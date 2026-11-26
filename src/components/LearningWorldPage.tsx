@@ -61,6 +61,9 @@ interface LearningWorldPageProps {
   onNavigate: (section: SectionId) => void;
   onOpenGamesTab: (tab: GamesHubTabId) => void;
   onOpenInSandbox: (code: string) => void;
+  onToggleBookmark?: (lessonId: string) => void;
+  onSaveLessonNote?: (lessonId: string, topic: TopicId, title: string, note: string) => void;
+  onDeleteLessonNote?: (lessonId: string) => void;
 }
 
 type WorldTab = 'map' | 'missions' | 'lessons' | 'daily-quest';
@@ -75,6 +78,9 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
   onNavigate,
   onOpenGamesTab,
   onOpenInSandbox,
+  onToggleBookmark,
+  onSaveLessonNote,
+  onDeleteLessonNote,
 }) => {
   const [worldTab, setWorldTab] = useState<WorldTab>('map');
   const [selectedMission, setSelectedMission] = useState<MissionDef | null>(null);
@@ -628,6 +634,11 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
             onNavigate={onNavigate}
             onOpenGamesTab={onOpenGamesTab}
             onOpenInSandbox={onOpenInSandbox}
+            bookmarkedLessons={progress.bookmarkedLessons}
+            lessonNotes={progress.lessonNotes}
+            onToggleBookmark={onToggleBookmark}
+            onSaveLessonNote={onSaveLessonNote}
+            onDeleteLessonNote={onDeleteLessonNote}
           />
         </Suspense>
       )}

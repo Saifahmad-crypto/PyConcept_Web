@@ -3,6 +3,7 @@ import {
   ActivityRecord,
   ActivityType,
   LearningProgress,
+  LessonNote,
   SavedSnippet,
   SimulatorId,
   TopicId,
@@ -114,6 +115,8 @@ const DEFAULT_PROGRESS: LearningProgress = {
   practiceSuccesses: 0,
   recentTopics: ['Python Basics'],
   savedSnippets: [],
+  bookmarkedLessons: [],
+  lessonNotes: {},
   preferences: DEFAULT_PREFERENCES,
 };
 
@@ -286,6 +289,9 @@ function migrateLegacyProgress(parsed: Partial<LearningProgress>): LearningProgr
         ? parsed.recentTopics
         : ['Python Basics'],
     savedSnippets: Array.isArray(parsed.savedSnippets) ? parsed.savedSnippets : [],
+    bookmarkedLessons: Array.isArray(parsed.bookmarkedLessons) ? parsed.bookmarkedLessons : [],
+    lessonNotes:
+      parsed.lessonNotes && typeof parsed.lessonNotes === 'object' ? parsed.lessonNotes : {},
     preferences: {
       ...DEFAULT_PREFERENCES,
       ...(parsed.preferences ?? {}),
@@ -724,6 +730,55 @@ export function useProgress() {
     return true;
   }, []);
 
+  const toggleBookmark = useCallback((lessonId: string) => {
+    setProgress((prev) => {
+      const current = prev.bookmarkedLessons ?? [];
+      const exists = current.includes(lessonId);
+      const nextBookmarks = exists
+        ? current.filter((id) => id !== lessonId)
+        : [...current, lessonId];
+      return {
+        ...prev,
+        bookmarkedLessons: nextBookmarks,
+      };
+    });
+  }, []);
+
+  const saveLessonNote = useCallback(
+    (lessonId: string, topic: TopicId, title: string, note: string) => {
+      setProgress((prev) => {
+        const nextNotes = { ...(prev.lessonNotes ?? {}) };
+        if (!note.trim()) {
+          delete nextNotes[lessonId];
+        } else {
+          nextNotes[lessonId] = {
+            lessonId,
+            topic,
+            title,
+            note: note.trim(),
+            updatedAt: Date.now(),
+          };
+        }
+        return {
+          ...prev,
+          lessonNotes: nextNotes,
+        };
+      });
+    },
+    []
+  );
+
+  const deleteLessonNote = useCallback((lessonId: string) => {
+    setProgress((prev) => {
+      const nextNotes = { ...(prev.lessonNotes ?? {}) };
+      delete nextNotes[lessonId];
+      return {
+        ...prev,
+        lessonNotes: nextNotes,
+      };
+    });
+  }, []);
+
   return {
     progress,
     toggleLesson,
@@ -749,5 +804,8 @@ export function useProgress() {
     recordPracticeAttempt,
     resetProgress,
     importProgress,
+    toggleBookmark,
+    saveLessonNote,
+    deleteLessonNote,
   };
 }

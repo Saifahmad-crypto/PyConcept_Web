@@ -7,9 +7,11 @@ import {
   RotateCcw,
   ArrowRight,
   Trophy,
+  Share2,
 } from 'lucide-react';
 import { GameScoreRecord, TopicId } from '../types';
 import { CodeBlock } from './CodeBlock';
+import { ScoreCardModal, ScoreCardData } from './ScoreCardModal';
 
 interface MiniGamesProps {
   gameScores: Record<string, GameScoreRecord>;
@@ -363,6 +365,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
   const [showHint, setShowHint] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [finished, setFinished] = useState<boolean>(false);
+  const [scoreCardData, setScoreCardData] = useState<ScoreCardData | null>(null);
 
   const game = GAMES.find((g) => g.id === selectedGameId)!;
   const question = game.questions[qIdx];
@@ -530,7 +533,24 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                 </strong>{' '}
                 in {game.title}.
               </p>
-              <div className="flex justify-center gap-3 pt-2">
+              <div className="flex flex-wrap justify-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScoreCardData({
+                      title: game.title,
+                      category: 'Mini-Game',
+                      score,
+                      maxScore: game.questions.length,
+                      topic: game.topic === 'conditionals' ? 'Conditionals' : 'Loops',
+                    });
+                  }}
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E10906] bg-[#E10906]/10 px-5 py-2 text-sm font-semibold text-[#E10906] shadow-sm transition-all hover:bg-[#E10906] hover:text-white"
+                >
+                  <Share2 className="h-4 w-4" />
+                  Share Score Card
+                </button>
+
                 <button
                   type="button"
                   onClick={() => startGame(game.id)}
@@ -684,6 +704,13 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
           )}
         </div>
       </div>
+
+      {scoreCardData && (
+        <ScoreCardModal
+          data={scoreCardData}
+          onClose={() => setScoreCardData(null)}
+        />
+      )}
     </div>
   );
 };

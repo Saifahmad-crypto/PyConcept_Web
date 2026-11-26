@@ -10,9 +10,11 @@ import {
   Trophy,
   RotateCcw,
   ShieldCheck,
+  Share2,
 } from 'lucide-react';
 import { runPythonCode } from '../../utils/pythonEngine';
 import { CodeBlock } from '../CodeBlock';
+import { ScoreCardModal, ScoreCardData } from '../ScoreCardModal';
 
 interface PythonEscapeRoomProps {
   completedEscapeRooms: string[];
@@ -180,6 +182,7 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
     message: string;
     output?: string;
   } | null>(null);
+  const [scoreCardData, setScoreCardData] = useState<ScoreCardData | null>(null);
 
   const room = VAULT_ROOMS[activeRoomIdx];
   const solvedCount = VAULT_ROOMS.filter((r) => completedEscapeRooms.includes(r.id)).length;
@@ -337,10 +340,28 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
               </p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
-            <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-            Code Vault Cleared
-          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setScoreCardData({
+                  title: 'The Python Code Vault',
+                  category: 'Escape Room',
+                  score: 5,
+                  maxScore: 5,
+                  topic: 'Vault Master',
+                });
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#E10906] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#C40705]"
+            >
+              <Share2 className="h-4 w-4" />
+              Share Score Card
+            </button>
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+              <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+              Code Vault Cleared
+            </span>
+          </div>
         </div>
       )}
 
@@ -528,6 +549,13 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
           </div>
         )}
       </div>
+
+      {scoreCardData && (
+        <ScoreCardModal
+          data={scoreCardData}
+          onClose={() => setScoreCardData(null)}
+        />
+      )}
     </div>
   );
 };

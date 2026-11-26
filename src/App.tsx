@@ -69,6 +69,9 @@ export default function App() {
     recordPracticeAttempt,
     resetProgress,
     importProgress,
+    toggleBookmark,
+    saveLessonNote,
+    deleteLessonNote,
   } = useProgress();
 
   // Global keyboard shortcut Ctrl+K / Cmd+K for PyVerse Search
@@ -236,6 +239,9 @@ export default function App() {
                 onNavigate={navigateTo}
                 onOpenGamesTab={openGamesTab}
                 onOpenInSandbox={handleOpenInPlayground}
+                onToggleBookmark={toggleBookmark}
+                onSaveLessonNote={saveLessonNote}
+                onDeleteLessonNote={deleteLessonNote}
               />
             )}
 

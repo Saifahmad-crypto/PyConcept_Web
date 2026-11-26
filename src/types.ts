@@ -83,6 +83,14 @@ export interface LessonDef {
   summary: string;
 }
 
+export interface LessonNote {
+  lessonId: string;
+  topic: TopicId;
+  title: string;
+  note: string;
+  updatedAt: number;
+}
+
 export interface MissionDef {
   id: string;
   topic: TopicId;
@@ -347,5 +355,7 @@ export interface LearningProgress {
   practiceSuccesses: number;
   recentTopics: string[];
   savedSnippets: SavedSnippet[];
+  bookmarkedLessons: string[];
+  lessonNotes: Record<string, LessonNote>;
   preferences: UserPreferences;
 }

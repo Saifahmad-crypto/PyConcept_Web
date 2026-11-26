@@ -19,8 +19,11 @@ import {
   HelpCircle,
   Cpu,
   Gamepad2,
+  Bookmark,
+  FileText,
+  Check,
 } from 'lucide-react';
-import { GamesHubTabId, LearnStageId, SectionId, TopicId } from '../types';
+import { GamesHubTabId, LearnStageId, LessonNote, SectionId, TopicId } from '../types';
 import {
   TOPIC_BASICS_LESSONS,
   TOPIC_08_LESSONS,
@@ -34,6 +37,7 @@ import {
   VariableBoxVisualizer,
 } from './LearnVisuals';
 import { CheatSheetModal } from './CheatSheetModal';
+import { BookmarksNotesModal } from './BookmarksNotesModal';
 
 interface LearnSectionProps {
   activeTopic: TopicId;
@@ -43,6 +47,11 @@ interface LearnSectionProps {
   onNavigate: (section: SectionId) => void;
   onOpenGamesTab: (tab: GamesHubTabId) => void;
   onOpenInSandbox: (code: string) => void;
+  bookmarkedLessons?: string[];
+  lessonNotes?: Record<string, LessonNote>;
+  onToggleBookmark?: (lessonId: string) => void;
+  onSaveLessonNote?: (lessonId: string, topic: TopicId, title: string, note: string) => void;
+  onDeleteLessonNote?: (lessonId: string) => void;
 }
 
 const STAGES: Array<{
@@ -143,10 +152,19 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
   onNavigate,
   onOpenGamesTab,
   onOpenInSandbox,
+  bookmarkedLessons = [],
+  lessonNotes = {},
+  onToggleBookmark,
+  onSaveLessonNote,
+  onDeleteLessonNote,
 }) => {
   const { lang } = useLanguage();
   const [activeStage, setActiveStage] = useState<'all' | LearnStageId>('all');
   const [cheatOpen, setCheatOpen] = useState(false);
+  const [activeNoteLessonId, setActiveNoteLessonId] = useState<string | null>(null);
+  const [draftNote, setDraftNote] = useState<string>('');
+  const [noteSavedFeedback, setNoteSavedFeedback] = useState<string | null>(null);
+  const [bookmarksModalOpen, setBookmarksModalOpen] = useState<boolean>(false);
 
   // Basics interactive widgets
   const [fName, setFName] = useState('Maya');
@@ -243,38 +261,159 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
     stageTag: string
   ) => {
     const isDone = completedLessons.includes(id);
+    const isBookmarked = bookmarkedLessons.includes(id);
+    const existingNote = lessonNotes[id];
+    const hasNote = Boolean(existingNote && existingNote.note.trim());
+    const isNoteOpen = activeNoteLessonId === id;
     const displayTitle = tLesson(lang, { id, title, summary: '' }).title;
+
     return (
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-4">
-        <div>
-          <span className="font-mono text-xs font-semibold text-[#E10906]">
-            Section {num} · {stageTag}
-          </span>
-          <h3 className="mt-0.5 font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea] sm:text-2xl">
-            {displayTitle}
-          </h3>
+      <div className="mb-4 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-4 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span className="font-mono text-xs font-semibold text-[#E10906]">
+              Section {num} · {stageTag}
+            </span>
+            <h3 className="mt-0.5 font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea] sm:text-2xl">
+              {displayTitle}
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Bookmark button */}
+            <button
+              type="button"
+              onClick={() => onToggleBookmark?.(id)}
+              title={isBookmarked ? 'Bookmarked' : 'Bookmark Lesson'}
+              className={`inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                isBookmarked
+                  ? 'border-amber-400/80 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300'
+                  : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
+              }`}
+            >
+              <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-amber-400 text-amber-500' : ''}`} />
+              <span className="hidden sm:inline">{isBookmarked ? 'Saved' : 'Bookmark'}</span>
+            </button>
+
+            {/* Note button */}
+            <button
+              type="button"
+              onClick={() => {
+                if (isNoteOpen) {
+                  setActiveNoteLessonId(null);
+                } else {
+                  setActiveNoteLessonId(id);
+                  setDraftNote(existingNote?.note ?? '');
+                }
+              }}
+              title={hasNote ? 'Edit Lesson Note' : 'Add Lesson Note'}
+              className={`inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                hasNote
+                  ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808]/60 text-[#E10906]'
+                  : isNoteOpen
+                  ? 'border-[#E10906] bg-[#E10906]/10 text-[#E10906]'
+                  : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
+              }`}
+            >
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">{hasNote ? 'Note (1)' : 'Note'}</span>
+            </button>
+
+            {/* Complete button */}
+            <button
+              type="button"
+              onClick={() => onToggleLesson(id)}
+              className={`inline-flex min-h-[38px] items-center gap-2 rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
+                isDone
+                  ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40'
+                  : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808]'
+              }`}
+            >
+              {isDone ? (
+                <>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                  {t(lang, 'learn.completed')}
+                </>
+              ) : (
+                <>
+                  <Circle className="h-4 w-4 text-[#8A8585] dark:text-[#9a8585]" aria-hidden="true" />
+                  {t(lang, 'learn.markComplete')}
+                </>
+              )}
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={() => onToggleLesson(id)}
-          className={`inline-flex min-h-[40px] items-center gap-2 rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
-            isDone
-              ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40/70'
-              : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808]'
-          }`}
-        >
-          {isDone ? (
-            <>
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-              {t(lang, 'learn.completed')}
-            </>
-          ) : (
-            <>
-              <Circle className="h-4 w-4 text-[#8A8585] dark:text-[#9a8585]" aria-hidden="true" />
-              {t(lang, 'learn.markComplete')}
-            </>
-          )}
-        </button>
+
+        {/* Inline Lesson Note Editor */}
+        {isNoteOpen && (
+          <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#120404] p-3.5 space-y-2.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-semibold text-[#100303] dark:text-[#f0eaea] flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-[#E10906]" />
+                Personal Note for {displayTitle}
+              </span>
+              {existingNote?.updatedAt && (
+                <span className="text-[11px] text-[#8A8585]">
+                  Last saved: {new Date(existingNote.updatedAt).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+
+            <textarea
+              rows={3}
+              value={draftNote}
+              onChange={(e) => setDraftNote(e.target.value)}
+              placeholder="Jot down personal notes, key syntax rules, memory tricks, or questions for this lesson..."
+              className="w-full rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#190909] p-2.5 text-xs text-[#100303] dark:text-white placeholder-[#8A8585] focus:outline-none focus:ring-1 focus:ring-[#E10906]"
+            />
+
+            <div className="flex items-center justify-between">
+              {noteSavedFeedback === id ? (
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
+                  <Check className="h-3.5 w-3.5" /> Note saved!
+                </span>
+              ) : (
+                <span className="text-[11px] text-[#8A8585]">
+                  Notes are stored safely in your browser progress.
+                </span>
+              )}
+
+              <div className="flex items-center gap-2">
+                {hasNote && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onDeleteLessonNote?.(id);
+                      setDraftNote('');
+                      setActiveNoteLessonId(null);
+                    }}
+                    className="rounded-lg px-2.5 py-1 text-xs text-[#8A8585] hover:text-rose-500 transition-colors"
+                  >
+                    Delete Note
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setActiveNoteLessonId(null)}
+                  className="rounded-lg px-2.5 py-1 text-xs text-[#8A8585] hover:text-[#100303] dark:hover:text-white"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSaveLessonNote?.(id, activeTopic, displayTitle, draftNote);
+                    setNoteSavedFeedback(id);
+                    setTimeout(() => setNoteSavedFeedback(null), 2000);
+                  }}
+                  className="rounded-lg bg-[#E10906] px-3.5 py-1 text-xs font-semibold text-white transition-colors hover:bg-[#C40705]"
+                >
+                  Save Note
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -360,6 +499,20 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
             >
               <BookMarked className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
               {t(lang, 'learn.cheatSheet')}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setBookmarksModalOpen(true)}
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] shadow-xs hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] whitespace-nowrap"
+            >
+              <Bookmark className="h-3.5 w-3.5 text-amber-500 fill-amber-500" aria-hidden="true" />
+              <span>Bookmarks &amp; Notes</span>
+              {(bookmarkedLessons.length > 0 || Object.keys(lessonNotes).length > 0) && (
+                <span className="rounded-full bg-[#E10906]/15 px-1.5 py-0.5 font-mono text-[10px] font-bold text-[#E10906]">
+                  {bookmarkedLessons.length + Object.keys(lessonNotes).length}
+                </span>
+              )}
             </button>
           </div>
 
@@ -1544,6 +1697,26 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
         initialTopic={activeTopic}
         onClose={() => setCheatOpen(false)}
         onTryInSandbox={onOpenInSandbox}
+      />
+
+      <BookmarksNotesModal
+        isOpen={bookmarksModalOpen}
+        onClose={() => setBookmarksModalOpen(false)}
+        bookmarkedLessons={bookmarkedLessons}
+        lessonNotes={lessonNotes}
+        onNavigateToLesson={(topic, lessonId) => {
+          if (topic !== activeTopic) {
+            onChangeTopic(topic);
+          }
+          setActiveStage('all');
+          setTimeout(() => {
+            const el = document.getElementById(lessonId);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }}
+        onToggleBookmark={(id) => onToggleBookmark?.(id)}
+        onSaveNote={(id, topic, title, note) => onSaveLessonNote?.(id, topic, title, note)}
+        onDeleteNote={(id) => onDeleteLessonNote?.(id)}
       />
     </div>
   );

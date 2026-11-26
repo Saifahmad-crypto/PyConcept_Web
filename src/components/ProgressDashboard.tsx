@@ -20,6 +20,8 @@ import {
   Bug,
   KeyRound,
   AlertTriangle,
+  Bookmark,
+  FileText,
 } from 'lucide-react';
 import {
   GamesHubTabId,
@@ -469,7 +471,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
       </div>
 
       {/* Real Activity Metrics Strip */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
           <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
             <BookOpen className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
@@ -539,6 +541,20 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             {progress.sandboxRuns}
           </p>
         </div>
+
+        <button
+          type="button"
+          onClick={() => onNavigate('learn')}
+          className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs text-left transition-colors hover:border-[#E10906]"
+        >
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
+            <Bookmark className="h-4 w-4 text-amber-500 fill-amber-500" aria-hidden="true" />
+            Saved Notes
+          </div>
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
+            {(progress.bookmarkedLessons?.length || 0) + Object.keys(progress.lessonNotes || {}).length}
+          </p>
+        </button>
       </div>
 
       {/* Weekly Activity Chart & 28-Day Learning Calendar */}

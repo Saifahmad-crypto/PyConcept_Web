@@ -7,10 +7,12 @@ import {
   Award,
   GitBranch,
   Repeat,
+  Share2,
 } from 'lucide-react';
 import { QUIZ_QUESTIONS } from '../data/curriculumData';
 import { QuizScoreRecord, TopicId } from '../types';
 import { CodeBlock } from './CodeBlock';
+import { ScoreCardModal, ScoreCardData } from './ScoreCardModal';
 
 type QuizTopic = Exclude<TopicId, 'basics'>;
 
@@ -35,6 +37,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
     Array<{ questionId: string; chosen: number; correct: number }>
   >([]);
   const [finished, setFinished] = useState<boolean>(false);
+  const [scoreCardData, setScoreCardData] = useState<ScoreCardData | null>(null);
 
   const questions = QUIZ_QUESTIONS.filter((q) => q.topic === topic);
   const currentQ = questions[currentIdx];
@@ -181,7 +184,24 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             })}
           </div>
 
-          <div className="flex justify-center gap-3 pt-2">
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                setScoreCardData({
+                  title: topic === 'conditionals' ? 'Topic 08: Conditionals Quiz' : 'Topic 09: Loops Quiz',
+                  category: 'Topic Quiz',
+                  score,
+                  maxScore: questions.length,
+                  topic: topic === 'conditionals' ? 'Conditional Statements' : 'Loops & Iteration',
+                });
+              }}
+              className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E10906] bg-[#E10906]/10 px-5 py-2 text-sm font-semibold text-[#E10906] shadow-sm transition-all hover:bg-[#E10906] hover:text-white"
+            >
+              <Share2 className="h-4 w-4" aria-hidden="true" />
+              Share Score Card
+            </button>
+
             <button
               type="button"
               onClick={() => resetQuiz(topic)}
@@ -319,6 +339,13 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             )}
           </div>
         </div>
+      )}
+
+      {scoreCardData && (
+        <ScoreCardModal
+          data={scoreCardData}
+          onClose={() => setScoreCardData(null)}
+        />
       )}
     </div>
   );
