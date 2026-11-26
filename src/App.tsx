@@ -195,6 +195,20 @@ export default function App() {
     setPendingTutorSimContext(null);
   }, []);
 
+  const handleOpenTutorWithCode = useCallback(
+    (snippet: string) => {
+      setPendingTutorSimContext({
+        simulatorId: 'traffic-signal',
+        simulatorTitle: 'Custom Python Code Analysis',
+        category: 'Custom Code',
+        concepts: ['Python Syntax', 'Logic Flow'],
+        code: snippet,
+      });
+      navigateTo('tutor');
+    },
+    [navigateTo]
+  );
+
   const reducedMotion = progress.preferences.reducedMotion;
 
   return (
@@ -292,6 +306,7 @@ export default function App() {
                 onCompleteChallenge={markChallengeComplete}
                 externalChallengeId={selectedChallengeId}
                 onConsumeExternalChallenge={handleConsumeChallengeId}
+                onOpenTutorWithCode={handleOpenTutorWithCode}
               />
             )}
 

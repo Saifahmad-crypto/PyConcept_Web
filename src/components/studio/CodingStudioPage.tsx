@@ -18,6 +18,7 @@ interface CodingStudioPageProps {
   onCompleteChallenge: (id: string) => void;
   externalChallengeId?: string | null;
   onConsumeExternalChallenge?: () => void;
+  onOpenTutorWithCode?: (code: string) => void;
 }
 
 export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
@@ -33,6 +34,7 @@ export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
   onCompleteChallenge,
   externalChallengeId,
   onConsumeExternalChallenge,
+  onOpenTutorWithCode,
 }) => {
   return (
     <div>
@@ -104,6 +106,7 @@ export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
           savedSnippets={savedSnippets}
           onSaveSnippet={onSaveSnippet}
           onDeleteSnippet={onDeleteSnippet}
+          onOpenTutorWithCode={onOpenTutorWithCode}
         />
       ) : (
         <ChallengesSection
