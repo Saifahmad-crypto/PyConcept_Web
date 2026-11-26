@@ -13,6 +13,9 @@ import {
   X,
   ArrowRight,
   Layers,
+  Github,
+  Instagram,
+  Linkedin,
 } from 'lucide-react';
 import { SectionId, UserPreferences } from '../types';
 import { getLearnerLevel } from '../data/ecosystemData';
@@ -134,6 +137,39 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Zone 3: Search, Preferences, XP Pill & Start Learning CTA */}
         <div className="relative flex items-center gap-2 shrink-0">
+          <div className="hidden lg:flex items-center gap-1 border-r border-[#E5DFDF] pr-2">
+            <a
+              href="https://github.com/Saifahmad-crypto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+              aria-label="GitHub"
+              title="GitHub: Saifahmad-crypto"
+            >
+              <Github className="h-4 w-4" aria-hidden="true" />
+            </a>
+            <a
+              href="https://www.instagram.com/saif_4hmad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+              aria-label="Instagram"
+              title="Instagram: @saif_4hmad"
+            >
+              <Instagram className="h-4 w-4" aria-hidden="true" />
+            </a>
+            <a
+              href="https://linkedin.com/in/saif4hmad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+              aria-label="LinkedIn"
+              title="LinkedIn"
+            >
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </div>
+
           <button
             type="button"
             onClick={onOpenSearch}
@@ -306,9 +342,38 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="mt-3 flex items-center justify-between gap-3 border-t border-[#E5DFDF] pt-3">
-            <span className="font-mono text-xs font-semibold text-[#100303] tabular-nums">
-              {xp} XP · Level {levelInfo.current.level}
-            </span>
+            <div className="flex items-center gap-1.5">
+              <a
+                href="https://github.com/Saifahmad-crypto"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-white text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+                aria-label="GitHub Profile"
+                title="GitHub"
+              >
+                <Github className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <a
+                href="https://www.instagram.com/saif_4hmad"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-white text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+                aria-label="Instagram Profile"
+                title="Instagram"
+              >
+                <Instagram className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <a
+                href="https://linkedin.com/in/saif4hmad"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-white text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+                aria-label="LinkedIn Profile"
+                title="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </div>
             <button
               type="button"
               onClick={() => handleNav('learn')}
