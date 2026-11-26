@@ -225,19 +225,27 @@ function mapGeminiError(err: unknown): { status: number; message: string; code: 
   };
 }
 
-async function withRetry<T>(fn: () => Promise<T>, retries = 1): Promise<T> {
+async function withModelFallback<T>(fn: (model: string) => Promise<T>): Promise<T> {
+  const primary = getConfiguredModel();
+  const candidates = Array.from(
+    new Set([primary, 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'])
+  );
   let lastErr: unknown;
-  for (let attempt = 0; attempt <= retries; attempt++) {
+  for (const model of candidates) {
     try {
-      return await fn();
+      return await fn(model);
     } catch (err) {
       lastErr = err;
       const msg = err instanceof Error ? err.message.toLowerCase() : '';
-      const isTransient = msg.includes('429') || msg.includes('503') || msg.includes('unavailable');
-      if (!isTransient || attempt === retries) {
+      const isTransient =
+        msg.includes('429') ||
+        msg.includes('503') ||
+        msg.includes('unavailable') ||
+        msg.includes('not_found') ||
+        msg.includes('404');
+      if (!isTransient) {
         throw err;
       }
-      await new Promise((r) => setTimeout(r, 700 * (attempt + 1)));
     }
   }
   throw lastErr;
@@ -364,9 +372,9 @@ async function startServer() {
     });
 
     try {
-      const stream = await withRetry(() =>
+      const stream = await withModelFallback((model) =>
         ai.models.generateContentStream({
-          model: getConfiguredModel(),
+          model,
           contents: trimmedHistory,
           config: {
             systemInstruction: TUTOR_SYSTEM_INSTRUCTION,
@@ -437,9 +445,9 @@ Provide 3 progressive hints:
 And provide solutionCode (clean Python) and solutionExplanation.`;
 
     try {
-      const response = await withRetry(() =>
+      const response = await withModelFallback((model) =>
         ai.models.generateContent({
-          model: getConfiguredModel(),
+          model,
           contents: prompt,
           config: {
             systemInstruction: TUTOR_SYSTEM_INSTRUCTION,
@@ -520,9 +528,9 @@ ${focusRequest ? `Specific focus: ${focusRequest.slice(0, 500)}` : ''}
 Include 4 concise options, 0-based correctIndex (0..3), concept name tested, and a clear explanation of why the correct option works and common mistakes.`;
 
     try {
-      const response = await withRetry(() =>
+      const response = await withModelFallback((model) =>
         ai.models.generateContent({
-          model: getConfiguredModel(),
+          model,
           contents: prompt,
           config: {
             systemInstruction: TUTOR_SYSTEM_INSTRUCTION,

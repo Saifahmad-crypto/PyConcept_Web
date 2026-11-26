@@ -23,6 +23,7 @@ import {
   Check,
   ListOrdered,
   ShieldCheck,
+  KeyRound,
 } from 'lucide-react';
 import {
   LearningProgress,
@@ -45,6 +46,13 @@ import { useTutorChats } from '../../hooks/useTutorChats';
 import { PyVerseLogo } from '../PyVerseLogo';
 import { TutorMessageContent } from './TutorMessageContent';
 import { PracticeQuestionCard, QuizQuestionCard } from './TutorInteractiveCards';
+import {
+  directGeneratePractice,
+  directGenerateQuiz,
+  directStreamTutorReply,
+  getStoredBrowserApiKey,
+  setStoredBrowserApiKey,
+} from '../../utils/tutorClient';
 
 interface AdaptiveTutorPageProps {
   progress: LearningProgress;
@@ -163,6 +171,9 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
   const [tutorHealth, setTutorHealth] = useState<{ configured: boolean; model: string } | null>(
     null
   );
+  const [serverAvailable, setServerAvailable] = useState<boolean | null>(null);
+  const [browserApiKey, setBrowserApiKey] = useState<string>(() => getStoredBrowserApiKey());
+  const [keyDraft, setKeyDraft] = useState<string>('');
   const [errorState, setErrorState] = useState<{
     message: string;
     retryAction?: () => void;
@@ -183,17 +194,31 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
   useEffect(() => {
     let active = true;
     fetch('/api/tutor/health')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data: { configured?: boolean; model?: string } | null) => {
-        if (active && data && typeof data.configured === 'boolean') {
+      .then(async (res) => {
+        if (!res.ok) return null;
+        try {
+          return (await res.json()) as { configured?: boolean; model?: string };
+        } catch {
+          return null;
+        }
+      })
+      .then((data) => {
+        if (!active) return;
+        if (data && typeof data.configured === 'boolean') {
+          setServerAvailable(true);
           setTutorHealth({
             configured: data.configured,
-            model: data.model || 'gemini',
+            model: data.model || 'gemini-3.1-flash-lite',
           });
+        } else {
+          setServerAvailable(false);
+          setTutorHealth({ configured: false, model: 'gemini-3.1-flash-lite' });
         }
       })
       .catch(() => {
-        // Ignore network transient errors; explicit errors show on send
+        if (!active) return;
+        setServerAvailable(false);
+        setTutorHealth({ configured: false, model: 'gemini-3.1-flash-lite' });
       });
     return () => {
       active = false;
@@ -246,11 +271,15 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       let accumulated = '';
 
       try {
-        const response = await fetch('/api/tutor/stream', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
+        const useBackend = Boolean(serverAvailable && tutorHealth?.configured);
+        if (!useBackend) {
+          if (!browserApiKey) {
+            throw new Error(
+              'Connect your Gemini API key in the setup bar above to chat with PyVerse AI Tutor.'
+            );
+          }
+          await directStreamTutorReply({
+            apiKey: browserApiKey,
             messages: historyMessages.map((m) => ({
               role: m.role,
               content: m.content,
@@ -258,54 +287,77 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
             mode: activeMode,
             learnerContext: buildLearnerContextPayload(),
             simulatorContext: simCtx,
-          }),
-        });
-
-        if (!response.ok) {
-          let errMsg = 'Unable to reach PyVerse AI Tutor.';
-          try {
-            const errJson = (await response.json()) as { message?: string };
-            if (errJson.message) errMsg = errJson.message;
-          } catch {
-            // ignore
-          }
-          throw new Error(errMsg);
-        }
-
-        if (!response.body) {
-          throw new Error('Streaming response body unavailable.');
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const events = buffer.split('\n\n');
-          buffer = events.pop() ?? '';
-
-          for (const evt of events) {
-            const line = evt
-              .split('\n')
-              .find((l) => l.startsWith('data: '));
-            if (!line) continue;
-            const payload = JSON.parse(line.slice(6)) as {
-              type: 'chunk' | 'done' | 'error';
-              text?: string;
-              message?: string;
-            };
-
-            if (payload.type === 'chunk' && payload.text) {
-              accumulated += payload.text;
+            signal: controller.signal,
+            onChunk: (chunkText) => {
+              accumulated += chunkText;
               updateMessage(targetSessionId, assistantMsgId, (prev) => ({
                 ...prev,
                 content: accumulated,
               }));
-            } else if (payload.type === 'error') {
-              throw new Error(payload.message || 'AI Tutor encountered an error.');
+            },
+          });
+        } else {
+          const response = await fetch('/api/tutor/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              messages: historyMessages.map((m) => ({
+                role: m.role,
+                content: m.content,
+              })),
+              mode: activeMode,
+              learnerContext: buildLearnerContextPayload(),
+              simulatorContext: simCtx,
+            }),
+          });
+
+          if (!response.ok) {
+            let errMsg = 'Unable to reach PyVerse AI Tutor.';
+            try {
+              const errJson = (await response.json()) as { message?: string };
+              if (errJson.message) errMsg = errJson.message;
+            } catch {
+              // ignore
+            }
+            throw new Error(errMsg);
+          }
+
+          if (!response.body) {
+            throw new Error('Streaming response body unavailable.');
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const events = buffer.split('\n\n');
+            buffer = events.pop() ?? '';
+
+            for (const evt of events) {
+              const line = evt
+                .split('\n')
+                .find((l) => l.startsWith('data: '));
+              if (!line) continue;
+              const payload = JSON.parse(line.slice(6)) as {
+                type: 'chunk' | 'done' | 'error';
+                text?: string;
+                message?: string;
+              };
+
+              if (payload.type === 'chunk' && payload.text) {
+                accumulated += payload.text;
+                updateMessage(targetSessionId, assistantMsgId, (prev) => ({
+                  ...prev,
+                  content: accumulated,
+                }));
+              } else if (payload.type === 'error') {
+                throw new Error(payload.message || 'AI Tutor encountered an error.');
+              }
             }
           }
         }
@@ -446,21 +498,37 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     appendMessage(activeSession.id, userMsg);
 
     try {
-      const res = await fetch('/api/tutor/practice', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      let question: Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>;
+      if (serverAvailable && tutorHealth?.configured) {
+        const res = await fetch('/api/tutor/practice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            learnerContext: buildLearnerContextPayload(),
+            focusRequest,
+            difficultyAdjustment,
+          }),
+        });
+        const data = (await res.json()) as {
+          question?: Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>;
+          message?: string;
+        };
+        if (!res.ok || !data.question) {
+          throw new Error(data.message || 'Could not generate a practice question.');
+        }
+        question = data.question;
+      } else {
+        if (!browserApiKey) {
+          throw new Error(
+            'Connect your Gemini API key in the setup bar above to generate practice tasks.'
+          );
+        }
+        question = await directGeneratePractice({
+          apiKey: browserApiKey,
           learnerContext: buildLearnerContextPayload(),
           focusRequest,
           difficultyAdjustment,
-        }),
-      });
-      const data = (await res.json()) as {
-        question?: Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>;
-        message?: string;
-      };
-      if (!res.ok || !data.question) {
-        throw new Error(data.message || 'Could not generate a practice question.');
+        });
       }
 
       const aiMsg: TutorMessage = {
@@ -470,7 +538,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         timestamp: Date.now(),
         mode: 'practice',
         practiceCard: {
-          ...data.question,
+          ...question,
           hintsRevealed: 0,
           solutionRevealed: false,
         },
@@ -515,31 +583,47 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     appendMessage(activeSession.id, userMsg);
 
     try {
-      const res = await fetch('/api/tutor/quiz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      let quiz: TutorQuizCard;
+      if (serverAvailable && tutorHealth?.configured) {
+        const res = await fetch('/api/tutor/quiz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            learnerContext: buildLearnerContextPayload(),
+            focusRequest,
+            difficultyAdjustment,
+          }),
+        });
+        const data = (await res.json()) as {
+          quiz?: TutorQuizCard;
+          message?: string;
+        };
+        if (!res.ok || !data.quiz) {
+          throw new Error(data.message || 'Could not generate a quiz question.');
+        }
+        quiz = data.quiz;
+      } else {
+        if (!browserApiKey) {
+          throw new Error(
+            'Connect your Gemini API key in the setup bar above to generate quiz questions.'
+          );
+        }
+        quiz = await directGenerateQuiz({
+          apiKey: browserApiKey,
           learnerContext: buildLearnerContextPayload(),
           focusRequest,
           difficultyAdjustment,
-        }),
-      });
-      const data = (await res.json()) as {
-        quiz?: TutorQuizCard;
-        message?: string;
-      };
-      if (!res.ok || !data.quiz) {
-        throw new Error(data.message || 'Could not generate a quiz question.');
+        });
       }
 
       const aiMsg: TutorMessage = {
         id: makeId('ai'),
         role: 'assistant',
-        content: `Quick check on **${data.quiz.concept}**: pick the best answer below.`,
+        content: `Quick check on **${quiz.concept}**: pick the best answer below.`,
         timestamp: Date.now(),
         mode: 'quiz',
         quizCard: {
-          ...data.quiz,
+          ...quiz,
           submitted: false,
         },
       };
@@ -1096,18 +1180,76 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
             <p className="text-xs text-[#8A8585]">{activeModeInfo.desc}</p>
           </div>
 
-          {/* Honest Configuration Notice when GEMINI_API_KEY is missing */}
-          {tutorHealth && !tutorHealth.configured && (
-            <div className="flex items-start gap-2.5 border-b border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-950">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
-              <div>
-                <p className="font-semibold">AI Tutor API key not configured</p>
-                <p className="mt-0.5 text-amber-900">
-                  Add <code className="rounded bg-amber-100 px-1 font-mono">GEMINI_API_KEY</code> in
-                  Settings &gt; Secrets to enable live Gemini tutoring. All other PyVerse lessons,
-                  simulators, sandbox execution, and quizzes continue working locally.
-                </p>
-              </div>
+          {/* Browser / Server Gemini API Key Setup Banner */}
+          {!(serverAvailable && tutorHealth?.configured) && (
+            <div className="border-b border-[#E5DFDF] bg-[#FFF1F1] px-4 py-3 text-xs text-[#100303]">
+              {!browserApiKey ? (
+                <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-start gap-2">
+                    <KeyRound className="mt-0.5 h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
+                    <div>
+                      <p className="font-semibold">Connect Gemini API Key for Live AI Tutor</p>
+                      <p className="mt-0.5 text-[#8A8585]">
+                        Saved only in your browser&apos;s localStorage. Get a key at{' '}
+                        <a
+                          href="https://aistudio.google.com/app/api-keys"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-[#E10906] underline"
+                        >
+                          Google AI Studio
+                        </a>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const clean = keyDraft.trim();
+                      if (!clean) return;
+                      setStoredBrowserApiKey(clean);
+                      setBrowserApiKey(clean);
+                      setKeyDraft('');
+                      setErrorState(null);
+                    }}
+                    className="flex items-center gap-2 shrink-0"
+                  >
+                    <input
+                      type="password"
+                      value={keyDraft}
+                      onChange={(e) => setKeyDraft(e.target.value)}
+                      placeholder="Paste Gemini API key..."
+                      aria-label="Gemini API key"
+                      className="w-52 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1.5 font-mono text-xs text-[#100303] focus:border-[#E10906] focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!keyDraft.trim()}
+                      className="rounded-lg bg-[#E10906] px-3 py-1.5 font-semibold text-white hover:bg-[#C40705] disabled:opacity-40"
+                    >
+                      Connect
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-1.5 font-medium text-[#100303]">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                    AI Tutor connected via your browser Gemini API key
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStoredBrowserApiKey('');
+                      setBrowserApiKey('');
+                    }}
+                    className="font-semibold text-[#E10906] hover:underline"
+                  >
+                    Disconnect Key
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
