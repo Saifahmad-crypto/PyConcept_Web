@@ -7,9 +7,26 @@ function makeId(prefix = 'id'): string {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function normalizeTutorMode(rawMode: unknown): TutorMode {
+  if (rawMode === 'learn') return 'explain';
+  if (rawMode === 'doubt') return 'example';
+  if (rawMode === 'review') return 'debug';
+  if (
+    rawMode === 'explain' ||
+    rawMode === 'example' ||
+    rawMode === 'debug' ||
+    rawMode === 'hint' ||
+    rawMode === 'practice' ||
+    rawMode === 'quiz'
+  ) {
+    return rawMode;
+  }
+  return 'explain';
+}
+
 function createEmptySession(
   topic: TutorTopic = 'Python Basics',
-  mode: TutorMode = 'learn'
+  mode: TutorMode = 'explain'
 ): TutorChatSession {
   return {
     id: makeId('chat'),
@@ -28,7 +45,7 @@ function loadSessions(fallbackTopic: TutorTopic): {
   try {
     const raw = window.localStorage.getItem(CHATS_STORAGE_KEY);
     if (!raw) {
-      const first = createEmptySession(fallbackTopic, 'learn');
+      const first = createEmptySession(fallbackTopic, 'explain');
       return { sessions: [first], activeId: first.id };
     }
     const parsed = JSON.parse(raw) as {
@@ -36,15 +53,19 @@ function loadSessions(fallbackTopic: TutorTopic): {
       activeId?: string;
     };
     if (Array.isArray(parsed.sessions) && parsed.sessions.length > 0) {
-      const validActive = parsed.sessions.some((s) => s.id === parsed.activeId)
+      const normalizedSessions = parsed.sessions.map((s) => ({
+        ...s,
+        mode: normalizeTutorMode(s.mode),
+      }));
+      const validActive = normalizedSessions.some((s) => s.id === parsed.activeId)
         ? parsed.activeId!
-        : parsed.sessions[0].id;
-      return { sessions: parsed.sessions, activeId: validActive };
+        : normalizedSessions[0].id;
+      return { sessions: normalizedSessions, activeId: validActive };
     }
   } catch {
     // Fallback cleanly
   }
-  const first = createEmptySession(fallbackTopic, 'learn');
+  const first = createEmptySession(fallbackTopic, 'explain');
   return { sessions: [first], activeId: first.id };
 }
 
@@ -136,7 +157,7 @@ export function useTutorChats(defaultTopic: TutorTopic) {
   );
 
   const clearAllChats = useCallback((topic: TutorTopic) => {
-    const fresh = createEmptySession(topic, 'learn');
+    const fresh = createEmptySession(topic, 'explain');
     setState({ sessions: [fresh], activeId: fresh.id });
   }, []);
 

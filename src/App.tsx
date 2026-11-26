@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'motion/react';
 import {
-  LabTabId,
+  GamesHubTabId,
   SectionId,
   SimulatorId,
   TopicId,
@@ -11,18 +11,16 @@ import { useProgress } from './hooks/useProgress';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
 import { LearnSection } from './components/LearnSection';
-import { InteractiveLab } from './components/InteractiveLab';
 import { SimulatorsSection } from './components/simulators/SimulatorsSection';
 import { CodePlayground } from './components/CodePlayground';
-import { ChallengesSection } from './components/ChallengesSection';
-import { QuizSection } from './components/QuizSection';
+import { GamesAndChallengesHub } from './components/GamesAndChallengesHub';
 import { ProgressDashboard } from './components/ProgressDashboard';
 import { AdaptiveTutorPage } from './components/tutor/AdaptiveTutorPage';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<SectionId>('home');
-  const [activeTopic, setActiveTopic] = useState<TopicId>('conditionals');
-  const [activeLabTab, setActiveLabTab] = useState<LabTabId>('conditional-sim');
+  const [activeTopic, setActiveTopic] = useState<TopicId>('basics');
+  const [activeGamesTab, setActiveGamesTab] = useState<GamesHubTabId>('mini-games');
   const [selectedSimulator, setSelectedSimulator] = useState<SimulatorId | null>(null);
   const [sandboxCode, setSandboxCode] = useState<string | null>(null);
   const [pendingTutorSimContext, setPendingTutorSimContext] =
@@ -34,6 +32,8 @@ export default function App() {
     markChallengeComplete,
     recordQuizResult,
     recordGameScore,
+    recordSimulatorRun,
+    recordSandboxRun,
     setTutorTopic,
     setTutorDifficulty,
     markConceptUnderstood,
@@ -44,7 +44,19 @@ export default function App() {
   } = useProgress();
 
   const navigateTo = useCallback((section: SectionId) => {
-    setActiveSection(section);
+    if (section === 'lab') {
+      setActiveGamesTab('logic-lab');
+      setActiveSection('games');
+    } else if (section === 'challenges') {
+      setActiveGamesTab('challenges');
+      setActiveSection('games');
+    } else if (section === 'quiz') {
+      setActiveGamesTab('quizzes');
+      setActiveSection('games');
+    } else {
+      setActiveSection(section);
+    }
+
     if (section === 'simulators') {
       setSelectedSimulator(null);
     }
@@ -59,10 +71,10 @@ export default function App() {
     [navigateTo]
   );
 
-  const openLabTab = useCallback(
-    (tab: LabTabId) => {
-      setActiveLabTab(tab);
-      navigateTo('lab');
+  const openGamesTab = useCallback(
+    (tab: GamesHubTabId) => {
+      setActiveGamesTab(tab);
+      navigateTo('games');
     },
     [navigateTo]
   );
@@ -92,7 +104,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#1E293B]">
+    <div className="flex min-h-screen flex-col bg-[#F8FAFC] text-[#1E293B]">
       <Navbar activeSection={activeSection} onNavigate={navigateTo} />
 
       <main className="flex-1 bg-pyverse-soft">
@@ -107,7 +119,7 @@ export default function App() {
               progress={progress}
               onNavigate={navigateTo}
               onOpenTopic={openTopic}
-              onOpenLabTab={openLabTab}
+              onOpenGamesTab={openGamesTab}
             />
           )}
 
@@ -117,16 +129,9 @@ export default function App() {
               onChangeTopic={setActiveTopic}
               completedLessons={progress.completedLessons}
               onToggleLesson={toggleLesson}
-              onOpenLab={openLabTab}
-            />
-          )}
-
-          {activeSection === 'lab' && (
-            <InteractiveLab
-              activeTab={activeLabTab}
-              onChangeTab={setActiveLabTab}
-              gameScores={progress.gameScores}
-              onRecordGameScore={recordGameScore}
+              onNavigate={navigateTo}
+              onOpenGamesTab={openGamesTab}
+              onOpenInSandbox={handleOpenInPlayground}
             />
           )}
 
@@ -134,7 +139,17 @@ export default function App() {
             <SimulatorsSection
               selectedSimulator={selectedSimulator}
               onSelectSimulator={setSelectedSimulator}
+              visitedSimulators={progress.visitedSimulators}
+              onRecordSimulatorRun={recordSimulatorRun}
               onAskTutor={handleAskTutorFromSimulator}
+            />
+          )}
+
+          {activeSection === 'playground' && (
+            <CodePlayground
+              externalCode={sandboxCode}
+              onConsumeExternalCode={handleConsumeSandboxCode}
+              onRecordSandboxRun={recordSandboxRun}
             />
           )}
 
@@ -156,22 +171,15 @@ export default function App() {
             />
           )}
 
-          {activeSection === 'playground' && (
-            <CodePlayground
-              externalCode={sandboxCode}
-              onConsumeExternalCode={handleConsumeSandboxCode}
-            />
-          )}
-
-          {activeSection === 'challenges' && (
-            <ChallengesSection
+          {activeSection === 'games' && (
+            <GamesAndChallengesHub
+              activeTab={activeGamesTab}
+              onChangeTab={setActiveGamesTab}
+              gameScores={progress.gameScores}
+              gameAttempts={progress.gameAttempts}
+              onRecordGameScore={recordGameScore}
               completedChallenges={progress.completedChallenges}
               onCompleteChallenge={markChallengeComplete}
-            />
-          )}
-
-          {activeSection === 'quiz' && (
-            <QuizSection
               quizScores={progress.quizScores}
               onRecordQuizResult={recordQuizResult}
             />
@@ -184,6 +192,7 @@ export default function App() {
               onResetProgress={resetProgress}
               onNavigate={navigateTo}
               onOpenTopic={openTopic}
+              onOpenGamesTab={openGamesTab}
             />
           )}
         </motion.div>

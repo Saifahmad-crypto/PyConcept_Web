@@ -13,6 +13,7 @@ import { CodeBlock } from './CodeBlock';
 
 interface MiniGamesProps {
   gameScores: Record<string, GameScoreRecord>;
+  gameAttempts?: Record<string, number>;
   onRecordGameScore: (gameId: string, score: number, maxScore: number) => void;
 }
 
@@ -349,7 +350,11 @@ const GAMES: GameDef[] = [
   },
 ];
 
-export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameScore }) => {
+export const MiniGames: React.FC<MiniGamesProps> = ({
+  gameScores,
+  gameAttempts = {},
+  onRecordGameScore,
+}) => {
   const [selectedGameId, setSelectedGameId] = useState<string>('cond-detective');
   const [qIdx, setQIdx] = useState<number>(0);
   const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
@@ -492,7 +497,11 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
               <p className="mt-0.5 text-xs text-slate-600">{game.description}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-semibold text-sky-700 tabular-nums">
+              <span className="font-mono text-xs text-[#64748B] tabular-nums">
+                Attempts: {gameAttempts[game.id] ?? 0}
+              </span>
+              <span aria-hidden="true" className="text-slate-300">·</span>
+              <span className="font-mono text-xs font-semibold text-[#2563EB] tabular-nums">
                 Score: {score} / {game.questions.length}
               </span>
               <button

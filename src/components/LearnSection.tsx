@@ -1,56 +1,193 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Circle, GitBranch, Repeat, ArrowRight, AlertTriangle } from 'lucide-react';
-import { TopicId } from '../types';
-import { TOPIC_08_LESSONS, TOPIC_09_LESSONS } from '../data/curriculumData';
+import {
+  CheckCircle2,
+  Circle,
+  GitBranch,
+  Repeat,
+  Box,
+  ArrowRight,
+  AlertTriangle,
+  BookMarked,
+  ChevronDown,
+  Compass,
+  Lightbulb,
+  Eye,
+  Sliders,
+  Code2,
+  HelpCircle,
+  Cpu,
+  Gamepad2,
+} from 'lucide-react';
+import { GamesHubTabId, LearnStageId, SectionId, TopicId } from '../types';
+import {
+  TOPIC_BASICS_LESSONS,
+  TOPIC_08_LESSONS,
+  TOPIC_09_LESSONS,
+} from '../data/curriculumData';
 import { CodeBlock } from './CodeBlock';
 import { FlowchartSVG, FlowchartType } from './FlowchartSVG';
+import {
+  ComparisonScaleSVG,
+  LoopTimelineStepper,
+  VariableBoxVisualizer,
+} from './LearnVisuals';
+import { CheatSheetModal } from './CheatSheetModal';
 
 interface LearnSectionProps {
   activeTopic: TopicId;
   onChangeTopic: (topic: TopicId) => void;
   completedLessons: string[];
   onToggleLesson: (lessonId: string) => void;
-  onOpenLab: (tab: 'conditional-sim' | 'loop-viz' | 'games') => void;
+  onNavigate: (section: SectionId) => void;
+  onOpenGamesTab: (tab: GamesHubTabId) => void;
+  onOpenInSandbox: (code: string) => void;
 }
+
+const STAGES: Array<{
+  id: 'all' | LearnStageId;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}> = [
+  { id: 'all', label: 'All 6 Stages', icon: Compass },
+  { id: 'explore', label: '1. Explore', icon: Compass },
+  { id: 'understand', label: '2. Understand', icon: Lightbulb },
+  { id: 'visualize', label: '3. Visualize', icon: Eye },
+  { id: 'experiment', label: '4. Experiment', icon: Sliders },
+  { id: 'practise', label: '5. Practise', icon: Code2 },
+  { id: 'test', label: '6. Test Yourself', icon: HelpCircle },
+];
+
+const QUICK_CHECKS: Record<
+  TopicId,
+  Array<{ q: string; options: string[]; answer: number; why: string }>
+> = {
+  basics: [
+    {
+      q: 'Which line correctly stores the string "PyVerse" inside a variable?',
+      options: ['name == "PyVerse"', 'name = "PyVerse"', 'name = PyVerse'],
+      answer: 1,
+      why: 'Single = assigns a value, and strings must be wrapped in quotes.',
+    },
+    {
+      q: 'What data type is 94.5 in Python?',
+      options: ['int', 'str', 'float'],
+      answer: 2,
+      why: 'Numbers with a decimal point are floats in Python.',
+    },
+  ],
+  conditionals: [
+    {
+      q: 'Which keyword tests another condition if the first if is False?',
+      options: ['elseif', 'elif', 'else if'],
+      answer: 1,
+      why: 'Python uses elif (short for else-if).',
+    },
+    {
+      q: 'What does 10 >= 10 evaluate to?',
+      options: ['True', 'False', 'Error'],
+      answer: 0,
+      why: '>= checks greater than OR equal to, so 10 >= 10 is True.',
+    },
+  ],
+  loops: [
+    {
+      q: 'Which numbers does range(1, 5) produce?',
+      options: ['1, 2, 3, 4, 5', '1, 2, 3, 4', '0, 1, 2, 3, 4'],
+      answer: 1,
+      why: 'range(start, stop) includes start (1) and excludes stop (5).',
+    },
+    {
+      q: 'Which statement skips the rest of the current pass without stopping the loop?',
+      options: ['break', 'stop', 'continue'],
+      answer: 2,
+      why: 'continue skips to the next iteration; break exits the loop entirely.',
+    },
+  ],
+};
+
+const ExpandableConcept: React.FC<{ title?: string; children: React.ReactNode }> = ({
+  title = 'Explore Concept',
+  children,
+}) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-2xl border border-slate-200/80 bg-[#F8FAFC]">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between px-4 py-2.5 text-left font-display text-xs font-semibold text-[#2563EB] hover:bg-sky-50/50 rounded-2xl transition-colors"
+      >
+        <span>{title}</span>
+        <ChevronDown
+          className={`h-4 w-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          aria-hidden="true"
+        />
+      </button>
+      {open && (
+        <div className="border-t border-slate-200/70 px-4 py-3 text-xs sm:text-sm leading-relaxed text-[#64748B] space-y-2">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const LearnSection: React.FC<LearnSectionProps> = ({
   activeTopic,
   onChangeTopic,
   completedLessons,
   onToggleLesson,
-  onOpenLab,
+  onNavigate,
+  onOpenGamesTab,
+  onOpenInSandbox,
 }) => {
-  // Interactive states for Topic 08 widgets
+  const [activeStage, setActiveStage] = useState<'all' | LearnStageId>('all');
+  const [cheatOpen, setCheatOpen] = useState(false);
+
+  // Basics interactive widgets
+  const [fName, setFName] = useState('Maya');
+  const [fScore, setFScore] = useState(92);
+  const [mathA, setMathA] = useState(17);
+  const [mathB, setMathB] = useState(5);
+
+  // Topic 08 Conditionals widgets
   const [cmpA, setCmpA] = useState(10);
   const [cmpB, setCmpB] = useState(5);
   const [boolA, setBoolA] = useState(true);
   const [boolB, setBoolB] = useState(false);
-
-  // 5 Real-world conditional interactive states
   const [rwMarks, setRwMarks] = useState(82);
   const [rwAge, setRwAge] = useState(19);
   const [rwSignNum, setRwSignNum] = useState(-4);
   const [rwEvenNum, setRwEvenNum] = useState(14);
   const [rwTotal, setRwTotal] = useState(120);
   const [rwMember, setRwMember] = useState(true);
-
-  // Flowchart explorer state (4.9)
   const [fcType, setFcType] = useState<FlowchartType>('if-else');
   const [fcValue, setFcValue] = useState(65);
   const [fcHasId, setFcHasId] = useState(true);
 
-  // Interactive states for Topic 09 widgets
+  // Topic 09 Loops widgets
   const [rangeStart, setRangeStart] = useState(1);
   const [rangeStop, setRangeStop] = useState(10);
   const [rangeStep, setRangeStep] = useState(2);
-
   const [breakAt, setBreakAt] = useState(4);
   const [skipAt, setSkipAt] = useState(3);
   const [nestRows, setNestRows] = useState(4);
   const [nestCols, setNestCols] = useState(4);
 
-  const lessons = activeTopic === 'conditionals' ? TOPIC_08_LESSONS : TOPIC_09_LESSONS;
+  // Mini self-check state
+  const [quickAnswers, setQuickAnswers] = useState<Record<string, number>>({});
+
+  const lessons =
+    activeTopic === 'basics'
+      ? TOPIC_BASICS_LESSONS
+      : activeTopic === 'conditionals'
+      ? TOPIC_08_LESSONS
+      : TOPIC_09_LESSONS;
   const doneCount = lessons.filter((l) => completedLessons.includes(l.id)).length;
+
+  const showStage = (stage: LearnStageId) =>
+    activeStage === 'all' || activeStage === stage;
 
   const getFlowchartHighlight = () => {
     if (fcType === 'if') {
@@ -74,7 +211,6 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
       ? { node: 'action1', branch: 'inner-true' }
       : { node: 'action2', branch: 'inner-false' };
   };
-
   const fcHighlight = getFlowchartHighlight();
 
   const computeRangeValues = () => {
@@ -97,12 +233,19 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
   };
   const rangePreview = computeRangeValues();
 
-  const renderLessonHeader = (id: string, num: string, title: string) => {
+  const renderLessonHeader = (
+    id: string,
+    num: string,
+    title: string,
+    stageTag: string
+  ) => {
     const isDone = completedLessons.includes(id);
     return (
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
         <div>
-          <span className="font-mono text-xs font-semibold text-sky-700">Section {num}</span>
+          <span className="font-mono text-xs font-semibold text-[#2563EB]">
+            Section {num} · {stageTag}
+          </span>
           <h3 className="mt-0.5 font-display text-xl font-bold text-[#1E293B] sm:text-2xl">
             {title}
           </h3>
@@ -133,63 +276,126 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-      {/* Top Topic Switcher */}
-      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-end">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+      {/* Top Topic Header + Controls */}
+      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end">
         <div>
-          <p className="text-xs font-semibold text-sky-700">PyVerse Curriculum</p>
+          <p className="text-xs font-semibold text-[#2563EB]">
+            PyVerse Visual Learning World
+          </p>
           <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
-            {activeTopic === 'conditionals'
-              ? 'Topic 08 — Conditional Statements'
-              : 'Topic 09 — Loops'}
+            {activeTopic === 'basics'
+              ? '01. Python Basics'
+              : activeTopic === 'conditionals'
+              ? '02. Conditional Statements'
+              : '03. Loops'}
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-600">
-            {activeTopic === 'conditionals'
-              ? 'Learn how Python evaluates True and False conditions to make smart decisions in code.'
-              : 'Learn how Python repeats tasks efficiently using for loops, while loops, range(), break, and continue.'}
+          <p className="mt-2 max-w-2xl text-sm text-[#64748B]">
+            {activeTopic === 'basics'
+              ? 'Visual foundation: variables as memory boxes, data types, print() output, and Python spacing.'
+              : activeTopic === 'conditionals'
+              ? 'Decision trees, balance-scale comparisons, True/False branching, and real-world checks.'
+              : 'Loop timelines, range() sequences, break/continue control, and nested iteration grids.'}
           </p>
         </div>
 
-        <div className="flex flex-col items-start gap-2 md:items-end">
-          <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-1">
+        <div className="flex flex-col items-start gap-2.5 lg:items-end">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1 shadow-xs">
+              <button
+                type="button"
+                onClick={() => {
+                  onChangeTopic('basics');
+                  setActiveStage('all');
+                }}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
+                  activeTopic === 'basics'
+                    ? 'bg-gradient-to-r from-[#38BDF8] to-[#2563EB] text-white shadow-xs'
+                    : 'text-[#64748B] hover:text-[#1E293B]'
+                }`}
+              >
+                <Box className="h-3.5 w-3.5" aria-hidden="true" />
+                01. Basics
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onChangeTopic('conditionals');
+                  setActiveStage('all');
+                }}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
+                  activeTopic === 'conditionals'
+                    ? 'bg-gradient-to-r from-[#2563EB] to-[#6366F1] text-white shadow-xs'
+                    : 'text-[#64748B] hover:text-[#1E293B]'
+                }`}
+              >
+                <GitBranch className="h-3.5 w-3.5" aria-hidden="true" />
+                02. Conditionals
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onChangeTopic('loops');
+                  setActiveStage('all');
+                }}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
+                  activeTopic === 'loops'
+                    ? 'bg-gradient-to-r from-[#8B5CF6] to-[#2563EB] text-white shadow-xs'
+                    : 'text-[#64748B] hover:text-[#1E293B]'
+                }`}
+              >
+                <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
+                03. Loops
+              </button>
+            </div>
+
             <button
               type="button"
-              onClick={() => onChangeTopic('conditionals')}
-              className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
-                activeTopic === 'conditionals'
-                  ? 'bg-gradient-to-r from-[#0EA5E9] to-[#6366F1] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-[#1E293B]'
-              }`}
+              onClick={() => setCheatOpen(true)}
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] shadow-xs hover:border-sky-300 hover:bg-[#F0F9FF] whitespace-nowrap"
             >
-              <GitBranch className="h-3.5 w-3.5" aria-hidden="true" />
-              08. Conditionals
-            </button>
-            <button
-              type="button"
-              onClick={() => onChangeTopic('loops')}
-              className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
-                activeTopic === 'loops'
-                  ? 'bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] text-white shadow-sm'
-                  : 'text-slate-600 hover:text-[#1E293B]'
-              }`}
-            >
-              <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
-              09. Loops
+              <BookMarked className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
+              Cheat Sheet
             </button>
           </div>
-          <span className="font-mono text-xs text-slate-500 tabular-nums">
-            {doneCount} of {lessons.length} sections completed
+
+          <span className="font-mono text-xs text-[#64748B] tabular-nums">
+            {doneCount} of {lessons.length} sections completed in this topic
           </span>
         </div>
       </div>
 
-      {/* Main Split: Chapter Sidebar + Content */}
+      {/* 6-Stage Visual Learning Flow Tabs */}
+      <div className="mb-8 overflow-x-auto pb-1">
+        <div className="inline-flex min-w-full sm:min-w-0 items-center gap-1.5 rounded-2xl border border-slate-200/90 bg-white p-1.5 shadow-xs">
+          {STAGES.map((st) => {
+            const Icon = st.icon;
+            const active = activeStage === st.id;
+            return (
+              <button
+                key={st.id}
+                type="button"
+                onClick={() => setActiveStage(st.id)}
+                className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 font-display text-xs font-semibold transition-all whitespace-nowrap ${
+                  active
+                    ? 'bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] text-white shadow-sm'
+                    : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]'
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                {st.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Main Split: Chapter Index + Visual Content */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-        {/* Sticky Chapter Index */}
         <aside className="lg:col-span-3">
-          <div className="sticky top-20 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm">
-            <h2 className="mb-3 font-display text-xs font-bold uppercase tracking-wider text-slate-500">
-              Lesson Chapters
+          <div className="sticky top-20 space-y-4 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm">
+            <h2 className="font-display text-xs font-bold uppercase tracking-wider text-[#64748B]">
+              Topic Chapters
             </h2>
             <nav aria-label="Lesson chapters" className="space-y-1">
               {lessons.map((lesson) => {
@@ -198,7 +404,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                   <a
                     key={lesson.id}
                     href={`#${lesson.id}`}
-                    className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-[#F0F9FF] hover:text-sky-800"
+                    onClick={() => setActiveStage('all')}
+                    className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-[#1E293B] transition-colors hover:bg-[#F0F9FF] hover:text-[#2563EB]"
                   >
                     <span className="truncate">
                       <span className="mr-1.5 font-mono text-slate-400">{lesson.number}</span>
@@ -215,887 +422,1125 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               })}
             </nav>
 
-            <div className="mt-5 border-t border-slate-200 pt-4">
+            <div className="space-y-2 border-t border-slate-200 pt-4">
+              <button
+                type="button"
+                onClick={() => onNavigate('simulators')}
+                className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-95"
+              >
+                <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
+                Open Simulators
+              </button>
               <button
                 type="button"
                 onClick={() =>
-                  onOpenLab(activeTopic === 'conditionals' ? 'conditional-sim' : 'loop-viz')
+                  onOpenGamesTab(
+                    activeTopic === 'basics' ? 'mini-games' : 'logic-lab'
+                  )
                 }
-                className="flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95"
+                className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-semibold text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]"
               >
-                Launch {activeTopic === 'conditionals' ? 'Conditional Simulator' : 'Loop Visualizer'}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                <Gamepad2 className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
+                {activeTopic === 'basics' ? 'Play Mini-Games' : 'Open Logic Lab'}
               </button>
             </div>
           </div>
         </aside>
 
-        {/* Lesson Content Column */}
-        <div className="space-y-8 lg:col-span-9">
-          {activeTopic === 'conditionals' ? (
+        {/* Lesson Cards Column */}
+        <div className="space-y-7 lg:col-span-9">
+          {/* ======================= TOPIC 01: PYTHON BASICS ======================= */}
+          {activeTopic === 'basics' && (
             <>
-              {/* 4.1 Introduction */}
-              <section id="c-intro" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-intro', '4.1', 'Introduction to Conditional Statements')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    <strong className="text-[#1E293B]">What are conditional statements?</strong> In daily life, you make
-                    decisions constantly: <em>&quot;If it is raining, I will carry an umbrella; otherwise, I will wear sunglasses.&quot;</em>{' '}
-                    Conditional statements let a Python program make similar decisions by running different blocks of code depending on whether a rule is true or false.
-                  </p>
-                  <p>
-                    <strong className="text-[#1E293B]">Why are they needed?</strong> Without conditionals, a program executes every line from top to bottom blindly. Conditionals allow software to react to user input, validate passwords, calculate grades, or trigger alerts.
-                  </p>
-                  <p>
-                    <strong className="text-[#1E293B]">What are True and False values?</strong> Python evaluates every condition into a{' '}
-                    <strong className="text-sky-700">Boolean</strong> (named after mathematician George Boole)—a data type with only two possible values:{' '}
-                    <code className="font-mono font-semibold text-emerald-700">True</code> or{' '}
-                    <code className="font-mono font-semibold text-violet-700">False</code> (always capitalized in Python).
-                  </p>
-                  <div className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4">
-                      <p className="font-mono text-xs font-bold text-emerald-800">Condition is True</p>
-                      <p className="mt-1 text-xs text-slate-700">
-                        Example: <code className="font-mono">temperature &gt; 30</code> when temperature is 34 → Python runs the indented action!
+              {(showStage('explore') || showStage('visualize')) && (
+                <section
+                  id="b-vars"
+                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                >
+                  {renderLessonHeader('b-vars', '1.1', 'Variables & Memory Boxes', 'Explore & Visualize')}
+                  <div className="space-y-4 text-sm text-[#1E293B]">
+                    <p className="text-[#64748B]">
+                      Think of a <strong className="text-[#1E293B]">variable</strong> as a labeled storage box. Python writes the label on the outside and stores your value inside.
+                    </p>
+                    <VariableBoxVisualizer />
+                    <ExpandableConcept title="Explore Concept: Rules for Naming Variables">
+                      <p>
+                        Variable names can use letters, numbers, and underscores (<code className="font-mono">student_age</code>), cannot start with a number, and cannot contain spaces. Python is case-sensitive (<code className="font-mono">Score</code> and <code className="font-mono">score</code> are two different boxes!).
                       </p>
-                    </div>
-                    <div className="rounded-2xl border border-violet-200 bg-violet-50/70 p-4">
-                      <p className="font-mono text-xs font-bold text-violet-800">Condition is False</p>
-                      <p className="mt-1 text-xs text-slate-700">
-                        Example: <code className="font-mono">temperature &gt; 30</code> when temperature is 22 → Python skips the block.
-                      </p>
-                    </div>
+                    </ExpandableConcept>
                   </div>
-                </div>
-              </section>
+                </section>
+              )}
 
-              {/* 4.2 if statement */}
-              <section id="c-if" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-if', '4.2', 'The if Statement')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    The <code className="font-mono font-semibold text-violet-700">if</code> statement runs a block of code{' '}
-                    <strong>only if</strong> its condition evaluates to{' '}
-                    <code className="font-mono font-semibold text-emerald-700">True</code>.
-                  </p>
-                  <ul className="list-disc space-y-1.5 pl-5 text-slate-700">
-                    <li>
-                      <strong className="text-[#1E293B]">Syntax:</strong> Start with <code className="font-mono">if</code>, write your condition, and end the line with a{' '}
-                      <strong className="text-sky-700">colon (:)</strong>.
-                    </li>
-                    <li>
-                      <strong className="text-[#1E293B]">Indentation:</strong> Indentation means the leading spaces before a line (4 spaces is standard in Python). Every indented line belongs inside the <code className="font-mono">if</code> block.
-                    </li>
-                  </ul>
-                  <div className="grid grid-cols-1 gap-6 pt-2 md:grid-cols-2">
-                    <CodeBlock
-                      title="if_example.py"
-                      code={'age = 18\n\nif age >= 18:\n    print("Eligible")'}
-                    />
-                    <div className="space-y-2.5 rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs text-slate-700">
-                      <p className="font-bold text-[#1E293B]">Line-by-Line Explanation</p>
-                      <p><span className="font-mono font-semibold text-sky-700">Line 1:</span> <code className="font-mono">age = 18</code> stores the number 18 in variable <code className="font-mono">age</code>.</p>
-                      <p><span className="font-mono font-semibold text-sky-700">Line 3:</span> <code className="font-mono">if age &gt;= 18:</code> checks if 18 is greater than or equal to 18. That is <strong className="text-emerald-700">True</strong>.</p>
-                      <p><span className="font-mono font-semibold text-sky-700">Line 4:</span> Because it is indented by 4 spaces and the condition was True, Python prints <code className="font-mono font-semibold text-emerald-700">Eligible</code>.</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.3 if-else statement */}
-              <section id="c-ifelse" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-ifelse', '4.3', 'The if-else Statement')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    Use <code className="font-mono font-semibold text-violet-700">else</code> when you want Python to choose between <strong>two mutually exclusive branches</strong>: one runs when the condition is <code className="font-mono">True</code>, and the <code className="font-mono">else</code> branch runs when it is <code className="font-mono">False</code>.
-                  </p>
-                  <div className="grid grid-cols-1 gap-6 pt-2 lg:grid-cols-2">
-                    <div className="space-y-4">
-                      <CodeBlock
-                        title="if_else_marks.py"
-                        code={'marks = 35\n\nif marks >= 40:\n    print("Pass")\nelse:\n    print("Fail")'}
-                      />
-                      <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs space-y-1.5 text-slate-700">
-                        <p><strong className="text-[#1E293B]">Trace with marks = 35:</strong></p>
-                        <p>1. <code className="font-mono">35 &gt;= 40</code> evaluates to <span className="text-violet-700 font-bold">False</span>.</p>
-                        <p>2. Python skips <code className="font-mono">print(&quot;Pass&quot;)</code> and jumps directly to <code className="font-mono">else:</code>.</p>
-                        <p>3. Output: <code className="font-mono font-bold text-emerald-700">Fail</code>.</p>
-                      </div>
-                    </div>
-                    <FlowchartSVG type="if-else" activeNode="action2" activeBranch="false" />
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.4 if-elif-else */}
-              <section id="c-elif" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-elif', '4.4', 'The if-elif-else Statement')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    When you have three or more possible outcomes, chain conditions with <code className="font-mono font-semibold text-violet-700">elif</code> (short for <em>else if</em>) and finish with a default <code className="font-mono font-semibold text-violet-700">else</code> branch.
-                  </p>
-                  <p>
-                    <strong className="text-[#1E293B]">Why order matters &amp; why only one branch executes:</strong> Python evaluates conditions strictly from <strong>top to bottom</strong>. As soon as it finds the <strong>first</strong> condition that is <code className="font-mono">True</code>, it runs that branch and skips all remaining <code className="font-mono">elif</code> and <code className="font-mono">else</code> blocks! If you accidentally put <code className="font-mono">marks &gt;= 40</code> first, a score of 95 would match 40+ and print &quot;Pass&quot; instead of &quot;Grade A&quot;.
-                  </p>
-                  <div className="grid grid-cols-1 gap-6 pt-2 lg:grid-cols-2">
-                    <CodeBlock
-                      title="grade_ladder.py"
-                      code={'marks = 85\n\nif marks >= 90:\n    print("Grade A")\nelif marks >= 75:\n    print("Grade B")\nelif marks >= 40:\n    print("Pass")\nelse:\n    print("Fail")'}
-                    />
-                    <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs space-y-2.5 text-slate-700">
-                      <p className="font-bold text-[#1E293B]">Evaluation Order for marks = 85</p>
-                      <p>1. <code className="font-mono">85 &gt;= 90</code> → <span className="text-violet-700 font-semibold">False</span> (keep checking)</p>
-                      <p>2. <code className="font-mono">85 &gt;= 75</code> → <span className="text-emerald-700 font-bold">True!</span> Prints <code className="font-mono font-bold text-emerald-700">&quot;Grade B&quot;</code></p>
-                      <p>3. Remaining <code className="font-mono">elif marks &gt;= 40</code> and <code className="font-mono">else</code> are skipped immediately.</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.5 Nested if */}
-              <section id="c-nested" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-nested', '4.5', 'Nested if Statements')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    <strong className="text-[#1E293B]">Nesting</strong> means placing an <code className="font-mono">if</code> statement inside another <code className="font-mono">if</code> block. The inner condition is only checked if the outer condition is already <code className="font-mono">True</code>.
-                  </p>
-                  <p>
-                    Notice the indentation levels: <strong>4 spaces</strong> for the outer block, and <strong>8 spaces</strong> for the inner block!
-                  </p>
-                  <div className="grid grid-cols-1 gap-6 pt-2 lg:grid-cols-2">
-                    <CodeBlock
-                      title="nested_if.py"
-                      code={'age = 20\nhas_id = True\n\nif age >= 18:\n    if has_id == True:\n        print("Entry Allowed")\n    else:\n        print("Please show ID")\nelse:\n    print("Must be 18 or older")'}
-                    />
-                    <FlowchartSVG type="nested-if" activeNode="action1" activeBranch="inner-true" />
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.6 Comparison Operators */}
-              <section id="c-compare" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-compare', '4.6', 'Comparison Operators')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    Comparison operators compare two values and return either <code className="font-mono font-semibold text-emerald-700">True</code> or <code className="font-mono font-semibold text-violet-700">False</code>.
-                    Always remember: <strong className="text-[#1E293B]"><code className="font-mono">=</code> assigns a value</strong> (like <code className="font-mono">x = 5</code>), while <strong className="text-sky-700"><code className="font-mono">==</code> compares equality</strong> (like <code className="font-mono">x == 5</code>).
-                  </p>
-
-                  <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4">
-                    <div className="mb-4 flex flex-wrap items-center gap-4">
-                      <label className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                        Value a:
-                        <input
-                          type="number"
-                          value={cmpA}
-                          onChange={(e) => setCmpA(Number(e.target.value))}
-                          className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-mono text-sm text-[#1E293B]"
-                        />
-                      </label>
-                      <label className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                        Value b:
-                        <input
-                          type="number"
-                          value={cmpB}
-                          onChange={(e) => setCmpB(Number(e.target.value))}
-                          className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-mono text-sm text-[#1E293B]"
-                        />
-                      </label>
-                    </div>
-
-                    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white px-4">
-                      <table className="w-full text-left text-xs">
-                        <thead>
-                          <tr className="border-b border-slate-200 text-slate-500">
-                            <th className="py-2.5 pr-4 font-semibold">Operator</th>
-                            <th className="py-2.5 pr-4 font-semibold">Meaning</th>
-                            <th className="py-2.5 pr-4 font-semibold">Expression</th>
-                            <th className="py-2.5 font-semibold">Live Result</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 font-mono">
-                          {[
-                            { op: '==', desc: 'Equal to', res: cmpA === cmpB },
-                            { op: '!=', desc: 'Not equal to', res: cmpA !== cmpB },
-                            { op: '>', desc: 'Greater than', res: cmpA > cmpB },
-                            { op: '<', desc: 'Less than', res: cmpA < cmpB },
-                            { op: '>=', desc: 'Greater than or equal', res: cmpA >= cmpB },
-                            { op: '<=', desc: 'Less than or equal', res: cmpA <= cmpB },
-                          ].map((row) => (
-                            <tr key={row.op}>
-                              <td className="py-2.5 pr-4 font-bold text-sky-700">{row.op}</td>
-                              <td className="py-2.5 pr-4 font-sans text-slate-700">{row.desc}</td>
-                              <td className="py-2.5 pr-4 text-[#1E293B] tabular-nums">
-                                {cmpA} {row.op} {cmpB}
-                              </td>
-                              <td className={`py-2.5 font-bold ${row.res ? 'text-emerald-700' : 'text-violet-700'}`}>
-                                {row.res ? 'True' : 'False'}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.7 Logical Operators */}
-              <section id="c-logical" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-logical', '4.7', 'Logical Operators (and, or, not)')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    Combine or flip boolean conditions using <code className="font-mono font-semibold text-violet-700">and</code>,{' '}
-                    <code className="font-mono font-semibold text-violet-700">or</code>, and <code className="font-mono font-semibold text-violet-700">not</code>.
-                    Toggle <code className="font-mono">A</code> and <code className="font-mono">B</code> below to see the live truth table highlight:
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4">
-                    <button
-                      type="button"
-                      onClick={() => setBoolA((v) => !v)}
-                      className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
-                        boolA
-                          ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                          : 'border-violet-300 bg-violet-50 text-violet-800'
-                      }`}
-                    >
-                      A = {boolA ? 'True' : 'False'} (Toggle)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setBoolB((v) => !v)}
-                      className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
-                        boolB
-                          ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                          : 'border-violet-300 bg-violet-50 text-violet-800'
-                      }`}
-                    >
-                      B = {boolB ? 'True' : 'False'} (Toggle)
-                    </button>
-                    <div className="ml-auto flex flex-wrap gap-4 font-mono text-xs text-slate-700">
-                      <span>
-                        A and B:{' '}
-                        <strong className={boolA && boolB ? 'text-emerald-700' : 'text-violet-700'}>
-                          {boolA && boolB ? 'True' : 'False'}
-                        </strong>
-                      </span>
-                      <span>
-                        A or B:{' '}
-                        <strong className={boolA || boolB ? 'text-emerald-700' : 'text-violet-700'}>
-                          {boolA || boolB ? 'True' : 'False'}
-                        </strong>
-                      </span>
-                      <span>
-                        not A:{' '}
-                        <strong className={!boolA ? 'text-emerald-700' : 'text-violet-700'}>
-                          {!boolA ? 'True' : 'False'}
-                        </strong>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white p-4">
-                    <table className="w-full text-left font-mono text-xs">
-                      <thead>
-                        <tr className="border-b border-slate-200 text-slate-500">
-                          <th className="py-2 pr-4">A</th>
-                          <th className="py-2 pr-4">B</th>
-                          <th className="py-2 pr-4">A and B (Both True)</th>
-                          <th className="py-2 pr-4">A or B (At least one True)</th>
-                          <th className="py-2">not A (Opposite)</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {[
-                          [true, true],
-                          [true, false],
-                          [false, true],
-                          [false, false],
-                        ].map(([a, b], idx) => {
-                          const isActiveRow = a === boolA && b === boolB;
-                          return (
-                            <tr
-                              key={idx}
-                              className={isActiveRow ? 'bg-sky-50 font-bold' : ''}
-                            >
-                              <td className="py-2.5 pr-4 text-[#1E293B]">{a ? 'True' : 'False'}</td>
-                              <td className="py-2.5 pr-4 text-[#1E293B]">{b ? 'True' : 'False'}</td>
-                              <td className={`py-2.5 pr-4 ${a && b ? 'text-emerald-700' : 'text-violet-700'}`}>
-                                {a && b ? 'True' : 'False'}
-                              </td>
-                              <td className={`py-2.5 pr-4 ${a || b ? 'text-emerald-700' : 'text-violet-700'}`}>
-                                {a || b ? 'True' : 'False'}
-                              </td>
-                              <td className={`py-2.5 ${!a ? 'text-emerald-700' : 'text-violet-700'}`}>
-                                {!a ? 'True' : 'False'}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.8 Real-world applications */}
-              <section id="c-realworld" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-realworld', '4.8', 'Real-World Conditional Applications')}
-                <p className="mb-5 text-sm text-slate-600">
-                  Test all five beginner programs live by entering your own inputs below:
-                </p>
-
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2.5">
-                    <h4 className="font-display text-sm font-bold text-[#1E293B]">1. Marks &amp; Grade Checker</h4>
-                    <label className="block text-xs font-medium text-slate-600">
-                      Marks (0–100):
-                      <input
-                        type="number"
-                        min={0}
-                        max={100}
-                        value={rwMarks}
-                        onChange={(e) => setRwMarks(Number(e.target.value))}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                      />
-                    </label>
-                    <p className="font-mono text-xs font-bold text-emerald-700">
-                      Result:{' '}
-                      {rwMarks >= 90
-                        ? 'Grade A'
-                        : rwMarks >= 75
-                        ? 'Grade B'
-                        : rwMarks >= 40
-                        ? 'Pass'
-                        : 'Fail'}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2.5">
-                    <h4 className="font-display text-sm font-bold text-[#1E293B]">2. Age Eligibility Checker</h4>
-                    <label className="block text-xs font-medium text-slate-600">
-                      Age:
-                      <input
-                        type="number"
-                        min={0}
-                        max={120}
-                        value={rwAge}
-                        onChange={(e) => setRwAge(Number(e.target.value))}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                      />
-                    </label>
-                    <p className="font-mono text-xs font-bold text-emerald-700">
-                      Result: {rwAge >= 18 ? 'Eligible to vote & drive' : 'Not eligible yet (under 18)'}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2.5">
-                    <h4 className="font-display text-sm font-bold text-[#1E293B]">3. Positive, Negative, or Zero</h4>
-                    <label className="block text-xs font-medium text-slate-600">
-                      Number:
-                      <input
-                        type="number"
-                        value={rwSignNum}
-                        onChange={(e) => setRwSignNum(Number(e.target.value))}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                      />
-                    </label>
-                    <p className="font-mono text-xs font-bold text-emerald-700">
-                      Result: {rwSignNum > 0 ? 'Positive (> 0)' : rwSignNum < 0 ? 'Negative (< 0)' : 'Zero (== 0)'}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2.5">
-                    <h4 className="font-display text-sm font-bold text-[#1E293B]">4. Even &amp; Odd Checker</h4>
-                    <label className="block text-xs font-medium text-slate-600">
-                      Whole Number:
-                      <input
-                        type="number"
-                        value={rwEvenNum}
-                        onChange={(e) => setRwEvenNum(Math.trunc(Number(e.target.value)))}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                      />
-                    </label>
-                    <p className="font-mono text-xs font-bold text-emerald-700">
-                      {rwEvenNum} % 2 == {Math.abs(rwEvenNum % 2)} → {rwEvenNum % 2 === 0 ? 'Even' : 'Odd'}
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2.5 md:col-span-2">
-                    <h4 className="font-display text-sm font-bold text-[#1E293B]">5. Discount Eligibility Checker</h4>
-                    <div className="flex flex-wrap items-center gap-4">
-                      <label className="text-xs font-medium text-slate-600">
-                        Order Total ($):
-                        <input
-                          type="number"
-                          min={0}
-                          value={rwTotal}
-                          onChange={(e) => setRwTotal(Number(e.target.value))}
-                          className="ml-2 w-24 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm text-[#1E293B]"
-                        />
-                      </label>
-                      <label className="flex items-center gap-2 text-xs font-medium text-slate-700 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={rwMember}
-                          onChange={(e) => setRwMember(e.target.checked)}
-                          className="accent-sky-600"
-                        />
-                        Student Member (`is_member = True`)
-                      </label>
-                    </div>
-                    <p className="font-mono text-xs font-bold text-emerald-700">
-                      {rwTotal >= 100 || rwMember
-                        ? `Discount Applied (20% off) → Final Price: $${(rwTotal * 0.8).toFixed(2)}`
-                        : `Standard Price (Spend $100+ or be a member for 20% off) → $${rwTotal.toFixed(2)}`}
-                    </p>
-                  </div>
-                </div>
-              </section>
-
-              {/* 4.9 Flowcharts */}
-              <section id="c-flowchart" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('c-flowchart', '4.9', 'Interactive Conditional Flowcharts')}
-                <p className="mb-4 text-sm text-slate-600">
-                  Select a flowchart pattern and change the input value to watch the exact execution path highlight from Start to End:
-                </p>
-
-                <div className="mb-5 flex flex-wrap items-center gap-2.5">
-                  {(['if', 'if-else', 'if-elif-else', 'nested-if'] as FlowchartType[]).map((t) => (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => setFcType(t)}
-                      className={`rounded-xl border px-3.5 py-1.5 font-mono text-xs font-semibold transition-all ${
-                        fcType === t
-                          ? 'border-transparent bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-sm'
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-sky-300'
-                      }`}
-                    >
-                      {t}
-                    </button>
-                  ))}
-
-                  <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-slate-700">
-                    {fcType === 'if' || fcType === 'nested-if' ? 'age:' : 'marks:'}
-                    <input
-                      type="number"
-                      value={fcValue}
-                      onChange={(e) => setFcValue(Number(e.target.value))}
-                      className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm text-[#1E293B]"
-                    />
-                  </label>
-
-                  {fcType === 'nested-if' && (
-                    <label className="flex items-center gap-2 text-xs font-medium text-slate-700 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={fcHasId}
-                        onChange={(e) => setFcHasId(e.target.checked)}
-                        className="accent-sky-600"
-                      />
-                      has_id = True
-                    </label>
-                  )}
-                </div>
-
-                <FlowchartSVG
-                  type={fcType}
-                  activeNode={fcHighlight.node}
-                  activeBranch={fcHighlight.branch}
-                />
-              </section>
-            </>
-          ) : (
-            <>
-              {/* 6.1 Introduction to Loops */}
-              <section id="l-intro" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-intro', '6.1', 'Introduction to Loops')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    <strong className="text-[#1E293B]">What is a loop?</strong> A loop is a programming instruction that repeats a block of code automatically until a task is finished or a condition becomes <code className="font-mono">False</code>. Each single pass through the loop is called an <strong className="text-violet-700">iteration</strong>.
-                  </p>
-                  <p>
-                    <strong className="text-[#1E293B]">Manual repetition vs Loops:</strong> Imagine printing numbers 1 to 100. Writing 100 separate <code className="font-mono">print()</code> lines is slow and error-prone. A loop accomplishes the exact same task in 2 lines!
-                  </p>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <CodeBlock
-                      title="manual_way.py (Tedious)"
-                      code={'print(1)\nprint(2)\nprint(3)\nprint(4)\nprint(5)'}
-                      compact
-                    />
-                    <CodeBlock
-                      title="loop_way.py (Clean & Scalable)"
-                      code={'for i in range(1, 6):\n    print(i)'}
-                      compact
-                    />
-                  </div>
-                </div>
-              </section>
-
-              {/* 6.2 for loop */}
-              <section id="l-for" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-for', '6.2', 'The for Loop')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    A <code className="font-mono font-semibold text-violet-700">for</code> loop iterates over every item in a sequence (such as numbers from <code className="font-mono">range()</code>, characters in a string, or items in a list). On each pass, Python assigns the next item to the <strong className="text-[#1E293B]">loop variable</strong> (<code className="font-mono">i</code>).
-                  </p>
-                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div className="space-y-4">
-                      <CodeBlock
-                        title="for_loop.py"
-                        code={'for i in range(1, 6):\n    print(i)'}
-                      />
-                      <div className="rounded-2xl border border-violet-100 bg-violet-50/50 p-4 text-xs space-y-1.5 text-slate-700">
-                        <p className="font-bold text-[#1E293B]">Line-by-Line &amp; Output</p>
-                        <p><span className="font-mono font-semibold text-violet-700">Line 1:</span> <code className="font-mono">range(1, 6)</code> produces <code className="font-mono">1, 2, 3, 4, 5</code>. Each value enters <code className="font-mono">i</code> one by one.</p>
-                        <p><span className="font-mono font-semibold text-violet-700">Line 2:</span> Indented <code className="font-mono">print(i)</code> runs 5 times, outputting:</p>
-                        <pre className="mt-1 rounded-xl bg-[#0F172A] p-2.5 font-mono text-emerald-300">1{'\n'}2{'\n'}3{'\n'}4{'\n'}5</pre>
-                      </div>
-                    </div>
-                    <FlowchartSVG type="for" activeNode="body" activeBranch="loop-true" />
-                  </div>
-                </div>
-              </section>
-
-              {/* 6.3 range() function */}
-              <section id="l-range" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-range', '6.3', 'The range() Function')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    <code className="font-mono font-semibold text-sky-700">range()</code> generates a sequence of integers. One golden rule in Python: <strong className="text-[#1E293B]">the <code className="font-mono">stop</code> value is always excluded</strong> (Python stops right before reaching it).
-                  </p>
-                  <ul className="list-disc space-y-1 pl-5 text-xs sm:text-sm">
-                    <li><code className="font-mono font-semibold text-sky-700">range(stop)</code> — starts at <code className="font-mono">0</code>, increments by <code className="font-mono">1</code>, stops before <code className="font-mono">stop</code>.</li>
-                    <li><code className="font-mono font-semibold text-sky-700">range(start, stop)</code> — starts at <code className="font-mono">start</code>, stops before <code className="font-mono">stop</code>.</li>
-                    <li><code className="font-mono font-semibold text-sky-700">range(start, stop, step)</code> — changes by <code className="font-mono">step</code> each time (use negative step to count backwards!).</li>
-                  </ul>
-
-                  <div className="rounded-2xl border border-violet-100 bg-[#F0F9FF]/60 p-4 space-y-4">
-                    <p className="font-display text-xs font-bold uppercase tracking-wider text-violet-700">
-                      Interactive range() Builder
-                    </p>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                      <label className="text-xs font-medium text-slate-600">
-                        start:
-                        <input
-                          type="number"
-                          value={rangeStart}
-                          onChange={(e) => setRangeStart(Number(e.target.value))}
-                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                        />
-                      </label>
-                      <label className="text-xs font-medium text-slate-600">
-                        stop (excluded):
-                        <input
-                          type="number"
-                          value={rangeStop}
-                          onChange={(e) => setRangeStop(Number(e.target.value))}
-                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                        />
-                      </label>
-                      <label className="text-xs font-medium text-slate-600">
-                        step:
-                        <input
-                          type="number"
-                          value={rangeStep}
-                          onChange={(e) => setRangeStep(Number(e.target.value))}
-                          className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
-                        />
-                      </label>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="font-mono font-medium text-slate-700">
-                        range({rangeStart}, {rangeStop}, {rangeStep}) →
-                      </span>
-                      {rangePreview.warning ? (
-                        <span className="font-medium text-amber-700">{rangePreview.warning}</span>
-                      ) : (
-                        rangePreview.values.map((val, idx) => (
-                          <span
-                            key={`${val}-${idx}`}
-                            className="inline-flex h-8 min-w-[34px] items-center justify-center rounded-lg border border-violet-200 bg-white px-2 font-mono font-bold text-violet-700 shadow-xs tabular-nums"
-                          >
-                            {val}
-                          </span>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 6.4 while loop */}
-              <section id="l-while" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-while', '6.4', 'The while Loop')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    A <code className="font-mono font-semibold text-violet-700">while</code> loop keeps repeating <strong>as long as its condition remains True</strong>. Before every pass, Python checks the condition. When it finally becomes <code className="font-mono">False</code>, the loop stops.
-                  </p>
-                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div className="space-y-4">
-                      <CodeBlock
-                        title="while_loop.py"
-                        code={'count = 1\n\nwhile count <= 5:\n    print(count)\n    count += 1'}
-                      />
-                      <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs space-y-1.5 text-slate-700">
-                        <p><span className="font-mono font-semibold text-sky-700">Line 1:</span> Initialize <code className="font-mono">count = 1</code> before the loop starts.</p>
-                        <p><span className="font-mono font-semibold text-sky-700">Line 3:</span> Condition <code className="font-mono">count &lt;= 5</code> is checked before each pass.</p>
-                        <p><span className="font-mono font-semibold text-sky-700">Line 4:</span> Prints current value of <code className="font-mono">count</code>.</p>
-                        <p><span className="font-mono font-semibold text-sky-700">Line 5:</span> <code className="font-mono">count += 1</code> updates the variable so the loop eventually stops when <code className="font-mono">count</code> reaches 6.</p>
-                      </div>
-                    </div>
-                    <FlowchartSVG type="while" activeNode="check" activeBranch="loop-back" />
-                  </div>
-                </div>
-              </section>
-
-              {/* 6.5 for vs while comparison */}
-              <section id="l-compare" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-compare', '6.5', 'for Loop vs while Loop')}
-                <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4">
-                  <table className="w-full text-left text-xs sm:text-sm">
-                    <thead>
-                      <tr className="border-b border-slate-200 text-slate-500">
-                        <th className="py-2.5 pr-4 font-semibold">Feature</th>
-                        <th className="py-2.5 pr-4 font-bold text-sky-700">for Loop</th>
-                        <th className="py-2.5 font-bold text-violet-700">while Loop</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-200/70 text-slate-700">
-                      <tr>
-                        <td className="py-3 pr-4 font-semibold text-[#1E293B]">How it works</td>
-                        <td className="py-3 pr-4">Takes items one-by-one from a sequence like <code className="font-mono">range()</code>.</td>
-                        <td className="py-3">Checks a boolean condition before each pass and repeats while <code className="font-mono">True</code>.</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3 pr-4 font-semibold text-[#1E293B]">Best used when</td>
-                        <td className="py-3 pr-4">You know the exact count or sequence beforehand.</td>
-                        <td className="py-3">You want to repeat until a changing condition becomes <code className="font-mono">False</code>.</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3 pr-4 font-semibold text-[#1E293B]">Common example</td>
-                        <td className="py-3 pr-4 font-mono text-xs text-sky-800">for i in range(1, 11):</td>
-                        <td className="py-3 font-mono text-xs text-violet-800">while balance &gt; 0:</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3 pr-4 font-semibold text-[#1E293B]">Key difference</td>
-                        <td className="py-3 pr-4">Loop variable updates automatically every iteration.</td>
-                        <td className="py-3">You must update the condition variable manually inside the body.</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-
-              {/* 6.6 break statement */}
-              <section id="l-break" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-break', '6.6', 'The break Statement')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    <code className="font-mono font-semibold text-violet-700">break</code> immediately terminates the nearest enclosing loop and jumps to the first line after the loop. It is commonly used when searching for an item and stopping as soon as you find it.
-                  </p>
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <span className="text-xs font-semibold text-[#1E293B]">
-                        Interactive <code className="font-mono text-violet-700">break</code> Demo (1 to 6):
-                      </span>
-                      <label className="text-xs font-medium text-slate-700">
-                        Break when <code className="font-mono">i ==</code>
-                        <select
-                          value={breakAt}
-                          onChange={(e) => setBreakAt(Number(e.target.value))}
-                          className="ml-2 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-[#1E293B]"
-                        >
-                          {[2, 3, 4, 5, 6].map((n) => (
-                            <option key={n} value={n}>{n}</option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                    <div className="grid grid-cols-6 gap-2">
-                      {[1, 2, 3, 4, 5, 6].map((n) => {
-                        const isBreak = n === breakAt;
-                        const isAfter = n > breakAt;
-                        return (
-                          <div
-                            key={n}
-                            className={`rounded-xl border p-2 text-center font-mono text-xs ${
-                              isBreak
-                                ? 'border-violet-300 bg-violet-100 text-violet-900 font-bold'
-                                : isAfter
-                                ? 'border-slate-200 bg-slate-100 text-slate-400 line-through'
-                                : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
-                            }`}
-                          >
-                            {n}
-                            <div className="mt-0.5 text-[10px]">
-                              {isBreak ? 'BREAK' : isAfter ? 'Never' : 'Printed'}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <FlowchartSVG type="break-continue" activeBranch="break" labels={{ cond1: `if i == ${breakAt}:` }} />
-                </div>
-              </section>
-
-              {/* 6.7 continue statement */}
-              <section id="l-continue" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-continue', '6.7', 'The continue Statement')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    <code className="font-mono font-semibold text-sky-700">continue</code> does <strong>not</strong> stop the loop. Instead, it skips the rest of the code in the <em>current</em> iteration and jumps straight to the next iteration.
-                  </p>
-                  <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <span className="text-xs font-semibold text-[#1E293B]">
-                        Interactive <code className="font-mono text-sky-700">continue</code> Demo (1 to 6):
-                      </span>
-                      <label className="text-xs font-medium text-slate-700">
-                        Skip when <code className="font-mono">i ==</code>
-                        <select
-                          value={skipAt}
-                          onChange={(e) => setSkipAt(Number(e.target.value))}
-                          className="ml-2 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-[#1E293B]"
-                        >
-                          {[1, 2, 3, 4, 5, 6].map((n) => (
-                            <option key={n} value={n}>{n}</option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                    <div className="grid grid-cols-6 gap-2">
-                      {[1, 2, 3, 4, 5, 6].map((n) => {
-                        const isSkip = n === skipAt;
-                        return (
-                          <div
-                            key={n}
-                            className={`rounded-xl border p-2 text-center font-mono text-xs ${
-                              isSkip
-                                ? 'border-sky-300 bg-sky-100 text-sky-900 font-bold'
-                                : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
-                            }`}
-                          >
-                            {n}
-                            <div className="mt-0.5 text-[10px]">{isSkip ? 'SKIPPED' : 'Printed'}</div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {/* 6.8 Nested loops */}
-              <section id="l-nested" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-nested', '6.8', 'Nested Loops')}
-                <div className="space-y-4 text-sm leading-relaxed text-slate-700">
-                  <p>
-                    A nested loop puts one loop inside another. For <strong>each single step</strong> of the <strong className="text-sky-700">outer loop</strong>, the <strong className="text-violet-700">inner loop</strong> completes all of its iterations. Total inner runs = <code className="font-mono">outer_count × inner_count</code>.
-                  </p>
-                  <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4 space-y-4">
-                    <div className="flex flex-wrap items-center gap-6">
-                      <label className="text-xs font-medium text-slate-700">
-                        Outer Rows: <strong className="font-mono text-sky-700">{nestRows}</strong>
-                        <input
-                          type="range"
-                          min={1}
-                          max={5}
-                          value={nestRows}
-                          onChange={(e) => setNestRows(Number(e.target.value))}
-                          className="ml-2 accent-sky-500 cursor-pointer"
-                        />
-                      </label>
-                      <label className="text-xs font-medium text-slate-700">
-                        Inner Columns: <strong className="font-mono text-violet-700">{nestCols}</strong>
-                        <input
-                          type="range"
-                          min={1}
-                          max={6}
-                          value={nestCols}
-                          onChange={(e) => setNestCols(Number(e.target.value))}
-                          className="ml-2 accent-violet-500 cursor-pointer"
-                        />
-                      </label>
-                      <span className="ml-auto font-mono text-xs font-bold text-emerald-700 tabular-nums">
-                        Total cells: {nestRows} × {nestCols} = {nestRows * nestCols}
-                      </span>
-                    </div>
-
-                    <div className="space-y-1.5 font-mono text-xs">
-                      {Array.from({ length: nestRows }, (_, r) => (
-                        <div key={r} className="flex items-center gap-2">
-                          <span className="w-16 text-slate-500">row {r + 1}:</span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {Array.from({ length: nestCols }, (_, c) => (
-                              <span
-                                key={c}
-                                className="rounded-lg border border-sky-200 bg-white px-2.5 py-1 font-semibold text-sky-800 shadow-xs tabular-nums"
-                              >
-                                ({r + 1},{c + 1})
-                              </span>
-                            ))}
-                          </div>
+              {(showStage('understand') || showStage('experiment')) && (
+                <section
+                  id="b-types"
+                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                >
+                  {renderLessonHeader('b-types', '1.2', 'Core Data Types (int, float, str, bool)', 'Understand & Experiment')}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                      {[
+                        { type: 'int', ex: '42', desc: 'Whole numbers', tone: 'border-sky-200 bg-sky-50/70 text-sky-800' },
+                        { type: 'float', ex: '3.14', desc: 'Decimal numbers', tone: 'border-indigo-200 bg-indigo-50/70 text-indigo-800' },
+                        { type: 'str', ex: '"Hi"', desc: 'Text in quotes', tone: 'border-violet-200 bg-violet-50/70 text-violet-800' },
+                        { type: 'bool', ex: 'True', desc: 'True or False', tone: 'border-emerald-200 bg-emerald-50/70 text-emerald-800' },
+                      ].map((t) => (
+                        <div key={t.type} className={`rounded-2xl border p-4 ${t.tone}`}>
+                          <div className="font-mono text-xs font-bold">{t.type}</div>
+                          <div className="mt-1 font-mono text-xl font-extrabold">{t.ex}</div>
+                          <div className="mt-1 text-xs opacity-85">{t.desc}</div>
                         </div>
                       ))}
                     </div>
-                  </div>
-                  <FlowchartSVG type="nested-loop" activeNode="inner" activeBranch="inner-body" />
-                </div>
-              </section>
 
-              {/* 6.9 Common mistakes */}
-              <section id="l-mistakes" className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
-                {renderLessonHeader('l-mistakes', '6.9', 'Common Loop Mistakes & Fixes')}
-                <div className="space-y-5 text-sm text-slate-700">
-                  {[
-                    {
-                      title: '1. Forgetting to update a while-loop variable (Infinite Loop)',
-                      bad: 'i = 1\nwhile i <= 5:\n    print(i)\n# i never changes!',
-                      good: 'i = 1\nwhile i <= 5:\n    print(i)\n    i += 1',
-                      why: 'Without i += 1, i stays 1 forever and i <= 5 never becomes False.',
-                    },
-                    {
-                      title: '2. Wrong range() stop boundary (Off-by-One)',
-                      bad: '# Goal: print 1 to 5\nfor i in range(1, 5):\n    print(i)  # Stops at 4!',
-                      good: '# Goal: print 1 to 5\nfor i in range(1, 6):\n    print(i)',
-                      why: 'range(start, stop) excludes stop. Always pass 6 if you want to include 5.',
-                    },
-                    {
-                      title: '3. Incorrect Indentation',
-                      bad: 'for i in range(3):\nprint(i)  # IndentationError',
-                      good: 'for i in range(3):\n    print(i)',
-                      why: 'Statements inside a loop body must be indented by 4 spaces under the loop header.',
-                    },
-                    {
-                      title: '4. Confusing break and continue',
-                      bad: '# Wanted to skip 3, accidentally stopped!\nfor i in range(1, 6):\n    if i == 3:\n        break\n    print(i)',
-                      good: '# Correctly skips only 3\nfor i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)',
-                      why: 'break exits the whole loop at 3 (stops at 2). continue skips only 3 and prints 1, 2, 4, 5.',
-                    },
-                  ].map((item) => (
-                    <div key={item.title} className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
-                      <div className="flex items-center gap-2 font-display text-sm font-bold text-amber-800">
-                        <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
-                        {item.title}
+                    {/* Interactive f-string & print() Builder */}
+                    <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 space-y-3">
+                      <p className="font-display text-xs font-bold uppercase tracking-wider text-[#2563EB]">
+                        Experiment: Live f-string &amp; print() Builder
+                      </p>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <label className="text-xs font-semibold text-[#1E293B]">
+                          student_name (str):
+                          <input
+                            type="text"
+                            value={fName}
+                            onChange={(e) => setFName(e.target.value)}
+                            className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                          />
+                        </label>
+                        <label className="text-xs font-semibold text-[#1E293B]">
+                          score (int):
+                          <input
+                            type="number"
+                            value={fScore}
+                            onChange={(e) => setFScore(Number(e.target.value))}
+                            className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                          />
+                        </label>
                       </div>
                       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <CodeBlock title="Broken Code" code={item.bad} compact showCopy={false} />
-                        <CodeBlock title="Corrected Code" code={item.good} compact showCopy={false} />
+                        <pre className="rounded-xl bg-[#0F172A] p-3 font-mono text-xs text-slate-200">
+                          {`name = "${fName}"\nscore = ${fScore}\nprint(f"Hi {name}, score: {score}")`}
+                        </pre>
+                        <div className="flex flex-col justify-center rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 font-mono text-xs">
+                          <span className="text-[11px] font-semibold text-emerald-700">Live Output:</span>
+                          <span className="mt-1 text-sm font-bold text-[#1E293B]">
+                            Hi {fName}, score: {fScore}
+                          </span>
+                        </div>
                       </div>
-                      <p className="text-xs text-slate-600">{item.why}</p>
                     </div>
-                  ))}
-                </div>
-              </section>
+                  </div>
+                </section>
+              )}
+
+              {(showStage('understand') || showStage('experiment')) && (
+                <section
+                  id="b-io"
+                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                >
+                  {renderLessonHeader('b-io', '1.3', 'Math Expressions & Python Indentation', 'Experiment')}
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <label className="text-xs font-semibold text-[#1E293B]">
+                          a:
+                          <input
+                            type="number"
+                            value={mathA}
+                            onChange={(e) => setMathA(Number(e.target.value))}
+                            className="ml-2 w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                          />
+                        </label>
+                        <label className="text-xs font-semibold text-[#1E293B]">
+                          b:
+                          <input
+                            type="number"
+                            value={mathB}
+                            onChange={(e) => setMathB(Number(e.target.value) || 1)}
+                            className="ml-2 w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                          />
+                        </label>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 font-mono text-xs">
+                        <div className="rounded-xl border border-slate-200 bg-white p-3">
+                          <div className="text-[#64748B]">{mathA} + {mathB}</div>
+                          <div className="mt-1 font-bold text-[#2563EB]">{mathA + mathB}</div>
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-white p-3">
+                          <div className="text-[#64748B]">{mathA} * {mathB}</div>
+                          <div className="mt-1 font-bold text-[#2563EB]">{mathA * mathB}</div>
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-white p-3">
+                          <div className="text-[#64748B]">{mathA} // {mathB} (floor)</div>
+                          <div className="mt-1 font-bold text-[#8B5CF6]">
+                            {Math.floor(mathA / (mathB || 1))}
+                          </div>
+                        </div>
+                        <div className="rounded-xl border border-slate-200 bg-white p-3">
+                          <div className="text-[#64748B]">{mathA} % {mathB} (rem)</div>
+                          <div className="mt-1 font-bold text-emerald-700">
+                            {mathA % (mathB || 1)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <ExpandableConcept title="Learn More: Why 4-Space Indentation Matters">
+                      <p>
+                        Unlike languages that use curly braces <code className="font-mono">{'{ }'}</code>, Python groups lines inside <code className="font-mono">if</code> or <code className="font-mono">for</code> using <strong>4 spaces</strong> at the start of each line inside the block.
+                      </p>
+                    </ExpandableConcept>
+                  </div>
+                </section>
+              )}
             </>
+          )}
+
+          {/* ======================= TOPIC 02: CONDITIONAL STATEMENTS ======================= */}
+          {activeTopic === 'conditionals' && (
+            <>
+              {showStage('explore') && (
+                <section
+                  id="c-intro"
+                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                >
+                  {renderLessonHeader('c-intro', '4.1', 'Introduction to Conditional Statements', 'Explore')}
+                  <div className="space-y-4 text-sm text-[#64748B]">
+                    <p>
+                      Programs make decisions just like traffic lights or grading rules: evaluate a{' '}
+                      <strong className="text-[#1E293B]">Boolean condition</strong> into{' '}
+                      <code className="font-mono font-semibold text-emerald-700">True</code> or{' '}
+                      <code className="font-mono font-semibold text-violet-700">False</code>, then pick one branch.
+                    </p>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4">
+                        <p className="font-mono text-xs font-bold text-emerald-800">Condition is True</p>
+                        <p className="mt-1 text-xs text-[#1E293B]">
+                          <code className="font-mono">temp &gt; 30</code> when temp is 34 → Python runs the indented block.
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-violet-200 bg-violet-50/70 p-4">
+                        <p className="font-mono text-xs font-bold text-violet-800">Condition is False</p>
+                        <p className="mt-1 text-xs text-[#1E293B]">
+                          <code className="font-mono">temp &gt; 30</code> when temp is 22 → Python skips the block.
+                        </p>
+                      </div>
+                    </div>
+                    <ExpandableConcept title="Explore Concept: Why Booleans Are Named After George Boole">
+                      <p>
+                        Every comparison in Python reduces to one of two values: <code className="font-mono">True</code> or <code className="font-mono">False</code> (always capitalized!). These binary yes/no values power every decision branch in software.
+                      </p>
+                    </ExpandableConcept>
+                  </div>
+                </section>
+              )}
+
+              {showStage('understand') && (
+                <>
+                  <section
+                    id="c-if"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-if', '4.2', 'The if Statement', 'Understand')}
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <CodeBlock
+                          title="if_example.py"
+                          code={'age = 18\n\nif age >= 18:\n    print("Eligible")'}
+                        />
+                        <div className="space-y-2.5 rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs text-[#1E293B]">
+                          <p className="font-bold">Visual Rule Breakdown</p>
+                          <p><span className="font-mono font-semibold text-[#2563EB]">1. Colon (:):</span> Marks the end of the condition line.</p>
+                          <p><span className="font-mono font-semibold text-[#2563EB]">2. 4 Spaces:</span> Indented lines belong inside the <code className="font-mono">if</code> block.</p>
+                          <p><span className="font-mono font-semibold text-emerald-700">3. Output:</span> Runs only when the condition is <code className="font-mono">True</code>.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    id="c-ifelse"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-ifelse', '4.3', 'The if-else Statement', 'Understand')}
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                      <div className="space-y-4">
+                        <CodeBlock
+                          title="if_else_marks.py"
+                          code={'marks = 35\n\nif marks >= 40:\n    print("Pass")\nelse:\n    print("Fail")'}
+                        />
+                        <ExpandableConcept title="Learn More: Two Mutually Exclusive Paths">
+                          <p>
+                            With <code className="font-mono">if-else</code>, exactly one of the two branches runs—never both, and never neither.
+                          </p>
+                        </ExpandableConcept>
+                      </div>
+                      <FlowchartSVG type="if-else" activeNode="action2" activeBranch="false" />
+                    </div>
+                  </section>
+
+                  <section
+                    id="c-elif"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-elif', '4.4', 'The if-elif-else Ladder', 'Understand')}
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                      <CodeBlock
+                        title="grade_ladder.py"
+                        code={'marks = 85\n\nif marks >= 90:\n    print("Grade A")\nelif marks >= 75:\n    print("Grade B")\nelif marks >= 40:\n    print("Pass")\nelse:\n    print("Fail")'}
+                      />
+                      <div className="space-y-3">
+                        <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs space-y-2 text-[#1E293B]">
+                          <p className="font-bold">Top-to-Bottom Execution Order (marks = 85)</p>
+                          <p>1. <code className="font-mono">85 &gt;= 90</code> → <span className="text-violet-700 font-semibold">False</span></p>
+                          <p>2. <code className="font-mono">85 &gt;= 75</code> → <span className="text-emerald-700 font-bold">True!</span> Prints &quot;Grade B&quot; and exits ladder.</p>
+                        </div>
+                        <ExpandableConcept title="Explore Concept: Why Condition Order Matters">
+                          <p>
+                            If you put <code className="font-mono">marks &gt;= 40</code> first, a score of 95 would match 40+ and print &quot;Pass&quot; instead of &quot;Grade A&quot;. Always order thresholds from strictest to broadest!
+                          </p>
+                        </ExpandableConcept>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    id="c-nested"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-nested', '4.5', 'Nested if Statements', 'Understand')}
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                      <div className="space-y-3">
+                        <CodeBlock
+                          title="nested_if.py"
+                          code={'age = 20\nhas_id = True\n\nif age >= 18:\n    if has_id == True:\n        print("Entry Allowed")\n    else:\n        print("Please show ID")\nelse:\n    print("Must be 18 or older")'}
+                        />
+                        <ExpandableConcept title="Explore Concept: 4 Spaces vs 8 Spaces">
+                          <p>
+                            The outer <code className="font-mono">if</code> indents by 4 spaces; the inner <code className="font-mono">if</code> indents by 8 spaces and only runs when the outer check is already True.
+                          </p>
+                        </ExpandableConcept>
+                      </div>
+                      <FlowchartSVG type="nested-if" activeNode="action1" activeBranch="inner-true" />
+                    </div>
+                  </section>
+                </>
+              )}
+
+              {showStage('visualize') && (
+                <section
+                  id="c-flowchart"
+                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                >
+                  {renderLessonHeader('c-flowchart', '4.9', 'Interactive Decision Tree & Flowcharts', 'Visualize')}
+                  <p className="mb-4 text-sm text-[#64748B]">
+                    Pick a structure and change the input value to watch the True/False path light up from Start to End:
+                  </p>
+
+                  <div className="mb-5 flex flex-wrap items-center gap-2.5">
+                    {(['if', 'if-else', 'if-elif-else', 'nested-if'] as FlowchartType[]).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setFcType(t)}
+                        className={`rounded-xl border px-3.5 py-1.5 font-mono text-xs font-semibold transition-all ${
+                          fcType === t
+                            ? 'border-transparent bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] text-white shadow-sm'
+                            : 'border-slate-200 bg-white text-[#1E293B] hover:border-sky-300'
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    ))}
+
+                    <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
+                      {fcType === 'if' || fcType === 'nested-if' ? 'age:' : 'marks:'}
+                      <input
+                        type="number"
+                        value={fcValue}
+                        onChange={(e) => setFcValue(Number(e.target.value))}
+                        className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                      />
+                    </label>
+
+                    {fcType === 'nested-if' && (
+                      <label className="flex items-center gap-2 text-xs font-medium text-[#1E293B] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={fcHasId}
+                          onChange={(e) => setFcHasId(e.target.checked)}
+                          className="accent-[#2563EB]"
+                        />
+                        has_id = True
+                      </label>
+                    )}
+                  </div>
+
+                  <FlowchartSVG
+                    type={fcType}
+                    activeNode={fcHighlight.node}
+                    activeBranch={fcHighlight.branch}
+                  />
+                </section>
+              )}
+
+              {(showStage('visualize') || showStage('experiment')) && (
+                <>
+                  <section
+                    id="c-compare"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-compare', '4.6', 'Comparison Operators & Balance Scale', 'Visualize & Experiment')}
+                    <div className="space-y-4">
+                      <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4 space-y-4">
+                        <div className="flex flex-wrap items-center gap-4">
+                          <label className="flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
+                            Value a:
+                            <input
+                              type="number"
+                              value={cmpA}
+                              onChange={(e) => setCmpA(Number(e.target.value))}
+                              className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-mono text-sm"
+                            />
+                          </label>
+                          <label className="flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
+                            Value b:
+                            <input
+                              type="number"
+                              value={cmpB}
+                              onChange={(e) => setCmpB(Number(e.target.value))}
+                              className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-mono text-sm"
+                            />
+                          </label>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+                          <div className="lg:col-span-5">
+                            <ComparisonScaleSVG leftVal={cmpA} rightVal={cmpB} />
+                          </div>
+                          <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white px-4 lg:col-span-7">
+                            <table className="w-full text-left text-xs">
+                              <thead>
+                                <tr className="border-b border-slate-200 text-[#64748B]">
+                                  <th className="py-2.5 pr-3 font-semibold">Op</th>
+                                  <th className="py-2.5 pr-3 font-semibold">Meaning</th>
+                                  <th className="py-2.5 pr-3 font-semibold">Expr</th>
+                                  <th className="py-2.5 font-semibold">Result</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-100 font-mono">
+                                {[
+                                  { op: '==', desc: 'Equal to', res: cmpA === cmpB },
+                                  { op: '!=', desc: 'Not equal', res: cmpA !== cmpB },
+                                  { op: '>', desc: 'Greater than', res: cmpA > cmpB },
+                                  { op: '<', desc: 'Less than', res: cmpA < cmpB },
+                                  { op: '>=', desc: 'Greater or equal', res: cmpA >= cmpB },
+                                  { op: '<=', desc: 'Less or equal', res: cmpA <= cmpB },
+                                ].map((row) => (
+                                  <tr key={row.op}>
+                                    <td className="py-2 pr-3 font-bold text-[#2563EB]">{row.op}</td>
+                                    <td className="py-2 pr-3 font-sans text-[#1E293B]">{row.desc}</td>
+                                    <td className="py-2 pr-3 text-[#64748B] tabular-nums">
+                                      {cmpA} {row.op} {cmpB}
+                                    </td>
+                                    <td
+                                      className={`py-2 font-bold ${
+                                        row.res ? 'text-emerald-700' : 'text-violet-700'
+                                      }`}
+                                    >
+                                      {row.res ? 'True' : 'False'}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                      <ExpandableConcept title="Explore Concept: = vs == (Common Beginner Trap)">
+                        <p>
+                          Single <code className="font-mono">=</code> puts a value into a variable (<code className="font-mono">x = 5</code>). Double <code className="font-mono">==</code> asks a yes/no question (<code className="font-mono">x == 5</code>).
+                        </p>
+                      </ExpandableConcept>
+                    </div>
+                  </section>
+
+                  <section
+                    id="c-logical"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-logical', '4.7', 'Logical Operators (and, or, not)', 'Experiment')}
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4">
+                        <button
+                          type="button"
+                          onClick={() => setBoolA((v) => !v)}
+                          className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
+                            boolA
+                              ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                              : 'border-violet-300 bg-violet-50 text-violet-800'
+                          }`}
+                        >
+                          A = {boolA ? 'True' : 'False'} (Toggle)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setBoolB((v) => !v)}
+                          className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
+                            boolB
+                              ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                              : 'border-violet-300 bg-violet-50 text-violet-800'
+                          }`}
+                        >
+                          B = {boolB ? 'True' : 'False'} (Toggle)
+                        </button>
+                        <div className="ml-auto flex flex-wrap gap-4 font-mono text-xs text-[#1E293B]">
+                          <span>
+                            A and B:{' '}
+                            <strong className={boolA && boolB ? 'text-emerald-700' : 'text-violet-700'}>
+                              {boolA && boolB ? 'True' : 'False'}
+                            </strong>
+                          </span>
+                          <span>
+                            A or B:{' '}
+                            <strong className={boolA || boolB ? 'text-emerald-700' : 'text-violet-700'}>
+                              {boolA || boolB ? 'True' : 'False'}
+                            </strong>
+                          </span>
+                          <span>
+                            not A:{' '}
+                            <strong className={!boolA ? 'text-emerald-700' : 'text-violet-700'}>
+                              {!boolA ? 'True' : 'False'}
+                            </strong>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white p-4">
+                        <table className="w-full text-left font-mono text-xs">
+                          <thead>
+                            <tr className="border-b border-slate-200 text-[#64748B]">
+                              <th className="py-2 pr-4">A</th>
+                              <th className="py-2 pr-4">B</th>
+                              <th className="py-2 pr-4">A and B</th>
+                              <th className="py-2 pr-4">A or B</th>
+                              <th className="py-2">not A</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {[
+                              [true, true],
+                              [true, false],
+                              [false, true],
+                              [false, false],
+                            ].map(([a, b], idx) => {
+                              const isActiveRow = a === boolA && b === boolB;
+                              return (
+                                <tr key={idx} className={isActiveRow ? 'bg-sky-50 font-bold' : ''}>
+                                  <td className="py-2.5 pr-4">{a ? 'True' : 'False'}</td>
+                                  <td className="py-2.5 pr-4">{b ? 'True' : 'False'}</td>
+                                  <td className={`py-2.5 pr-4 ${a && b ? 'text-emerald-700' : 'text-violet-700'}`}>
+                                    {a && b ? 'True' : 'False'}
+                                  </td>
+                                  <td className={`py-2.5 pr-4 ${a || b ? 'text-emerald-700' : 'text-violet-700'}`}>
+                                    {a || b ? 'True' : 'False'}
+                                  </td>
+                                  <td className={`py-2.5 ${!a ? 'text-emerald-700' : 'text-violet-700'}`}>
+                                    {!a ? 'True' : 'False'}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    id="c-realworld"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('c-realworld', '4.8', 'Real-World Conditional Checkers', 'Experiment')}
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#1E293B]">1. Marks &amp; Grade Checker</h4>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={rwMarks}
+                          onChange={(e) => setRwMarks(Number(e.target.value))}
+                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                        />
+                        <p className="font-mono text-xs font-bold text-emerald-700">
+                          Result:{' '}
+                          {rwMarks >= 90 ? 'Grade A' : rwMarks >= 75 ? 'Grade B' : rwMarks >= 40 ? 'Pass' : 'Fail'}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#1E293B]">2. Age Eligibility Checker</h4>
+                        <input
+                          type="number"
+                          min={0}
+                          max={120}
+                          value={rwAge}
+                          onChange={(e) => setRwAge(Number(e.target.value))}
+                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                        />
+                        <p className="font-mono text-xs font-bold text-emerald-700">
+                          {rwAge >= 18 ? 'Eligible to vote & drive' : 'Not eligible yet (< 18)'}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#1E293B]">3. Positive, Negative, or Zero</h4>
+                        <input
+                          type="number"
+                          value={rwSignNum}
+                          onChange={(e) => setRwSignNum(Number(e.target.value))}
+                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                        />
+                        <p className="font-mono text-xs font-bold text-emerald-700">
+                          {rwSignNum > 0 ? 'Positive (> 0)' : rwSignNum < 0 ? 'Negative (< 0)' : 'Zero (== 0)'}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#1E293B]">4. Even &amp; Odd Checker</h4>
+                        <input
+                          type="number"
+                          value={rwEvenNum}
+                          onChange={(e) => setRwEvenNum(Math.trunc(Number(e.target.value)))}
+                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                        />
+                        <p className="font-mono text-xs font-bold text-emerald-700">
+                          {rwEvenNum} % 2 == {Math.abs(rwEvenNum % 2)} → {rwEvenNum % 2 === 0 ? 'Even' : 'Odd'}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2 md:col-span-2">
+                        <h4 className="font-display text-sm font-bold text-[#1E293B]">5. Discount Eligibility Checker</h4>
+                        <div className="flex flex-wrap items-center gap-4">
+                          <label className="text-xs font-medium text-[#1E293B]">
+                            Total ($):
+                            <input
+                              type="number"
+                              min={0}
+                              value={rwTotal}
+                              onChange={(e) => setRwTotal(Number(e.target.value))}
+                              className="ml-2 w-24 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                            />
+                          </label>
+                          <label className="flex items-center gap-2 text-xs font-medium text-[#1E293B] cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={rwMember}
+                              onChange={(e) => setRwMember(e.target.checked)}
+                              className="accent-[#2563EB]"
+                            />
+                            is_member = True
+                          </label>
+                        </div>
+                        <p className="font-mono text-xs font-bold text-emerald-700">
+                          {rwTotal >= 100 || rwMember
+                            ? `20% Off Applied → Final: $${(rwTotal * 0.8).toFixed(2)}`
+                            : `Standard Price → $${rwTotal.toFixed(2)}`}
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+                </>
+              )}
+            </>
+          )}
+
+          {/* ======================= TOPIC 03: LOOPS ======================= */}
+          {activeTopic === 'loops' && (
+            <>
+              {showStage('explore') && (
+                <section
+                  id="l-intro"
+                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                >
+                  {renderLessonHeader('l-intro', '6.1', 'Introduction to Loops', 'Explore')}
+                  <div className="space-y-4">
+                    <p className="text-sm text-[#64748B]">
+                      A <strong className="text-[#1E293B]">loop</strong> repeats instructions automatically. Each single pass is called an{' '}
+                      <strong className="text-[#8B5CF6]">iteration</strong>.
+                    </p>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <CodeBlock
+                        title="manual_way.py (5 lines)"
+                        code={'print(1)\nprint(2)\nprint(3)\nprint(4)\nprint(5)'}
+                        compact
+                      />
+                      <CodeBlock
+                        title="loop_way.py (2 lines)"
+                        code={'for i in range(1, 6):\n    print(i)'}
+                        compact
+                      />
+                    </div>
+                    <LoopTimelineStepper />
+                  </div>
+                </section>
+              )}
+
+              {(showStage('understand') || showStage('visualize')) && (
+                <>
+                  <section
+                    id="l-for"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-for', '6.2', 'The for Loop', 'Understand & Visualize')}
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                      <div className="space-y-4">
+                        <CodeBlock
+                          title="for_loop.py"
+                          code={'for i in range(1, 6):\n    print(i)'}
+                        />
+                        <ExpandableConcept title="Explore Concept: How the Loop Variable Works">
+                          <p>
+                            On each pass, Python automatically takes the next value from <code className="font-mono">range(1, 6)</code>, puts it into variable <code className="font-mono">i</code>, and executes the indented body.
+                          </p>
+                        </ExpandableConcept>
+                      </div>
+                      <FlowchartSVG type="for" activeNode="body" activeBranch="loop-true" />
+                    </div>
+                  </section>
+
+                  <section
+                    id="l-while"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-while', '6.4', 'The while Loop', 'Understand & Visualize')}
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                      <div className="space-y-4">
+                        <CodeBlock
+                          title="while_loop.py"
+                          code={'count = 1\n\nwhile count <= 5:\n    print(count)\n    count += 1'}
+                        />
+                        <ExpandableConcept title="Explore Concept: When to Use while vs for">
+                          <p>
+                            Use <code className="font-mono">for</code> when you know the exact count or sequence. Use <code className="font-mono">while</code> when repetition stops only when a changing condition becomes <code className="font-mono">False</code>.
+                          </p>
+                        </ExpandableConcept>
+                      </div>
+                      <FlowchartSVG type="while" activeNode="check" activeBranch="loop-back" />
+                    </div>
+                  </section>
+                </>
+              )}
+
+              {showStage('experiment') && (
+                <>
+                  <section
+                    id="l-range"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-range', '6.3', 'Interactive range() Builder', 'Experiment')}
+                    <div className="rounded-2xl border border-violet-100 bg-[#F0F9FF]/60 p-4 space-y-4">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        <label className="text-xs font-medium text-[#64748B]">
+                          start:
+                          <input
+                            type="number"
+                            value={rangeStart}
+                            onChange={(e) => setRangeStart(Number(e.target.value))}
+                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
+                          />
+                        </label>
+                        <label className="text-xs font-medium text-[#64748B]">
+                          stop (excluded):
+                          <input
+                            type="number"
+                            value={rangeStop}
+                            onChange={(e) => setRangeStop(Number(e.target.value))}
+                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
+                          />
+                        </label>
+                        <label className="text-xs font-medium text-[#64748B]">
+                          step:
+                          <input
+                            type="number"
+                            value={rangeStep}
+                            onChange={(e) => setRangeStep(Number(e.target.value))}
+                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
+                          />
+                        </label>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="font-mono font-medium text-[#1E293B]">
+                          range({rangeStart}, {rangeStop}, {rangeStep}) →
+                        </span>
+                        {rangePreview.warning ? (
+                          <span className="font-medium text-amber-700">{rangePreview.warning}</span>
+                        ) : (
+                          rangePreview.values.map((val, idx) => (
+                            <span
+                              key={`${val}-${idx}`}
+                              className="inline-flex h-8 min-w-[34px] items-center justify-center rounded-lg border border-violet-200 bg-white px-2 font-mono font-bold text-[#8B5CF6] shadow-xs tabular-nums"
+                            >
+                              {val}
+                            </span>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    id="l-compare"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-compare', '6.5', 'for Loop vs while Loop', 'Understand')}
+                    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4">
+                      <table className="w-full text-left text-xs sm:text-sm">
+                        <thead>
+                          <tr className="border-b border-slate-200 text-[#64748B]">
+                            <th className="py-2.5 pr-4 font-semibold">Feature</th>
+                            <th className="py-2.5 pr-4 font-bold text-[#2563EB]">for Loop</th>
+                            <th className="py-2.5 font-bold text-[#8B5CF6]">while Loop</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200/70 text-[#1E293B]">
+                          <tr>
+                            <td className="py-3 pr-4 font-semibold">Best used when</td>
+                            <td className="py-3 pr-4">Known count or sequence (<code className="font-mono">range()</code>)</td>
+                            <td className="py-3">Condition-controlled repetition</td>
+                          </tr>
+                          <tr>
+                            <td className="py-3 pr-4 font-semibold">Counter update</td>
+                            <td className="py-3 pr-4">Automatic each iteration</td>
+                            <td className="py-3">Manual inside loop body</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+
+                  <section
+                    id="l-break"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-break', '6.6', 'The break Statement', 'Experiment')}
+                    <div className="space-y-4">
+                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <span className="text-xs font-semibold text-[#1E293B]">
+                            Interactive <code className="font-mono text-[#8B5CF6]">break</code> Demo (1..6)
+                          </span>
+                          <label className="text-xs font-medium text-[#1E293B]">
+                            Break when <code className="font-mono">i ==</code>
+                            <select
+                              value={breakAt}
+                              onChange={(e) => setBreakAt(Number(e.target.value))}
+                              className="ml-2 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono"
+                            >
+                              {[2, 3, 4, 5, 6].map((n) => (
+                                <option key={n} value={n}>{n}</option>
+                              ))}
+                            </select>
+                          </label>
+                        </div>
+                        <div className="grid grid-cols-6 gap-2">
+                          {[1, 2, 3, 4, 5, 6].map((n) => {
+                            const isBreak = n === breakAt;
+                            const isAfter = n > breakAt;
+                            return (
+                              <div
+                                key={n}
+                                className={`rounded-xl border p-2 text-center font-mono text-xs ${
+                                  isBreak
+                                    ? 'border-violet-300 bg-violet-100 text-violet-900 font-bold'
+                                    : isAfter
+                                    ? 'border-slate-200 bg-slate-100 text-slate-400 line-through'
+                                    : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
+                                }`}
+                              >
+                                {n}
+                                <div className="mt-0.5 text-[10px]">
+                                  {isBreak ? 'BREAK' : isAfter ? 'Stopped' : 'Printed'}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <FlowchartSVG type="break-continue" activeBranch="break" labels={{ cond1: `if i == ${breakAt}:` }} />
+                    </div>
+                  </section>
+
+                  <section
+                    id="l-continue"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-continue', '6.7', 'The continue Statement', 'Experiment')}
+                    <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <span className="text-xs font-semibold text-[#1E293B]">
+                          Interactive <code className="font-mono text-[#2563EB]">continue</code> Demo (1..6)
+                        </span>
+                        <label className="text-xs font-medium text-[#1E293B]">
+                          Skip when <code className="font-mono">i ==</code>
+                          <select
+                            value={skipAt}
+                            onChange={(e) => setSkipAt(Number(e.target.value))}
+                            className="ml-2 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono"
+                          >
+                            {[1, 2, 3, 4, 5, 6].map((n) => (
+                              <option key={n} value={n}>{n}</option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
+                      <div className="grid grid-cols-6 gap-2">
+                        {[1, 2, 3, 4, 5, 6].map((n) => {
+                          const isSkip = n === skipAt;
+                          return (
+                            <div
+                              key={n}
+                              className={`rounded-xl border p-2 text-center font-mono text-xs ${
+                                isSkip
+                                  ? 'border-sky-300 bg-sky-100 text-sky-900 font-bold'
+                                  : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
+                              }`}
+                            >
+                              {n}
+                              <div className="mt-0.5 text-[10px]">{isSkip ? 'SKIPPED' : 'Printed'}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </section>
+
+                  <section
+                    id="l-nested"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-nested', '6.8', 'Nested Loops Grid', 'Visualize & Experiment')}
+                    <div className="space-y-4">
+                      <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4 space-y-4">
+                        <div className="flex flex-wrap items-center gap-6">
+                          <label className="text-xs font-medium text-[#1E293B]">
+                            Outer Rows: <strong className="font-mono text-[#2563EB]">{nestRows}</strong>
+                            <input
+                              type="range"
+                              min={1}
+                              max={5}
+                              value={nestRows}
+                              onChange={(e) => setNestRows(Number(e.target.value))}
+                              className="ml-2 accent-[#2563EB] cursor-pointer"
+                            />
+                          </label>
+                          <label className="text-xs font-medium text-[#1E293B]">
+                            Inner Columns: <strong className="font-mono text-[#8B5CF6]">{nestCols}</strong>
+                            <input
+                              type="range"
+                              min={1}
+                              max={6}
+                              value={nestCols}
+                              onChange={(e) => setNestCols(Number(e.target.value))}
+                              className="ml-2 accent-[#8B5CF6] cursor-pointer"
+                            />
+                          </label>
+                          <span className="ml-auto font-mono text-xs font-bold text-emerald-700 tabular-nums">
+                            {nestRows} × {nestCols} = {nestRows * nestCols} cells
+                          </span>
+                        </div>
+
+                        <div className="space-y-1.5 font-mono text-xs">
+                          {Array.from({ length: nestRows }, (_, r) => (
+                            <div key={r} className="flex items-center gap-2">
+                              <span className="w-16 text-[#64748B]">row {r + 1}:</span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {Array.from({ length: nestCols }, (_, c) => (
+                                  <span
+                                    key={c}
+                                    className="rounded-lg border border-sky-200 bg-white px-2.5 py-1 font-semibold text-[#2563EB] tabular-nums"
+                                  >
+                                    ({r + 1},{c + 1})
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <FlowchartSVG type="nested-loop" activeNode="inner" activeBranch="inner-body" />
+                    </div>
+                  </section>
+
+                  <section
+                    id="l-mistakes"
+                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  >
+                    {renderLessonHeader('l-mistakes', '6.9', 'Common Loop Mistakes & Fixes', 'Understand')}
+                    <div className="space-y-4">
+                      {[
+                        {
+                          title: '1. Missing while-loop update (Infinite Loop)',
+                          bad: 'i = 1\nwhile i <= 5:\n    print(i)',
+                          good: 'i = 1\nwhile i <= 5:\n    print(i)\n    i += 1',
+                          why: 'Without i += 1, i stays 1 forever.',
+                        },
+                        {
+                          title: '2. Wrong range() stop bound (Off-by-One)',
+                          bad: 'for i in range(1, 5):\n    print(i)  # stops at 4!',
+                          good: 'for i in range(1, 6):\n    print(i)  # prints 1..5',
+                          why: 'range(start, stop) always excludes stop.',
+                        },
+                      ].map((item) => (
+                        <div key={item.title} className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                          <div className="flex items-center gap-2 font-display text-sm font-bold text-amber-800">
+                            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
+                            {item.title}
+                          </div>
+                          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                            <CodeBlock title="Broken" code={item.bad} compact showCopy={false} />
+                            <CodeBlock title="Fixed" code={item.good} compact showCopy={false} />
+                          </div>
+                          <p className="text-xs text-[#64748B]">{item.why}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                </>
+              )}
+            </>
+          )}
+
+          {/* ======================= STAGE 5: PRACTISE LAUNCHER ======================= */}
+          {showStage('practise') && (
+            <section className="rounded-3xl border border-sky-200/80 bg-gradient-to-br from-[#F0F9FF] via-white to-violet-50/50 p-6 shadow-sm sm:p-8">
+              <p className="font-mono text-xs font-semibold text-[#2563EB]">
+                Stage 5 · Hands-On Practice
+              </p>
+              <h3 className="mt-1 font-display text-xl font-bold text-[#1E293B]">
+                Apply What You Just Visualized
+              </h3>
+              <p className="mt-1 text-sm text-[#64748B]">
+                Jump straight into a real-life simulator, write code in the Sandbox, or test your skills in mini-games.
+              </p>
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('simulators')}
+                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#1E293B] shadow-xs hover:border-sky-300"
+                >
+                  <span>Run Real-Life Simulators</span>
+                  <ArrowRight className="h-4 w-4 text-[#2563EB]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onOpenInSandbox(
+                      activeTopic === 'basics'
+                        ? 'name = "Alex"\nscore = 90\nprint(f"{name} scored {score}")'
+                        : activeTopic === 'conditionals'
+                        ? 'marks = 82\nif marks >= 75:\n    print("Honors")\nelse:\n    print("Pass")'
+                        : 'for i in range(1, 6):\n    print("Step", i)'
+                    )
+                  }
+                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#1E293B] shadow-xs hover:border-violet-300"
+                >
+                  <span>Try in Python Sandbox</span>
+                  <ArrowRight className="h-4 w-4 text-[#8B5CF6]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onOpenGamesTab('challenges')}
+                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#1E293B] shadow-xs hover:border-emerald-300"
+                >
+                  <span>Solve Coding Challenges</span>
+                  <ArrowRight className="h-4 w-4 text-emerald-600" />
+                </button>
+              </div>
+            </section>
+          )}
+
+          {/* ======================= STAGE 6: TEST YOURSELF ======================= */}
+          {showStage('test') && (
+            <section className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-mono text-xs font-semibold text-[#8B5CF6]">
+                    Stage 6 · Quick Concept Check
+                  </p>
+                  <h3 className="mt-1 font-display text-xl font-bold text-[#1E293B]">
+                    Test Yourself
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onOpenGamesTab('quizzes')}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-4 py-2 text-xs font-semibold text-white"
+                >
+                  Open Full 20-Question Quiz
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+                {QUICK_CHECKS[activeTopic].map((item, qIdx) => {
+                  const key = `${activeTopic}-${qIdx}`;
+                  const chosen = quickAnswers[key];
+                  const answered = chosen !== undefined;
+                  return (
+                    <div
+                      key={key}
+                      className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3"
+                    >
+                      <p className="text-sm font-semibold text-[#1E293B]">{item.q}</p>
+                      <div className="space-y-1.5">
+                        {item.options.map((opt, oIdx) => {
+                          const isSelected = chosen === oIdx;
+                          const isCorrect = oIdx === item.answer;
+                          let cls =
+                            'border-slate-200 bg-white text-[#1E293B] hover:border-sky-300';
+                          if (answered) {
+                            if (isCorrect)
+                              cls = 'border-emerald-300 bg-emerald-50 text-emerald-800 font-semibold';
+                            else if (isSelected)
+                              cls = 'border-rose-300 bg-rose-50 text-rose-800';
+                          }
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() =>
+                                setQuickAnswers((prev) => ({ ...prev, [key]: oIdx }))
+                              }
+                              className={`w-full rounded-xl border px-3 py-2 text-left font-mono text-xs transition-colors ${cls}`}
+                            >
+                              {opt}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {answered && (
+                        <p className="text-xs text-[#64748B]">{item.why}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
           )}
         </div>
       </div>
+
+      <CheatSheetModal
+        isOpen={cheatOpen}
+        initialTopic={activeTopic}
+        onClose={() => setCheatOpen(false)}
+        onTryInSandbox={onOpenInSandbox}
+      />
     </div>
   );
 };

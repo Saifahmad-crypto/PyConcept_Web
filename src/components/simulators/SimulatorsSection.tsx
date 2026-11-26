@@ -2,7 +2,7 @@ import React from 'react';
 import { SimulatorId, TutorSimulatorContext } from '../../types';
 import { SIMULATORS_CATALOG } from '../../simulators/simulatorsData';
 import { SimulatorsHub } from './SimulatorsHub';
-import { SimulatorTutorContext } from './SimulatorShell';
+import { SimulatorRunContext, SimulatorTutorContext } from './SimulatorShell';
 import { TrafficSignalStage } from './stages/TrafficSignalStage';
 import { AtmDecisionStage } from './stages/AtmDecisionStage';
 import { SmartAcStage } from './stages/SmartAcStage';
@@ -15,12 +15,16 @@ import { CashCounterStage } from './stages/CashCounterStage';
 interface SimulatorsSectionProps {
   selectedSimulator: SimulatorId | null;
   onSelectSimulator: (id: SimulatorId | null) => void;
+  visitedSimulators?: string[];
+  onRecordSimulatorRun?: (id: SimulatorId) => void;
   onAskTutor?: (ctx: TutorSimulatorContext) => void;
 }
 
 export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
   selectedSimulator,
   onSelectSimulator,
+  visitedSimulators = [],
+  onRecordSimulatorRun,
   onAskTutor,
 }) => {
   const handleSelect = (id: SimulatorId) => {
@@ -34,12 +38,22 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
   };
 
   if (!selectedSimulator) {
-    return <SimulatorsHub onSelectSimulator={handleSelect} />;
+    return (
+      <SimulatorsHub
+        onSelectSimulator={handleSelect}
+        visitedSimulators={visitedSimulators}
+      />
+    );
   }
 
   const meta = SIMULATORS_CATALOG.find((s) => s.id === selectedSimulator);
   if (!meta) {
-    return <SimulatorsHub onSelectSimulator={handleSelect} />;
+    return (
+      <SimulatorsHub
+        onSelectSimulator={handleSelect}
+        visitedSimulators={visitedSimulators}
+      />
+    );
   }
 
   const renderStage = () => {
@@ -64,8 +78,10 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
   };
 
   return (
-    <SimulatorTutorContext.Provider value={onAskTutor ?? null}>
-      {renderStage()}
-    </SimulatorTutorContext.Provider>
+    <SimulatorRunContext.Provider value={onRecordSimulatorRun ?? null}>
+      <SimulatorTutorContext.Provider value={onAskTutor ?? null}>
+        {renderStage()}
+      </SimulatorTutorContext.Provider>
+    </SimulatorRunContext.Provider>
   );
 };

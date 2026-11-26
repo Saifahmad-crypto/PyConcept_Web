@@ -12,19 +12,21 @@ import { QUIZ_QUESTIONS } from '../data/curriculumData';
 import { QuizScoreRecord, TopicId } from '../types';
 import { CodeBlock } from './CodeBlock';
 
+type QuizTopic = Exclude<TopicId, 'basics'>;
+
 interface QuizSectionProps {
   quizScores: {
     conditionals: QuizScoreRecord | null;
     loops: QuizScoreRecord | null;
   };
-  onRecordQuizResult: (topic: TopicId, score: number, total: number) => void;
+  onRecordQuizResult: (topic: QuizTopic, score: number, total: number) => void;
 }
 
 export const QuizSection: React.FC<QuizSectionProps> = ({
   quizScores,
   onRecordQuizResult,
 }) => {
-  const [topic, setTopic] = useState<TopicId>('conditionals');
+  const [topic, setTopic] = useState<QuizTopic>('conditionals');
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [selectedOpt, setSelectedOpt] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -37,7 +39,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
   const questions = QUIZ_QUESTIONS.filter((q) => q.topic === topic);
   const currentQ = questions[currentIdx];
 
-  const resetQuiz = (nextTopic: TopicId = topic) => {
+  const resetQuiz = (nextTopic: QuizTopic = topic) => {
     setTopic(nextTopic);
     setCurrentIdx(0);
     setSelectedOpt(null);

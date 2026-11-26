@@ -15,7 +15,10 @@ const DEFAULT_MODEL = 'gemini-4-hydrogen';
 
 function getConfiguredModel(): string {
   const raw = (process.env.GEMINI_MODEL || '').trim();
-  return raw || DEFAULT_MODEL;
+  if (/^gemini-[a-z0-9._-]+$/i.test(raw)) {
+    return raw;
+  }
+  return DEFAULT_MODEL;
 }
 
 const TUTOR_SYSTEM_INSTRUCTION = `You are PyVerse AI Tutor, an adaptive Python programming teacher.
@@ -263,8 +266,14 @@ async function startServer() {
       return;
     }
 
-    const validModes = new Set(['learn', 'doubt', 'review', 'practice', 'quiz']);
-    const safeMode = mode && validModes.has(mode) ? mode : 'learn';
+    const modeAliases: Record<string, string> = {
+      learn: 'explain',
+      doubt: 'example',
+      review: 'debug',
+    };
+    const normalizedInput = mode && modeAliases[mode] ? modeAliases[mode] : mode;
+    const validModes = new Set(['explain', 'example', 'debug', 'hint', 'practice', 'quiz']);
+    const safeMode = normalizedInput && validModes.has(normalizedInput) ? normalizedInput : 'explain';
     const trimmedHistory = messages.slice(-14).map((m) => ({
       role: m.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: String(m.content || '').slice(0, 8000) }],
@@ -279,21 +288,24 @@ async function startServer() {
 
     const contextBlock = buildContextPreamble(safeMode, learnerContext, simulatorContext);
     let modeDirective = '';
-    if (safeMode === 'review') {
+    if (safeMode === 'debug') {
       modeDirective =
-        '\n[MODE DIRECTIVE - REVIEW MY CODE]: Carefully explain what the student code does, list any syntax or logical bugs with line numbers, explain why they happen, give hints to fix them without rewriting everything unnecessarily, and only give the full corrected code if requested. Do NOT claim you executed the code unless output was given.';
+        '\n[MODE DIRECTIVE - DEBUG MY CODE]: Carefully explain what the student code does, list any syntax or logical bugs with line numbers, explain why they happen, give hints to fix them without rewriting everything unnecessarily, and only give the full corrected code if requested. Do NOT claim you executed the code unless output was given.';
+    } else if (safeMode === 'hint') {
+      modeDirective =
+        '\n[MODE DIRECTIVE - GIVE ME A HINT]: Give a gentle, progressive nudge or guiding question that helps the student figure out the next step themselves without immediately revealing the full answer or complete solution code.';
+    } else if (safeMode === 'example') {
+      modeDirective =
+        '\n[MODE DIRECTIVE - REAL-LIFE EXAMPLE]: Explain the concept using a relatable everyday analogy, map that analogy directly to a short beginner-friendly Python snippet, and finish with one brief check question.';
     } else if (safeMode === 'practice') {
       modeDirective =
         '\n[MODE DIRECTIVE - PRACTICE WITH ME]: If the student attempted a solution, evaluate their logic patiently, pinpoint any misconception, and give a guiding hint rather than immediately dumping the full solution unless they explicitly ask for the full solution.';
     } else if (safeMode === 'quiz') {
       modeDirective =
-        '\n[MODE DIRECTIVE - TEST MY UNDERSTANDING]: Evaluate the student reasoning concisely, clarify misconceptions, and suggest what to practice next.';
-    } else if (safeMode === 'doubt') {
-      modeDirective =
-        '\n[MODE DIRECTIVE - CLEAR MY DOUBT]: Answer their specific doubt directly in simple beginner-friendly terms, use a quick relatable example and short code snippet, and ask one brief understanding check.';
+        '\n[MODE DIRECTIVE - TEST MY KNOWLEDGE]: Evaluate the student reasoning concisely, clarify misconceptions, and suggest what to practice next.';
     } else {
       modeDirective =
-        '\n[MODE DIRECTIVE - LEARN A CONCEPT]: Teach clearly step by step using Simple explanation, Real-life example, Python code, Line-by-line explanation, Try it yourself, and a Quick understanding check where appropriate.';
+        '\n[MODE DIRECTIVE - EXPLAIN SIMPLY]: Teach clearly in plain, beginner-friendly language using Simple explanation, Real-life example, Python code, Line-by-line explanation, Try it yourself, and a Quick understanding check where appropriate.';
     }
 
     trimmedHistory[lastIdx] = {
@@ -327,7 +339,7 @@ async function startServer() {
             systemInstruction: TUTOR_SYSTEM_INSTRUCTION,
             thinkingConfig: {
               thinkingLevel:
-                safeMode === 'review' ? ThinkingLevel.MEDIUM : ThinkingLevel.LOW,
+                safeMode === 'debug' ? ThinkingLevel.MEDIUM : ThinkingLevel.LOW,
             },
             abortSignal: controller.signal,
           },

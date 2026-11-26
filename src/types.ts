@@ -1,17 +1,29 @@
 export type SectionId =
   | 'home'
   | 'learn'
-  | 'lab'
   | 'simulators'
-  | 'tutor'
   | 'playground'
+  | 'tutor'
+  | 'games'
+  | 'progress'
+  // Legacy aliases retained cleanly so internal cross-links map smoothly to the Games & Challenges hub
+  | 'lab'
   | 'challenges'
-  | 'quiz'
-  | 'progress';
+  | 'quiz';
 
-export type TopicId = 'conditionals' | 'loops';
+export type TopicId = 'basics' | 'conditionals' | 'loops';
+
+export type LearnStageId =
+  | 'explore'
+  | 'understand'
+  | 'visualize'
+  | 'experiment'
+  | 'practise'
+  | 'test';
 
 export type LabTabId = 'conditional-sim' | 'loop-viz' | 'games';
+
+export type GamesHubTabId = 'mini-games' | 'challenges' | 'quizzes' | 'logic-lab';
 
 export type SimulatorId =
   | 'traffic-signal'
@@ -46,7 +58,7 @@ export interface LessonDef {
 
 export interface QuizQuestion {
   id: string;
-  topic: TopicId;
+  topic: Exclude<TopicId, 'basics'> | TopicId;
   question: string;
   code?: string;
   options: string[];
@@ -56,7 +68,7 @@ export interface QuizQuestion {
 
 export interface CodingChallenge {
   id: string;
-  topic: TopicId;
+  topic: Exclude<TopicId, 'basics'>;
   title: string;
   difficulty: 'Beginner' | 'Guided' | 'Applied';
   description: string;
@@ -91,7 +103,13 @@ export interface GameScoreRecord {
 
 export type TutorTopic = 'Python Basics' | 'Conditional Statements' | 'Loops';
 export type TutorDifficulty = 'Beginner' | 'Guided' | 'Intermediate';
-export type TutorMode = 'learn' | 'doubt' | 'review' | 'practice' | 'quiz';
+export type TutorMode =
+  | 'explain'
+  | 'example'
+  | 'debug'
+  | 'hint'
+  | 'practice'
+  | 'quiz';
 
 export interface TutorPracticeCard {
   title: string;
@@ -167,6 +185,11 @@ export interface LearningProgress {
     loops: QuizScoreRecord | null;
   };
   gameScores: Record<string, GameScoreRecord>;
+  gameAttempts: Record<string, number>;
+  visitedSimulators: string[];
+  simulatorRuns: number;
+  sandboxRuns: number;
+  activeDates: string[];
   activeTutorTopic: TutorTopic;
   tutorDifficulty: TutorDifficulty;
   conceptsUnderstood: string[];

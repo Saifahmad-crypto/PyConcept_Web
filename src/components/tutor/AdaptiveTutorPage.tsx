@@ -5,7 +5,8 @@ import {
   Trash2,
   MessageSquare,
   BookOpen,
-  HelpCircle,
+  Lightbulb,
+  Loader2,
   Code2,
   Target,
   CheckSquare,
@@ -33,7 +34,11 @@ import {
   TutorSimulatorContext,
   TutorTopic,
 } from '../../types';
-import { TOPIC_08_LESSONS, TOPIC_09_LESSONS } from '../../data/curriculumData';
+import {
+  TOPIC_BASICS_LESSONS,
+  TOPIC_08_LESSONS,
+  TOPIC_09_LESSONS,
+} from '../../data/curriculumData';
 import { useTutorChats } from '../../hooks/useTutorChats';
 import { PyVerseLogo } from '../PyVerseLogo';
 import { TutorMessageContent } from './TutorMessageContent';
@@ -65,34 +70,40 @@ const DIFFICULTIES: TutorDifficulty[] = ['Beginner', 'Guided', 'Intermediate'];
 
 const MODES: Array<{ id: TutorMode; label: string; icon: React.ReactNode; desc: string }> = [
   {
-    id: 'learn',
-    label: 'Learn a Concept',
+    id: 'explain',
+    label: 'Explain Simply',
     icon: <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />,
-    desc: 'Step-by-step explanations with analogies and line-by-line Python code.',
+    desc: 'Step-by-step plain-language explanations with line-by-line Python code.',
   },
   {
-    id: 'doubt',
-    label: 'Clear My Doubt',
-    icon: <HelpCircle className="h-3.5 w-3.5" aria-hidden="true" />,
-    desc: 'Ask any question and get an answer adapted to your level.',
+    id: 'example',
+    label: 'Real-Life Example',
+    icon: <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />,
+    desc: 'Relatable everyday analogies mapped directly to short Python snippets.',
   },
   {
-    id: 'review',
-    label: 'Review My Code',
+    id: 'debug',
+    label: 'Debug My Code',
     icon: <Code2 className="h-3.5 w-3.5" aria-hidden="true" />,
-    desc: 'Paste your Python code to spot syntax or logic errors with guiding hints.',
+    desc: 'Paste your Python code to spot syntax or logic issues by line number.',
+  },
+  {
+    id: 'hint',
+    label: 'Give Me a Hint',
+    icon: <Lightbulb className="h-3.5 w-3.5" aria-hidden="true" />,
+    desc: 'Get a guiding nudge without spoiling the full solution right away.',
   },
   {
     id: 'practice',
     label: 'Practice With Me',
     icon: <Target className="h-3.5 w-3.5" aria-hidden="true" />,
-    desc: 'Get tailored coding tasks with 3 progressive hints before the solution.',
+    desc: 'Interactive coding tasks with 3 progressive hints before the solution.',
   },
   {
     id: 'quiz',
-    label: 'Test My Understanding',
+    label: 'Test My Knowledge',
     icon: <CheckSquare className="h-3.5 w-3.5" aria-hidden="true" />,
-    desc: 'Interactive multiple-choice & code-output checks with concept feedback.',
+    desc: 'Adaptive multiple-choice & code-output checks with instant feedback.',
   },
 ];
 
@@ -126,9 +137,12 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     clearAllChats,
   } = useTutorChats(progress.activeTutorTopic);
 
-  const [mode, setMode] = useState<TutorMode>(activeSession?.mode ?? 'learn');
+  const [mode, setMode] = useState<TutorMode>(activeSession?.mode ?? 'explain');
   const [inputText, setInputText] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [tutorHealth, setTutorHealth] = useState<{ configured: boolean; model: string } | null>(
+    null
+  );
   const [errorState, setErrorState] = useState<{
     message: string;
     retryAction?: () => void;
@@ -145,6 +159,26 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/tutor/health')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { configured?: boolean; model?: string } | null) => {
+        if (active && data && typeof data.configured === 'boolean') {
+          setTutorHealth({
+            configured: data.configured,
+            model: data.model || 'gemini',
+          });
+        }
+      })
+      .catch(() => {
+        // Ignore network transient errors; explicit errors show on send
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -341,14 +375,14 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     const inferredTopic: TutorTopic =
       simCtx.category === 'loops' ? 'Loops' : 'Conditional Statements';
     onSetTopic(inferredTopic);
-    setMode('learn');
+    setMode('explain');
     setAttachedSimContext(simCtx);
 
-    const newSid = createNewChat(inferredTopic, 'learn');
+    const newSid = createNewChat(inferredTopic, 'explain');
     updateSessionMeta(newSid, {
       title: `${simCtx.simulatorTitle} Help`,
       topic: inferredTopic,
-      mode: 'learn',
+      mode: 'explain',
     });
 
     const linePart = simCtx.currentLine
@@ -357,7 +391,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     const prompt = `I am using the ${simCtx.simulatorTitle} and I'm ${linePart}. Can you explain what Python is doing at this exact step, why the variables/condition have these values, and what happens next?`;
 
     window.setTimeout(() => {
-      void sendUserMessage(prompt, 'learn', newSid, simCtx);
+      void sendUserMessage(prompt, 'explain', newSid, simCtx);
     }, 40);
   }, [
     pendingSimulatorContext,
@@ -534,6 +568,9 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
   };
 
   // Recommended Next Step derived from real PyVerse progress
+  const nextBasicsLesson = TOPIC_BASICS_LESSONS.find(
+    (l) => !progress.completedLessons.includes(l.id)
+  );
   const nextT8Lesson = TOPIC_08_LESSONS.find(
     (l) => !progress.completedLessons.includes(l.id)
   );
@@ -547,9 +584,19 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         label: `Revise "${concept}"`,
         sub: 'Marked as needing improvement',
         onClick: () => {
-          setMode('doubt');
-          void sendUserMessage(`Help me revise ${concept} with a simple step-by-step example.`, 'doubt');
+          setMode('explain');
+          void sendUserMessage(
+            `Help me revise ${concept} with a simple step-by-step example.`,
+            'explain'
+          );
         },
+      };
+    }
+    if (progress.activeTutorTopic === 'Python Basics' && nextBasicsLesson) {
+      return {
+        label: `Lesson ${nextBasicsLesson.number}: ${nextBasicsLesson.title}`,
+        sub: 'Topic 01 · Python Basics',
+        onClick: () => onOpenTopic('basics'),
       };
     }
     if (progress.activeTutorTopic === 'Loops' && nextT9Lesson) {
@@ -564,6 +611,13 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         label: `Lesson ${nextT8Lesson.number}: ${nextT8Lesson.title}`,
         sub: 'Topic 08 · Conditional Statements',
         onClick: () => onOpenTopic('conditionals'),
+      };
+    }
+    if (nextBasicsLesson) {
+      return {
+        label: `Lesson ${nextBasicsLesson.number}: ${nextBasicsLesson.title}`,
+        sub: 'Topic 01 · Python Basics',
+        onClick: () => onOpenTopic('basics'),
       };
     }
     return {
@@ -684,7 +738,8 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
             <div className="rounded-lg bg-white p-2 border border-slate-200/70">
               <span className="text-slate-500">Lessons</span>
               <p className="font-mono font-bold text-[#1E293B] tabular-nums">
-                {progress.completedLessons.length} / {TOPIC_08_LESSONS.length + TOPIC_09_LESSONS.length}
+                {progress.completedLessons.length} /{' '}
+                {TOPIC_BASICS_LESSONS.length + TOPIC_08_LESSONS.length + TOPIC_09_LESSONS.length}
               </p>
             </div>
             <div className="rounded-lg bg-white p-2 border border-slate-200/70">
@@ -953,7 +1008,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     </div>
   );
 
-  const activeModeInfo = MODES.find((m) => m.id === mode)!;
+  const activeModeInfo = MODES.find((m) => m.id === mode) ?? MODES[0];
 
   return (
     <div className="mx-auto max-w-[1440px] px-4 py-5 sm:px-6 lg:px-8">
@@ -1018,6 +1073,21 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
             <p className="text-xs text-slate-500">{activeModeInfo.desc}</p>
           </div>
 
+          {/* Honest Configuration Notice when GEMINI_API_KEY is missing */}
+          {tutorHealth && !tutorHealth.configured && (
+            <div className="flex items-start gap-2.5 border-b border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-950">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
+              <div>
+                <p className="font-semibold">AI Tutor API key not configured</p>
+                <p className="mt-0.5 text-amber-900">
+                  Add <code className="rounded bg-amber-100 px-1 font-mono">GEMINI_API_KEY</code> in
+                  Settings &gt; Secrets to enable live Gemini tutoring. All other PyVerse lessons,
+                  simulators, sandbox execution, and quizzes continue working locally.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Attached Simulator Context Banner */}
           {attachedSimContext && (
             <div className="flex items-center justify-between gap-3 border-b border-sky-200 bg-[#F0F9FF] px-4 py-2.5 text-xs">
@@ -1069,25 +1139,25 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                     {[
                       {
                         label: 'What is Python?',
-                        mode: 'learn' as TutorMode,
-                        action: () => void sendUserMessage('What is Python?', 'learn'),
+                        mode: 'explain' as TutorMode,
+                        action: () => void sendUserMessage('What is Python?', 'explain'),
                       },
                       {
                         label: 'Explain if-else with a real-life example',
-                        mode: 'learn' as TutorMode,
+                        mode: 'example' as TutorMode,
                         action: () =>
                           void sendUserMessage(
                             'Explain if-else with a real-life example.',
-                            'learn'
+                            'example'
                           ),
                       },
                       {
                         label: 'Difference between if and elif',
-                        mode: 'doubt' as TutorMode,
+                        mode: 'explain' as TutorMode,
                         action: () =>
                           void sendUserMessage(
                             'I do not understand the difference between if and elif.',
-                            'doubt'
+                            'explain'
                           ),
                       },
                       {
@@ -1138,7 +1208,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                             />
                           ) : (
                             <span className="inline-flex items-center gap-2 text-xs text-slate-500">
-                              <span className="h-2 w-2 rounded-full bg-sky-500 animate-ping" />
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-sky-600" aria-hidden="true" />
                               Thinking through the best way to explain...
                             </span>
                           )}
@@ -1214,7 +1284,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                                 if (kind === 'explain') {
                                   void sendUserMessage(
                                     `Why was that the right answer for ${concept}? Can you walk me through it simply?`,
-                                    'doubt'
+                                    'explain'
                                   );
                                 } else if (kind === 'harder') {
                                   if (progress.tutorDifficulty === 'Beginner')
@@ -1308,37 +1378,49 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 type="button"
                 disabled={isLoading}
                 onClick={() => {
-                  setMode('doubt');
-                  setInputText('I have a doubt about ');
+                  setMode('explain');
+                  setInputText(`Explain simply in ${progress.activeTutorTopic}: `);
                   textareaRef.current?.focus();
                 }}
                 className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300 disabled:opacity-40"
               >
-                Ask a doubt
+                Explain Simply
               </button>
               <button
                 type="button"
                 disabled={isLoading}
                 onClick={() => {
-                  setMode('learn');
-                  setInputText(`Explain a concept in ${progress.activeTutorTopic}: `);
+                  setMode('example');
+                  setInputText(`Give me a real-life example for `);
                   textareaRef.current?.focus();
                 }}
                 className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300 disabled:opacity-40"
               >
-                Explain a concept
+                Real-Life Example
               </button>
               <button
                 type="button"
                 disabled={isLoading}
                 onClick={() => {
-                  setMode('review');
-                  setInputText('Please review my Python code:\n\n');
+                  setMode('debug');
+                  setInputText('Please debug my Python code:\n\n');
                   textareaRef.current?.focus();
                 }}
                 className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300 disabled:opacity-40"
               >
-                Review my code
+                Debug My Code
+              </button>
+              <button
+                type="button"
+                disabled={isLoading}
+                onClick={() => {
+                  setMode('hint');
+                  setInputText('Give me a hint without spoiling the answer for: ');
+                  textareaRef.current?.focus();
+                }}
+                className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-900 hover:bg-amber-100 disabled:opacity-40"
+              >
+                Give Me a Hint
               </button>
               <button
                 type="button"
@@ -1346,7 +1428,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 onClick={() => void handleGeneratePractice('same')}
                 className="rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-1 text-[11px] font-semibold text-violet-800 hover:bg-violet-100 disabled:opacity-40"
               >
-                Give me a practice question
+                Practice Task
               </button>
               <button
                 type="button"
@@ -1354,7 +1436,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 onClick={() => void handleGenerateQuiz('same')}
                 className="rounded-lg border border-sky-200 bg-[#F0F9FF] px-2.5 py-1 text-[11px] font-semibold text-sky-800 hover:bg-sky-100 disabled:opacity-40"
               >
-                Quick Quiz Check
+                Test My Knowledge
               </button>
             </div>
 
@@ -1366,7 +1448,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleTextareaKeyDown}
                 placeholder={
-                  mode === 'review'
+                  mode === 'debug'
                     ? 'Paste your Python code here and press Send (Shift+Enter for new line)...'
                     : `Ask PyVerse AI Tutor about ${progress.activeTutorTopic}...`
                 }

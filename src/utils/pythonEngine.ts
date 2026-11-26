@@ -556,7 +556,8 @@ function evalExpression(
   expr: string,
   env: Record<string, PyValue>,
   line: number,
-  outputChunks: string[]
+  outputChunks: string[],
+  inputQueue?: { values: string[]; idx: number }
 ): PyValue {
   const tokens = tokenizeExpr(expr, line);
   let pos = 0;
@@ -864,6 +865,17 @@ function evalExpression(
         outputChunks.push(args.map(pyToString).join(sep) + end);
         return null;
       }
+      case 'input': {
+        const promptText = args.length > 0 ? pyToString(args[0]) : '';
+        const nextVal =
+          inputQueue && inputQueue.idx < inputQueue.values.length
+            ? inputQueue.values[inputQueue.idx++]
+            : '';
+        if (promptText || nextVal) {
+          outputChunks.push(`${promptText}${nextVal}\n`);
+        }
+        return nextVal;
+      }
       case 'range':
         return makeRangeArray(args, line);
       case 'len': {
@@ -915,9 +927,10 @@ function evalExpression(
   return result;
 }
 
-export function runPythonCode(code: string): PythonRunResult {
+export function runPythonCode(code: string, stdinLines: string[] = []): PythonRunResult {
   const outputChunks: string[] = [];
   const env: Record<string, PyValue> = {};
+  const inputQueue = { values: stdinLines, idx: 0 };
   let stepsExecuted = 0;
   const MAX_STEPS = 4000;
 
@@ -954,7 +967,7 @@ export function runPythonCode(code: string): PythonRunResult {
         if (stmt.kind === 'continue') throw new ContinueSignal();
 
         if (stmt.kind === 'assign') {
-          const val = evalExpression(stmt.expr, env, stmt.line, outputChunks);
+          const val = evalExpression(stmt.expr, env, stmt.line, outputChunks, inputQueue);
           if (stmt.op === '=') {
             env[stmt.target] = val;
           } else {
@@ -984,13 +997,13 @@ export function runPythonCode(code: string): PythonRunResult {
         }
 
         if (stmt.kind === 'expr') {
-          evalExpression(stmt.expr, env, stmt.line, outputChunks);
+          evalExpression(stmt.expr, env, stmt.line, outputChunks, inputQueue);
           continue;
         }
 
         if (stmt.kind === 'if') {
           for (const branch of stmt.branches) {
-            if (branch.cond === null || isTruthy(evalExpression(branch.cond, env, branch.line, outputChunks))) {
+            if (branch.cond === null || isTruthy(evalExpression(branch.cond, env, branch.line, outputChunks, inputQueue))) {
               execStmts(branch.body);
               break;
             }
@@ -999,7 +1012,7 @@ export function runPythonCode(code: string): PythonRunResult {
         }
 
         if (stmt.kind === 'for') {
-          const iterable = evalExpression(stmt.iterExpr, env, stmt.line, outputChunks);
+          const iterable = evalExpression(stmt.iterExpr, env, stmt.line, outputChunks, inputQueue);
           let items: PyValue[] = [];
           if (Array.isArray(iterable)) {
             items = iterable;
@@ -1037,7 +1050,7 @@ export function runPythonCode(code: string): PythonRunResult {
         }
 
         if (stmt.kind === 'while') {
-          while (isTruthy(evalExpression(stmt.cond, env, stmt.line, outputChunks))) {
+          while (isTruthy(evalExpression(stmt.cond, env, stmt.line, outputChunks, inputQueue))) {
             stepsExecuted++;
             if (stepsExecuted > MAX_STEPS) {
               throw new PyRuntimeError(

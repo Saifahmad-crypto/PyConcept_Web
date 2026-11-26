@@ -17,11 +17,13 @@ interface ChallengesSectionProps {
   onCompleteChallenge: (id: string) => void;
 }
 
+type ChallengeTopic = Exclude<TopicId, 'basics'>;
+
 export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   completedChallenges,
   onCompleteChallenge,
 }) => {
-  const [topicFilter, setTopicFilter] = useState<TopicId>('conditionals');
+  const [topicFilter, setTopicFilter] = useState<ChallengeTopic>('conditionals');
   const filteredChallenges = CODING_CHALLENGES.filter((c) => c.topic === topicFilter);
   const [activeId, setActiveId] = useState<string>(CODING_CHALLENGES[0].id);
   const activeChallenge =
@@ -50,7 +52,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
     setShowSolution(false);
   };
 
-  const handleTopicSwitch = (topic: TopicId) => {
+  const handleTopicSwitch = (topic: ChallengeTopic) => {
     setTopicFilter(topic);
     const first = CODING_CHALLENGES.find((c) => c.topic === topic);
     if (first) selectChallenge(first.id);

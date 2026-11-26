@@ -18,22 +18,26 @@ import { SIMULATORS_CATALOG } from '../../simulators/simulatorsData';
 
 interface SimulatorsHubProps {
   onSelectSimulator: (id: SimulatorId) => void;
+  visitedSimulators?: string[];
 }
 
 type FilterOption = 'all' | SimulatorCategory;
 
 const SIMULATOR_ICONS: Record<SimulatorId, React.ReactNode> = {
-  'traffic-signal': <TrafficCone className="h-6 w-6 text-sky-600" aria-hidden="true" />,
-  'atm-decision': <Landmark className="h-6 w-6 text-violet-600" aria-hidden="true" />,
-  'smart-ac': <ThermometerSnowflake className="h-6 w-6 text-sky-600" aria-hidden="true" />,
-  'shopping-discount': <ShoppingBag className="h-6 w-6 text-violet-600" aria-hidden="true" />,
-  'elevator-floor': <Building2 className="h-6 w-6 text-sky-600" aria-hidden="true" />,
-  'countdown-timer': <Timer className="h-6 w-6 text-violet-600" aria-hidden="true" />,
-  'parking-scanner': <CarFront className="h-6 w-6 text-sky-600" aria-hidden="true" />,
-  'atm-cash-counter': <Banknote className="h-6 w-6 text-violet-600" aria-hidden="true" />,
+  'traffic-signal': <TrafficCone className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
+  'atm-decision': <Landmark className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
+  'smart-ac': <ThermometerSnowflake className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
+  'shopping-discount': <ShoppingBag className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
+  'elevator-floor': <Building2 className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
+  'countdown-timer': <Timer className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
+  'parking-scanner': <CarFront className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
+  'atm-cash-counter': <Banknote className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
 };
 
-export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({ onSelectSimulator }) => {
+export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
+  onSelectSimulator,
+  visitedSimulators = [],
+}) => {
   const [filter, setFilter] = useState<FilterOption>('all');
   const [query, setQuery] = useState<string>('');
 
@@ -56,6 +60,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({ onSelectSimulator 
 
   const renderCard = (sim: SimulatorMeta) => {
     const isCond = sim.category === 'conditionals';
+    const isExplored = visitedSimulators.includes(sim.id);
     return (
       <article
         key={sim.id}
@@ -72,23 +77,30 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({ onSelectSimulator 
             >
               {SIMULATOR_ICONS[sim.id]}
             </div>
-            <span className="font-mono text-xs font-semibold text-slate-500">
-              {sim.number} · {sim.difficulty}
-            </span>
+            <div className="text-right font-mono text-xs font-semibold text-[#64748B]">
+              <div>
+                {sim.number} · {sim.difficulty}
+              </div>
+              {isExplored && (
+                <div className="mt-0.5 text-[11px] font-semibold text-emerald-700">
+                  ✓ Explored
+                </div>
+              )}
+            </div>
           </div>
 
-          <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B] group-hover:text-sky-700 transition-colors">
+          <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B] group-hover:text-[#2563EB] transition-colors">
             {sim.title}
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+          <p className="mt-2 text-sm leading-relaxed text-[#64748B]">
             {sim.shortDescription}
           </p>
         </div>
 
         <div className="mt-5 border-t border-slate-100 pt-4 space-y-4">
-          <div className="text-xs text-slate-500">
-            <span className="font-medium text-slate-600">Python concepts: </span>
-            <span className="font-mono font-semibold text-violet-700">
+          <div className="text-xs text-[#64748B]">
+            <span className="font-medium text-[#1E293B]">Python concepts: </span>
+            <span className="font-mono font-semibold text-[#8B5CF6]">
               {sim.concepts.join(' · ')}
             </span>
           </div>
@@ -96,7 +108,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({ onSelectSimulator 
           <button
             type="button"
             onClick={() => onSelectSimulator(sim.id)}
-            className="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 hover:shadow-md"
+            className="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 hover:shadow-md"
           >
             Start Simulator
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

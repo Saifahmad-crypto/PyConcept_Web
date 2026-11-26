@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, createContext } from 'react';
+import React, { useEffect, useContext, createContext, useRef, useState } from 'react';
 import {
   ArrowLeft,
   Play,
@@ -13,12 +13,18 @@ import {
   BookOpen,
   Info,
   Sparkles,
+  History,
+  ChevronDown,
 } from 'lucide-react';
-import { SimulatorMeta, TutorSimulatorContext } from '../../types';
+import { SimulatorId, SimulatorMeta, TutorSimulatorContext } from '../../types';
 import { PythonTraceStep, formatPyLiteral } from '../../utils/pythonEngine';
 
 export const SimulatorTutorContext = createContext<
   ((ctx: TutorSimulatorContext) => void) | null
+>(null);
+
+export const SimulatorRunContext = createContext<
+  ((id: SimulatorId) => void) | null
 >(null);
 
 export interface SimulatorShellProps {
@@ -40,10 +46,10 @@ export interface SimulatorShellProps {
 }
 
 const SPEED_OPTIONS = [
-  { label: '0.5x Slow', ms: 1350 },
-  { label: '1x Normal', ms: 800 },
-  { label: '2x Fast', ms: 400 },
-  { label: '4x Turbo', ms: 180 },
+  { label: '0.5x', ms: 1350 },
+  { label: '1x', ms: 800 },
+  { label: '2x', ms: 400 },
+  { label: '4x', ms: 180 },
 ];
 
 const PY_KEYWORDS = new Set([
@@ -67,7 +73,8 @@ const PY_BUILTINS = new Set(['print', 'range', 'len', 'int', 'str', 'abs', 'min'
 
 function highlightLine(line: string): React.ReactNode[] {
   const tokens: React.ReactNode[] = [];
-  const regex = /(#.*$|"(?:\\.|[^"])*"|'(?:\\.|[^'])*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b)/g;
+  const regex =
+    /(#.*$|"(?:\\.|[^"])*"|'(?:\\.|[^'])*'|\b\d+(?:\.\d+)?\b|\b[A-Za-z_][A-Za-z0-9_]*\b)/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
   let k = 0;
@@ -145,6 +152,21 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
     stepIndex > 0 && stepIndex <= totalSteps ? steps[stepIndex - 1] : null;
   const isFinished = totalSteps > 0 && stepIndex >= totalSteps;
 
+  const [historyOpen, setHistoryOpen] = useState(true);
+  const recordedRunRef = useRef(false);
+
+  const onAskTutor = useContext(SimulatorTutorContext);
+  const onRecordRun = useContext(SimulatorRunContext);
+
+  useEffect(() => {
+    if (stepIndex === 0) {
+      recordedRunRef.current = false;
+    } else if (stepIndex >= 1 && !recordedRunRef.current && onRecordRun) {
+      recordedRunRef.current = true;
+      onRecordRun(meta.id);
+    }
+  }, [stepIndex, meta.id, onRecordRun]);
+
   useEffect(() => {
     if (!isPlaying) return;
     if (stepIndex >= totalSteps) {
@@ -157,11 +179,15 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
     return () => window.clearTimeout(timer);
   }, [isPlaying, stepIndex, totalSteps, speedMs, onNextStep, onPause]);
 
-  const onAskTutor = useContext(SimulatorTutorContext);
   const codeLines = code.split('\n');
   const currentVars = activeStep ? activeStep.variables : initialVariables;
+  const prevStepVars =
+    stepIndex > 1 && stepIndex <= totalSteps
+      ? steps[stepIndex - 2].variables
+      : initialVariables;
   const currentOutput = activeStep ? activeStep.outputLines : [];
   const progressPct = totalSteps > 0 ? Math.round((stepIndex / totalSteps) * 100) : 0;
+  const executedHistory = steps.slice(0, stepIndex);
 
   const handleAskTutorAboutStep = () => {
     if (!onAskTutor) return;
@@ -189,21 +215,19 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           <button
             type="button"
             onClick={onBackToHub}
-            className="mb-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 transition-colors hover:text-violet-700"
+            className="mb-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] transition-colors hover:text-[#8B5CF6]"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             Back to Simulators Hub
           </button>
 
-          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
-            <span className="font-mono font-semibold text-sky-700">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#64748B]">
+            <span className="font-mono font-semibold text-[#2563EB]">
               Simulator {meta.number}
             </span>
             <span aria-hidden="true">·</span>
             <span>
-              {meta.category === 'conditionals'
-                ? 'Conditional Statements'
-                : 'Loops'}
+              {meta.category === 'conditionals' ? 'Conditional Statements' : 'Loops'}
             </span>
             <span aria-hidden="true">·</span>
             <span>{meta.difficulty}</span>
@@ -212,18 +236,19 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           <h1 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B] sm:text-3xl">
             {meta.title}
           </h1>
-          <p className="mt-1 max-w-3xl text-sm text-slate-600">
+          <p className="mt-1 max-w-3xl text-sm text-[#64748B]">
             {meta.realLifeScenario} Concepts:{' '}
-            <span className="font-mono text-xs font-semibold text-violet-700">
+            <span className="font-mono text-xs font-semibold text-[#8B5CF6]">
               {meta.concepts.join(' · ')}
             </span>
           </p>
         </div>
 
-        <div className="flex max-w-sm items-start gap-2 rounded-xl border border-sky-200/80 bg-[#F0F9FF] px-3.5 py-2.5 text-xs text-slate-700">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" aria-hidden="true" />
+        <div className="flex max-w-sm items-start gap-2 rounded-xl border border-sky-200/80 bg-[#F0F9FF] px-3.5 py-2.5 text-xs text-[#1E293B]">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" aria-hidden="true" />
           <span>
-            Synchronized educational Python execution engine — every visual change is driven directly by the highlighted line.
+            Purpose-built educational execution engine for synchronized step-by-step Python
+            visualization.
           </span>
         </div>
       </div>
@@ -263,7 +288,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                     key={lineNum}
                     className={`flex items-center px-3 transition-colors duration-150 ${
                       isActive
-                        ? 'bg-gradient-to-r from-[#38BDF8]/25 via-[#6366F1]/20 to-[#8B5CF6]/20'
+                        ? 'bg-gradient-to-r from-[#38BDF8]/25 via-[#2563EB]/20 to-[#8B5CF6]/20'
                         : 'hover:bg-slate-800/40'
                     }`}
                   >
@@ -290,17 +315,16 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
-                <Cpu className="h-4 w-4 text-violet-600" aria-hidden="true" />
-                Live Variables &amp; State
+                <Cpu className="h-4 w-4 text-[#8B5CF6]" aria-hidden="true" />
+                Live Variables &amp; Memory
               </div>
               {activeStep?.loopVar && (
-                <span className="font-mono text-xs font-semibold text-sky-700 tabular-nums">
+                <span className="font-mono text-xs font-semibold text-[#2563EB] tabular-nums">
                   Loop Pass #{activeStep.loopVar.iteration}
                 </span>
               )}
             </div>
 
-            {/* Variable Grid */}
             <div className="grid grid-cols-2 gap-2">
               {Object.entries(currentVars).map(([name, val]) => {
                 const formatted =
@@ -311,15 +335,29 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                   val === null
                     ? formatPyLiteral(val as never)
                     : String(val);
+                const prevFormatted =
+                  prevStepVars && name in prevStepVars
+                    ? formatPyLiteral(prevStepVars[name] as never)
+                    : formatted;
+                const changed = stepIndex > 0 && formatted !== prevFormatted;
+
                 return (
                   <div
                     key={name}
-                    className="flex items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-[#F8FAFC] px-3 py-2 text-xs"
+                    className={`flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs transition-colors ${
+                      changed
+                        ? 'border-sky-300 bg-[#F0F9FF]'
+                        : 'border-slate-200/80 bg-[#F8FAFC]'
+                    }`}
                   >
-                    <span className="font-mono font-medium text-slate-600 truncate">
+                    <span className="font-mono font-medium text-[#64748B] truncate">
                       {name}
                     </span>
-                    <span className="font-mono font-bold text-[#1E293B] tabular-nums truncate max-w-[130px]">
+                    <span
+                      className={`font-mono font-bold tabular-nums truncate max-w-[130px] ${
+                        changed ? 'text-[#2563EB]' : 'text-[#1E293B]'
+                      }`}
+                    >
                       {formatted}
                     </span>
                   </div>
@@ -327,7 +365,6 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               })}
             </div>
 
-            {/* Condition Result Box */}
             {activeStep?.conditionExpr !== undefined &&
               activeStep.conditionResult !== undefined && (
                 <div
@@ -364,18 +401,17 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
         </div>
       </div>
 
-      {/* BOTTOM SECTION — CONTROLS, EXPLANATION & CONSOLE */}
+      {/* BOTTOM SECTION — CONTROLS, EXPLANATION, CONSOLE & EXECUTION HISTORY */}
       <div className="mt-6 space-y-5">
         {/* Execution Controls Bar */}
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Play / Pause / Step / Reset */}
             <div className="flex flex-wrap items-center gap-2.5">
               {!isPlaying ? (
                 <button
                   type="button"
                   onClick={onPlay}
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
                 >
                   <Play className="h-3.5 w-3.5" aria-hidden="true" />
                   {isFinished ? 'Replay' : stepIndex === 0 ? 'Play' : 'Resume'}
@@ -400,35 +436,47 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 disabled={isFinished}
                 className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] disabled:opacity-40 whitespace-nowrap"
               >
-                <SkipForward className="h-3.5 w-3.5 text-sky-600" aria-hidden="true" />
+                <SkipForward className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
                 Next Step
               </button>
 
               <button
                 type="button"
                 onClick={onReset}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-[#1E293B] whitespace-nowrap"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-[#64748B] transition-colors hover:bg-slate-50 hover:text-[#1E293B] whitespace-nowrap"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset
               </button>
             </div>
 
-            {/* Speed Control & Step Progress */}
+            {/* Speed Slider + Presets & Step Progress */}
             <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Gauge className="h-4 w-4 text-slate-500" aria-hidden="true" />
-                <span className="text-xs font-medium text-slate-500">Speed:</span>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <Gauge className="h-4 w-4 text-[#64748B]" aria-hidden="true" />
+                <label htmlFor="sim-speed-slider" className="text-xs font-medium text-[#64748B]">
+                  Speed
+                </label>
+                <input
+                  id="sim-speed-slider"
+                  type="range"
+                  min={150}
+                  max={1450}
+                  step={50}
+                  value={1600 - speedMs}
+                  onChange={(e) => onChangeSpeed(1600 - Number(e.target.value))}
+                  className="w-24 accent-[#2563EB] cursor-pointer"
+                />
                 <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-0.5">
                   {SPEED_OPTIONS.map((opt) => (
                     <button
                       key={opt.ms}
                       type="button"
                       onClick={() => onChangeSpeed(opt.ms)}
-                      className={`rounded-lg px-2.5 py-1 text-[11px] font-semibold transition-all whitespace-nowrap ${
+                      className={`rounded-lg px-2 py-1 text-[11px] font-semibold transition-all whitespace-nowrap ${
                         speedMs === opt.ms
-                          ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
-                          : 'text-slate-600 hover:text-[#1E293B]'
+                          ? 'bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] text-white shadow-xs'
+                          : 'text-[#64748B] hover:text-[#1E293B]'
                       }`}
                     >
                       {opt.label}
@@ -443,7 +491,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 </span>
                 <div className="h-2 w-24 overflow-hidden rounded-full bg-slate-100">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] transition-all duration-200"
+                    className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] transition-all duration-200"
                     style={{ width: `${progressPct}%` }}
                   />
                 </div>
@@ -456,11 +504,11 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-6">
             <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-xs font-semibold text-sky-700">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#2563EB]">
                 <BookOpen className="h-4 w-4" aria-hidden="true" />
                 Step-by-Step Explanation
               </div>
-              <span className="font-mono text-[11px] font-medium text-slate-500 tabular-nums">
+              <span className="font-mono text-[11px] font-medium text-[#64748B] tabular-nums">
                 {activeStep ? `Line ${activeStep.line}` : 'Initial State'}
               </span>
             </div>
@@ -473,16 +521,16 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               </p>
             )}
             {onAskTutor && (
-              <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between gap-3">
-                <span className="text-[11px] text-slate-500">
+              <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
+                <span className="text-[11px] text-[#64748B]">
                   Want a deeper breakdown of this step?
                 </span>
                 <button
                   type="button"
                   onClick={handleAskTutorAboutStep}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-sky-200 bg-gradient-to-r from-[#F0F9FF] to-violet-50 px-3 py-1.5 text-xs font-semibold text-sky-800 transition-colors hover:border-violet-300 hover:text-violet-800 whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-sky-200 bg-gradient-to-r from-[#F0F9FF] to-violet-50 px-3 py-1.5 text-xs font-semibold text-[#2563EB] transition-colors hover:border-violet-300 hover:text-[#8B5CF6] whitespace-nowrap"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-violet-600" aria-hidden="true" />
+                  <Sparkles className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
                   Ask AI Tutor about this step
                 </button>
               </div>
@@ -516,6 +564,63 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               )}
             </div>
           </div>
+        </div>
+
+        {/* Execution History Timeline */}
+        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <button
+            type="button"
+            onClick={() => setHistoryOpen((o) => !o)}
+            aria-expanded={historyOpen}
+            className="flex w-full items-center justify-between px-5 py-3.5 text-left"
+          >
+            <span className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#1E293B]">
+              <History className="h-4 w-4 text-[#2563EB]" aria-hidden="true" />
+              Execution History ({executedHistory.length} / {totalSteps} steps logged)
+            </span>
+            <ChevronDown
+              className={`h-4 w-4 text-[#64748B] transition-transform ${
+                historyOpen ? 'rotate-180' : ''
+              }`}
+              aria-hidden="true"
+            />
+          </button>
+
+          {historyOpen && (
+            <div className="border-t border-slate-100 px-5 py-3">
+              {executedHistory.length === 0 ? (
+                <p className="text-xs text-[#64748B]">
+                  Press Play or Next Step to record execution history here.
+                </p>
+              ) : (
+                <div className="max-h-44 space-y-1.5 overflow-y-auto pr-1">
+                  {executedHistory.map((step, idx) => {
+                    const isCurrent = idx === executedHistory.length - 1;
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs ${
+                          isCurrent
+                            ? 'border-sky-300 bg-[#F0F9FF]'
+                            : 'border-slate-100 bg-[#F8FAFC]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span className="font-mono text-[11px] font-bold text-[#2563EB] tabular-nums">
+                            #{idx + 1} · L{step.line}
+                          </span>
+                          <span className="truncate text-[#1E293B]">{step.explanation}</span>
+                        </div>
+                        <span className="font-mono text-[11px] font-semibold text-[#64748B] shrink-0">
+                          {step.statusLabel}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

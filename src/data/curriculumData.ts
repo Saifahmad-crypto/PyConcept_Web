@@ -1,6 +1,12 @@
 import { CodingChallenge, LessonDef, PlaygroundExample, QuizQuestion } from '../types';
 import { runPythonCode } from '../utils/pythonEngine';
 
+export const TOPIC_BASICS_LESSONS: LessonDef[] = [
+  { id: 'b-vars', topic: 'basics', number: '1.1', title: 'Variables & Memory Boxes', summary: 'Store numbers, text, and True/False values inside named variables.' },
+  { id: 'b-types', topic: 'basics', number: '1.2', title: 'Core Data Types', summary: 'Tell int, float, str, and bool apart at a glance.' },
+  { id: 'b-io', topic: 'basics', number: '1.3', title: 'Output, Expressions & Indentation', summary: 'Combine print(), f-strings, math operators, and Python spacing rules.' },
+];
+
 export const TOPIC_08_LESSONS: LessonDef[] = [
   { id: 'c-intro', topic: 'conditionals', number: '4.1', title: 'Introduction to Decisions', summary: 'Boolean values, True/False, and why programs branch.' },
   { id: 'c-if', topic: 'conditionals', number: '4.2', title: 'The if Statement', summary: 'Syntax, colons, indentation, and single-branch flow.' },
@@ -538,6 +544,13 @@ export const CODING_CHALLENGES: CodingChallenge[] = [
 ];
 
 export const PLAYGROUND_EXAMPLES: PlaygroundExample[] = [
+  {
+    id: 'ex-basics-vars',
+    title: '0. Variables & f-strings (Basics)',
+    topic: 'basics',
+    description: 'Stores student data in variables and formats a clean greeting.',
+    code: 'name = "Aarav"\nlevel = 3\naccuracy = 94.5\nis_ready = True\n\nprint(f"Welcome {name}! Level {level} unlocked.")\nprint("Accuracy:", accuracy, "% | Ready:", is_ready)',
+  },
   {
     id: 'ex-basic-if',
     title: '1. Basic if statement',
