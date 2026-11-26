@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Download, X, Award, CheckCircle2, Sparkles, Sun, Moon } from 'lucide-react';
+import { Download, X, Award, CheckCircle2, Sparkles, FileText, QrCode } from 'lucide-react';
 import { TopicId } from '../types';
+import {
+  generateCertId,
+  computeCertSignature,
+  buildVerificationUrl,
+} from '../utils/certificateSecurity';
+import { drawQrToCanvas } from '../utils/qrCode';
+import { downloadCanvasAsA4LandscapePdf } from '../utils/pdfGenerator';
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -32,13 +39,20 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     });
   });
 
-  const [certTheme, setCertTheme] = useState<'dark' | 'light'>('dark');
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
 
-  // Stable random certificate ID per topic/session
+  // Deterministic unique Certificate ID and cryptographic signature
   const certId = useMemo(() => {
-    const digits = Math.floor(1000 + Math.random() * 9000);
-    return `PV-2026-${digits}`;
-  }, [topicId]);
+    return generateCertId(recipientName, topicId);
+  }, [recipientName, topicId]);
+
+  const signature = useMemo(() => {
+    return computeCertSignature(certId, recipientName, topicId, issueDate);
+  }, [certId, recipientName, topicId, issueDate]);
+
+  const verificationUrl = useMemo(() => {
+    return buildVerificationUrl(certId, recipientName, topicId, issueDate, signature);
+  }, [certId, recipientName, topicId, issueDate, signature]);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -57,95 +71,59 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Standard high-res certificate dimensions (16:10 ratio, matches A4 landscape scaling)
     const width = 1600;
     const height = 1000;
     canvas.width = width;
     canvas.height = height;
 
-    const isLight = certTheme === 'light';
+    // 1. Background - Deep Luxury Black/Ruby Gradient (Original PyVerse Black Theme)
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+    bgGrad.addColorStop(0, '#090101');
+    bgGrad.addColorStop(0.5, '#120404');
+    bgGrad.addColorStop(1, '#070101');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
 
-    // 1. Background
-    if (isLight) {
-      // Light print-friendly luxury parchment
-      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-      bgGrad.addColorStop(0, '#FCFBF8');
-      bgGrad.addColorStop(0.5, '#F7F4EE');
-      bgGrad.addColorStop(1, '#EFEAE0');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, width, height);
+    // Subtle Radial Glow behind center
+    const radial = ctx.createRadialGradient(width / 2, height * 0.44, 50, width / 2, height * 0.44, 600);
+    radial.addColorStop(0, 'rgba(225, 9, 6, 0.16)');
+    radial.addColorStop(0.65, 'rgba(225, 9, 6, 0.03)');
+    radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = radial;
+    ctx.fillRect(0, 0, width, height);
 
-      // Subtle warm radial
-      const radial = ctx.createRadialGradient(width / 2, height * 0.44, 40, width / 2, height * 0.44, 550);
-      radial.addColorStop(0, 'rgba(225, 9, 6, 0.05)');
-      radial.addColorStop(0.7, 'rgba(225, 9, 6, 0.01)');
-      radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = radial;
-      ctx.fillRect(0, 0, width, height);
-
-      // Fine grid
-      ctx.strokeStyle = 'rgba(16, 3, 3, 0.04)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-      for (let y = 0; y < height; y += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
-    } else {
-      // Deep luxury dark gradient
-      const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-      bgGrad.addColorStop(0, '#0a0202');
-      bgGrad.addColorStop(0.5, '#120404');
-      bgGrad.addColorStop(1, '#080101');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, width, height);
-
-      // Subtle radial glow
-      const radial = ctx.createRadialGradient(width / 2, height * 0.44, 50, width / 2, height * 0.44, 600);
-      radial.addColorStop(0, 'rgba(225, 9, 6, 0.14)');
-      radial.addColorStop(0.6, 'rgba(225, 9, 6, 0.03)');
-      radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      ctx.fillStyle = radial;
-      ctx.fillRect(0, 0, width, height);
-
-      // Fine grid
-      ctx.strokeStyle = 'rgba(251, 245, 249, 0.025)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-      for (let y = 0; y < height; y += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
+    // Fine grid overlay
+    ctx.strokeStyle = 'rgba(251, 245, 249, 0.025)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < width; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+    for (let y = 0; y < height; y += 40) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
     }
 
-    // 2. Borders & Ornamental Corners
-    ctx.strokeStyle = isLight ? '#2A1010' : '#3A1D1D';
+    // 2. Borders & Ornamental Frame
+    ctx.strokeStyle = '#3A1D1D';
     ctx.lineWidth = 3;
     ctx.strokeRect(36, 36, width - 72, height - 72);
 
     const borderGrad = ctx.createLinearGradient(0, 0, width, height);
     borderGrad.addColorStop(0, '#E10906');
-    borderGrad.addColorStop(0.5, isLight ? '#8A7550' : '#FBF5F9');
+    borderGrad.addColorStop(0.5, '#FBF5F9');
     borderGrad.addColorStop(1, '#E10906');
     ctx.strokeStyle = borderGrad;
     ctx.lineWidth = 2.5;
     ctx.strokeRect(48, 48, width - 96, height - 96);
 
     ctx.save();
-    ctx.strokeStyle = isLight ? 'rgba(225, 9, 6, 0.45)' : 'rgba(225, 9, 6, 0.4)';
+    ctx.strokeStyle = 'rgba(225, 9, 6, 0.4)';
     ctx.lineWidth = 1.2;
     ctx.setLineDash([6, 6]);
     ctx.strokeRect(60, 60, width - 120, height - 120);
@@ -172,7 +150,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       ctx.fillRect(x + dx * 8 - (dx < 0 ? 6 : 0), y + dy * 8 - (dy < 0 ? 6 : 0), 6, 6);
     });
 
-    // 3. PyVerse Logo Header (adjusted y-axis to reduce gap)
+    // 3. PyVerse Logo Header
     ctx.save();
     const logoX = width / 2 - 130;
     const logoY = 92;
@@ -182,7 +160,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.scale(logoScale, logoScale);
 
     ctx.fillStyle = '#100303';
-    ctx.strokeStyle = isLight ? '#2A1010' : '#3A1D1D';
+    ctx.strokeStyle = '#3A1D1D';
     ctx.lineWidth = 2;
     ctx.beginPath();
     const r = 12;
@@ -225,30 +203,30 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.font = '800 38px "Space Grotesk", system-ui, -apple-system, sans-serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = isLight ? '#100303' : '#FBF5F9';
+    ctx.fillStyle = '#FBF5F9';
     ctx.fillText('Py', width / 2 - 60, 121);
     const pyWidth = ctx.measureText('Py').width;
     ctx.fillStyle = '#E10906';
     ctx.fillText('Verse', width / 2 - 60 + pyWidth, 121);
 
-    // Tagline - larger & brighter
+    // Tagline - bright & crisp
     ctx.font = '700 15px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
     try {
       (ctx as unknown as { letterSpacing?: string }).letterSpacing = '5px';
     } catch {}
-    ctx.fillStyle = isLight ? '#4A3D3D' : '#E5DFDF';
+    ctx.fillStyle = '#E5DFDF';
     ctx.fillText('THINK · CODE · EXPERIMENT', width / 2, 168);
 
     // 4. Certificate Title: "Certificate of Completion"
     ctx.font = '800 46px "Cinzel", "Playfair Display", Georgia, serif';
-    ctx.fillStyle = isLight ? '#100303' : '#FFFFFF';
+    ctx.fillStyle = '#FFFFFF';
     ctx.textAlign = 'center';
     ctx.fillText('CERTIFICATE OF COMPLETION', width / 2, 240);
 
-    // Subtitle - brighter & larger
+    // Subtitle - bright & tracked
     ctx.font = '700 16px "Space Grotesk", sans-serif';
-    ctx.fillStyle = isLight ? '#4A3D3D' : '#E5DFDF';
+    ctx.fillStyle = '#E5DFDF';
     try {
       (ctx as unknown as { letterSpacing?: string }).letterSpacing = '3px';
     } catch {}
@@ -257,18 +235,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     // 5. Recipient Name
     const cleanName = (recipientName || 'Python Learner').trim();
     ctx.font = '700 62px "Cinzel", "Playfair Display", Georgia, serif';
-    if (isLight) {
-      ctx.fillStyle = '#100303';
-    } else {
-      const nameGrad = ctx.createLinearGradient(width / 2 - 300, 0, width / 2 + 300, 0);
-      nameGrad.addColorStop(0, '#FFFFFF');
-      nameGrad.addColorStop(0.5, '#FFF2F2');
-      nameGrad.addColorStop(1, '#FFFFFF');
-      ctx.fillStyle = nameGrad;
-    }
+    const nameGrad = ctx.createLinearGradient(width / 2 - 300, 0, width / 2 + 300, 0);
+    nameGrad.addColorStop(0, '#FFFFFF');
+    nameGrad.addColorStop(0.5, '#FFF2F2');
+    nameGrad.addColorStop(1, '#FFFFFF');
+    ctx.fillStyle = nameGrad;
     ctx.fillText(cleanName, width / 2, 375);
 
-    // Underline
+    // Elegant underline for name
     const nameWidth = Math.max(360, ctx.measureText(cleanName).width + 60);
     const lineY = 405;
     const underlineGrad = ctx.createLinearGradient(width / 2 - nameWidth / 2, 0, width / 2 + nameWidth / 2, 0);
@@ -287,63 +261,64 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.arc(width / 2, lineY, 4.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // 6. Topic Certification Statement - larger & brighter
+    // 6. Topic Certification Statement
     ctx.font = '500 20px "Space Grotesk", sans-serif';
-    ctx.fillStyle = isLight ? '#382D2D' : '#F1EEEE';
+    ctx.fillStyle = '#F1EEEE';
     try {
       (ctx as unknown as { letterSpacing?: string }).letterSpacing = '0px';
     } catch {}
     ctx.fillText('for successfully completing all interactive lessons, visual flow simulations, and challenge missions in', width / 2, 458);
 
-    // Topic Name Highlight Box
+    // Topic Name Highlight
     ctx.font = '800 42px "Space Grotesk", sans-serif';
     ctx.fillStyle = '#E10906';
     ctx.fillText(topicTitle.toUpperCase(), width / 2, 518);
 
-    // Curriculum verification label - brighter & larger
+    // Curriculum verification label
     ctx.font = '600 16px "JetBrains Mono", monospace';
-    ctx.fillStyle = isLight ? '#554848' : '#D1C7C7';
+    ctx.fillStyle = '#D1C7C7';
     ctx.fillText('100% Curriculum Completed · Interactive Python Visualizer Verified', width / 2, 562);
 
-    // 7. Footer: Date, Seal, and Signature (compacted gap: footerY moved from 740 to 660)
+    // 7. Footer: Compact spacing (footerY = 660)
     const footerY = 660;
 
-    // Left: Date
+    // --- Left: Date & Certificate ID ---
+    const leftX = 250;
     ctx.textAlign = 'center';
     ctx.font = '700 14px "JetBrains Mono", monospace';
-    ctx.fillStyle = isLight ? '#554848' : '#D1C7C7';
-    ctx.fillText('DATE OF ISSUANCE', 280, footerY);
+    ctx.fillStyle = '#D1C7C7';
+    ctx.fillText('DATE OF ISSUANCE', leftX, footerY);
 
     ctx.font = '700 20px "Space Grotesk", sans-serif';
-    ctx.fillStyle = isLight ? '#100303' : '#FBF5F9';
-    ctx.fillText(issueDate, 280, footerY + 36);
+    ctx.fillStyle = '#FBF5F9';
+    ctx.fillText(issueDate, leftX, footerY + 36);
 
-    ctx.strokeStyle = isLight ? '#CFC8C8' : '#3A1D1D';
+    ctx.strokeStyle = '#3A1D1D';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(170, footerY + 50);
-    ctx.lineTo(390, footerY + 50);
+    ctx.moveTo(leftX - 110, footerY + 50);
+    ctx.lineTo(leftX + 110, footerY + 50);
     ctx.stroke();
 
-    // Random Certificate ID shown on left (replaced "local storage ID")
-    ctx.font = '700 14px "JetBrains Mono", monospace';
+    // Verifiable unique certificate ID
+    ctx.font = '700 15px "JetBrains Mono", monospace';
     ctx.fillStyle = '#E10906';
-    ctx.fillText(`ID: ${certId}`, 280, footerY + 74);
+    ctx.fillText(`ID: ${certId}`, leftX, footerY + 75);
 
-    // Center: Official PyVerse Seal Badge with "COMPLETED"
+    // --- Center: Proper PyVerse Emblem in Center Seal ---
     const sealX = width / 2;
     const sealY = footerY + 28;
 
-    // Outer seal circle
+    // Outer crimson ring
     ctx.strokeStyle = '#E10906';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(sealX, sealY, 56, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Inner dashed circle
+    // Inner dashed ring
     ctx.save();
-    ctx.strokeStyle = isLight ? 'rgba(16, 3, 3, 0.4)' : 'rgba(251, 245, 249, 0.5)';
+    ctx.strokeStyle = 'rgba(251, 245, 249, 0.5)';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
@@ -351,39 +326,79 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.stroke();
     ctx.restore();
 
-    // Seal fill
-    ctx.fillStyle = isLight ? '#F5EBEB' : '#190909';
+    // Inner seal background
+    ctx.fillStyle = '#190909';
     ctx.beginPath();
     ctx.arc(sealX, sealY, 44, 0, Math.PI * 2);
     ctx.fill();
 
-    // Star / Seal core
-    ctx.font = '800 24px "Space Grotesk", sans-serif';
+    // PROPER PYVERSE EMBLEM IN CENTER SEAL
+    ctx.save();
+    const emblemScale = 0.52;
+    ctx.translate(sealX - 32 * emblemScale, sealY - 38 * emblemScale);
+    ctx.scale(emblemScale, emblemScale);
+
+    // Emblem squircle background
+    ctx.fillStyle = '#100303';
+    ctx.strokeStyle = '#3A1D1D';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if ('roundRect' in ctx && typeof (ctx as unknown as { roundRect?: Function }).roundRect === 'function') {
+      (ctx as unknown as { roundRect: Function }).roundRect(4, 4, 56, 56, 12);
+    } else {
+      ctx.rect(4, 4, 56, 56);
+    }
+    ctx.fill();
+    ctx.stroke();
+
+    // Emblem white outer vector
+    ctx.strokeStyle = '#FBF5F9';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'square';
+    try {
+      const p1 = new Path2D('M16 48 L16 18 C16 14, 19 12, 23 12 L38 12 C45.5 12, 50 17, 50 24.5 C50 32, 45.5 37, 38 37 L26 37');
+      ctx.stroke(p1);
+    } catch {
+      ctx.strokeRect(16, 18, 22, 19);
+    }
+
+    // Emblem red inner vector
+    ctx.strokeStyle = '#E10906';
+    ctx.lineWidth = 4.5;
+    ctx.lineCap = 'square';
+    try {
+      const p2 = new Path2D('M26 50 L26 24 L37 24 C40 24, 42 25.8, 42 28.5 C42 31.2, 40 33, 37 33 L26 33');
+      ctx.stroke(p2);
+    } catch {
+      ctx.strokeRect(26, 24, 11, 9);
+    }
+
     ctx.fillStyle = '#E10906';
-    ctx.fillText('★', sealX, sealY - 4);
+    ctx.fillRect(40, 42, 10, 8);
+    ctx.restore();
 
-    // Seal text: "COMPLETED" (per user request)
+    // Seal text: "COMPLETED"
     ctx.font = '800 11px "JetBrains Mono", monospace';
-    ctx.fillStyle = isLight ? '#100303' : '#FBF5F9';
-    ctx.fillText('COMPLETED', sealX, sealY + 16);
+    ctx.fillStyle = '#FBF5F9';
+    ctx.fillText('COMPLETED', sealX, sealY + 22);
 
-    // Seal outer curved text or label
+    // Outer seal title
     ctx.font = '700 13px "JetBrains Mono", monospace';
-    ctx.fillStyle = isLight ? '#554848' : '#D1C7C7';
+    ctx.fillStyle = '#D1C7C7';
     ctx.fillText('PYVERSE ACADEMIC SEAL', sealX, sealY + 76);
 
-    // Right: Signature
-    const sigX = width - 280;
+    // --- Right: Signature & Credentials ---
+    const sigX = width - 400;
     ctx.font = '700 14px "JetBrains Mono", monospace';
-    ctx.fillStyle = isLight ? '#554848' : '#D1C7C7';
+    ctx.fillStyle = '#D1C7C7';
     ctx.fillText('DIRECTOR OF CURRICULUM', sigX, footerY);
 
     // Stylized signature
     ctx.font = 'italic 700 28px "Playfair Display", Georgia, serif';
-    ctx.fillStyle = isLight ? '#100303' : '#FBF5F9';
+    ctx.fillStyle = '#FBF5F9';
     ctx.fillText('PyVerse Council', sigX, footerY + 32);
 
-    ctx.strokeStyle = isLight ? '#CFC8C8' : '#3A1D1D';
+    ctx.strokeStyle = '#3A1D1D';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(sigX - 110, footerY + 50);
@@ -391,14 +406,32 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.stroke();
 
     ctx.font = '700 13px "JetBrains Mono", monospace';
-    ctx.fillStyle = isLight ? '#382D2D' : '#E5DFDF';
+    ctx.fillStyle = '#E5DFDF';
     ctx.fillText('VERIFIED CREDENTIAL', sigX, footerY + 74);
+
+    // --- Far Right: Scannable QR Code to Verification Page ---
+    const qrSize = 100;
+    const qrX = width - 210;
+    const qrY = footerY - 14;
+
+    // Draw high-contrast scannable QR code
+    drawQrToCanvas(ctx, verificationUrl, qrX, qrY, qrSize, '#0a0202', '#FBF5F9');
+
+    // QR Code border and label
+    ctx.strokeStyle = '#E10906';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(qrX - 2, qrY - 2, qrSize + 4, qrSize + 4);
+
+    ctx.font = '700 11px "JetBrains Mono", monospace';
+    ctx.fillStyle = '#D1C7C7';
+    ctx.textAlign = 'center';
+    ctx.fillText('SCAN TO VERIFY', qrX + qrSize / 2, qrY + qrSize + 18);
 
     // Reset settings
     try {
       (ctx as unknown as { letterSpacing?: string }).letterSpacing = '0px';
     } catch {}
-  }, [recipientName, issueDate, topicId, topicTitle, certTheme, certId]);
+  }, [recipientName, issueDate, topicId, topicTitle, certId, verificationUrl]);
 
   useEffect(() => {
     if (isOpen) {
@@ -417,14 +450,28 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       const dataUrl = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       const safeName = (recipientName || 'Learner').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-      const themeSuffix = certTheme === 'light' ? '_Print' : '';
-      a.download = `PyVerse_Certificate_${topicId}_${safeName}${themeSuffix}.png`;
+      a.download = `PyVerse_Certificate_${topicId}_${safeName}.png`;
       a.href = dataUrl;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     } catch (e) {
       console.error('Failed to export certificate image:', e);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    try {
+      setIsExportingPdf(true);
+      const safeName = (recipientName || 'Learner').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+      await downloadCanvasAsA4LandscapePdf(canvas, `PyVerse_Certificate_${topicId}_${safeName}.pdf`);
+    } catch (e) {
+      console.error('Failed to export certificate PDF:', e);
+    } finally {
+      setIsExportingPdf(false);
     }
   };
 
@@ -454,41 +501,22 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 </span>
               </h2>
               <p className="text-xs text-[#8A8585]">
-                {topicTitle} · {certId}
+                {topicTitle} · {certId} · QR Verification Enabled
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Theme Toggle (Dark vs Light Print) */}
-            <div className="inline-flex items-center gap-1 rounded-xl border border-[#3A1D1D] bg-[#190909] p-1">
-              <button
-                type="button"
-                onClick={() => setCertTheme('dark')}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors ${
-                  certTheme === 'dark'
-                    ? 'bg-[#E10906] text-white shadow-xs'
-                    : 'text-[#8A8585] hover:text-white'
-                }`}
-                title="Dark Luxury Theme"
-              >
-                <Moon className="h-3.5 w-3.5" />
-                <span>Dark</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setCertTheme('light')}
-                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors ${
-                  certTheme === 'light'
-                    ? 'bg-[#E10906] text-white shadow-xs'
-                    : 'text-[#8A8585] hover:text-white'
-                }`}
-                title="Print-Friendly Light Theme (Saves Ink)"
-              >
-                <Sun className="h-3.5 w-3.5" />
-                <span>Light (print)</span>
-              </button>
-            </div>
+            <a
+              href={verificationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-[#3A1D1D] bg-[#190909] px-2.5 py-1 text-xs font-semibold text-[#D1C7C7] hover:border-[#E10906] hover:text-white transition-colors"
+              title="Open public verification page"
+            >
+              <QrCode className="h-3.5 w-3.5 text-[#E10906]" />
+              <span>Verify Link</span>
+            </a>
 
             <button
               type="button"
@@ -546,24 +574,27 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
           <p className="text-xs text-[#8A8585] flex items-center gap-1.5">
             <Sparkles className="h-3.5 w-3.5 text-[#E10906]" />
-            High-resolution 1600×1000 PNG format · {certTheme === 'light' ? 'Light Print Edition' : 'Dark Luxury Edition'}
+            Includes scannable QR verification code &amp; PyVerse Emblem seal.
           </p>
 
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 sm:flex-initial rounded-xl border border-[#3A1D1D] bg-[#190909] px-4 py-2.5 text-xs font-semibold text-[#CFC8C8] hover:text-white hover:border-[#E10906] transition-colors"
-            >
-              Close
-            </button>
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
             <button
               type="button"
               onClick={handleDownloadPng}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 rounded-xl bg-[#E10906] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#C40705] transition-colors shadow-md hover:shadow-red-900/40"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#3A1D1D] bg-[#190909] px-4 py-2.5 text-xs font-bold text-[#FBF5F9] hover:border-[#E10906] hover:text-white transition-colors"
             >
-              <Download className="h-4 w-4" aria-hidden="true" />
-              Download Certificate (PNG)
+              <Download className="h-4 w-4" />
+              Download PNG
+            </button>
+
+            <button
+              type="button"
+              disabled={isExportingPdf}
+              onClick={handleDownloadPdf}
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 rounded-xl bg-[#E10906] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#C40705] transition-colors shadow-md hover:shadow-red-900/40 disabled:opacity-50"
+            >
+              <FileText className="h-4 w-4" />
+              <span>{isExportingPdf ? 'Exporting...' : 'Download A4 PDF'}</span>
             </button>
           </div>
         </div>

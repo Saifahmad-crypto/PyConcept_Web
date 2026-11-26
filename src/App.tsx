@@ -21,6 +21,8 @@ import { CodingStudioPage } from './components/studio/CodingStudioPage';
 import { RevisionHubPage } from './components/revision/RevisionHubPage';
 import { ProgressDashboard } from './components/ProgressDashboard';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
+import { CertificateVerificationModal } from './components/CertificateVerificationModal';
+import { parseVerificationFromUrl } from './utils/certificateSecurity';
 
 const AdaptiveTutorPage = lazy(() =>
   import('./components/tutor/AdaptiveTutorPage').then((m) => ({ default: m.AdaptiveTutorPage }))
@@ -39,6 +41,9 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [pendingTutorSimContext, setPendingTutorSimContext] =
     useState<TutorSimulatorContext | null>(null);
+  const [verifyModalOpen, setVerifyModalOpen] = useState<boolean>(() => {
+    return typeof window !== 'undefined' && parseVerificationFromUrl() !== null;
+  });
 
   const {
     progress,
@@ -76,6 +81,21 @@ export default function App() {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
+  // Listen for certificate verification URLs
+  useEffect(() => {
+    const checkVerificationUrl = () => {
+      if (parseVerificationFromUrl()) {
+        setVerifyModalOpen(true);
+      }
+    };
+    window.addEventListener('hashchange', checkVerificationUrl);
+    window.addEventListener('popstate', checkVerificationUrl);
+    return () => {
+      window.removeEventListener('hashchange', checkVerificationUrl);
+      window.removeEventListener('popstate', checkVerificationUrl);
+    };
   }, []);
 
   const navigateTo = useCallback((section: SectionId) => {
@@ -331,6 +351,21 @@ export default function App() {
           onOpenGamesTab={openGamesTab}
           onOpenRevisionTab={openRevisionTab}
         />
+
+        {verifyModalOpen && (
+          <CertificateVerificationModal
+            onClose={() => {
+              setVerifyModalOpen(false);
+              if (window.location.hash.includes('verify')) {
+                window.location.hash = '#/';
+              }
+            }}
+            onNavigateHome={() => {
+              setVerifyModalOpen(false);
+              navigateTo('home');
+            }}
+          />
+        )}
       </div>
     </MotionConfig>
   );
