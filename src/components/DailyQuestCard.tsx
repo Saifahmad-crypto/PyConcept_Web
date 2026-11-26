@@ -82,7 +82,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
         <div className="flex items-center gap-2 font-mono text-xs font-semibold">
           <span className="text-[#E10906]">+{quest.xpReward} XP</span>
           {alreadyCompleted && (
-            <span className="inline-flex items-center gap-1 text-emerald-700">
+            <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300">
               <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
               Claimed today
             </span>
@@ -103,9 +103,9 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
                 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808]';
               if (submitted) {
                 if (idx === quest.correctIndex) {
-                  cls = 'border-emerald-300 bg-emerald-50 text-emerald-900 font-semibold';
+                  cls = 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold';
                 } else if (chosen) {
-                  cls = 'border-rose-300 bg-rose-50 text-rose-900';
+                  cls = 'border-rose-300 dark:border-rose-700/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200';
                 } else {
                   cls = 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] opacity-75';
                 }
@@ -126,10 +126,10 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
                 >
                   <span className="font-mono">{opt}</span>
                   {submitted && idx === quest.correctIndex && (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                   )}
                   {submitted && chosen && idx !== quest.correctIndex && (
-                    <XCircle className="h-4 w-4 shrink-0 text-rose-600" aria-hidden="true" />
+                    <XCircle className="h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
                   )}
                 </button>
               );
@@ -169,7 +169,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
           </div>
 
           {showHint && (
-            <p className="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-xs text-amber-900">
+            <p className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 px-3.5 py-2.5 text-xs text-amber-900 dark:text-amber-200">
               <strong>Hint:</strong> {quest.hint}
             </p>
           )}
@@ -178,8 +178,8 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             <div
               className={`rounded-xl border px-3.5 py-3 text-xs leading-relaxed ${
                 isCorrect
-                  ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                  : 'border-rose-200 bg-rose-50 text-rose-900'
+                  ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                  : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
               }`}
             >
               <p className="font-bold">

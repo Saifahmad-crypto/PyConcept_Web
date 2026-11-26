@@ -81,7 +81,7 @@ const CHEAT_SHEETS: Array<{
   {
     topic: 'conditionals',
     title: 'Topic 08 · Conditional Statements',
-    accent: 'text-blue-700',
+    accent: 'text-blue-700 dark:text-blue-300',
     items: [
       {
         label: 'if / elif / else',
@@ -188,7 +188,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
 
             <div className="inline-flex items-center gap-3 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2 text-xs">
               <span className="text-[#8A8585] dark:text-[#9a8585]">Flashcards Mastered:</span>
-              <span className="font-mono font-bold text-emerald-700 tabular-nums">
+              <span className="font-mono font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
                 {understoodFlashcards.length} / {FLASHCARDS_BANK.length}
               </span>
             </div>
@@ -247,7 +247,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                               className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-2 py-1 text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]"
                             >
                               {copiedId === key ? (
-                                <Check className="h-3 w-3 text-emerald-600" />
+                                <Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                               ) : (
                                 <Copy className="h-3 w-3" />
                               )}
@@ -393,7 +393,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
               onClick={() => onToggleFlashcardUnderstood(currentCard.id)}
               className={`inline-flex min-h-[40px] items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
                 cardUnderstood
-                  ? 'border border-emerald-300 bg-emerald-50 text-emerald-800'
+                  ? 'border border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200'
                   : 'bg-[#E10906] text-white shadow-sm'
               }`}
             >
@@ -432,10 +432,10 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                 let style =
                   'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]';
                 if (arenaSubmitted) {
-                  if (correct) style = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold';
-                  else if (selected) style = 'border-rose-500 bg-rose-50 text-rose-900';
+                  if (correct) style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold';
+                  else if (selected) style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200';
                 } else if (selected) {
-                  style = 'border-[#E10906] bg-[#EFF6FF] font-semibold ring-1 ring-[#38BDF8]';
+                  style = 'border-[#E10906] bg-[#EFF6FF] dark:bg-sky-950/40 font-semibold ring-1 ring-[#38BDF8]';
                 }
 
                 return (
@@ -459,19 +459,19 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
               <div
                 className={`rounded-xl border p-4 text-xs sm:text-sm ${
                   arenaChoice === currentArenaQ.correctIndex
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                    : 'border-rose-200 bg-rose-50 text-rose-900'
+                    ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                    : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
                 }`}
               >
                 <div className="flex items-center gap-2 font-semibold">
                   {arenaChoice === currentArenaQ.correctIndex ? (
                     <>
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                       Spot on!
                     </>
                   ) : (
                     <>
-                      <XCircle className="h-4 w-4 text-rose-600" />
+                      <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
                       Correct answer: {currentArenaQ.options[currentArenaQ.correctIndex]}
                     </>
                   )}
@@ -549,7 +549,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                       onClick={() => setFlowType(opt.id)}
                       className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
                         flowType === opt.id
-                          ? 'border-[#E10906] bg-[#EFF6FF] text-[#E10906]'
+                          ? 'border-[#E10906] bg-[#EFF6FF] dark:bg-sky-950/40 text-[#E10906]'
                           : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585]'
                       }`}
                     >

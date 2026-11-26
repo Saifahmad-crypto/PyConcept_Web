@@ -141,8 +141,8 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                 onClick={() => applyPresetAmount(amt)}
                 className={`rounded-lg border px-2.5 py-1 font-mono text-[11px] font-semibold transition-colors ${
                   effectiveAmount === amt
-                    ? 'border-violet-400 bg-violet-50 text-violet-700'
-                    : 'border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] text-[#8A8585] dark:text-[#9a8585] hover:border-slate-300'
+                    ? 'border-violet-400 bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300'
+                    : 'border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] hover:border-slate-300'
                 }`}
               >
                 Test ₹{amt.toLocaleString('en-IN')}
@@ -159,7 +159,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
               return (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3.5 py-2.5"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3.5 py-2.5"
                 >
                   <div>
                     <p className="text-xs font-semibold text-[#1E293B]">{item.name}</p>
@@ -209,7 +209,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                   setReactiveMode(true);
                   setCustomAmount(Math.max(0, Number(e.target.value) || 0));
                 }}
-                className="w-28 rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1.5 text-right font-mono text-xs font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+                className="w-28 rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1.5 text-right font-mono text-xs font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
               />
             </div>
           </div>
@@ -222,7 +222,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                   <ShoppingCart className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   Order Summary
                 </span>
-                <span className="inline-flex items-center gap-1 font-mono text-violet-700">
+                <span className="inline-flex items-center gap-1 font-mono text-violet-700 dark:text-violet-300">
                   <Tag className="h-3.5 w-3.5" aria-hidden="true" />
                   {shownRate}% OFF
                 </span>
@@ -254,7 +254,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                   ₹{effectiveAmount.toLocaleString('en-IN')}
                 </span>
               </div>
-              <div className="flex justify-between text-emerald-700">
+              <div className="flex justify-between text-emerald-700 dark:text-emerald-300">
                 <span>Discount ({shownRate}%)</span>
                 <span className="font-mono font-semibold tabular-nums">
                   -₹{shownDiscount.toLocaleString('en-IN')}
@@ -265,7 +265,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                   <Receipt className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   Final Bill
                 </span>
-                <span className="font-mono text-lg text-sky-700 tabular-nums">
+                <span className="font-mono text-lg text-sky-700 dark:text-sky-300 tabular-nums">
                   ₹{shownFinal.toLocaleString('en-IN')}
                 </span>
               </div>

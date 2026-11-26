@@ -63,10 +63,10 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
   const noteColors =
     denomination === 500
-      ? 'border-violet-400 bg-violet-50 text-[#100303] dark:text-[#f0eaea]'
+      ? 'border-violet-400 bg-violet-50 dark:bg-violet-950/40 text-[#100303] dark:text-[#f0eaea]'
       : denomination === 200
-      ? 'border-amber-400 bg-amber-50 text-amber-900'
-      : 'border-sky-400 bg-[#F0F9FF] text-sky-900';
+      ? 'border-amber-400 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200'
+      : 'border-sky-400 bg-[#F0F9FF] text-sky-900 dark:text-sky-200';
 
   const resetWith = (fn: () => void) => {
     fn();
@@ -109,7 +109,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </p>
           </div>
 
-          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-1 gap-1">
             {(['while', 'for'] as const).map((m) => (
               <button
                 key={m}
@@ -129,7 +129,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
         {/* Inputs Row */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-3">
             <span className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] mb-2">
               Note Denomination
             </span>
@@ -151,7 +151,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-3">
             <label htmlFor="cash-notes" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               Number of Notes (0–20)
             </label>
@@ -166,7 +166,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             />
           </div>
 
-          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-3">
             <label htmlFor="cash-target" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               Target Limit ₹ (0 = All)
             </label>
@@ -246,7 +246,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
             <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3.5 text-center">
               <span className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Counted Stack</span>
-              <p className="mt-2 font-mono text-xl font-bold text-emerald-700 tabular-nums">
+              <p className="mt-2 font-mono text-xl font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
                 {counted} counted
               </p>
               <div className="mt-2 flex flex-wrap justify-center gap-1">
@@ -266,23 +266,23 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <div
               className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold ${
                 safeNotes === 0
-                  ? 'border-amber-200 bg-amber-50 text-amber-900'
-                  : 'border-emerald-200 bg-emerald-50 text-emerald-900'
+                  ? 'border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200'
+                  : 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
               }`}
             >
               {safeNotes === 0 ? (
                 <>
-                  <AlertCircle className="h-4 w-4 text-amber-600" aria-hidden="true" />
+                  <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
                   Empty input (0 notes): Loop condition was False immediately — ₹0 counted.
                 </>
               ) : hitTargetEarly ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                   Target ₹{safeTarget.toLocaleString('en-IN')} reached after {counted} notes ({remaining} notes left uncounted).
                 </>
               ) : (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                   All {counted} notes counted! Total accumulated: ₹{total.toLocaleString('en-IN')}.
                 </>
               )}

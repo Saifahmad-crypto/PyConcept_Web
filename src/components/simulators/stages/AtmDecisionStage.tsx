@@ -104,21 +104,21 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <button
               type="button"
               onClick={() => applyPreset('1234', 5000, 2000)}
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
             >
               Valid ₹2000
             </button>
             <button
               type="button"
               onClick={() => applyPreset('9999', 5000, 2000)}
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-rose-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-rose-300"
             >
               Wrong PIN
             </button>
             <button
               type="button"
               onClick={() => applyPreset('1234', 1500, 3000)}
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-amber-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-amber-300"
             >
               Over Balance
             </button>
@@ -215,7 +215,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                       style={{ transitionDuration: `${scaleAnimationMs(450, runner.speedMs)}ms` }}
                       className={`h-full transition-all ${
                         atmPhase === 'wrong-pin'
-                          ? 'w-1/4 bg-rose-500'
+                          ? 'w-1/4 bg-rose-50 dark:bg-rose-950/400'
                           : runner.stepIndex > 0
                           ? 'w-full bg-gradient-to-r from-[#E10906] to-[#8B5CF6]'
                           : 'w-1/3 bg-slate-400'
@@ -231,7 +231,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                       {atmPhase === 'approved' ? `₹${safeAmount}` : 'Closed'}
                     </span>
                   </div>
-                  <div className="mt-2 flex items-center gap-1.5 text-emerald-700 font-mono font-semibold">
+                  <div className="mt-2 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 font-mono font-semibold">
                     <Banknote className="h-4 w-4" aria-hidden="true" />
                     <span>{atmPhase === 'approved' ? 'Dispensed' : 'Idle'}</span>
                   </div>
@@ -256,7 +256,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     setEnteredPin(e.target.value.replace(/\D/g, ''));
                     runner.reset();
                   }}
-                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] focus:border-sky-500 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] focus:border-sky-500 focus:outline-none"
                 />
               </div>
 
@@ -275,7 +275,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     setBalanceInput(Number(e.target.value));
                     runner.reset();
                   }}
-                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
                 />
               </div>
 
@@ -294,7 +294,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     setAmountInput(Number(e.target.value));
                     runner.reset();
                   }}
-                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
                 />
               </div>
             </div>

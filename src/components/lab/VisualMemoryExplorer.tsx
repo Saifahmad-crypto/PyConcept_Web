@@ -35,18 +35,18 @@ const MEMORY_PRESETS = [
 
 function inferPyType(val: unknown): { typeName: string; tone: string } {
   if (typeof val === 'boolean') {
-    return { typeName: 'bool', tone: 'border-emerald-300 bg-emerald-50 text-emerald-800' };
+    return { typeName: 'bool', tone: 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200' };
   }
   if (typeof val === 'number') {
     return Number.isInteger(val)
       ? { typeName: 'int', tone: 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' }
-      : { typeName: 'float', tone: 'border-indigo-300 bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' };
+      : { typeName: 'float', tone: 'border-indigo-300 dark:border-indigo-700/60 bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' };
   }
   if (typeof val === 'string') {
     return { typeName: 'str', tone: 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' };
   }
   if (Array.isArray(val)) {
-    return { typeName: 'list', tone: 'border-amber-300 bg-amber-50 text-amber-800' };
+    return { typeName: 'list', tone: 'border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200' };
   }
   return { typeName: 'object', tone: 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-slate-800 dark:text-[#f0eaea]' };
 }
@@ -168,8 +168,8 @@ export const VisualMemoryExplorer: React.FC = () => {
           </div>
 
           {trace.error && (
-            <div className="flex items-start gap-2 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-900">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" aria-hidden="true" />
+            <div className="flex items-start gap-2 rounded-2xl border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 p-4 text-xs text-rose-900 dark:text-rose-200">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
               <div>
                 <p className="font-bold">
                   {trace.error.type} on line {trace.error.line}

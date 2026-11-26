@@ -550,11 +550,11 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
                 {currentStep.conditionResult !== null && (
                   <span
                     className={`inline-flex items-center gap-1 font-mono text-xs font-bold ${
-                      currentStep.conditionResult ? 'text-emerald-700' : 'text-[#E10906]'
+                      currentStep.conditionResult ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'
                     }`}
                   >
                     {currentStep.conditionResult ? (
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" />
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                     ) : (
                       <XCircle className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                     )}
@@ -581,7 +581,7 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
                       L{st.line}: {st.conditionText}
                     </span>
                     {st.conditionResult !== null && (
-                      <span className={st.conditionResult ? 'text-emerald-700' : 'text-[#E10906]'}>
+                      <span className={st.conditionResult ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}>
                         {st.conditionResult ? 'True' : 'False'}
                       </span>
                     )}

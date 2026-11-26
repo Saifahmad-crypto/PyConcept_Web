@@ -2,14 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 
 type ColorScheme = 'light' | 'dark' | 'system';
 
-function applyTheme(scheme: ColorScheme) {
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = scheme === 'dark' || (scheme === 'system' && prefersDark);
-  if (isDark) {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
+function computeIsDark(scheme: ColorScheme, systemDark: boolean): boolean {
+  return scheme === 'dark' || (scheme === 'system' && systemDark);
+}
+
+function applyThemeClass(isDark: boolean) {
+  if (typeof document === 'undefined') return;
+  document.documentElement.classList.toggle('dark', isDark);
 }
 
 export function useDarkMode() {
@@ -21,35 +20,34 @@ export function useDarkMode() {
     }
   });
 
-  // Apply on mount + whenever scheme changes
-  useEffect(() => {
-    applyTheme(scheme);
-  }, [scheme]);
+  const [systemDark, setSystemDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
-  // Track system preference changes when scheme === 'system'
+  const isDark = computeIsDark(scheme, systemDark);
+
   useEffect(() => {
-    if (scheme !== 'system') return;
+    applyThemeClass(isDark);
+  }, [isDark]);
+
+  useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = () => applyTheme('system');
+    const handler = (e: MediaQueryListEvent) => setSystemDark(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
-  }, [scheme]);
-
-  const toggle = useCallback(() => {
-    setScheme((prev) => {
-      // cycle: system → light → dark → system
-      const isDark = document.documentElement.classList.contains('dark');
-      const next: ColorScheme = isDark ? 'light' : 'dark';
-      try {
-        localStorage.setItem('pyverse-color-scheme', next);
-      } catch { /* ignore */ }
-      return next;
-    });
   }, []);
 
-  const isDark = typeof window !== 'undefined'
-    ? document.documentElement.classList.contains('dark')
-    : false;
+  const toggle = useCallback(() => {
+    const next: ColorScheme = isDark ? 'light' : 'dark';
+    applyThemeClass(next === 'dark');
+    setScheme(next);
+    try {
+      localStorage.setItem('pyverse-color-scheme', next);
+    } catch {
+      // ignore storage errors
+    }
+  }, [isDark]);
 
   return { isDark, scheme, toggle };
 }

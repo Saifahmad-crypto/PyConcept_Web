@@ -223,7 +223,7 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
                 {challenge.difficulty}
               </span>
               {isChallengeCompleted && (
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                   <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
                   Already Completed
                 </span>

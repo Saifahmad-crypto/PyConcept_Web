@@ -88,14 +88,14 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </p>
           </div>
 
-          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-1 gap-1">
             {(['red', 'yellow', 'green'] as SignalColor[]).map((sig) => {
               const active = signal === sig;
               const activeCls =
                 sig === 'red'
                   ? 'bg-rose-600 text-white shadow-sm'
                   : sig === 'yellow'
-                  ? 'bg-amber-500 text-white shadow-sm'
+                  ? 'bg-amber-50 dark:bg-amber-950/400 text-white shadow-sm'
                   : 'bg-emerald-600 text-white shadow-sm';
               return (
                 <button
@@ -119,11 +119,11 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white/95 dark:bg-[#1a0808]/95 px-4 py-2.5 shadow-xs">
             <div className="flex items-center gap-2.5 text-xs font-semibold text-[#1E293B]">
               {currentAction === 'STOP' ? (
-                <OctagonAlert className="h-4 w-4 text-rose-600" aria-hidden="true" />
+                <OctagonAlert className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
               ) : currentAction === 'WAIT' ? (
-                <Clock className="h-4 w-4 text-amber-600" aria-hidden="true" />
+                <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
               ) : (
-                <Navigation className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                <Navigation className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               )}
               <span>
                 Vehicle Command:{' '}
@@ -134,7 +134,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
             <span className="font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">
               Pedestrian Crosswalk:{' '}
-              <strong className={isPedestrianCrossing ? 'text-emerald-700' : 'text-[#100303] dark:text-[#f0eaea]'}>
+              <strong className={isPedestrianCrossing ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#100303] dark:text-[#f0eaea]'}>
                 {isPedestrianCrossing ? 'WALK SAFE' : 'WAIT AT CURB'}
               </strong>
             </span>

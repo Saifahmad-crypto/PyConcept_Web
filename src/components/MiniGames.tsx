@@ -441,7 +441,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                   >
                     <span className="truncate">{g.title}</span>
                     {rec?.completed && (
-                      <span className="font-mono text-[11px] font-semibold text-emerald-700 tabular-nums shrink-0">
+                      <span className="font-mono text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 tabular-nums shrink-0">
                         {rec.bestScore}/{rec.maxScore}
                       </span>
                     )}
@@ -472,7 +472,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                   >
                     <span className="truncate">{g.title}</span>
                     {rec?.completed && (
-                      <span className="font-mono text-[11px] font-semibold text-emerald-700 tabular-nums shrink-0">
+                      <span className="font-mono text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 tabular-nums shrink-0">
                         {rec.bestScore}/{rec.maxScore}
                       </span>
                     )}
@@ -517,7 +517,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
 
           {finished ? (
             <div className="py-10 text-center space-y-4">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 border border-amber-200">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60">
                 <Trophy className="h-8 w-8 text-amber-500" aria-hidden="true" />
               </div>
               <h4 className="font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
@@ -525,7 +525,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
               </h4>
               <p className="text-sm text-[#8A8585] dark:text-[#9a8585]">
                 You scored{' '}
-                <strong className="font-mono text-emerald-700 tabular-nums">
+                <strong className="font-mono text-emerald-700 dark:text-emerald-300 tabular-nums">
                   {score} out of {game.questions.length}
                 </strong>{' '}
                 in {game.title}.
@@ -550,7 +550,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowHint((h) => !h)}
-                  className="inline-flex items-center gap-1.5 font-medium text-amber-700 hover:text-amber-800"
+                  className="inline-flex items-center gap-1.5 font-medium text-amber-700 dark:text-amber-300 hover:text-amber-800"
                 >
                   <Lightbulb className="h-3.5 w-3.5" aria-hidden="true" />
                   {showHint ? 'Hide Hint' : 'Need a Hint?'}
@@ -558,7 +558,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
               </div>
 
               {showHint && (
-                <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs text-amber-900">
+                <div className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 px-4 py-2.5 text-xs text-amber-900 dark:text-amber-200">
                   <strong>Hint:</strong> {question.hint}
                 </div>
               )}
@@ -605,9 +605,9 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                       'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808]/60 dark:bg-[#2a0808]/60';
                     if (submitted) {
                       if (isAnswer) {
-                        cls = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold';
+                        cls = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold';
                       } else if (isPicked && !isAnswer) {
-                        cls = 'border-rose-500 bg-rose-50 text-rose-900';
+                        cls = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200';
                       }
                     } else if (isPicked) {
                       cls =
@@ -636,19 +636,19 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                 <div
                   className={`rounded-xl border p-4 text-xs sm:text-sm ${
                     isCorrect
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                      : 'border-rose-200 bg-rose-50 text-rose-900'
+                      ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                      : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
                   }`}
                 >
                   <div className="flex items-center gap-2 font-semibold">
                     {isCorrect ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         Correct!
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-4 w-4 text-rose-600" />
+                        <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" />
                         Not quite — {isSequenceQuestion ? `the missing value is ${question.missingAnswer}.` : 'review the explanation below.'}
                       </>
                     )}

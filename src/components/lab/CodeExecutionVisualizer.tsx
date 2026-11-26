@@ -210,7 +210,7 @@ export const CodeExecutionVisualizer: React.FC = () => {
                     key={lineNum}
                     className={`flex items-center px-3 ${
                       isActive
-                        ? 'bg-[#FFF1F1] dark:bg-[#2a0808]0/25 text-white'
+                        ? 'bg-[#E10906]/25 text-white'
                         : isPrev
                         ? 'bg-[#190909]/60 text-[#CFC8C8]'
                         : 'text-[#8A8585] dark:text-[#9a8585]'
@@ -230,14 +230,14 @@ export const CodeExecutionVisualizer: React.FC = () => {
           </div>
 
           {trace.error && (
-            <div className="flex items-start gap-2.5 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-900">
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" aria-hidden="true" />
+            <div className="flex items-start gap-2.5 rounded-2xl border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 p-4 text-xs text-rose-900 dark:text-rose-200">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
               <div>
                 <p className="font-bold">
                   {trace.error.type} on line {trace.error.line}
                 </p>
                 <p className="mt-0.5">{trace.error.message}</p>
-                <p className="mt-1 text-rose-800">{trace.error.hint}</p>
+                <p className="mt-1 text-rose-800 dark:text-rose-200">{trace.error.hint}</p>
               </div>
             </div>
           )}
@@ -283,20 +283,20 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 <div
                   className={`flex items-center justify-between rounded-xl border px-3.5 py-2.5 text-xs ${
                     activeStep.conditionResult
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                      : 'border-amber-200 bg-amber-50 text-amber-900'
+                      ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                      : 'border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200'
                   }`}
                 >
                   <code className="font-mono font-semibold">{activeStep.conditionExpr}</code>
                   <span className="inline-flex items-center gap-1 font-mono font-bold">
                     {activeStep.conditionResult ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         True
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-4 w-4 text-amber-600" />
+                        <XCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                         False
                       </>
                     )}

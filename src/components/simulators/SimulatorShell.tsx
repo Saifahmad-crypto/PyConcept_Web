@@ -520,8 +520,8 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 <div
                   className={`flex items-center justify-between gap-3 rounded-xl border px-3.5 py-2.5 text-xs ${
                     activeStep.conditionResult
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                      : 'border-amber-200 bg-amber-50 text-amber-900'
+                      ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                      : 'border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200'
                   }`}
                 >
                   <div className="min-w-0">
@@ -535,12 +535,12 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                   <span className="inline-flex shrink-0 items-center gap-1 font-mono font-bold">
                     {activeStep.conditionResult ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                         True
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-4 w-4 text-amber-600" aria-hidden="true" />
+                        <XCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
                         False
                       </>
                     )}
@@ -635,7 +635,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 </span>
                 <div className="h-1 w-16 overflow-hidden rounded-full bg-[#F1EEEE] dark:bg-[#221010]">
                   <div
-                    className="h-full rounded-full bg-[#FFF1F1] dark:bg-[#2a0808]0"
+                    className="h-full rounded-full bg-[#E10906]"
                     style={{ width: `${Math.round(frameProgress * 100)}%` }}
                   />
                 </div>
@@ -669,7 +669,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               {activeStep ? activeStep.explanation : initialExplanation}
             </p>
             {isFinished && (
-              <p className="mt-2 text-xs font-semibold text-emerald-700">
+              <p className="mt-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                 Simulation finished cleanly. Adjust inputs or press Reset / Replay to experiment again.
               </p>
             )}

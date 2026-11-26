@@ -224,7 +224,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                   </span>
                 </div>
                 <div className="mt-1.5 flex items-center gap-2">
-                  <div className="h-2 w-32 overflow-hidden rounded-full bg-[#E5DFDF]">
+                  <div className="h-2 w-32 overflow-hidden rounded-full bg-[#E5DFDF] dark:bg-[#3a1a1a]">
                     <div
                       className="h-full rounded-full bg-[#E10906]"
                       style={{ width: `${levelInfo.progressPercent}%` }}
@@ -236,7 +236,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                 </div>
               </div>
 
-              <div className="h-8 w-px bg-[#E5DFDF]" aria-hidden="true" />
+              <div className="h-8 w-px bg-[#E5DFDF] dark:bg-[#3a1a1a]" aria-hidden="true" />
 
               <div className="text-xs">
                 <span className="flex items-center gap-1 font-semibold text-[#100303] dark:text-[#f0eaea] tabular-nums">
@@ -306,7 +306,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                       <span
                         className={`font-mono font-semibold ${
                           lvl.status === 'Completed'
-                            ? 'text-emerald-700'
+                            ? 'text-emerald-700 dark:text-emerald-300'
                             : lvl.status === 'In Progress'
                             ? 'text-[#E10906]'
                             : 'text-[#8A8585] dark:text-[#9a8585]'
@@ -398,7 +398,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                   key={item.title}
                   className="flex items-start gap-3 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-4 opacity-80"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E5DFDF] text-[#8A8585] dark:text-[#9a8585]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E5DFDF] dark:bg-[#3a1a1a] text-[#8A8585] dark:text-[#9a8585]">
                     <Lock className="h-4 w-4" aria-hidden="true" />
                   </div>
                   <div>
@@ -468,7 +468,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                       active
                         ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] shadow-xs'
                         : done
-                        ? 'border-emerald-200 bg-emerald-50/40 hover:border-emerald-300'
+                        ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/40 hover:border-emerald-300'
                         : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] hover:border-[#E10906]'
                     }`}
                   >
@@ -484,7 +484,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                     </div>
                     {done && (
                       <CheckCircle2
-                        className="h-5 w-5 shrink-0 text-emerald-600"
+                        className="h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400"
                         aria-label="Mission completed"
                       />
                     )}
@@ -528,9 +528,9 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                           'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]';
                         if (missionSubmitted) {
                           if (isCorrect) {
-                            cls = 'border-emerald-300 bg-emerald-50 text-emerald-900 font-semibold';
+                            cls = 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold';
                           } else if (chosen) {
-                            cls = 'border-rose-300 bg-rose-50 text-rose-900';
+                            cls = 'border-rose-300 dark:border-rose-700/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200';
                           }
                         } else if (chosen) {
                           cls = 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] font-semibold';
@@ -550,10 +550,10 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                           >
                             <span>{opt}</span>
                             {missionSubmitted && isCorrect && (
-                              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                             )}
                             {missionSubmitted && chosen && !isCorrect && (
-                              <XCircle className="h-4 w-4 shrink-0 text-rose-600" />
+                              <XCircle className="h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400" />
                             )}
                           </button>
                         );
@@ -583,8 +583,8 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                       <p
                         className={`rounded-xl border px-3.5 py-2.5 text-xs ${
                           missionAnswer === selectedMission.correctIndex
-                            ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                            : 'border-rose-200 bg-rose-50 text-rose-900'
+                            ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                            : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
                         }`}
                       >
                         {missionAnswer === selectedMission.correctIndex

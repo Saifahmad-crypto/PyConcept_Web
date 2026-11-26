@@ -93,7 +93,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
       {/* Header & Difficulty Filter */}
       <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 shadow-xs md:flex-row md:items-center">
         <div>
-          <div className="inline-flex items-center gap-2 text-xs font-semibold text-rose-700">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold text-rose-700 dark:text-rose-300">
             <Bug className="h-4 w-4" aria-hidden="true" />
             Dedicated Debugging Workspace
           </div>
@@ -157,7 +157,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                   <p className="mt-1 font-mono text-[11px] text-[#E10906]">+{bug.xpReward} XP</p>
                 </div>
                 {solved && (
-                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-emerald-600" aria-label="Fixed" />
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-label="Fixed" />
                 )}
               </button>
             );
@@ -177,7 +177,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                 </h3>
               </div>
               {completedBugHunts.includes(activeBug.id) && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                   <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                   Bug Squashed (+{activeBug.xpReward} XP)
                 </span>
@@ -234,7 +234,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
             </div>
 
             {hintLevel > 0 && (
-              <div className="space-y-1.5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-950">
+              <div className="space-y-1.5 rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 p-4 text-xs text-amber-950 dark:text-amber-100">
                 {activeBug.hints.slice(0, hintLevel).map((h, i) => (
                   <p key={i}>
                     <strong>Hint {i + 1}:</strong> {h}
@@ -279,19 +279,19 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
               <div
                 className={`rounded-xl border p-4 text-xs sm:text-sm ${
                   resultFeedback.passed
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                    : 'border-rose-200 bg-rose-50 text-rose-900'
+                    ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                    : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
                 }`}
               >
                 <div className="flex items-center gap-2 font-semibold">
                   {resultFeedback.passed ? (
                     <>
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                       Bug Fixed!
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4 text-rose-600" aria-hidden="true" />
+                      <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
                       Still Broken
                     </>
                   )}

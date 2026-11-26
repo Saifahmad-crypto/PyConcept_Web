@@ -387,7 +387,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
           </button>
         </div>
 
-        {warning && <p className="mt-3 text-xs font-medium text-amber-700">{warning}</p>}
+        {warning && <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">{warning}</p>}
       </div>
 
       {/* Live Metrics & Animated Sequence Strip */}
@@ -413,8 +413,8 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
             <div className="mt-1.5 flex items-center gap-1.5 font-mono text-sm font-bold">
               {currentStep.conditionResult ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
-                  <span className="text-emerald-700">True</span>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                  <span className="text-emerald-700 dark:text-emerald-300">True</span>
                 </>
               ) : (
                 <>
@@ -426,7 +426,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
           </div>
           <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-3.5">
             <span className="text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">Accumulated Output</span>
-            <p className="mt-1.5 truncate font-mono text-sm font-bold text-emerald-700">
+            <p className="mt-1.5 truncate font-mono text-sm font-bold text-emerald-700 dark:text-emerald-300">
               {accumulatedOutputs.length > 0 ? accumulatedOutputs.join(', ') : '(none)'}
             </p>
           </div>
@@ -451,7 +451,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                         isActive
                           ? 'border-[#E10906] bg-[#E10906] text-white shadow-sm scale-105'
                           : isCompleted
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                          ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200'
                           : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585]'
                       }`}
                     >
@@ -492,7 +492,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                           ? 'bg-gradient-to-t from-[#E10906] to-[#8B5CF6]'
                           : isDone
                           ? 'bg-sky-400'
-                          : 'bg-[#E5DFDF]'
+                          : 'bg-[#E5DFDF] dark:bg-[#3a1a1a]'
                       }`}
                       style={{
                         height: `${heightPct}%`,
@@ -551,7 +551,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                       <tr key={i} className="text-[#100303] dark:text-[#f0eaea]">
                         <td className="py-1.5 pr-3 text-[#8A8585] dark:text-[#9a8585] tabular-nums">#{row.iteration}</td>
                         <td className="py-1.5 pr-3 font-semibold text-[#E10906] tabular-nums">{row.variableVal}</td>
-                        <td className="py-1.5 font-bold text-emerald-700 tabular-nums">{row.outputEmitted}</td>
+                        <td className="py-1.5 font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">{row.outputEmitted}</td>
                       </tr>
                     ))}
                   </tbody>

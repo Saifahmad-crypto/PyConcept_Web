@@ -60,7 +60,7 @@ export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
               <span className="text-[#CFC8C8]">|</span>
               <span className="text-[#8A8585] dark:text-[#9a8585]">
                 Challenges:{' '}
-                <strong className="font-mono text-emerald-700">
+                <strong className="font-mono text-emerald-700 dark:text-emerald-300">
                   {completedChallenges.length}/{CODING_CHALLENGES.length}
                 </strong>
               </span>

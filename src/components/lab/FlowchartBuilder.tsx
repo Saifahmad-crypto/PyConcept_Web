@@ -467,13 +467,13 @@ export const FlowchartBuilder: React.FC<{
             <div
               className={`flex items-center gap-3 rounded-2xl border p-4 text-xs ${
                 reversePassed
-                  ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
-                  : 'border-amber-200 bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea]'
+                  ? 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                  : 'border-amber-200 dark:border-amber-800/60 bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea]'
               }`}
             >
               {reversePassed ? (
                 <>
-                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
                   <span>
                     <strong>Structure Verified!</strong> Your flowchart includes Start, Decision,
                     Output, and End blocks with valid connections.
@@ -552,7 +552,7 @@ export const FlowchartBuilder: React.FC<{
                     : block.kind === 'decision'
                     ? 'rounded-xl border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]'
                     : block.kind === 'io'
-                    ? 'rounded-xl border-emerald-300 bg-emerald-50 text-emerald-900'
+                    ? 'rounded-xl border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
                     : 'rounded-xl border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea]';
 
                 const findLabel = (targetId?: string | null) =>
@@ -572,7 +572,7 @@ export const FlowchartBuilder: React.FC<{
                     }}
                     className={`flex flex-col justify-between gap-3 rounded-2xl border p-3.5 transition-all cursor-pointer sm:flex-row sm:items-center ${
                       isActive
-                        ? 'border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-300'
+                        ? 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 ring-2 ring-emerald-300'
                         : isSelected
                         ? 'border-[#E10906] bg-[#FFF1F1]/60 dark:bg-[#2a0808]/60'
                         : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] hover:border-[#E10906]'
@@ -592,10 +592,10 @@ export const FlowchartBuilder: React.FC<{
                     <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
                       {block.kind === 'decision' ? (
                         <div className="flex items-center gap-2">
-                          <span className="text-emerald-700">
+                          <span className="text-emerald-700 dark:text-emerald-300">
                             T→{findLabel(block.trueId)}
                           </span>
-                          <span className="text-amber-700">
+                          <span className="text-amber-700 dark:text-amber-300">
                             F→{findLabel(block.falseId)}
                           </span>
                           <button
@@ -609,8 +609,8 @@ export const FlowchartBuilder: React.FC<{
                             }}
                             className={`rounded-md border px-2 py-0.5 text-[10px] font-bold ${
                               decisionChoices[block.id] ?? true
-                                ? 'border-emerald-300 bg-emerald-100 text-emerald-800'
-                                : 'border-amber-300 bg-amber-100 text-amber-800'
+                                ? 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-200'
+                                : 'border-amber-300 dark:border-amber-700/60 bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200'
                             }`}
                           >
                             Sim: {decisionChoices[block.id] ?? true ? 'True' : 'False'}
@@ -658,7 +658,7 @@ export const FlowchartBuilder: React.FC<{
             </div>
 
             {execHistory.length > 0 && (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 px-3.5 py-2.5 text-xs text-emerald-900">
+              <div className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 px-3.5 py-2.5 text-xs text-emerald-900 dark:text-emerald-200">
                 <strong>Active Path Trace:</strong> {execHistory.join(' → ')}
               </div>
             )}
@@ -677,7 +677,7 @@ export const FlowchartBuilder: React.FC<{
                 <button
                   type="button"
                   onClick={() => deleteBlock(selectedBlock.id)}
-                  className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-[11px] font-semibold text-rose-700 hover:bg-rose-100"
+                  className="inline-flex items-center gap-1 rounded-lg border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 px-2.5 py-1 text-[11px] font-semibold text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/40"
                 >
                   <Trash2 className="h-3 w-3" />
                   Delete
@@ -699,7 +699,7 @@ export const FlowchartBuilder: React.FC<{
               {selectedBlock.kind === 'decision' ? (
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold text-emerald-700">
+                    <label className="block text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                       True Branch →
                     </label>
                     <select
@@ -720,7 +720,7 @@ export const FlowchartBuilder: React.FC<{
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-amber-700">
+                    <label className="block text-xs font-semibold text-amber-700 dark:text-amber-300">
                       False Branch →
                     </label>
                     <select
@@ -769,9 +769,9 @@ export const FlowchartBuilder: React.FC<{
 
           {/* Validation Status */}
           {validationIssues.length > 0 ? (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-900 space-y-1">
+            <div className="rounded-2xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 p-4 text-xs text-amber-900 dark:text-amber-200 space-y-1">
               <p className="flex items-center gap-1.5 font-bold">
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
                 Connection Validation Warnings
               </p>
               <ul className="list-disc pl-5 space-y-0.5">
@@ -781,8 +781,8 @@ export const FlowchartBuilder: React.FC<{
               </ul>
             </div>
           ) : (
-            <div className="flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-900">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <div className="flex items-center gap-2 rounded-2xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 px-4 py-3 text-xs font-semibold text-emerald-900 dark:text-emerald-200">
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               All flowchart paths are validly connected.
             </div>
           )}

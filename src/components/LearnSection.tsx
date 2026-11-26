@@ -255,13 +255,13 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
           onClick={() => onToggleLesson(id)}
           className={`inline-flex min-h-[40px] items-center gap-2 rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
             isDone
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100/70'
+              ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/40/70'
               : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808]'
           }`}
         >
           {isDone ? (
             <>
-              <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               Completed
             </>
           ) : (
@@ -413,7 +413,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                     </span>
                     {isDone && (
                       <CheckCircle2
-                        className="h-3.5 w-3.5 shrink-0 text-emerald-600"
+                        className="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400"
                         aria-label="Completed"
                       />
                     )}
@@ -482,9 +482,9 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                       {[
                         { type: 'int', ex: '42', desc: 'Whole numbers', tone: 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 text-[#100303] dark:text-[#f0eaea]' },
-                        { type: 'float', ex: '3.14', desc: 'Decimal numbers', tone: 'border-indigo-200 bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 text-[#100303] dark:text-[#f0eaea]' },
+                        { type: 'float', ex: '3.14', desc: 'Decimal numbers', tone: 'border-indigo-200 dark:border-indigo-800/60 bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 text-[#100303] dark:text-[#f0eaea]' },
                         { type: 'str', ex: '"Hi"', desc: 'Text in quotes', tone: 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 text-[#100303] dark:text-[#f0eaea]' },
-                        { type: 'bool', ex: 'True', desc: 'True or False', tone: 'border-emerald-200 bg-emerald-50/70 text-emerald-800' },
+                        { type: 'bool', ex: 'True', desc: 'True or False', tone: 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200' },
                       ].map((t) => (
                         <div key={t.type} className={`rounded-2xl border p-4 ${t.tone}`}>
                           <div className="font-mono text-xs font-bold">{t.type}</div>
@@ -523,8 +523,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         <pre className="rounded-xl bg-[#100303] p-3 font-mono text-xs text-[#CFC8C8]">
                           {`name = "${fName}"\nscore = ${fScore}\nprint(f"Hi {name}, score: {score}")`}
                         </pre>
-                        <div className="flex flex-col justify-center rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 font-mono text-xs">
-                          <span className="text-[11px] font-semibold text-emerald-700">Live Output:</span>
+                        <div className="flex flex-col justify-center rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 p-3 font-mono text-xs">
+                          <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">Live Output:</span>
                           <span className="mt-1 text-sm font-bold text-[#100303] dark:text-[#f0eaea]">
                             Hi {fName}, score: {fScore}
                           </span>
@@ -580,7 +580,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         </div>
                         <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3">
                           <div className="text-[#8A8585] dark:text-[#9a8585]">{mathA} % {mathB} (rem)</div>
-                          <div className="mt-1 font-bold text-emerald-700">
+                          <div className="mt-1 font-bold text-emerald-700 dark:text-emerald-300">
                             {mathA % (mathB || 1)}
                           </div>
                         </div>
@@ -611,12 +611,12 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                     <p>
                       Programs make decisions just like traffic lights or grading rules: evaluate a{' '}
                       <strong className="text-[#100303] dark:text-[#f0eaea]">Boolean condition</strong> into{' '}
-                      <code className="font-mono font-semibold text-emerald-700">True</code> or{' '}
+                      <code className="font-mono font-semibold text-emerald-700 dark:text-emerald-300">True</code> or{' '}
                       <code className="font-mono font-semibold text-[#E10906]">False</code>, then pick one branch.
                     </p>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4">
-                        <p className="font-mono text-xs font-bold text-emerald-800">Condition is True</p>
+                      <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 p-4">
+                        <p className="font-mono text-xs font-bold text-emerald-800 dark:text-emerald-200">Condition is True</p>
                         <p className="mt-1 text-xs text-[#100303] dark:text-[#f0eaea]">
                           <code className="font-mono">temp &gt; 30</code> when temp is 34 → Python runs the indented block.
                         </p>
@@ -654,7 +654,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           <p className="font-bold">Visual Rule Breakdown</p>
                           <p><span className="font-mono font-semibold text-[#E10906]">1. Colon (:):</span> Marks the end of the condition line.</p>
                           <p><span className="font-mono font-semibold text-[#E10906]">2. 4 Spaces:</span> Indented lines belong inside the <code className="font-mono">if</code> block.</p>
-                          <p><span className="font-mono font-semibold text-emerald-700">3. Output:</span> Runs only when the condition is <code className="font-mono">True</code>.</p>
+                          <p><span className="font-mono font-semibold text-emerald-700 dark:text-emerald-300">3. Output:</span> Runs only when the condition is <code className="font-mono">True</code>.</p>
                         </div>
                       </div>
                     </div>
@@ -695,7 +695,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         <div className="rounded-2xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 p-4 text-xs space-y-2 text-[#100303] dark:text-[#f0eaea]">
                           <p className="font-bold">Top-to-Bottom Execution Order (marks = 85)</p>
                           <p>1. <code className="font-mono">85 &gt;= 90</code> → <span className="text-[#E10906] font-semibold">False</span></p>
-                          <p>2. <code className="font-mono">85 &gt;= 75</code> → <span className="text-emerald-700 font-bold">True!</span> Prints &quot;Grade B&quot; and exits ladder.</p>
+                          <p>2. <code className="font-mono">85 &gt;= 75</code> → <span className="text-emerald-700 dark:text-emerald-300 font-bold">True!</span> Prints &quot;Grade B&quot; and exits ladder.</p>
                         </div>
                         <ExpandableConcept title="Explore Concept: Why Condition Order Matters">
                           <p>
@@ -847,7 +847,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                                     </td>
                                     <td
                                       className={`py-2 font-bold ${
-                                        row.res ? 'text-emerald-700' : 'text-[#E10906]'
+                                        row.res ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'
                                       }`}
                                     >
                                       {row.res ? 'True' : 'False'}
@@ -879,7 +879,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           onClick={() => setBoolA((v) => !v)}
                           className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
                             boolA
-                              ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                              ? 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200'
                               : 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]'
                           }`}
                         >
@@ -890,7 +890,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           onClick={() => setBoolB((v) => !v)}
                           className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
                             boolB
-                              ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
+                              ? 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200'
                               : 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]'
                           }`}
                         >
@@ -899,19 +899,19 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         <div className="ml-auto flex flex-wrap gap-4 font-mono text-xs text-[#100303] dark:text-[#f0eaea]">
                           <span>
                             A and B:{' '}
-                            <strong className={boolA && boolB ? 'text-emerald-700' : 'text-[#E10906]'}>
+                            <strong className={boolA && boolB ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}>
                               {boolA && boolB ? 'True' : 'False'}
                             </strong>
                           </span>
                           <span>
                             A or B:{' '}
-                            <strong className={boolA || boolB ? 'text-emerald-700' : 'text-[#E10906]'}>
+                            <strong className={boolA || boolB ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}>
                               {boolA || boolB ? 'True' : 'False'}
                             </strong>
                           </span>
                           <span>
                             not A:{' '}
-                            <strong className={!boolA ? 'text-emerald-700' : 'text-[#E10906]'}>
+                            <strong className={!boolA ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}>
                               {!boolA ? 'True' : 'False'}
                             </strong>
                           </span>
@@ -941,13 +941,13 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                                 <tr key={idx} className={isActiveRow ? 'bg-[#FFF1F1] dark:bg-[#2a0808] font-bold' : ''}>
                                   <td className="py-2.5 pr-4">{a ? 'True' : 'False'}</td>
                                   <td className="py-2.5 pr-4">{b ? 'True' : 'False'}</td>
-                                  <td className={`py-2.5 pr-4 ${a && b ? 'text-emerald-700' : 'text-[#E10906]'}`}>
+                                  <td className={`py-2.5 pr-4 ${a && b ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}`}>
                                     {a && b ? 'True' : 'False'}
                                   </td>
-                                  <td className={`py-2.5 pr-4 ${a || b ? 'text-emerald-700' : 'text-[#E10906]'}`}>
+                                  <td className={`py-2.5 pr-4 ${a || b ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}`}>
                                     {a || b ? 'True' : 'False'}
                                   </td>
-                                  <td className={`py-2.5 ${!a ? 'text-emerald-700' : 'text-[#E10906]'}`}>
+                                  <td className={`py-2.5 ${!a ? 'text-emerald-700 dark:text-emerald-300' : 'text-[#E10906]'}`}>
                                     {!a ? 'True' : 'False'}
                                   </td>
                                 </tr>
@@ -975,7 +975,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           onChange={(e) => setRwMarks(Number(e.target.value))}
                           className="w-full rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm"
                         />
-                        <p className="font-mono text-xs font-bold text-emerald-700">
+                        <p className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300">
                           Result:{' '}
                           {rwMarks >= 90 ? 'Grade A' : rwMarks >= 75 ? 'Grade B' : rwMarks >= 40 ? 'Pass' : 'Fail'}
                         </p>
@@ -991,7 +991,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           onChange={(e) => setRwAge(Number(e.target.value))}
                           className="w-full rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm"
                         />
-                        <p className="font-mono text-xs font-bold text-emerald-700">
+                        <p className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300">
                           {rwAge >= 18 ? 'Eligible to vote & drive' : 'Not eligible yet (< 18)'}
                         </p>
                       </div>
@@ -1004,7 +1004,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           onChange={(e) => setRwSignNum(Number(e.target.value))}
                           className="w-full rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm"
                         />
-                        <p className="font-mono text-xs font-bold text-emerald-700">
+                        <p className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300">
                           {rwSignNum > 0 ? 'Positive (> 0)' : rwSignNum < 0 ? 'Negative (< 0)' : 'Zero (== 0)'}
                         </p>
                       </div>
@@ -1017,7 +1017,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           onChange={(e) => setRwEvenNum(Math.trunc(Number(e.target.value)))}
                           className="w-full rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm"
                         />
-                        <p className="font-mono text-xs font-bold text-emerald-700">
+                        <p className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300">
                           {rwEvenNum} % 2 == {Math.abs(rwEvenNum % 2)} → {rwEvenNum % 2 === 0 ? 'Even' : 'Odd'}
                         </p>
                       </div>
@@ -1045,7 +1045,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                             is_member = True
                           </label>
                         </div>
-                        <p className="font-mono text-xs font-bold text-emerald-700">
+                        <p className="font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300">
                           {rwTotal >= 100 || rwMember
                             ? `20% Off Applied → Final: $${(rwTotal * 0.8).toFixed(2)}`
                             : `Standard Price → $${rwTotal.toFixed(2)}`}
@@ -1178,7 +1178,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           range({rangeStart}, {rangeStop}, {rangeStep}) →
                         </span>
                         {rangePreview.warning ? (
-                          <span className="font-medium text-amber-700">{rangePreview.warning}</span>
+                          <span className="font-medium text-amber-700 dark:text-amber-300">{rangePreview.warning}</span>
                         ) : (
                           rangePreview.values.map((val, idx) => (
                             <span
@@ -1259,7 +1259,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                                     ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea] font-bold'
                                     : isAfter
                                     ? 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#F1EEEE] dark:bg-[#221010] text-[#8A8585] dark:text-[#9a8585] line-through'
-                                    : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
+                                    : 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 font-semibold'
                                 }`}
                               >
                                 {n}
@@ -1307,7 +1307,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                               className={`rounded-xl border p-2 text-center font-mono text-xs ${
                                 isSkip
                                   ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea] font-bold'
-                                  : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
+                                  : 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 font-semibold'
                               }`}
                             >
                               {n}
@@ -1349,7 +1349,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                               className="ml-2 accent-[#8B5CF6] cursor-pointer"
                             />
                           </label>
-                          <span className="ml-auto font-mono text-xs font-bold text-emerald-700 tabular-nums">
+                          <span className="ml-auto font-mono text-xs font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
                             {nestRows} × {nestCols} = {nestRows * nestCols} cells
                           </span>
                         </div>
@@ -1397,8 +1397,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         },
                       ].map((item) => (
                         <div key={item.title} className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-4 space-y-3">
-                          <div className="flex items-center gap-2 font-display text-sm font-bold text-amber-800">
-                            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
+                          <div className="flex items-center gap-2 font-display text-sm font-bold text-amber-800 dark:text-amber-200">
+                            <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
                             {item.title}
                           </div>
                           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -1458,7 +1458,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                   className="flex items-center justify-between rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-3.5 text-left text-xs font-semibold text-[#100303] dark:text-[#f0eaea] shadow-xs hover:border-emerald-300"
                 >
                   <span>Solve Coding Challenges</span>
-                  <ArrowRight className="h-4 w-4 text-emerald-600" />
+                  <ArrowRight className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 </button>
               </div>
             </section>
@@ -1505,9 +1505,9 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                             'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]';
                           if (answered) {
                             if (isCorrect)
-                              cls = 'border-emerald-300 bg-emerald-50 text-emerald-800 font-semibold';
+                              cls = 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 font-semibold';
                             else if (isSelected)
-                              cls = 'border-rose-300 bg-rose-50 text-rose-800';
+                              cls = 'border-rose-300 dark:border-rose-700/60 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200';
                           }
                           return (
                             <button

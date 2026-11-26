@@ -329,15 +329,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           )}
 
           {confirmReset ? (
-            <div className="flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2">
-              <span className="text-xs font-medium text-rose-900">Reset all saved progress?</span>
+            <div className="flex items-center gap-2 rounded-xl border border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 px-3.5 py-2">
+              <span className="text-xs font-medium text-rose-900 dark:text-rose-200">Reset all saved progress?</span>
               <button
                 type="button"
                 onClick={() => {
                   onResetProgress();
                   setConfirmReset(false);
                 }}
-                className="rounded-lg bg-rose-600 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-500"
+                className="rounded-lg bg-rose-600 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-50 dark:hover:bg-rose-950/400"
               >
                 Confirm
               </button>
@@ -353,7 +353,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             <button
               type="button"
               onClick={() => setConfirmReset(true)}
-              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] shadow-xs transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
+              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] shadow-xs transition-colors hover:border-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-700"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               Reset Progress
@@ -366,8 +366,8 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
         <div
           className={`flex items-center justify-between rounded-xl border px-4 py-2.5 text-xs font-medium ${
             ioNotice.type === 'ok'
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-              : 'border-rose-200 bg-rose-50 text-rose-900'
+              ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+              : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
           }`}
         >
           <span>{ioNotice.text}</span>
@@ -408,14 +408,14 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 </p>
               </div>
             ) : (
-              <span className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-800">
+              <span className="rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 px-4 py-2 text-xs font-bold text-emerald-800 dark:text-emerald-200">
                 Maximum Rank Reached!
               </span>
             )}
           </div>
 
           <div className="mt-4">
-            <div className="h-3 overflow-hidden rounded-full bg-[#E5DFDF]/80">
+            <div className="h-3 overflow-hidden rounded-full bg-[#E5DFDF]/80 dark:bg-[#3a1a1a]/80">
               <div
                 className="h-full rounded-full bg-[#E10906] transition-all duration-500"
                 style={{ width: `${levelInfo.progressPercent}%` }}
@@ -442,9 +442,9 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
 
           <div className="my-4 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-amber-200/80 bg-amber-50/50 p-3.5 text-center">
-              <p className="text-[11px] font-semibold text-amber-900">Current Streak</p>
-              <p className="mt-1 font-mono text-3xl font-extrabold text-amber-700 tabular-nums">
+            <div className="rounded-xl border border-amber-200/80 dark:border-amber-800/60 bg-amber-50/50 dark:bg-amber-950/40 p-3.5 text-center">
+              <p className="text-[11px] font-semibold text-amber-900 dark:text-amber-200">Current Streak</p>
+              <p className="mt-1 font-mono text-3xl font-extrabold text-amber-700 dark:text-amber-300 tabular-nums">
                 {streakDays}d
               </p>
             </div>
@@ -486,7 +486,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
           <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
-            <Bug className="h-4 w-4 text-rose-600" aria-hidden="true" />
+            <Bug className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
             Bug Hunts
           </div>
           <p className="mt-2 font-mono text-xl font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
@@ -516,7 +516,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
           <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
-            <Cpu className="h-4 w-4 text-blue-600" aria-hidden="true" />
+            <Cpu className="h-4 w-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
             Simulators
           </div>
           <p className="mt-2 font-mono text-xl font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
@@ -526,7 +526,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
           <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
-            <Terminal className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+            <Terminal className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
             Sandbox Runs
           </div>
           <p className="mt-2 font-mono text-xl font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
@@ -561,7 +561,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                       className={`w-full rounded-md transition-all ${
                         day.count > 0
                           ? 'bg-[#E10906]'
-                          : 'bg-[#E5DFDF]'
+                          : 'bg-[#E5DFDF] dark:bg-[#3a1a1a]'
                       }`}
                       style={{ height: `${heightPct}%` }}
                       title={`${day.key}: ${day.count} actions (${day.xp} XP)`}
@@ -584,7 +584,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 28-Day Practice Calendar
               </h2>
             </div>
-            <span className="font-mono text-xs text-emerald-700 font-semibold tabular-nums">
+            <span className="font-mono text-xs text-emerald-700 dark:text-emerald-300 font-semibold tabular-nums">
               {progress.activeDates.length} active day{progress.activeDates.length === 1 ? '' : 's'}
             </span>
           </div>
@@ -596,7 +596,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 title={cell.key}
                 className={`flex h-9 items-center justify-center rounded-lg border font-mono text-xs tabular-nums ${
                   cell.active
-                    ? 'border-emerald-300 bg-emerald-50 font-bold text-emerald-800'
+                    ? 'border-emerald-300 dark:border-emerald-700/60 bg-emerald-50 dark:bg-emerald-950/40 font-bold text-emerald-800 dark:text-emerald-200'
                     : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585]'
                 }`}
               >
@@ -644,12 +644,12 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="font-mono text-xs font-semibold text-blue-700">Topic 08</span>
+              <span className="font-mono text-xs font-semibold text-blue-700 dark:text-blue-300">Topic 08</span>
               <h2 className="font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea]">
                 Conditional Statements
               </h2>
             </div>
-            <span className="font-mono text-2xl font-bold text-blue-700 tabular-nums">
+            <span className="font-mono text-2xl font-bold text-blue-700 dark:text-blue-300 tabular-nums">
               {topic08Percent}%
             </span>
           </div>
@@ -674,7 +674,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             </div>
             <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-3">
               <span className="text-[#8A8585] dark:text-[#9a8585]">Best Quiz</span>
-              <p className="mt-1 font-mono font-bold text-emerald-700 tabular-nums">
+              <p className="mt-1 font-mono font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
                 {progress.quizScores.conditionals ? `${Math.round(t8QuizPct * 100)}%` : '—'}
               </p>
             </div>
@@ -712,7 +712,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             </div>
             <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-3">
               <span className="text-[#8A8585] dark:text-[#9a8585]">Best Quiz</span>
-              <p className="mt-1 font-mono font-bold text-emerald-700 tabular-nums">
+              <p className="mt-1 font-mono font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
                 {progress.quizScores.loops ? `${Math.round(t9QuizPct * 100)}%` : '—'}
               </p>
             </div>
@@ -741,7 +741,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 key={ach.id}
                 className={`flex items-start gap-3 rounded-xl border p-3.5 transition-colors ${
                   ach.unlocked
-                    ? 'border-emerald-200 bg-emerald-50/50'
+                    ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/40'
                     : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] opacity-75'
                 }`}
               >
@@ -749,7 +749,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
                     ach.unlocked
                       ? 'bg-[#E10906] text-white shadow-xs'
-                      : 'bg-[#E5DFDF]/80 text-[#8A8585] dark:text-[#9a8585]'
+                      : 'bg-[#E5DFDF]/80 dark:bg-[#3a1a1a]/80 text-[#8A8585] dark:text-[#9a8585]'
                   }`}
                 >
                   <Award className="h-4 w-4" aria-hidden="true" />
@@ -781,10 +781,10 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               weakAreas.map((w, idx) => (
                 <div
                   key={idx}
-                  className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 space-y-1.5"
+                  className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/70 dark:bg-amber-950/40 p-4 space-y-1.5"
                 >
-                  <h3 className="font-display text-sm font-bold text-amber-950">{w.title}</h3>
-                  <p className="text-xs text-amber-900">{w.reason}</p>
+                  <h3 className="font-display text-sm font-bold text-amber-950 dark:text-amber-100">{w.title}</h3>
+                  <p className="text-xs text-amber-900 dark:text-amber-200">{w.reason}</p>
                   <button
                     type="button"
                     onClick={w.onClick}
@@ -840,7 +840,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                     className="flex items-center justify-between gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs"
                   >
                     <span className="truncate font-medium text-[#100303] dark:text-[#f0eaea]">{entry.label}</span>
-                    <span className="font-mono font-bold text-emerald-700 shrink-0 tabular-nums">
+                    <span className="font-mono font-bold text-emerald-700 dark:text-emerald-300 shrink-0 tabular-nums">
                       +{entry.amount} XP
                     </span>
                   </div>
@@ -884,7 +884,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                       {lesson.title}
                     </span>
                     {done ? (
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                     ) : (
                       <Circle className="h-4 w-4 shrink-0 text-[#8A8585] dark:text-[#9a8585]" />
                     )}

@@ -182,7 +182,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                   </h3>
                 </div>
                 {isSolved && (
-                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" aria-label="Solved" />
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-label="Solved" />
                 )}
               </button>
             );
@@ -203,7 +203,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 </h2>
               </div>
               {completedChallenges.includes(activeChallenge.id) && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                   <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                   Completed
                 </span>
@@ -266,7 +266,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
             </div>
 
             {showHint && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-900">
+              <div className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 p-3.5 text-xs text-amber-900 dark:text-amber-200">
                 <strong>Hint:</strong> {activeChallenge.hint}
               </div>
             )}
@@ -307,19 +307,19 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
               <div
                 className={`rounded-xl border p-4 text-xs sm:text-sm ${
                   feedback.passed
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                    : 'border-rose-200 bg-rose-50 text-rose-900'
+                    ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                    : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
                 }`}
               >
                 <div className="flex items-center gap-2 font-semibold">
                   {feedback.passed ? (
                     <>
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                       Challenge Passed!
                     </>
                   ) : (
                     <>
-                      <AlertCircle className="h-4 w-4 text-rose-600" aria-hidden="true" />
+                      <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
                       Keep Trying
                     </>
                   )}

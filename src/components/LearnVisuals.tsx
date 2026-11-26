@@ -26,7 +26,7 @@ export const VariableBoxVisualizer: React.FC = () => {
     if (trimmed === 'True' || trimmed === 'False') {
       return {
         typeName: 'bool',
-        color: 'text-emerald-700 border-emerald-200 bg-emerald-50',
+        color: 'text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40',
         hint: 'Boolean flag — only True or False (always capitalized).',
       };
     }
@@ -50,13 +50,13 @@ export const VariableBoxVisualizer: React.FC = () => {
     if (/^-?\d+\.\d+$/.test(trimmed)) {
       return {
         typeName: 'float',
-        color: 'text-indigo-700 border-indigo-200 bg-[#FFF1F1] dark:bg-[#2a0808]',
+        color: 'text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/60 bg-[#FFF1F1] dark:bg-[#2a0808]',
         hint: 'Float — number with a decimal point.',
       };
     }
     return {
       typeName: 'Syntax check',
-      color: 'text-amber-700 border-amber-200 bg-amber-50',
+      color: 'text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40',
       hint: 'Wrap text in quotes like "Maya", or type a number / True / False.',
     };
   };
@@ -341,7 +341,7 @@ export const LoopTimelineStepper: React.FC = () => {
                     active
                       ? 'border-violet-500 bg-gradient-to-br from-[#2563EB] to-[#8B5CF6] text-white shadow-md scale-[1.03]'
                       : completed
-                      ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                      ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200'
                       : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585]'
                   }`}
                 >

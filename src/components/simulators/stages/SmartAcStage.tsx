@@ -109,8 +109,8 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onClick={() => handleSliderChange(preset.val)}
                 className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
                   temperature === preset.val
-                    ? 'border-sky-400 bg-[#F0F9FF] text-sky-700'
-                    : 'border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] text-[#8A8585] dark:text-[#9a8585] hover:border-slate-300'
+                    ? 'border-sky-400 bg-[#F0F9FF] text-sky-700 dark:text-sky-300'
+                    : 'border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] hover:border-slate-300'
                 }`}
               >
                 {preset.label}
@@ -154,7 +154,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 <span
                   className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 font-mono text-xs font-bold ${
                     acRunning
-                      ? 'border-sky-200 bg-[#F0F9FF] text-sky-700'
+                      ? 'border-sky-200 dark:border-sky-800/60 bg-[#F0F9FF] text-sky-700 dark:text-sky-300'
                       : 'border-slate-200 dark:border-[#3a1a1a] bg-slate-50 dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585]'
                   }`}
                 >
@@ -164,7 +164,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
 
               {/* Airflow Visualization */}
-              <div className="mt-5 rounded-xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#F8FAFC] p-4">
+              <div className="mt-5 rounded-xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#F8FAFC] dark:bg-[#1a0808] p-4">
                 <div className="flex items-center justify-between text-xs text-[#8A8585] dark:text-[#9a8585]">
                   <span className="inline-flex items-center gap-1.5 font-medium">
                     <Snowflake
@@ -199,7 +199,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
               <div className="flex items-center justify-between text-xs">
                 <label htmlFor="ac-temp-slider" className="font-semibold text-[#1E293B]">
-                  Room Temperature: <span className="font-mono text-sky-700 tabular-nums">{temperature}°C</span>
+                  Room Temperature: <span className="font-mono text-sky-700 dark:text-sky-300 tabular-nums">{temperature}°C</span>
                 </label>
                 <span className="font-mono text-slate-500 dark:text-[#9a8585]">Range: 16°C – 40°C</span>
               </div>
@@ -215,7 +215,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               />
               <div className="mt-1 flex justify-between font-mono text-[11px] text-slate-500 dark:text-[#9a8585]">
                 <span>16°C Cool</span>
-                <span className="font-semibold text-violet-700">28°C Cutoff</span>
+                <span className="font-semibold text-violet-700 dark:text-violet-300">28°C Cutoff</span>
                 <span>40°C Hot</span>
               </div>
             </div>

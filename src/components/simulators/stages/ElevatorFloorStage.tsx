@@ -74,7 +74,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               Building Elevator Shaft (Floors 0–7)
             </h2>
             <p className="text-xs text-slate-500 dark:text-[#9a8585]">
-              Watch how <code className="font-mono text-sky-700">range(start, stop, step)</code> generates each floor.
+              Watch how <code className="font-mono text-sky-700 dark:text-sky-300">range(start, stop, step)</code> generates each floor.
             </p>
           </div>
           <button
@@ -86,7 +86,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 setDirection('auto');
               })
             }
-            className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
+            className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
           >
             Test Same Floor (3 → 3)
           </button>
@@ -101,7 +101,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 <Building2 className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                 Live Shaft View
               </span>
-              <span className="inline-flex items-center gap-1 font-mono font-bold text-violet-700 tabular-nums">
+              <span className="inline-flex items-center gap-1 font-mono font-bold text-violet-700 dark:text-violet-300 tabular-nums">
                 {startFloor === targetFloor ? (
                   <>
                     <Minus className="h-3.5 w-3.5" aria-hidden="true" />
@@ -121,7 +121,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </span>
             </div>
 
-            <div className="relative space-y-1.5 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+            <div className="relative space-y-1.5 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-3">
               {FLOORS.map((f) => {
                 const isCabinHere = currentFloor === f;
                 const isDest = targetFloor === f;
@@ -134,7 +134,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                       isCabinHere
                         ? 'border-sky-400 bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-sm'
                         : isDest
-                        ? 'border-violet-300 bg-violet-50 text-[#100303] dark:text-[#f0eaea]'
+                        ? 'border-violet-300 dark:border-violet-700/60 bg-violet-50 dark:bg-violet-950/40 text-[#100303] dark:text-[#f0eaea]'
                         : 'border-slate-200 dark:border-[#3a1a1a]/70 bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585]'
                     }`}
                   >
@@ -147,7 +147,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                         <span className="text-slate-500 dark:text-[#9a8585]">Start</span>
                       )}
                       {isDest && !isCabinHere && (
-                        <span className="font-semibold text-violet-700">Target</span>
+                        <span className="font-semibold text-violet-700 dark:text-violet-300">Target</span>
                       )}
                       {isCabinHere && (
                         <span className="font-bold">
@@ -182,7 +182,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onChange={(e) =>
                   handleResettingChange(() => setStartFloor(Number(e.target.value)))
                 }
-                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
               >
                 {FLOORS.slice().reverse().map((f) => (
                   <option key={f} value={f}>
@@ -202,7 +202,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onChange={(e) =>
                   handleResettingChange(() => setTargetFloor(Number(e.target.value)))
                 }
-                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
               >
                 {FLOORS.slice().reverse().map((f) => (
                   <option key={f} value={f}>
@@ -216,7 +216,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               <span className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] mb-1.5">
                 Step Direction
               </span>
-              <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1">
+              <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-1">
                 {(
                   [
                     { id: 'auto', label: 'Auto' },

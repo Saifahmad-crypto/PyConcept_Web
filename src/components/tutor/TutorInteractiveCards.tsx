@@ -53,7 +53,7 @@ export const PracticeQuestionCard: React.FC<PracticeCardProps> = ({
 
       <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2.5 text-xs">
         <span className="font-semibold text-[#8A8585] dark:text-[#9a8585]">Expected Output / Goal: </span>
-        <span className="font-mono font-semibold text-emerald-700">{card.expectedOutput}</span>
+        <span className="font-mono font-semibold text-emerald-700 dark:text-emerald-300">{card.expectedOutput}</span>
       </div>
 
       {card.starterCode && (
@@ -70,7 +70,7 @@ export const PracticeQuestionCard: React.FC<PracticeCardProps> = ({
           {hints.slice(0, card.hintsRevealed).map((hintText, idx) => (
             <div
               key={idx}
-              className="rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-xs text-amber-950"
+              className="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 px-3.5 py-2.5 text-xs text-amber-950 dark:text-amber-100"
             >
               <strong className="font-semibold">
                 Hint {idx + 1} (
@@ -93,7 +93,7 @@ export const PracticeQuestionCard: React.FC<PracticeCardProps> = ({
           <button
             type="button"
             onClick={onRevealNextHint}
-            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-1.5 text-xs font-semibold text-amber-900 transition-colors hover:bg-amber-100 whitespace-nowrap"
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 px-3.5 py-1.5 text-xs font-semibold text-amber-900 dark:text-amber-200 transition-colors hover:bg-amber-100 dark:hover:bg-amber-900/40 whitespace-nowrap"
           >
             <Lightbulb className="h-3.5 w-3.5" aria-hidden="true" />
             {card.hintsRevealed === 0
@@ -177,9 +177,9 @@ export const QuizQuestionCard: React.FC<QuizCardProps> = ({
             'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808]/60 dark:bg-[#2a0808]/60';
           if (submitted) {
             if (isRight) {
-              cls = 'border-emerald-500 bg-emerald-50 text-emerald-950 font-semibold';
+              cls = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-100 font-semibold';
             } else if (isSelected && !isRight) {
-              cls = 'border-rose-500 bg-rose-50 text-rose-950';
+              cls = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-950 dark:text-rose-100';
             }
           } else if (isSelected) {
             cls =
@@ -219,19 +219,19 @@ export const QuizQuestionCard: React.FC<QuizCardProps> = ({
           <div
             className={`rounded-xl border p-3.5 text-xs ${
               isCorrect
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-950'
-                : 'border-rose-200 bg-rose-50 text-rose-950'
+                ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-100'
+                : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-950 dark:text-rose-100'
             }`}
           >
             <div className="flex items-center gap-1.5 font-semibold">
               {isCorrect ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                   Spot on! You understood {card.concept}.
                 </>
               ) : (
                 <>
-                  <XCircle className="h-4 w-4 text-rose-600" aria-hidden="true" />
+                  <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
                   Not quite — Correct choice is {String.fromCharCode(65 + card.correctIndex)}.
                 </>
               )}

@@ -500,7 +500,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('progress')}
-                className="mt-5 inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl border border-[#100303] bg-white dark:bg-[#1a0808] px-4 py-2 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#100303] hover:text-white"
+                className="mt-5 inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl border border-[#100303] dark:border-[#9a8585] bg-white dark:bg-[#1a0808] px-4 py-2 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#100303] dark:hover:bg-[#f0eaea] hover:text-white dark:hover:text-[#100303]"
               >
                 Open Progress Dashboard
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -693,7 +693,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <button
                     type="button"
                     onClick={() => onOpenLabTab('simulators')}
-                    className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#100303] px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#E10906]"
+                    className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#100303] dark:bg-[#f0eaea] px-3 py-2 text-xs font-semibold text-white dark:text-[#100303] transition-colors hover:bg-[#E10906] dark:hover:bg-[#E10906] dark:hover:text-white"
                   >
                     <Play className="h-3.5 w-3.5" aria-hidden="true" />
                     Launch in Lab

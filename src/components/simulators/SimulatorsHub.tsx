@@ -82,7 +82,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
                 {sim.number} · {sim.difficulty}
               </div>
               {isExplored && (
-                <div className="mt-0.5 text-[11px] font-semibold text-emerald-700">
+                <div className="mt-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
                   ✓ Explored
                 </div>
               )}

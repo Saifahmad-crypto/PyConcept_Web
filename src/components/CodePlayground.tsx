@@ -403,7 +403,7 @@ builtins.input = _pyverse_input
             onClick={handleCopyCode}
             className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] whitespace-nowrap"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? 'Copied' : 'Copy Code'}
           </button>
           <button
@@ -470,7 +470,7 @@ builtins.input = _pyverse_input
                   onKeyDown={handleKeyDown}
                   spellCheck={false}
                   rows={14}
-                  className="relative z-10 h-full min-h-[344px] w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-transparent caret-sky-400 selection:bg-[#FFF1F1] dark:bg-[#2a0808]0/30 focus:outline-none"
+                  className="relative z-10 h-full min-h-[344px] w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-transparent caret-sky-400 selection:bg-[#E10906]/30 focus:outline-none"
                 />
               </div>
             </div>
@@ -509,7 +509,7 @@ builtins.input = _pyverse_input
                   Saved Local Snippets ({savedSnippets.length})
                 </span>
                 {snippetSavedFlash && (
-                  <span className="text-[11px] font-semibold text-emerald-700">
+                  <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
                     Saved to this browser!
                   </span>
                 )}
@@ -563,7 +563,7 @@ builtins.input = _pyverse_input
                           type="button"
                           onClick={() => onDeleteSnippet(snip.id)}
                           aria-label={`Delete ${snip.title}`}
-                          className="rounded-lg p-1 text-[#8A8585] dark:text-[#9a8585] hover:bg-rose-50 hover:text-rose-600"
+                          className="rounded-lg p-1 text-[#8A8585] dark:text-[#9a8585] hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600"
                         >
                           <Trash2 className="h-3 w-3" aria-hidden="true" />
                         </button>

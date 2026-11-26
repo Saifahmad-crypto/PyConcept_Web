@@ -87,7 +87,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               Synchronized Digital Countdown
             </h2>
             <p className="text-xs text-slate-500 dark:text-[#9a8585]">
-              Every tick updates strictly from the <code className="font-mono text-sky-700">while count &gt; 0</code> step.
+              Every tick updates strictly from the <code className="font-mono text-sky-700 dark:text-sky-300">while count &gt; 0</code> step.
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -99,7 +99,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   setEnableBreak(false);
                 })
               }
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
             >
               Test Start = 0
             </button>
@@ -112,7 +112,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   setStopAt(2);
                 })
               }
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-violet-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-violet-300"
             >
               Demo break at 2
             </button>
@@ -164,16 +164,16 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             {/* Condition & Termination Readout */}
-            <div className="mt-4 flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-4 py-2 text-xs font-semibold">
+            <div className="mt-4 flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold">
               {brokeEarly ? (
                 <>
-                  <OctagonX className="h-4 w-4 text-rose-600" aria-hidden="true" />
-                  <span className="text-rose-800">Stopped early via break</span>
+                  <OctagonX className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                  <span className="text-rose-800 dark:text-rose-200">Stopped early via break</span>
                 </>
               ) : finishedNaturally ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
-                  <span className="text-emerald-800">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                  <span className="text-emerald-800 dark:text-emerald-200">
                     Terminated: {currentCount} &gt; 0 is False
                   </span>
                 </>
@@ -193,7 +193,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <div>
               <div className="flex justify-between text-xs">
                 <label htmlFor="cd-start" className="font-semibold text-[#1E293B]">
-                  Starting Number: <span className="font-mono text-sky-700 tabular-nums">{startCount}</span>
+                  Starting Number: <span className="font-mono text-sky-700 dark:text-sky-300 tabular-nums">{startCount}</span>
                 </label>
               </div>
               <input
@@ -220,7 +220,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   onChange={(e) => handleUpdate(() => setEnableBreak(e.target.checked))}
                   className="h-4 w-4 rounded accent-[#8B5CF6]"
                 />
-                Enable <code className="font-mono text-violet-700">break</code> trigger
+                Enable <code className="font-mono text-violet-700 dark:text-violet-300">break</code> trigger
               </label>
 
               {enableBreak && (
@@ -235,7 +235,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     max={Math.max(1, startCount)}
                     value={stopAt}
                     onChange={(e) => handleUpdate(() => setStopAt(Number(e.target.value)))}
-                    className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] focus:border-violet-500 focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] focus:border-violet-500 focus:outline-none"
                   />
                 </div>
               )}

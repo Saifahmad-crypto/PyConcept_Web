@@ -123,7 +123,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
       {finished ? (
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm sm:p-8 space-y-6">
           <div className="text-center space-y-3">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40">
               <Award className="h-8 w-8 text-amber-500" aria-hidden="true" />
             </div>
             <h2 className="font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea] sm:text-3xl">
@@ -131,7 +131,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             </h2>
             <p className="text-base text-[#8A8585] dark:text-[#9a8585]">
               Final Score:{' '}
-              <strong className="font-mono text-2xl text-emerald-700 tabular-nums">
+              <strong className="font-mono text-2xl text-emerald-700 dark:text-emerald-300 tabular-nums">
                 {score} / {questions.length}
               </strong>{' '}
               ({Math.round((score / questions.length) * 100)}%)
@@ -160,12 +160,12 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                       {idx + 1}. {q.question}
                     </span>
                     {right ? (
-                      <span className="inline-flex items-center gap-1 font-semibold text-emerald-700 shrink-0">
+                      <span className="inline-flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-300 shrink-0">
                         <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
                         Correct
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 font-semibold text-rose-700 shrink-0">
+                      <span className="inline-flex items-center gap-1 font-semibold text-rose-700 dark:text-rose-300 shrink-0">
                         <XCircle className="h-3.5 w-3.5" aria-hidden="true" />
                         Incorrect
                       </span>
@@ -235,9 +235,9 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
 
               if (submitted) {
                 if (isCorrect) {
-                  style = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold';
+                  style = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-semibold';
                 } else if (isSelected && !isCorrect) {
-                  style = 'border-rose-500 bg-rose-50 text-rose-900';
+                  style = 'border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200';
                 }
               } else if (isSelected) {
                 style =
@@ -266,19 +266,19 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             <div
               className={`rounded-xl border p-4 text-xs sm:text-sm ${
                 selectedOpt === currentQ.correctIndex
-                  ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
-                  : 'border-rose-200 bg-rose-50 text-rose-900'
+                  ? 'border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200'
+                  : 'border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200'
               }`}
             >
               <div className="flex items-center gap-2 font-semibold">
                 {selectedOpt === currentQ.correctIndex ? (
                   <>
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                     Correct Answer!
                   </>
                 ) : (
                   <>
-                    <XCircle className="h-4 w-4 text-rose-600" aria-hidden="true" />
+                    <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
                     Incorrect — The right answer is {String.fromCharCode(65 + currentQ.correctIndex)}.
                   </>
                 )}

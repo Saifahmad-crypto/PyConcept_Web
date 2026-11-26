@@ -126,11 +126,11 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               Top-View Parking Lot (Click Any Bay to Toggle)
             </h2>
             <p className="text-xs text-slate-500 dark:text-[#9a8585]">
-              Scanner inspects slots 1–8 sequentially using <code className="font-mono text-sky-700">continue</code> &amp; <code className="font-mono text-violet-700">break</code>.
+              Scanner inspects slots 1–8 sequentially using <code className="font-mono text-sky-700 dark:text-sky-300">continue</code> &amp; <code className="font-mono text-violet-700 dark:text-violet-300">break</code>.
             </p>
           </div>
 
-          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-1 gap-1">
             {(['for', 'while'] as const).map((mode) => (
               <button
                 key={mode}
@@ -157,14 +157,14 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <button
               type="button"
               onClick={() => applyPreset(DEFAULT_SLOTS)}
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
             >
               Default Lot
             </button>
             <button
               type="button"
               onClick={() => applyPreset(Array(8).fill('Occupied'))}
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-rose-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-rose-300"
             >
               All Occupied (Edge Case)
             </button>
@@ -182,7 +182,7 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   'Occupied',
                 ])
               }
-              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-emerald-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-emerald-300"
             >
               Slot 1 Free
             </button>
@@ -190,17 +190,17 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
           <div className="text-xs font-semibold">
             {foundSlot > 0 ? (
-              <span className="inline-flex items-center gap-1.5 text-emerald-700">
+              <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300">
                 <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                 Found Available: Slot {foundSlot} (break!)
               </span>
             ) : isFullResult ? (
-              <span className="inline-flex items-center gap-1.5 text-rose-700">
+              <span className="inline-flex items-center gap-1.5 text-rose-700 dark:text-rose-300">
                 <Ban className="h-4 w-4" aria-hidden="true" />
                 Parking Lot Full (0 Available)
               </span>
             ) : activeScanIndex >= 0 ? (
-              <span className="inline-flex items-center gap-1.5 text-sky-700">
+              <span className="inline-flex items-center gap-1.5 text-sky-700 dark:text-sky-300">
                 <Search className="h-4 w-4" aria-hidden="true" />
                 Scanning Slot {activeScanIndex + 1}...
               </span>
@@ -230,9 +230,9 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   style={{ transitionDuration: `${scaleAnimationMs(240, runner.speedMs)}ms` }}
                   className={`relative flex min-h-[112px] flex-col items-center justify-between rounded-xl border-2 p-3 text-center transition-all ${
                     isWinner
-                      ? 'border-emerald-400 bg-emerald-500/20 shadow-md shadow-emerald-500/20'
+                      ? 'border-emerald-400 bg-emerald-50 dark:bg-emerald-950/400/20 shadow-md shadow-emerald-500/20'
                       : isScanning
-                      ? 'border-sky-400 bg-sky-500/20 ring-2 ring-violet-400/50'
+                      ? 'border-sky-400 bg-sky-50 dark:bg-sky-950/400/20 ring-2 ring-violet-400/50'
                       : status === 'Occupied'
                       ? 'border-slate-600 bg-[#190909]/90 hover:border-slate-500'
                       : 'border-emerald-500/50 bg-emerald-950/30 hover:border-emerald-400'

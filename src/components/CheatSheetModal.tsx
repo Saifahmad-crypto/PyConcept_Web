@@ -180,7 +180,7 @@ export const CheatSheetModal: React.FC<CheatSheetModalProps> = ({
                   >
                     {copiedIdx === idx ? (
                       <>
-                        <Check className="h-3 w-3 text-emerald-600" />
+                        <Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                         Copied
                       </>
                     ) : (
