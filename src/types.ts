@@ -24,6 +24,7 @@ export type LearnStageId =
   | 'test';
 
 export type LabTabId =
+  | 'create-system'
   | 'simulators'
   | 'conditionals-lab'
   | 'loops-lab'

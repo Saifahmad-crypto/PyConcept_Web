@@ -7,6 +7,7 @@ import {
   Play,
   Workflow,
   ArrowUpRight,
+  Layers,
 } from 'lucide-react';
 import {
   LabTabId,
@@ -20,6 +21,7 @@ import { LoopVisualizer } from '../LoopVisualizer';
 import { VisualMemoryExplorer } from './VisualMemoryExplorer';
 import { CodeExecutionVisualizer } from './CodeExecutionVisualizer';
 import { FlowchartBuilder } from './FlowchartBuilder';
+import { CreateSystemStudio } from './CreateSystemStudio';
 
 interface InteractiveLabPageProps {
   activeTab: LabTabId;
@@ -39,6 +41,7 @@ const LAB_TABS: Array<{
   label: string;
   icon: React.ComponentType<{ className?: string }>;
 }> = [
+  { id: 'create-system', label: 'Create Mode Studio', icon: Layers },
   { id: 'simulators', label: 'All Simulators (8)', icon: Cpu },
   { id: 'conditionals-lab', label: 'Conditional Lab', icon: GitBranch },
   { id: 'loops-lab', label: 'Loop Lab', icon: Repeat },
@@ -133,6 +136,12 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
       </div>
 
       {/* Tab Content */}
+      {normalizedTab === 'create-system' && (
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <CreateSystemStudio />
+        </div>
+      )}
+
       {normalizedTab === 'simulators' && (
         <SimulatorsSection
           selectedSimulator={selectedSimulator}
