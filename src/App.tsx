@@ -176,7 +176,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
-      <div className="flex min-h-screen flex-col bg-[#FBF5F9] text-[#100303]">
+      <div className="flex min-h-screen flex-col bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea]">
         <Navbar
           activeSection={activeSection}
           xp={progress.xp}
@@ -186,7 +186,7 @@ export default function App() {
           onNavigate={navigateTo}
         />
 
-        <main className="flex-1 bg-[#FBF5F9]">
+        <main className="flex-1 bg-[#FBF5F9] dark:bg-[#0f0303]">
           <motion.div
             key={`${activeSection}-${activeLabTab}-${selectedSimulator ?? 'hub'}`}
             initial={reducedMotion ? false : { opacity: 0, y: 6 }}

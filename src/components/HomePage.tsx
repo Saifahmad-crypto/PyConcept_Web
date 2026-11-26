@@ -196,7 +196,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   return (
-    <div className="bg-[#FBF5F9] text-[#100303]">
+    <div className="bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea]">
       {/* 1. HERO — DARK EDITORIAL CANVAS */}
       <section className="bg-pyverse-dark-grid border-b border-[#2C1616] text-[#FBF5F9]">
         <div className="mx-auto max-w-7xl px-4 pb-16 pt-12 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
@@ -245,15 +245,15 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="mt-10 grid grid-cols-3 gap-4 border-t border-[#2C1616] pt-6">
                 <div>
                   <p className="font-mono text-xl font-bold text-white tabular-nums">8</p>
-                  <p className="mt-0.5 text-xs text-[#8A8585]">Real-Life Simulators</p>
+                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">Real-Life Simulators</p>
                 </div>
                 <div>
                   <p className="font-mono text-xl font-bold text-white tabular-nums">17</p>
-                  <p className="mt-0.5 text-xs text-[#8A8585]">Guided Missions</p>
+                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">Guided Missions</p>
                 </div>
                 <div>
                   <p className="font-mono text-xl font-bold text-[#E10906] tabular-nums">8+</p>
-                  <p className="mt-0.5 text-xs text-[#8A8585]">Games &amp; Escape Vault</p>
+                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">Games &amp; Escape Vault</p>
                 </div>
               </div>
             </motion.div>
@@ -273,7 +273,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* 2. THE PROBLEM — WHY PASSIVE LEARNING FAILS */}
       <section
         id="pyverse-problem"
-        className="border-b border-[#E5DFDF] bg-[#FBF5F9] py-16 lg:py-20"
+        className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] py-16 lg:py-20"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -286,10 +286,10 @@ export const HomePage: React.FC<HomePageProps> = ({
             <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
               01 · The Problem
             </p>
-            <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
               Static code on a page hides how Python actually thinks.
             </h2>
-            <p className="mt-3 text-base text-[#8A8585]">
+            <p className="mt-3 text-base text-[#8A8585] dark:text-[#9a8585]">
               Traditional tutorials ask beginners to memorize syntax before they can picture
               conditions, memory references, or loop iterations.
             </p>
@@ -318,16 +318,16 @@ export const HomePage: React.FC<HomePageProps> = ({
             ].map((item) => (
               <div
                 key={item.num}
-                className="flex flex-col justify-between rounded-2xl border border-[#E5DFDF] bg-white p-6"
+                className="flex flex-col justify-between rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6"
               >
                 <div>
                   <span className="font-mono text-xs font-bold text-[#E10906]">{item.num}</span>
-                  <h3 className="mt-3 font-display text-lg font-bold text-[#100303]">
+                  <h3 className="mt-3 font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#8A8585]">{item.desc}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{item.desc}</p>
                 </div>
-                <div className="mt-5 rounded-lg border border-[#F1EEEE] bg-[#FBF5F9] px-3 py-2 font-mono text-xs font-semibold text-[#100303]">
+                <div className="mt-5 rounded-lg border border-[#F1EEEE] dark:border-[#2a1212] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 font-mono text-xs font-semibold text-[#100303] dark:text-[#f0eaea]">
                   {item.diagram}
                 </div>
               </div>
@@ -337,18 +337,18 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* 3. THE PYVERSE APPROACH + DAILY QUEST & LIVE PROGRESS */}
-      <section className="border-b border-[#E5DFDF] bg-white py-16 lg:py-20">
+      <section className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
                 02 · The PyVerse Approach
               </p>
-              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
                 Learn. Experiment. Understand.
               </h2>
             </div>
-            <p className="max-w-md text-sm text-[#8A8585]">
+            <p className="max-w-md text-sm text-[#8A8585] dark:text-[#9a8585]">
               Every concept flows from visual intuition to hands-on experimentation and real Python execution.
             </p>
           </div>
@@ -378,18 +378,18 @@ export const HomePage: React.FC<HomePageProps> = ({
               return (
                 <div
                   key={card.step}
-                  className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-6"
+                  className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-6"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#8A8585]">{card.step}</span>
+                    <span className="font-mono text-xs font-bold text-[#8A8585] dark:text-[#9a8585]">{card.step}</span>
                     <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#100303] text-[#FBF5F9]">
                       <Icon className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                     </div>
                   </div>
-                  <h3 className="mt-4 font-display text-lg font-bold text-[#100303]">
+                  <h3 className="mt-4 font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
                     {card.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#8A8585]">{card.desc}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{card.desc}</p>
                 </div>
               );
             })}
@@ -405,24 +405,24 @@ export const HomePage: React.FC<HomePageProps> = ({
               />
             </div>
 
-            <div className="flex flex-col justify-between rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-6 lg:col-span-5">
+            <div className="flex flex-col justify-between rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-6 lg:col-span-5">
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <p className="font-mono text-xs font-semibold text-[#E10906]">
                       LIVE TELEMETRY
                     </p>
-                    <h3 className="mt-0.5 font-display text-xl font-bold text-[#100303]">
+                    <h3 className="mt-0.5 font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea]">
                       {levelInfo.current.title}
                     </h3>
                   </div>
-                  <span className="font-mono text-sm font-extrabold text-[#100303] tabular-nums">
+                  <span className="font-mono text-sm font-extrabold text-[#100303] dark:text-[#f0eaea] tabular-nums">
                     {progress.xp} XP
                   </span>
                 </div>
 
                 <div className="mt-3">
-                  <div className="flex justify-between font-mono text-[11px] text-[#8A8585] tabular-nums">
+                  <div className="flex justify-between font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                     <span>Level {levelInfo.current.level}</span>
                     <span>
                       {levelInfo.next
@@ -430,7 +430,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         : 'Max Explorer Rank'}
                     </span>
                   </div>
-                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-[#F1EEEE]">
+                  <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-[#F1EEEE] dark:bg-[#221010]">
                     <div
                       className="h-full rounded-full bg-[#E10906] transition-all duration-300"
                       style={{ width: `${levelInfo.progressPercent}%` }}
@@ -439,43 +439,43 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 <div className="mt-5 grid grid-cols-3 gap-3">
-                  <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A8585]">
+                  <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3">
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
                       <CheckCircle2 className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                       Lessons
                     </div>
-                    <p className="mt-1 font-mono text-lg font-bold text-[#100303] tabular-nums">
+                    <p className="mt-1 font-mono text-lg font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
                       {completedLessonsCount}/{totalLessons}
                     </p>
                   </div>
-                  <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A8585]">
-                      <Trophy className="h-3.5 w-3.5 text-[#100303]" aria-hidden="true" />
+                  <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3">
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
+                      <Trophy className="h-3.5 w-3.5 text-[#100303] dark:text-[#f0eaea]" aria-hidden="true" />
                       Missions
                     </div>
-                    <p className="mt-1 font-mono text-lg font-bold text-[#100303] tabular-nums">
+                    <p className="mt-1 font-mono text-lg font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
                       {progress.completedMissions.length}/17
                     </p>
                   </div>
-                  <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A8585]">
+                  <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3">
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
                       <Flame className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                       Streak
                     </div>
-                    <p className="mt-1 font-mono text-lg font-bold text-[#100303] tabular-nums">
+                    <p className="mt-1 font-mono text-lg font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
                       {streakDays}d
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-5 rounded-xl border border-[#E5DFDF] bg-white p-4">
-                  <p className="flex items-center gap-1.5 text-xs font-bold text-[#100303]">
+                <div className="mt-5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4">
+                  <p className="flex items-center gap-1.5 text-xs font-bold text-[#100303] dark:text-[#f0eaea]">
                     <Clock className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                     {isBrandNewLearner ? 'Start Tracking Real Progress' : 'Recent Recorded Activity'}
                   </p>
 
                   {isBrandNewLearner ? (
-                    <p className="mt-1.5 text-xs leading-relaxed text-[#8A8585]">
+                    <p className="mt-1.5 text-xs leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
                       Your progress starts at 0 XP. Complete today&apos;s Daily Quest or open
                       Mission M1.1 in Learning World to record your first real XP.
                     </p>
@@ -484,7 +484,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       {recentActivities.map((act) => (
                         <li
                           key={act.id}
-                          className="flex items-center justify-between gap-2 text-[#100303]"
+                          className="flex items-center justify-between gap-2 text-[#100303] dark:text-[#f0eaea]"
                         >
                           <span className="truncate">{act.title}</span>
                           <span className="shrink-0 font-mono font-semibold text-[#E10906] tabular-nums">
@@ -500,7 +500,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <button
                 type="button"
                 onClick={() => onNavigate('progress')}
-                className="mt-5 inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl border border-[#100303] bg-white px-4 py-2 font-display text-xs font-semibold text-[#100303] transition-colors hover:bg-[#100303] hover:text-white"
+                className="mt-5 inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl border border-[#100303] bg-white dark:bg-[#1a0808] px-4 py-2 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#100303] hover:text-white"
               >
                 Open Progress Dashboard
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -548,7 +548,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <div>
                       <div className="flex items-center justify-between font-mono text-xs">
                         <span className="font-bold text-[#E10906]">STAGE {stage.number}</span>
-                        <span className="text-[#8A8585] tabular-nums">
+                        <span className="text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                           {stat.done}/{stat.total} lessons
                         </span>
                       </div>
@@ -560,7 +560,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                           <h3 className="font-display text-lg font-bold text-white">
                             {stage.title}
                           </h3>
-                          <span className="font-mono text-[11px] text-[#8A8585]">
+                          <span className="font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585]">
                             {stage.difficulty}
                           </span>
                         </div>
@@ -571,7 +571,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     </div>
 
                     <div className="mt-5">
-                      <div className="flex justify-between font-mono text-[11px] text-[#8A8585] tabular-nums">
+                      <div className="flex justify-between font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                         <span>Progress</span>
                         <span>{pct}%</span>
                       </div>
@@ -619,7 +619,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <Icon className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                     {dest.title}
                   </span>
-                  <ArrowRight className="h-3.5 w-3.5 text-[#8A8585]" aria-hidden="true" />
+                  <ArrowRight className="h-3.5 w-3.5 text-[#8A8585] dark:text-[#9a8585]" aria-hidden="true" />
                 </button>
               );
             })}
@@ -628,23 +628,23 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* 5. INTERACTIVE SIMULATORS PREVIEW */}
-      <section className="border-b border-[#E5DFDF] bg-[#FBF5F9] py-16 lg:py-20">
+      <section className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
                 04 · Interactive Simulators
               </p>
-              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
                 Eight real-life Python machines.
               </h2>
-              <p className="mt-2 max-w-xl text-sm text-[#8A8585]">
+              <p className="mt-2 max-w-xl text-sm text-[#8A8585] dark:text-[#9a8585]">
                 Every simulator synchronizes animated visuals with active code lines, live
                 variables, and step controls.
               </p>
             </div>
 
-            <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-white p-1">
+            <div className="inline-flex rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-1">
               {(
                 [
                   { id: 'conditionals', label: 'Conditionals (4)' },
@@ -657,8 +657,8 @@ export const HomePage: React.FC<HomePageProps> = ({
                   onClick={() => setSimFilter(t.id)}
                   className={`rounded-lg px-4 py-2 text-xs font-semibold transition-colors ${
                     simFilter === t.id
-                      ? 'bg-[#100303] text-white'
-                      : 'text-[#8A8585] hover:text-[#100303]'
+                      ? 'bg-[#100303] dark:bg-[#f0eaea] text-white dark:text-[#100303]'
+                      : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
                   }`}
                 >
                   {t.label}
@@ -671,23 +671,23 @@ export const HomePage: React.FC<HomePageProps> = ({
             {filteredSims.map((sim) => (
               <div
                 key={sim.id}
-                className="flex flex-col justify-between rounded-2xl border border-[#E5DFDF] bg-white p-5 transition-colors hover:border-[#100303]"
+                className="flex flex-col justify-between rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 transition-colors hover:border-[#100303] dark:hover:border-[#9a8585]"
               >
                 <div>
                   <div className="flex items-center justify-between font-mono text-[11px]">
                     <span className="font-bold text-[#E10906]">{sim.number}</span>
-                    <span className="text-[#8A8585]">{sim.difficulty}</span>
+                    <span className="text-[#8A8585] dark:text-[#9a8585]">{sim.difficulty}</span>
                   </div>
-                  <h3 className="mt-3 font-display text-base font-bold text-[#100303]">
+                  <h3 className="mt-3 font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
                     {sim.title}
                   </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-[#8A8585]">
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
                     {sim.shortDescription}
                   </p>
                 </div>
 
-                <div className="mt-5 border-t border-[#F1EEEE] pt-3.5">
-                  <p className="font-mono text-[11px] font-medium text-[#100303]">
+                <div className="mt-5 border-t border-[#F1EEEE] dark:border-[#2a1212] pt-3.5">
+                  <p className="font-mono text-[11px] font-medium text-[#100303] dark:text-[#f0eaea]">
                     {sim.concepts.join(' · ')}
                   </p>
                   <button
@@ -706,14 +706,14 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* 6. GAME ZONE PREVIEW */}
-      <section className="border-b border-[#E5DFDF] bg-white py-16 lg:py-20">
+      <section className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
                 05 · Game Zone
               </p>
-              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
                 Turn logic drills into playable challenges.
               </h2>
             </div>
@@ -729,7 +729,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <button
                 type="button"
                 onClick={() => onOpenGamesTab('bug-hunter')}
-                className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2.5 font-display text-xs font-semibold text-[#100303] hover:border-[#100303]"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2.5 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#100303] dark:hover:border-[#9a8585]"
               >
                 <Bug className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                 Bug Hunter Lab
@@ -743,19 +743,19 @@ export const HomePage: React.FC<HomePageProps> = ({
                 key={g.name}
                 type="button"
                 onClick={() => onOpenGamesTab(g.tab)}
-                className="group flex flex-col justify-between rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-5 text-left transition-colors hover:border-[#100303] hover:bg-white"
+                className="group flex flex-col justify-between rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-5 text-left transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] hover:bg-white dark:hover:bg-[#221010]"
               >
                 <div className="flex items-center justify-between font-mono text-[11px]">
-                  <span className="text-[#8A8585]">0{i + 1}</span>
+                  <span className="text-[#8A8585] dark:text-[#9a8585]">0{i + 1}</span>
                   <span className="font-semibold text-[#E10906]">{g.tag}</span>
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2">
-                  <h3 className="font-display text-sm font-bold text-[#100303]">{g.name}</h3>
+                  <h3 className="font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">{g.name}</h3>
                   {g.name === 'Python Escape Room' ? (
                     <KeyRound className="h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
                   ) : (
                     <ArrowRight
-                      className="h-4 w-4 shrink-0 text-[#8A8585] transition-transform group-hover:translate-x-0.5 group-hover:text-[#E10906]"
+                      className="h-4 w-4 shrink-0 text-[#8A8585] dark:text-[#9a8585] transition-transform group-hover:translate-x-0.5 group-hover:text-[#E10906]"
                       aria-hidden="true"
                     />
                   )}
@@ -789,7 +789,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <p className="mt-1 font-display text-sm font-bold text-white">
                   {nextChallenge.title}
                 </p>
-                <p className="mt-1 text-xs text-[#8A8585]">{nextChallenge.description}</p>
+                <p className="mt-1 text-xs text-[#8A8585] dark:text-[#9a8585]">{nextChallenge.description}</p>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -823,7 +823,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         className={`rounded-lg px-3 py-1.5 font-mono text-xs font-semibold transition-colors ${
                           snippetIdx === idx
                             ? 'bg-[#E10906] text-white'
-                            : 'bg-[#100303] text-[#8A8585] hover:text-white'
+                            : 'bg-[#100303] text-[#8A8585] dark:text-[#9a8585] hover:text-white'
                         }`}
                       >
                         {s.label}
@@ -833,7 +833,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <button
                     type="button"
                     onClick={handleRunPreview}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#FBF5F9] px-3 py-1.5 font-mono text-xs font-bold text-[#100303] hover:bg-white"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-1.5 font-mono text-xs font-bold text-[#100303] dark:text-[#f0eaea] hover:bg-white dark:hover:bg-[#221010]"
                   >
                     <Play className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                     Run Code
@@ -850,7 +850,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 />
 
                 <div className="border-t border-[#2C1616] bg-[#140505] px-4 py-3 font-mono text-xs">
-                  <span className="text-[#8A8585]">Console Output:</span>
+                  <span className="text-[#8A8585] dark:text-[#9a8585]">Console Output:</span>
                   <pre className="mt-1.5 whitespace-pre-wrap text-emerald-300">
                     {previewResult.success
                       ? previewResult.output || '(no output)'
@@ -864,17 +864,17 @@ export const HomePage: React.FC<HomePageProps> = ({
       </section>
 
       {/* 8. ADAPTIVE AI TUTOR */}
-      <section className="border-b border-[#E5DFDF] bg-[#FBF5F9] py-16 lg:py-20">
+      <section className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 items-center gap-10 rounded-2xl border border-[#E5DFDF] bg-white p-6 sm:p-10 lg:grid-cols-12">
+          <div className="grid grid-cols-1 items-center gap-10 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 sm:p-10 lg:grid-cols-12">
             <div className="lg:col-span-6">
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
                 07 · Adaptive AI Tutor
               </p>
-              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303]">
+              <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea]">
                 Guidance that adapts to what you are learning right now.
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-[#8A8585]">
+              <p className="mt-3 text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
                 Unlike a generic chatbot, the PyVerse AI Tutor reads your active topic, difficulty
                 level, simulator state, and concepts needing review—giving progressive hints before
                 revealing full solutions.
@@ -892,7 +892,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <button
                   type="button"
                   onClick={() => onOpenLabTab('execution-visualizer')}
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2.5 font-display text-xs font-semibold text-[#100303] hover:border-[#100303]"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2.5 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#100303] dark:hover:border-[#9a8585]"
                 >
                   Try Execution Visualizer
                 </button>
@@ -920,12 +920,12 @@ export const HomePage: React.FC<HomePageProps> = ({
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-4"
+                  className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-4"
                 >
-                  <span className="font-mono text-[11px] font-semibold text-[#8A8585]">
+                  <span className="font-mono text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585]">
                     {item.label}
                   </span>
-                  <p className="mt-1.5 font-display text-sm font-bold text-[#100303]">{item.val}</p>
+                  <p className="mt-1.5 font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">{item.val}</p>
                 </div>
               ))}
             </div>
@@ -972,7 +972,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <p className="font-display text-sm font-semibold text-white">
                   Think. Code. Experiment.
                 </p>
-                <p className="max-w-sm text-xs leading-relaxed text-[#8A8585]">
+                <p className="max-w-sm text-xs leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
                   PyVerse is an interactive Python learning universe combining visual lessons,
                   real-life simulators, debugging labs, coding games, and adaptive tutoring.
                 </p>
@@ -981,7 +981,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     href="https://github.com/Saifahmad-crypto"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
                     aria-label="GitHub Profile"
                     title="GitHub: Saifahmad-crypto"
                   >
@@ -991,7 +991,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     href="https://www.instagram.com/saif_4hmad"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
                     aria-label="Instagram Profile"
                     title="Instagram: @saif_4hmad"
                   >
@@ -1001,7 +1001,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     href="https://www.linkedin.com/in/saif-ahmad-tech"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
                     aria-label="LinkedIn Profile"
                     title="LinkedIn: saif-ahmad-tech"
                   >
@@ -1011,7 +1011,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     href="https://x.com/Saif4hmad"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
                     aria-label="Twitter / X Profile"
                     title="X (Twitter): @Saif4hmad"
                   >
@@ -1024,7 +1024,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
                   Workspaces
                 </h3>
-                <ul className="mt-3 space-y-2 text-xs text-[#8A8585]">
+                <ul className="mt-3 space-y-2 text-xs text-[#8A8585] dark:text-[#9a8585]">
                   <li>
                     <button
                       type="button"
@@ -1068,7 +1068,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-white">
                   Tools &amp; Revision
                 </h3>
-                <ul className="mt-3 space-y-2 text-xs text-[#8A8585]">
+                <ul className="mt-3 space-y-2 text-xs text-[#8A8585] dark:text-[#9a8585]">
                   <li>
                     <button
                       type="button"
@@ -1109,7 +1109,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
             </div>
 
-            <div className="mt-10 flex flex-col justify-between gap-2 border-t border-[#2C1616] pt-6 text-xs text-[#8A8585] sm:flex-row">
+            <div className="mt-10 flex flex-col justify-between gap-2 border-t border-[#2C1616] pt-6 text-xs text-[#8A8585] dark:text-[#9a8585] sm:flex-row">
               <span>© {new Date().getFullYear()} PyVerse. Interactive Python Learning Universe.</span>
               <span>Local browser progress · Python Basics · Conditionals · Loops</span>
             </div>

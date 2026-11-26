@@ -129,7 +129,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Online Store Checkout
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Rules: ₹5,000+ = 20% off · ₹2,000+ = 10% off · Below ₹2,000 = 0% off.
             </p>
           </div>
@@ -142,7 +142,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                 className={`rounded-lg border px-2.5 py-1 font-mono text-[11px] font-semibold transition-colors ${
                   effectiveAmount === amt
                     ? 'border-violet-400 bg-violet-50 text-violet-700'
-                    : 'border-slate-200 bg-[#F8FAFC] text-[#8A8585] hover:border-slate-300'
+                    : 'border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] text-[#8A8585] dark:text-[#9a8585] hover:border-slate-300'
                 }`}
               >
                 Test ₹{amt.toLocaleString('en-IN')}
@@ -159,11 +159,11 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
               return (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2.5"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3.5 py-2.5"
                 >
                   <div>
                     <p className="text-xs font-semibold text-[#1E293B]">{item.name}</p>
-                    <p className="font-mono text-xs text-slate-500 tabular-nums">
+                    <p className="font-mono text-xs text-slate-500 dark:text-[#9a8585] tabular-nums">
                       ₹{item.price.toLocaleString('en-IN')} each
                     </p>
                   </div>
@@ -173,7 +173,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                       type="button"
                       onClick={() => updateQty(item.id, -1)}
                       aria-label={`Decrease ${item.name} quantity`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#100303] hover:bg-[#F1EEEE]"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:bg-[#F1EEEE] dark:hover:bg-[#221010] dark:bg-[#221010]"
                     >
                       <Minus className="h-3.5 w-3.5" />
                     </button>
@@ -184,7 +184,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                       type="button"
                       onClick={() => updateQty(item.id, 1)}
                       aria-label={`Increase ${item.name} quantity`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#100303] hover:border-sky-300 hover:bg-[#F0F9FF]"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:border-sky-300 hover:bg-[#F0F9FF]"
                     >
                       <Plus className="h-3.5 w-3.5" />
                     </button>
@@ -194,8 +194,8 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
             })}
 
             {/* Direct Amount Override */}
-            <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5">
-              <label htmlFor="custom-cart-amt" className="text-xs font-medium text-[#8A8585]">
+            <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2.5">
+              <label htmlFor="custom-cart-amt" className="text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
                 Or enter custom amount (₹):
               </label>
               <input
@@ -209,13 +209,13 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                   setReactiveMode(true);
                   setCustomAmount(Math.max(0, Number(e.target.value) || 0));
                 }}
-                className="w-28 rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1.5 text-right font-mono text-xs font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+                className="w-28 rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1.5 text-right font-mono text-xs font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Discount Tier & Final Bill */}
-          <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-4 md:col-span-5">
+          <div className="flex flex-col justify-between rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-4 md:col-span-5">
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-semibold text-[#1E293B]">
                 <span className="inline-flex items-center gap-1.5">
@@ -230,7 +230,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
 
               {/* Tier Progress Meter */}
               <div>
-                <div className="flex justify-between font-mono text-[10px] text-slate-500 mb-1">
+                <div className="flex justify-between font-mono text-[10px] text-slate-500 dark:text-[#9a8585] mb-1">
                   <span>₹0</span>
                   <span>₹2k (10%)</span>
                   <span>₹5k (20%)</span>
@@ -247,8 +247,8 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
               </div>
             </div>
 
-            <div className="mt-4 space-y-2 border-t border-slate-200 pt-3 text-xs">
-              <div className="flex justify-between text-[#8A8585]">
+            <div className="mt-4 space-y-2 border-t border-slate-200 dark:border-[#3a1a1a] pt-3 text-xs">
+              <div className="flex justify-between text-[#8A8585] dark:text-[#9a8585]">
                 <span>Cart Amount</span>
                 <span className="font-mono font-semibold text-[#1E293B] tabular-nums">
                   ₹{effectiveAmount.toLocaleString('en-IN')}
@@ -260,7 +260,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                   -₹{shownDiscount.toLocaleString('en-IN')}
                 </span>
               </div>
-              <div className="flex items-center justify-between border-t border-slate-200 pt-2 text-sm font-bold text-[#1E293B]">
+              <div className="flex items-center justify-between border-t border-slate-200 dark:border-[#3a1a1a] pt-2 text-sm font-bold text-[#1E293B]">
                 <span className="inline-flex items-center gap-1.5">
                   <Receipt className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   Final Bill

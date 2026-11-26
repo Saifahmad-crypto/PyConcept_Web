@@ -156,19 +156,31 @@ export async function directGeneratePractice({
   difficulty: string;
 }): Promise<{
   title: string;
-  instructions: string;
-  hints: string[];
-  solution: string;
   concept: string;
+  difficulty: string;
+  problemStatement: string;
+  expectedOutput: string;
+  starterCode: string;
+  hint1: string;
+  hint2: string;
+  hint3: string;
+  solutionCode: string;
+  solutionExplanation: string;
 }> {
   const prompt = `Generate a Python practice question for topic "${topic}" at "${difficulty}" level.
 Return ONLY valid JSON (no markdown) with this exact shape:
 {
   "title": "short task title",
-  "instructions": "what the learner must write",
-  "hints": ["hint 1", "hint 2", "hint 3"],
-  "solution": "complete Python solution code",
-  "concept": "the main Python concept being practiced"
+  "concept": "the main Python concept being practiced",
+  "difficulty": "${difficulty}",
+  "problemStatement": "clear instructions for what the learner must write",
+  "expectedOutput": "expected console output",
+  "starterCode": "# starter Python code\\n",
+  "hint1": "gentle nudge",
+  "hint2": "stronger hint",
+  "hint3": "near-solution hint",
+  "solutionCode": "complete Python solution code",
+  "solutionExplanation": "brief explanation of why the solution works"
 }`;
 
   for (const model of GEMINI_MODELS) {
@@ -205,19 +217,25 @@ export async function directGenerateQuiz({
   difficulty: string;
 }): Promise<{
   question: string;
+  codeSnippet?: string;
   options: string[];
   correctIndex: number;
-  explanation: string;
   concept: string;
+  difficulty: string;
+  explanation: string;
+  recommendedPractice: string;
 }> {
   const prompt = `Generate a multiple-choice Python quiz question for topic "${topic}" at "${difficulty}" level.
 Return ONLY valid JSON (no markdown) with this exact shape:
 {
   "question": "the question text",
+  "codeSnippet": "optional short Python snippet or empty string",
   "options": ["option A", "option B", "option C", "option D"],
   "correctIndex": 0,
+  "concept": "the Python concept being tested",
+  "difficulty": "${difficulty}",
   "explanation": "why that answer is correct",
-  "concept": "the Python concept being tested"
+  "recommendedPractice": "short suggestion for what to practice next"
 }`;
 
   for (const model of GEMINI_MODELS) {

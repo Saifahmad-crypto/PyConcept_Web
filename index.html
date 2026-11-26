@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       (function () {
+        // ── No-flicker dark mode ──────────────────────────────────────────────
+        try {
+          var saved = localStorage.getItem('pyverse-color-scheme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'dark' || (!saved || saved === 'system') && prefersDark) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (_) {}
+
+        // ── Suppress browser-extension errors ────────────────────────────────
         var isExt = function (val) {
           return typeof val === 'string' && (val.indexOf('chrome-extension://') !== -1 || val.indexOf('moz-extension://') !== -1);
         };
@@ -49,7 +59,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
   </head>
-  <body class="bg-[#FBF5F9] text-[#100303] antialiased selection:bg-[#E10906]/15 selection:text-[#100303]">
+  <body class="bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] antialiased selection:bg-[#E10906]/15 selection:text-[#100303] dark:selection:text-[#f0eaea]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

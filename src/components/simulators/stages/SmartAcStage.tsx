@@ -93,7 +93,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Smart Climate Room
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               AC activates only when temperature is strictly greater than 28°C.
             </p>
           </div>
@@ -110,7 +110,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
                   temperature === preset.val
                     ? 'border-sky-400 bg-[#F0F9FF] text-sky-700'
-                    : 'border-slate-200 bg-[#F8FAFC] text-[#8A8585] hover:border-slate-300'
+                    : 'border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] text-[#8A8585] dark:text-[#9a8585] hover:border-slate-300'
                 }`}
               >
                 {preset.label}
@@ -120,17 +120,17 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         </div>
 
         {/* Visual Smart Room */}
-        <div className="grid grid-cols-1 gap-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5 sm:grid-cols-12">
+        <div className="grid grid-cols-1 gap-5 rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5 sm:grid-cols-12">
           {/* AC Unit + Room Status */}
           <div className="space-y-4 sm:col-span-8">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs">
+            <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 shadow-xs">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2.5">
                   <div
                     className={`flex h-10 w-10 items-center justify-center rounded-xl ${
                       acRunning
                         ? 'bg-gradient-to-br from-[#E10906] to-[#8B5CF6] text-white'
-                        : 'bg-[#F1EEEE] text-slate-500'
+                        : 'bg-[#F1EEEE] dark:bg-[#221010] text-slate-500 dark:text-[#9a8585]'
                     }`}
                   >
                     <Fan
@@ -144,7 +144,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-slate-500">SMART AC UNIT</p>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-[#9a8585]">SMART AC UNIT</p>
                     <p className="font-display text-base font-bold text-[#1E293B]">
                       {acRunning ? 'AC ON · Cooling Active' : 'AC OFF · Standby'}
                     </p>
@@ -155,7 +155,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 font-mono text-xs font-bold ${
                     acRunning
                       ? 'border-sky-200 bg-[#F0F9FF] text-sky-700'
-                      : 'border-slate-200 bg-slate-50 text-[#8A8585]'
+                      : 'border-slate-200 dark:border-[#3a1a1a] bg-slate-50 dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585]'
                   }`}
                 >
                   <Power className="h-3.5 w-3.5" aria-hidden="true" />
@@ -164,8 +164,8 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
 
               {/* Airflow Visualization */}
-              <div className="mt-5 rounded-xl border border-[#F1EEEE] bg-[#F8FAFC] p-4">
-                <div className="flex items-center justify-between text-xs text-[#8A8585]">
+              <div className="mt-5 rounded-xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#F8FAFC] p-4">
+                <div className="flex items-center justify-between text-xs text-[#8A8585] dark:text-[#9a8585]">
                   <span className="inline-flex items-center gap-1.5 font-medium">
                     <Snowflake
                       className={`h-4 w-4 ${acRunning ? 'text-sky-500' : 'text-slate-400'}`}
@@ -196,12 +196,12 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             {/* Labeled Temperature Slider */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+            <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
               <div className="flex items-center justify-between text-xs">
                 <label htmlFor="ac-temp-slider" className="font-semibold text-[#1E293B]">
                   Room Temperature: <span className="font-mono text-sky-700 tabular-nums">{temperature}°C</span>
                 </label>
-                <span className="font-mono text-slate-500">Range: 16°C – 40°C</span>
+                <span className="font-mono text-slate-500 dark:text-[#9a8585]">Range: 16°C – 40°C</span>
               </div>
               <input
                 id="ac-temp-slider"
@@ -213,7 +213,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onChange={(e) => handleSliderChange(Number(e.target.value))}
                 className="mt-3 w-full accent-[#E10906] cursor-pointer"
               />
-              <div className="mt-1 flex justify-between font-mono text-[11px] text-slate-500">
+              <div className="mt-1 flex justify-between font-mono text-[11px] text-slate-500 dark:text-[#9a8585]">
                 <span>16°C Cool</span>
                 <span className="font-semibold text-violet-700">28°C Cutoff</span>
                 <span>40°C Hot</span>
@@ -222,13 +222,13 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           </div>
 
           {/* Live Thermometer Column */}
-          <div className="flex flex-col items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-xs sm:col-span-4">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#8A8585]">
+          <div className="flex flex-col items-center justify-between rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs sm:col-span-4">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               <Thermometer className="h-4 w-4 text-rose-500" aria-hidden="true" />
               Thermometer
             </div>
 
-            <div className="relative my-3 flex h-44 w-12 items-end justify-center rounded-full border-2 border-slate-200 bg-[#F1EEEE] p-1.5">
+            <div className="relative my-3 flex h-44 w-12 items-end justify-center rounded-full border-2 border-slate-200 dark:border-[#3a1a1a] bg-[#F1EEEE] dark:bg-[#221010] p-1.5">
               {/* 28°C Threshold Marker */}
               <div
                 className="absolute inset-x-0 border-t-2 border-dashed border-violet-500 z-10"
@@ -252,7 +252,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               <p className="font-mono text-2xl font-extrabold text-[#1E293B] tabular-nums">
                 {temperature}°C
               </p>
-              <p className="text-[11px] font-medium text-slate-500">
+              <p className="text-[11px] font-medium text-slate-500 dark:text-[#9a8585]">
                 {temperature > 28 ? 'Above 28°C' : temperature === 28 ? 'Exactly 28°C (<= 28)' : '28°C or below'}
               </p>
             </div>

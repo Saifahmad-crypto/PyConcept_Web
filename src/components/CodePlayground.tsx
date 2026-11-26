@@ -77,7 +77,7 @@ function highlightPythonLine(line: string): React.ReactNode[] {
     const word = match[0];
     if (word.startsWith('#')) {
       tokens.push(
-        <span key={k++} className="text-[#8A8585] italic">
+        <span key={k++} className="text-[#8A8585] dark:text-[#9a8585] italic">
           {word}
         </span>
       );
@@ -309,27 +309,27 @@ builtins.input = _pyverse_input
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
       {/* Header */}
-      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-6 lg:flex-row lg:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-6 lg:flex-row lg:items-end">
         <div>
           <p className="text-xs font-semibold text-[#E10906]">PyVerse Python Sandbox</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
             Interactive Python Sandbox
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#8A8585]">
+          <p className="mt-2 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
             Write and experiment with Python code, test <code className="font-mono text-[#E10906]">input()</code>, and see instant syntax-highlighted output.
           </p>
         </div>
 
         {/* Honest Engine Selector */}
         <div className="flex flex-col items-start gap-2 lg:items-end">
-          <div className="inline-flex items-center gap-1 rounded-xl border border-[#E5DFDF] bg-white p-1 shadow-xs">
+          <div className="inline-flex items-center gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-1 shadow-xs">
             <button
               type="button"
               onClick={() => setRuntimeMode('ast')}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
                 runtimeMode === 'ast'
                   ? 'bg-[#E10906] text-white'
-                  : 'text-[#8A8585] hover:text-[#100303]'
+                  : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
               }`}
             >
               <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
@@ -342,7 +342,7 @@ builtins.input = _pyverse_input
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
                 runtimeMode === 'pyodide'
                   ? 'bg-[#E10906] text-white'
-                  : 'text-[#8A8585] hover:text-[#100303]'
+                  : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
               }`}
             >
               {pyodideState === 'loading'
@@ -352,7 +352,7 @@ builtins.input = _pyverse_input
                 : 'Enable CPython (Pyodide)'}
             </button>
           </div>
-          <p className="flex items-center gap-1.5 text-[11px] text-[#8A8585]">
+          <p className="flex items-center gap-1.5 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
             <Info className="h-3.5 w-3.5 text-[#E10906] shrink-0" aria-hidden="true" />
             {pyodideState === 'unavailable'
               ? 'Pyodide CDN unreachable here — using built-in AST engine reliably.'
@@ -364,16 +364,16 @@ builtins.input = _pyverse_input
       </div>
 
       {/* Controls & Example Selector */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
-          <label htmlFor="playground-example-select" className="text-xs font-semibold text-[#8A8585]">
+          <label htmlFor="playground-example-select" className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
             Example Program:
           </label>
           <select
             id="playground-example-select"
             value={selectedExampleId}
             onChange={(e) => handleSelectExample(e.target.value)}
-            className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-medium text-[#100303] focus:border-[#E10906] focus:outline-none sm:text-sm"
+            className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] focus:border-[#E10906] focus:outline-none sm:text-sm"
           >
             {PLAYGROUND_EXAMPLES.map((ex) => (
               <option key={ex.id} value={ex.id}>
@@ -382,7 +382,7 @@ builtins.input = _pyverse_input
             ))}
             <option value="ex-input-demo">9. Interactive input() Demo</option>
           </select>
-          <span className="hidden text-xs text-[#8A8585] xl:inline">
+          <span className="hidden text-xs text-[#8A8585] dark:text-[#9a8585] xl:inline">
             {selectedExampleId === 'ex-input-demo'
               ? 'Reads lines from Program Inputs below using input().'
               : selectedExample?.description}
@@ -401,7 +401,7 @@ builtins.input = _pyverse_input
           <button
             type="button"
             onClick={handleCopyCode}
-            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs font-medium text-[#100303] hover:border-[#E10906] whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] whitespace-nowrap"
           >
             {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? 'Copied' : 'Copy Code'}
@@ -409,7 +409,7 @@ builtins.input = _pyverse_input
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs font-medium text-[#100303] hover:bg-[#F1EEEE] whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] hover:bg-[#F1EEEE] dark:hover:bg-[#221010] dark:bg-[#221010] whitespace-nowrap"
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Reset
@@ -417,7 +417,7 @@ builtins.input = _pyverse_input
           <button
             type="button"
             onClick={handleClearOutput}
-            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-medium text-[#8A8585] hover:bg-[#FBF5F9] whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-medium text-[#8A8585] dark:text-[#9a8585] hover:bg-[#FBF5F9] dark:hover:bg-[#221010] dark:bg-[#0f0303] whitespace-nowrap"
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             Clear Output
@@ -429,17 +429,17 @@ builtins.input = _pyverse_input
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Syntax-Highlighted Code Editor */}
         <div className="space-y-4 lg:col-span-7">
-          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-lg shadow-[#100303]/5">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-lg shadow-[#100303]/5">
             <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs text-[#CFC8C8]">
               <span className="font-mono font-medium">main.py</span>
-              <span className="text-[#8A8585]">Syntax highlighted · Tab = 4 spaces</span>
+              <span className="text-[#8A8585] dark:text-[#9a8585]">Syntax highlighted · Tab = 4 spaces</span>
             </div>
 
             <div className="flex">
               {/* Line Numbers */}
               <div
                 aria-hidden="true"
-                className="select-none border-r border-[#2C1616] bg-[#0B1120] px-3 py-4 text-right font-mono text-xs leading-6 text-[#8A8585] tabular-nums"
+                className="select-none border-r border-[#2C1616] bg-[#0B1120] px-3 py-4 text-right font-mono text-xs leading-6 text-[#8A8585] dark:text-[#9a8585] tabular-nums"
               >
                 {Array.from({ length: Math.max(13, lineCount) }, (_, idx) => (
                   <div key={idx}>{idx + 1}</div>
@@ -470,23 +470,23 @@ builtins.input = _pyverse_input
                   onKeyDown={handleKeyDown}
                   spellCheck={false}
                   rows={14}
-                  className="relative z-10 h-full min-h-[344px] w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-transparent caret-sky-400 selection:bg-[#FFF1F1]0/30 focus:outline-none"
+                  className="relative z-10 h-full min-h-[344px] w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-transparent caret-sky-400 selection:bg-[#FFF1F1] dark:bg-[#2a0808]0/30 focus:outline-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Interactive Stdin Box (for input() support) */}
-          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
             <div className="flex items-center justify-between gap-2">
               <label
                 htmlFor="sandbox-stdin"
-                className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#100303]"
+                className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#100303] dark:text-[#f0eaea]"
               >
                 <Keyboard className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                 Program Inputs (for <code className="font-mono text-[#E10906]">input()</code>, one per line)
               </label>
-              <span className="font-mono text-[11px] text-[#8A8585]">
+              <span className="font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585]">
                 {usesInput ? 'Detected input() in code' : 'Optional stdin buffer'}
               </span>
             </div>
@@ -496,15 +496,15 @@ builtins.input = _pyverse_input
               value={stdinText}
               onChange={(e) => setStdinText(e.target.value)}
               placeholder="Line 1 = first input(), Line 2 = second input()..."
-              className="mt-2 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-xs text-[#100303] focus:border-[#E10906] focus:outline-none"
+              className="mt-2 w-full rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 font-mono text-xs text-[#100303] dark:text-[#f0eaea] focus:border-[#E10906] focus:outline-none"
             />
           </div>
 
           {/* Local Saved Snippets */}
           {onSaveSnippet && (
-            <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs space-y-3">
+            <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#100303]">
+                <span className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#100303] dark:text-[#f0eaea]">
                   <FolderOpen className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   Saved Local Snippets ({savedSnippets.length})
                 </span>
@@ -530,7 +530,7 @@ builtins.input = _pyverse_input
                   onChange={(e) => setSnippetTitle(e.target.value)}
                   placeholder="Name this Python script..."
                   aria-label="Snippet title"
-                  className="min-w-0 flex-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs text-[#100303] focus:border-[#E10906] focus:outline-none"
+                  className="min-w-0 flex-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs text-[#100303] dark:text-[#f0eaea] focus:border-[#E10906] focus:outline-none"
                 />
                 <button
                   type="submit"
@@ -546,7 +546,7 @@ builtins.input = _pyverse_input
                   {savedSnippets.map((snip) => (
                     <div
                       key={snip.id}
-                      className="inline-flex items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] pl-3 pr-1.5 py-1.5 text-xs"
+                      className="inline-flex items-center gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] pl-3 pr-1.5 py-1.5 text-xs"
                     >
                       <button
                         type="button"
@@ -554,7 +554,7 @@ builtins.input = _pyverse_input
                           setCode(snip.code);
                           setResult(runPythonCode(snip.code, stdinText.split('\n')));
                         }}
-                        className="font-semibold text-[#100303] hover:text-[#E10906]"
+                        className="font-semibold text-[#100303] dark:text-[#f0eaea] hover:text-[#E10906]"
                       >
                         {snip.title}
                       </button>
@@ -563,7 +563,7 @@ builtins.input = _pyverse_input
                           type="button"
                           onClick={() => onDeleteSnippet(snip.id)}
                           aria-label={`Delete ${snip.title}`}
-                          className="rounded-lg p-1 text-[#8A8585] hover:bg-rose-50 hover:text-rose-600"
+                          className="rounded-lg p-1 text-[#8A8585] dark:text-[#9a8585] hover:bg-rose-50 hover:text-rose-600"
                         >
                           <Trash2 className="h-3 w-3" aria-hidden="true" />
                         </button>
@@ -578,7 +578,7 @@ builtins.input = _pyverse_input
 
         {/* Output Console */}
         <div className="lg:col-span-5">
-          <div className="flex h-full min-h-[390px] flex-col overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-lg shadow-[#100303]/5">
+          <div className="flex h-full min-h-[390px] flex-col overflow-hidden rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-lg shadow-[#100303]/5">
             <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs">
               <span className="font-semibold text-[#CFC8C8]">Output Console</span>
               {result && (
@@ -604,7 +604,7 @@ builtins.input = _pyverse_input
 
             <div className="flex-1 p-4 font-mono text-sm leading-relaxed">
               {!result ? (
-                <p className="text-xs text-[#8A8585]">
+                <p className="text-xs text-[#8A8585] dark:text-[#9a8585]">
                   Console cleared. Click &quot;Run Code&quot; to execute your script.
                 </p>
               ) : (
@@ -612,7 +612,7 @@ builtins.input = _pyverse_input
                   {result.output ? (
                     <pre className="whitespace-pre-wrap text-emerald-300">{result.output}</pre>
                   ) : result.success ? (
-                    <p className="text-xs text-[#8A8585]">
+                    <p className="text-xs text-[#8A8585] dark:text-[#9a8585]">
                       Program ran without errors and produced no print() output.
                     </p>
                   ) : null}

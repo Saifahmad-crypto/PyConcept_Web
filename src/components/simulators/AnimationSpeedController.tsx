@@ -313,15 +313,15 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
     <div
       className={`flex flex-wrap items-center gap-2.5 ${
         compact
-          ? 'rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2'
-          : 'rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2'
+          ? 'rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2'
+          : 'rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2'
       }`}
     >
       <div className="flex items-center gap-1.5">
         <Gauge className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
         <label
           htmlFor={compact ? 'compact-speed-slider' : 'sim-speed-slider'}
-          className="text-xs font-semibold text-[#100303]"
+          className="text-xs font-semibold text-[#100303] dark:text-[#f0eaea]"
         >
           Frame Rate
         </label>
@@ -342,7 +342,7 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
         className="w-24 sm:w-28 accent-[#E10906] cursor-pointer"
       />
 
-      <div className="inline-flex rounded-lg border border-[#E5DFDF] bg-white p-0.5">
+      <div className="inline-flex rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-0.5">
         {SPEED_PRESETS.map((preset) => {
           const active = Math.abs(multiplier - preset.multiplier) < 0.08;
           return (
@@ -353,7 +353,7 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
               className={`rounded-md px-2 py-1 font-mono text-[11px] font-semibold transition-all whitespace-nowrap ${
                 active
                   ? 'bg-[#E10906] text-white shadow-xs'
-                  : 'text-[#8A8585] hover:text-[#100303]'
+                  : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
               }`}
             >
               {preset.label}
@@ -363,12 +363,12 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
       </div>
 
       {!compact && (
-        <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#8A8585]">
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
           <span className="font-mono tabular-nums">
             {paceLabel} · {fps.toFixed(2)} FPS · {speedMs}ms/step
           </span>
           {remainingSeconds !== null && remainingSteps !== null && remainingSteps > 0 && (
-            <span className="font-mono text-[#8A8585] tabular-nums">
+            <span className="font-mono text-[#8A8585] dark:text-[#9a8585] tabular-nums">
               · ~{remainingSeconds}s left
             </span>
           )}
@@ -383,8 +383,8 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
           title="Automatically slow down briefly when evaluating if/elif or loop conditions"
           className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap ${
             pauseOnBranches
-              ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
-              : 'border-[#E5DFDF] bg-white text-[#8A8585] hover:text-[#100303]'
+              ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]'
+              : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
           }`}
         >
           <Sparkles className="h-3 w-3 text-[#E10906]" aria-hidden="true" />

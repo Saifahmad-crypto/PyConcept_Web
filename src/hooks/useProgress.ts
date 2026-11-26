@@ -719,7 +719,7 @@ export function useProgress() {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
       return false;
     }
-    const normalized = normalizeProgress(raw as Partial<LearningProgress>);
+    const normalized = migrateLegacyProgress(raw as Partial<LearningProgress>);
     setProgress(normalized);
     return true;
   }, []);

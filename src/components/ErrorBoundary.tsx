@@ -25,13 +25,13 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] p-6 text-[#1E293B]">
-          <div className="max-w-md rounded-2xl border border-rose-200 bg-white p-6 shadow-sm space-y-4">
-            <div className="flex items-center gap-2.5 text-rose-700">
+        <div className="flex min-h-screen items-center justify-center bg-[#FBF5F9] dark:bg-[#0f0303] p-6 text-[#100303] dark:text-[#f0eaea]">
+          <div className="max-w-md rounded-2xl border border-rose-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-4">
+            <div className="flex items-center gap-2.5 text-rose-700 dark:text-rose-400">
               <AlertCircle className="h-5 w-5 shrink-0" aria-hidden="true" />
               <h1 className="font-display text-lg font-bold">PyVerse Recovery</h1>
             </div>
-            <p className="text-sm text-[#8A8585]">
+            <p className="text-sm text-[#8A8585] dark:text-[#9a8585]">
               Something went wrong while rendering this view: {this.state.message}
             </p>
             <button

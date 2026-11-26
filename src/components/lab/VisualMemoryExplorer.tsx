@@ -39,16 +39,16 @@ function inferPyType(val: unknown): { typeName: string; tone: string } {
   }
   if (typeof val === 'number') {
     return Number.isInteger(val)
-      ? { typeName: 'int', tone: 'border-[#E10906] bg-[#FFF1F1] text-[#100303]' }
-      : { typeName: 'float', tone: 'border-indigo-300 bg-[#FFF1F1] text-[#100303]' };
+      ? { typeName: 'int', tone: 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' }
+      : { typeName: 'float', tone: 'border-indigo-300 bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' };
   }
   if (typeof val === 'string') {
-    return { typeName: 'str', tone: 'border-[#E10906] bg-[#FFF1F1] text-[#100303]' };
+    return { typeName: 'str', tone: 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea]' };
   }
   if (Array.isArray(val)) {
     return { typeName: 'list', tone: 'border-amber-300 bg-amber-50 text-amber-800' };
   }
-  return { typeName: 'object', tone: 'border-[#E5DFDF] bg-[#FBF5F9] text-slate-800' };
+  return { typeName: 'object', tone: 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-slate-800 dark:text-[#f0eaea]' };
 }
 
 export const VisualMemoryExplorer: React.FC = () => {
@@ -104,13 +104,13 @@ export const VisualMemoryExplorer: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:flex-row lg:items-center">
+      <div className="flex flex-col justify-between gap-4 rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm lg:flex-row lg:items-center">
         <div>
           <p className="text-xs font-semibold text-[#E10906]">Visual Learning Tool</p>
-          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#100303]">
+          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#100303] dark:text-[#f0eaea]">
             Visual Memory Explorer (Names &amp; Object References)
           </h2>
-          <p className="mt-1 max-w-2xl text-sm text-[#8A8585]">
+          <p className="mt-1 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
             Step through Python assignments to see how variable names point to typed value objects
             in memory—and how reassignment rebinds a name to a new object.
           </p>
@@ -124,8 +124,8 @@ export const VisualMemoryExplorer: React.FC = () => {
               onClick={() => setCode(p.code)}
               className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${
                 code === p.code
-                  ? 'border-[#E10906] bg-[#FFF1F1] text-[#E10906]'
-                  : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] hover:text-[#100303]'
+                  ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#E10906]'
+                  : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
               }`}
             >
               {p.label}
@@ -137,7 +137,7 @@ export const VisualMemoryExplorer: React.FC = () => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Left: Editable Code + Execution Stepper */}
         <div className="space-y-4 lg:col-span-5">
-          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-sm">
             <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs text-[#CFC8C8]">
               <span className="font-mono font-semibold">memory_trace.py</span>
               <span className="font-mono text-[#E10906] tabular-nums">
@@ -158,7 +158,7 @@ export const VisualMemoryExplorer: React.FC = () => {
 
             {/* Active Line Preview Strip */}
             <div className="border-t border-[#2C1616] bg-[#0B1120] px-4 py-2.5 font-mono text-xs">
-              <span className="text-[#8A8585]">Active Line: </span>
+              <span className="text-[#8A8585] dark:text-[#9a8585]">Active Line: </span>
               <span className="text-emerald-300">
                 {activeStep
                   ? `${activeStep.line}: ${codeLines[activeStep.line - 1] ?? ''}`
@@ -180,7 +180,7 @@ export const VisualMemoryExplorer: React.FC = () => {
           )}
 
           {/* Playback Controls */}
-          <div className="space-y-3 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="space-y-3 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs">
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
@@ -205,7 +205,7 @@ export const VisualMemoryExplorer: React.FC = () => {
                   setStepIndex((s) => Math.max(0, s - 1));
                 }}
                 disabled={stepIndex <= 0}
-                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] disabled:opacity-40"
+                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] disabled:opacity-40"
               >
                 <SkipBack className="h-3.5 w-3.5 text-[#E10906]" />
                 Back
@@ -218,7 +218,7 @@ export const VisualMemoryExplorer: React.FC = () => {
                   setStepIndex((s) => Math.min(steps.length, s + 1));
                 }}
                 disabled={stepIndex >= steps.length}
-                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] disabled:opacity-40"
+                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] disabled:opacity-40"
               >
                 <SkipForward className="h-3.5 w-3.5 text-[#E10906]" />
                 Step
@@ -230,13 +230,13 @@ export const VisualMemoryExplorer: React.FC = () => {
                   setIsPlaying(false);
                   setStepIndex(0);
                 }}
-                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-white px-3 py-2 text-xs font-medium text-[#8A8585]"
+                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-2 text-xs font-medium text-[#8A8585] dark:text-[#9a8585]"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Reset
               </button>
 
-              <span className="ml-auto font-mono text-xs font-semibold text-[#8A8585] tabular-nums">
+              <span className="ml-auto font-mono text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                 {stepIndex}/{steps.length}
               </span>
             </div>
@@ -253,18 +253,18 @@ export const VisualMemoryExplorer: React.FC = () => {
 
         {/* Right: Names -> Object References Diagram + Explanation */}
         <div className="space-y-4 lg:col-span-7">
-          <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] pb-3">
-              <h3 className="font-display text-base font-bold text-[#100303]">
+          <div className="rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] dark:border-[#2a1212] pb-3">
+              <h3 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
                 Names &amp; Object Reference Diagram
               </h3>
-              <span className="font-mono text-xs text-[#8A8585]">
+              <span className="font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">
                 {Object.keys(currentVars).length} active binding(s)
               </span>
             </div>
 
             {groupedObjects.length === 0 ? (
-              <div className="py-12 text-center text-sm text-[#8A8585]">
+              <div className="py-12 text-center text-sm text-[#8A8585] dark:text-[#9a8585]">
                 No variables bound yet. Click <strong>Step</strong> or <strong>Run</strong> to see
                 Python bind variable names to objects.
               </div>
@@ -283,8 +283,8 @@ export const VisualMemoryExplorer: React.FC = () => {
                       key={group.key}
                       className={`flex flex-col items-stretch justify-between gap-3 rounded-2xl border p-4 transition-all sm:flex-row sm:items-center ${
                         anyChanged
-                          ? 'border-[#E10906] bg-[#FFF1F1]/70'
-                          : 'border-[#E5DFDF] bg-[#FBF5F9]'
+                          ? 'border-[#E10906] bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70'
+                          : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303]'
                       }`}
                     >
                       {/* Variable Name Labels */}
@@ -292,7 +292,7 @@ export const VisualMemoryExplorer: React.FC = () => {
                         {group.names.map((name) => (
                           <div
                             key={name}
-                            className="rounded-xl border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm font-bold text-[#100303] shadow-xs"
+                            className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm font-bold text-[#100303] dark:text-[#f0eaea] shadow-xs"
                           >
                             {name}
                           </div>
@@ -300,7 +300,7 @@ export const VisualMemoryExplorer: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 text-xs text-[#E10906]">
-                        <span className="font-mono text-[11px] font-medium text-[#8A8585]">
+                        <span className="font-mono text-[11px] font-medium text-[#8A8585] dark:text-[#9a8585]">
                           references
                         </span>
                         <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -325,7 +325,7 @@ export const VisualMemoryExplorer: React.FC = () => {
               </div>
             )}
 
-            <div className="mt-5 rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1] p-4 text-xs leading-relaxed text-[#100303]">
+            <div className="mt-5 rounded-2xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#FFF1F1] dark:bg-[#2a0808] p-4 text-xs leading-relaxed text-[#100303] dark:text-[#f0eaea]">
               <p className="font-bold text-[#E10906]">Step Explanation</p>
               <p className="mt-1">
                 {activeStep
@@ -335,7 +335,7 @@ export const VisualMemoryExplorer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-start gap-2.5 rounded-2xl border border-[#E5DFDF] bg-white px-4 py-3 text-xs text-[#8A8585]">
+          <div className="flex items-start gap-2.5 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-3 text-xs text-[#8A8585] dark:text-[#9a8585]">
             <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
             <span>
               Conceptual model: supports variable assignments, reassignments, numbers, strings,

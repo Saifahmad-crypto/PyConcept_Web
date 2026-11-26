@@ -53,7 +53,7 @@ function highlightPythonLine(line: string): React.ReactNode[] {
   while (i < line.length) {
     if (line[i] === '#') {
       tokens.push(
-        <span key={key++} className="text-[#8A8585] italic">
+        <span key={key++} className="text-[#8A8585] dark:text-[#9a8585] italic">
           {line.slice(i)}
         </span>
       );
@@ -165,7 +165,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium text-[#8A8585] transition-colors hover:bg-[#2C1616] hover:text-[#FBF5F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium text-[#8A8585] dark:text-[#9a8585] transition-colors hover:bg-[#2C1616] hover:text-[#FBF5F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
             aria-label="Copy code snippet"
           >
             {copied ? (
@@ -201,7 +201,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
             >
               <span
                 className={`mr-4 w-5 shrink-0 select-none text-right tabular-nums text-xs leading-relaxed ${
-                  isCurrent ? 'font-bold text-[#FF6B6B]' : 'text-[#8A8585]'
+                  isCurrent ? 'font-bold text-[#FF6B6B]' : 'text-[#8A8585] dark:text-[#9a8585]'
                 }`}
               >
                 {lineNum}

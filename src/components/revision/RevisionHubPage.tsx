@@ -173,28 +173,28 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
   return (
     <div>
       {/* Header */}
-      <div className="border-b border-[#E5DFDF] bg-white">
+      <div className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808]">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-y-5">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
             <div>
               <p className="text-xs font-semibold text-[#E10906]">PyVerse Revision Hub</p>
-              <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+              <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
                 Quick Revision &amp; Recall Studio
               </h1>
-              <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585]">
+              <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
                 Review syntax cheat sheets, flip active-recall flashcards, drill mixed questions in the Revision Arena, and explore visual diagrams.
               </p>
             </div>
 
-            <div className="inline-flex items-center gap-3 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2 text-xs">
-              <span className="text-[#8A8585]">Flashcards Mastered:</span>
+            <div className="inline-flex items-center gap-3 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2 text-xs">
+              <span className="text-[#8A8585] dark:text-[#9a8585]">Flashcards Mastered:</span>
               <span className="font-mono font-bold text-emerald-700 tabular-nums">
                 {understoodFlashcards.length} / {FLASHCARDS_BANK.length}
               </span>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-1.5">
+          <div className="flex flex-wrap gap-1.5 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-1.5">
             {REVISION_TABS.map((tab) => {
               const Icon = tab.icon;
               const active = activeTab === tab.id;
@@ -206,7 +206,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                   className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 font-display text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
                     active
                       ? 'bg-[#E10906] text-white shadow-sm'
-                      : 'text-[#8A8585] hover:bg-white hover:text-[#100303]'
+                      : 'text-[#8A8585] dark:text-[#9a8585] hover:bg-white dark:hover:bg-[#221010] hover:text-[#100303] dark:hover:text-[#f0eaea]'
                   }`}
                 >
                   <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -225,7 +225,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
             {CHEAT_SHEETS.map((sheet) => (
               <div
                 key={sheet.topic}
-                className="rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-sm space-y-4"
+                className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 shadow-sm space-y-4"
               >
                 <h2 className={`font-display text-lg font-bold ${sheet.accent}`}>{sheet.title}</h2>
                 <div className="space-y-4">
@@ -234,17 +234,17 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                     return (
                       <div
                         key={key}
-                        className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5 space-y-2"
+                        className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-3.5 space-y-2"
                       >
                         <div className="flex items-center justify-between gap-2">
-                          <h3 className="font-display text-xs font-bold text-[#100303]">
+                          <h3 className="font-display text-xs font-bold text-[#100303] dark:text-[#f0eaea]">
                             {item.label}
                           </h3>
                           <div className="flex items-center gap-1.5">
                             <button
                               type="button"
                               onClick={() => void handleCopy(key, item.syntax)}
-                              className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] bg-white px-2 py-1 text-[11px] font-semibold text-[#8A8585] hover:text-[#100303]"
+                              className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-2 py-1 text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]"
                             >
                               {copiedId === key ? (
                                 <Check className="h-3 w-3 text-emerald-600" />
@@ -256,7 +256,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                             <button
                               type="button"
                               onClick={() => onOpenInStudio(item.syntax)}
-                              className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] bg-[#FFF1F1] px-2 py-1 text-[11px] font-semibold text-[#E10906] hover:bg-[#FFF1F1]"
+                              className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FFF1F1] dark:bg-[#2a0808] px-2 py-1 text-[11px] font-semibold text-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808]"
                             >
                               <Terminal className="h-3 w-3" />
                               Studio
@@ -266,7 +266,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                         <pre className="overflow-x-auto rounded-lg bg-[#100303] p-3 font-mono text-xs leading-relaxed text-sky-200">
                           {item.syntax}
                         </pre>
-                        <p className="text-xs text-[#8A8585]">{item.note}</p>
+                        <p className="text-xs text-[#8A8585] dark:text-[#9a8585]">{item.note}</p>
                       </div>
                     );
                   })}
@@ -281,7 +281,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
       {activeTab === 'flashcards' && (
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex flex-wrap gap-1 rounded-xl border border-[#E5DFDF] bg-white p-1">
+            <div className="inline-flex flex-wrap gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-1">
               {(
                 [
                   { id: 'all', label: 'All Topics' },
@@ -301,7 +301,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                   className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                     cardTopic === f.id
                       ? 'bg-[#E10906] text-white'
-                      : 'text-[#8A8585] hover:text-[#100303]'
+                      : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
                   }`}
                 >
                   {f.label}
@@ -309,7 +309,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
               ))}
             </div>
 
-            <span className="font-mono text-xs font-semibold text-[#8A8585] tabular-nums">
+            <span className="font-mono text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] tabular-nums">
               Card {(cardIdx % visibleCards.length) + 1} of {visibleCards.length}
             </span>
           </div>
@@ -324,13 +324,13 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                 setFlipped((f) => !f);
               }
             }}
-            className="cursor-pointer rounded-3xl border border-[#E5DFDF] bg-gradient-to-br from-white via-[#F0F9FF]/50 to-[#F5F3FF]/50 p-7 shadow-sm transition-all hover:border-[#E10906] hover:shadow-md min-h-[290px] flex flex-col justify-between"
+            className="cursor-pointer rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-gradient-to-br from-white via-[#F0F9FF]/50 to-[#F5F3FF]/50 p-7 shadow-sm transition-all hover:border-[#E10906] hover:shadow-md min-h-[290px] flex flex-col justify-between"
           >
             <div className="flex items-center justify-between gap-2 text-xs">
               <span className="font-mono font-semibold text-[#E10906] uppercase">
                 {currentCard.topic} · {flipped ? 'Answer & Example' : 'Question Prompt'}
               </span>
-              <span className="inline-flex items-center gap-1 text-[#8A8585]">
+              <span className="inline-flex items-center gap-1 text-[#8A8585] dark:text-[#9a8585]">
                 <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
                 Click card to flip
               </span>
@@ -338,7 +338,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
 
             {!flipped ? (
               <div className="my-6 text-center space-y-3">
-                <h2 className="font-display text-2xl font-bold text-[#100303]">
+                <h2 className="font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
                   {currentCard.front}
                 </h2>
                 {currentCard.codeHint && (
@@ -349,14 +349,14 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
               </div>
             ) : (
               <div className="my-4 space-y-4">
-                <p className="text-base font-semibold leading-relaxed text-[#100303]">
+                <p className="text-base font-semibold leading-relaxed text-[#100303] dark:text-[#f0eaea]">
                   {currentCard.back}
                 </p>
                 <CodeBlock code={currentCard.example} title="example.py" compact showCopy={false} />
               </div>
             )}
 
-            <div className="flex items-center justify-between text-xs text-[#8A8585]">
+            <div className="flex items-center justify-between text-xs text-[#8A8585] dark:text-[#9a8585]">
               <span>{cardUnderstood ? 'Marked understood' : 'Still reviewing'}</span>
               <span className="font-mono">{currentCard.id}</span>
             </div>
@@ -370,7 +370,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                   setCardIdx((i) => (i - 1 + visibleCards.length) % visibleCards.length);
                   setFlipped(false);
                 }}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#100303] hover:bg-[#FBF5F9]"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:bg-[#FBF5F9] dark:hover:bg-[#221010] dark:bg-[#0f0303]"
               >
                 <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                 Previous
@@ -381,7 +381,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                   setCardIdx((i) => (i + 1) % visibleCards.length);
                   setFlipped(false);
                 }}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#100303] hover:bg-[#FBF5F9]"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:bg-[#FBF5F9] dark:hover:bg-[#221010] dark:bg-[#0f0303]"
               >
                 Next Card
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -407,11 +407,11 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
       {/* Tab 3: Revision Arena (Mixed Rapid Drill) */}
       {activeTab === 'arena' && (
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
-          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-5">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="text-xs font-semibold text-[#E10906]">Mixed-Topic Rapid Drill</p>
-                <h2 className="font-display text-2xl font-bold text-[#100303]">
+                <h2 className="font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
                   {currentArenaQ.title}
                 </h2>
               </div>
@@ -421,7 +421,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
               </div>
             </div>
 
-            <p className="text-sm text-[#8A8585]">{currentArenaQ.instructions}</p>
+            <p className="text-sm text-[#8A8585] dark:text-[#9a8585]">{currentArenaQ.instructions}</p>
 
             <CodeBlock code={currentArenaQ.code} title="revision_arena.py" compact showCopy={false} />
 
@@ -430,7 +430,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                 const selected = arenaChoice === idx;
                 const correct = idx === currentArenaQ.correctIndex;
                 let style =
-                  'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906]';
+                  'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]';
                 if (arenaSubmitted) {
                   if (correct) style = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold';
                   else if (selected) style = 'border-rose-500 bg-rose-50 text-rose-900';
@@ -446,7 +446,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                     onClick={() => setArenaChoice(idx)}
                     className={`flex items-start gap-2.5 rounded-xl border px-4 py-3 text-left font-mono text-xs transition-all ${style}`}
                   >
-                    <span className="font-bold text-[#8A8585]">
+                    <span className="font-bold text-[#8A8585] dark:text-[#9a8585]">
                       {String.fromCharCode(65 + idx)}.
                     </span>
                     <span>{opt}</span>
@@ -476,11 +476,11 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                     </>
                   )}
                 </div>
-                <p className="mt-1 text-[#100303]">{currentArenaQ.explanation}</p>
+                <p className="mt-1 text-[#100303] dark:text-[#f0eaea]">{currentArenaQ.explanation}</p>
               </div>
             )}
 
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E5DFDF] pt-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E5DFDF] dark:border-[#3a1a1a] pt-4">
               {!arenaSubmitted ? (
                 <button
                   type="button"
@@ -518,7 +518,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                   setArenaSubmitted(false);
                   setArenaScore(0);
                 }}
-                className="text-xs font-medium text-[#8A8585] hover:text-[#100303]"
+                className="text-xs font-medium text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]"
               >
                 Reset Drill Score
               </button>
@@ -536,9 +536,9 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
       {activeTab === 'visual-notes' && (
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
-            <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-4 lg:col-span-7">
+            <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-4 lg:col-span-7">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 className="font-display text-lg font-bold text-[#100303]">
+                <h2 className="font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
                   Execution Flowchart Reference
                 </h2>
                 <div className="flex flex-wrap gap-1.5">
@@ -550,7 +550,7 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
                       className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
                         flowType === opt.id
                           ? 'border-[#E10906] bg-[#EFF6FF] text-[#E10906]'
-                          : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585]'
+                          : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#8A8585] dark:text-[#9a8585]'
                       }`}
                     >
                       {opt.label}
@@ -562,8 +562,8 @@ export const RevisionHubPage: React.FC<RevisionHubPageProps> = ({
             </div>
 
             <div className="space-y-5 lg:col-span-5">
-              <div className="rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-sm space-y-4">
-                <h3 className="font-display text-base font-bold text-[#100303]">
+              <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 shadow-sm space-y-4">
+                <h3 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
                   Interactive Comparison Scale
                 </h3>
                 <div className="grid grid-cols-2 gap-3 text-xs">

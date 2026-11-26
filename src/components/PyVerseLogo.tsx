@@ -32,8 +32,7 @@ export const PyVerseLogo: React.FC<PyVerseLogoProps> = ({
           width="56"
           height="56"
           rx="14"
-          fill={isDark ? '#190909' : '#100303'}
-          stroke={isDark ? '#3A1D1D' : '#100303'}
+          className={isDark ? 'fill-[#190909] stroke-[#3A1D1D]' : 'fill-[#100303] stroke-[#100303] dark:fill-[#190909] dark:stroke-[#3A1D1D]'}
           strokeWidth="2"
         />
         {/* Kinetic orbital frame */}
@@ -55,7 +54,7 @@ export const PyVerseLogo: React.FC<PyVerseLogoProps> = ({
 
       {showWordmark && (
         <span className={`font-display font-extrabold tracking-tight ${textSize}`}>
-          <span className={isDark ? 'text-[#FBF5F9]' : 'text-[#100303]'}>Py</span>
+          <span className={isDark ? 'text-[#FBF5F9]' : 'text-[#100303] dark:text-[#FBF5F9]'}>Py</span>
           <span className="text-[#E10906]">Verse</span>
         </span>
       )}

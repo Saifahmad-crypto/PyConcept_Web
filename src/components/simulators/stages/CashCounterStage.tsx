@@ -63,7 +63,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
   const noteColors =
     denomination === 500
-      ? 'border-violet-400 bg-violet-50 text-[#100303]'
+      ? 'border-violet-400 bg-violet-50 text-[#100303] dark:text-[#f0eaea]'
       : denomination === 200
       ? 'border-amber-400 bg-amber-50 text-amber-900'
       : 'border-sky-400 bg-[#F0F9FF] text-sky-900';
@@ -104,12 +104,12 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Educational Cash Counting Machine
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Sample currency denominations for practicing loop counters &amp; accumulation.
             </p>
           </div>
 
-          <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1 gap-1">
             {(['while', 'for'] as const).map((m) => (
               <button
                 key={m}
@@ -118,7 +118,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                   loopMode === m
                     ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
-                    : 'text-[#8A8585] hover:text-[#1E293B]'
+                    : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#1E293B]'
                 }`}
               >
                 {m} loop
@@ -129,8 +129,8 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
         {/* Inputs Row */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
-            <span className="block text-xs font-semibold text-[#8A8585] mb-2">
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+            <span className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] mb-2">
               Note Denomination
             </span>
             <div className="grid grid-cols-3 gap-1.5">
@@ -142,7 +142,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   className={`rounded-lg border py-1.5 font-mono text-xs font-bold transition-all ${
                     denomination === d
                       ? 'border-sky-500 bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
-                      : 'border-slate-200 bg-white text-[#1E293B] hover:border-sky-300'
+                      : 'border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#1E293B] hover:border-sky-300'
                   }`}
                 >
                   ₹{d}
@@ -151,8 +151,8 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
-            <label htmlFor="cash-notes" className="block text-xs font-semibold text-[#8A8585]">
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+            <label htmlFor="cash-notes" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               Number of Notes (0–20)
             </label>
             <input
@@ -162,12 +162,12 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               max={20}
               value={numNotes}
               onChange={(e) => resetWith(() => setNumNotes(Number(e.target.value)))}
-              className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+              className="mt-1.5 w-full rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
             />
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
-            <label htmlFor="cash-target" className="block text-xs font-semibold text-[#8A8585]">
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
+            <label htmlFor="cash-target" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               Target Limit ₹ (0 = All)
             </label>
             <input
@@ -178,13 +178,13 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               step={100}
               value={targetAmount}
               onChange={(e) => resetWith(() => setTargetAmount(Number(e.target.value)))}
-              className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+              className="mt-1.5 w-full rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Cash Counter Machine Visual */}
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5 space-y-4">
+        <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5 space-y-4">
           {/* LED Display */}
           <div className="grid grid-cols-3 gap-3 rounded-2xl bg-[#0F172A] p-4 text-white">
             <div>
@@ -209,8 +209,8 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
           {/* Hopper -> Roller -> Output Stack */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 items-stretch">
-            <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center">
-              <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-[#8A8585]">
+            <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3.5 text-center">
+              <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
                 <Layers className="h-3.5 w-3.5" aria-hidden="true" />
                 Input Hopper
               </div>
@@ -229,23 +229,23 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-3.5 text-center">
-              <span className="text-xs font-semibold text-[#8A8585]">Optical Counter</span>
+            <div className="flex flex-col items-center justify-center rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3.5 text-center">
+              <span className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Optical Counter</span>
               <div
                 style={{ transitionDuration: `${scaleAnimationMs(260, runner.speedMs)}ms` }}
                 className={`mt-2 flex h-12 w-24 items-center justify-center rounded-xl border-2 font-mono text-sm font-extrabold transition-all ${
                   runner.activeStep?.kind === 'assign' &&
                   runner.activeStep.codeLine.includes('total = total')
                     ? `${noteColors} scale-105 shadow-sm`
-                    : 'border-dashed border-slate-300 bg-slate-50 text-slate-400'
+                    : 'border-dashed border-slate-300 dark:border-[#4a2525] bg-slate-50 dark:bg-[#1a0808] text-slate-400'
                 }`}
               >
                 <Banknote className="mr-1 h-4 w-4" aria-hidden="true" />₹{denomination}
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center">
-              <span className="text-xs font-semibold text-[#8A8585]">Counted Stack</span>
+            <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3.5 text-center">
+              <span className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Counted Stack</span>
               <p className="mt-2 font-mono text-xl font-bold text-emerald-700 tabular-nums">
                 {counted} counted
               </p>

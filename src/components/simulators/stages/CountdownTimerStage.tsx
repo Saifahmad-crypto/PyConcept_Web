@@ -86,7 +86,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Synchronized Digital Countdown
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Every tick updates strictly from the <code className="font-mono text-sky-700">while count &gt; 0</code> step.
             </p>
           </div>
@@ -99,7 +99,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   setEnableBreak(false);
                 })
               }
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-sky-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
             >
               Test Start = 0
             </button>
@@ -112,16 +112,16 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   setStopAt(2);
                 })
               }
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-violet-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-violet-300"
             >
               Demo break at 2
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5 sm:grid-cols-12 items-center">
+        <div className="grid grid-cols-1 gap-5 rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5 sm:grid-cols-12 items-center">
           {/* Large Digital Ring Display */}
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white p-6 shadow-xs sm:col-span-7">
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-xs sm:col-span-7">
             <div className="relative flex h-44 w-44 items-center justify-center">
               <svg className="h-44 w-44 -rotate-90" viewBox="0 0 160 160" aria-hidden="true">
                 <defs>
@@ -157,14 +157,14 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 <span className="font-mono text-5xl font-extrabold text-[#1E293B] tabular-nums">
                   {currentCount}
                 </span>
-                <span className="mt-1 font-mono text-xs font-medium text-slate-500">
+                <span className="mt-1 font-mono text-xs font-medium text-slate-500 dark:text-[#9a8585]">
                   count
                 </span>
               </div>
             </div>
 
             {/* Condition & Termination Readout */}
-            <div className="mt-4 flex items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold">
+            <div className="mt-4 flex items-center gap-2 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-4 py-2 text-xs font-semibold">
               {brokeEarly ? (
                 <>
                   <OctagonX className="h-4 w-4 text-rose-600" aria-hidden="true" />
@@ -189,7 +189,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           </div>
 
           {/* Controls */}
-          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs sm:col-span-5">
+          <div className="space-y-4 rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs sm:col-span-5">
             <div>
               <div className="flex justify-between text-xs">
                 <label htmlFor="cd-start" className="font-semibold text-[#1E293B]">
@@ -206,13 +206,13 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onChange={(e) => handleUpdate(() => setStartCount(Number(e.target.value)))}
                 className="mt-2 w-full accent-[#E10906] cursor-pointer"
               />
-              <div className="flex justify-between font-mono text-[11px] text-slate-500">
+              <div className="flex justify-between font-mono text-[11px] text-slate-500 dark:text-[#9a8585]">
                 <span>0 (Edge Case)</span>
                 <span>12</span>
               </div>
             </div>
 
-            <div className="border-t border-[#F1EEEE] pt-3">
+            <div className="border-t border-[#F1EEEE] dark:border-[#2a1212] pt-3">
               <label className="flex items-center gap-2.5 text-xs font-semibold text-[#1E293B] cursor-pointer">
                 <input
                   type="checkbox"
@@ -225,7 +225,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
               {enableBreak && (
                 <div className="mt-3">
-                  <label htmlFor="cd-stop-at" className="block text-xs text-[#8A8585]">
+                  <label htmlFor="cd-stop-at" className="block text-xs text-[#8A8585] dark:text-[#9a8585]">
                     Break when <code className="font-mono">count ==</code>
                   </label>
                   <input
@@ -235,7 +235,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     max={Math.max(1, startCount)}
                     value={stopAt}
                     onChange={(e) => handleUpdate(() => setStopAt(Number(e.target.value)))}
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] focus:border-violet-500 focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] focus:border-violet-500 focus:outline-none"
                   />
                 </div>
               )}

@@ -83,12 +83,12 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Road Intersection Control
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Switch the traffic signal to trigger conditional branching.
             </p>
           </div>
 
-          <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1 gap-1">
             {(['red', 'yellow', 'green'] as SignalColor[]).map((sig) => {
               const active = signal === sig;
               const activeCls =
@@ -103,7 +103,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   type="button"
                   onClick={() => handleSelectSignal(sig)}
                   className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold capitalize transition-all whitespace-nowrap ${
-                    active ? activeCls : 'text-[#8A8585] hover:text-[#1E293B]'
+                    active ? activeCls : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#1E293B]'
                   }`}
                 >
                   {sig}
@@ -114,9 +114,9 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         </div>
 
         {/* Animated Intersection Canvas */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-[#FFF1F1] to-[#E0F2FE]/60 p-4 sm:p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-b from-[#FFF1F1] dark:from-[#2a0808] to-[#E0F2FE]/60 p-4 sm:p-5">
           {/* Status Banner (Icon + Text — never hue-only) */}
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 shadow-xs">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white/95 dark:bg-[#1a0808]/95 px-4 py-2.5 shadow-xs">
             <div className="flex items-center gap-2.5 text-xs font-semibold text-[#1E293B]">
               {currentAction === 'STOP' ? (
                 <OctagonAlert className="h-4 w-4 text-rose-600" aria-hidden="true" />
@@ -132,9 +132,9 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 </strong>
               </span>
             </div>
-            <span className="font-mono text-xs text-[#8A8585]">
+            <span className="font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">
               Pedestrian Crosswalk:{' '}
-              <strong className={isPedestrianCrossing ? 'text-emerald-700' : 'text-[#100303]'}>
+              <strong className={isPedestrianCrossing ? 'text-emerald-700' : 'text-[#100303] dark:text-[#f0eaea]'}>
                 {isPedestrianCrossing ? 'WALK SAFE' : 'WAIT AT CURB'}
               </strong>
             </span>
@@ -143,7 +143,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           {/* SVG Intersection Scene */}
           <svg
             viewBox="0 0 640 280"
-            className="w-full rounded-xl border border-slate-200/80 bg-[#ECFDF5]/60"
+            className="w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a]/80 bg-[#ECFDF5]/60"
             role="img"
             aria-label={`Traffic intersection showing ${currentSignalVar} signal and vehicles ${currentAction}`}
           >

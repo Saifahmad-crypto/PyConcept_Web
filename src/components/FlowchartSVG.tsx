@@ -64,7 +64,7 @@ export const FlowchartSVG: React.FC<FlowchartSVGProps> = ({
   const edgeWidth = (branchId: string) => (isBranch(branchId) ? 2.6 : 1.5);
 
   return (
-    <div className="w-full overflow-x-auto rounded-2xl border border-[#E5DFDF] bg-gradient-to-br from-white to-[#F0F9FF] p-3.5 shadow-sm">
+    <div className="w-full overflow-x-auto rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-gradient-to-br from-white to-[#F0F9FF] p-3.5 shadow-sm">
       <svg
         viewBox={
           type === 'if-elif-else'

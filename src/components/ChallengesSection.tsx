@@ -118,26 +118,26 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-6 md:flex-row md:items-end">
+      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-6 md:flex-row md:items-end">
         <div>
           <p className="text-xs font-semibold text-[#E10906]">PyVerse Practice Challenges</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
             Beginner Coding Challenges
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#8A8585]">
+          <p className="mt-2 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
             Write real Python solutions for 10 structured problems (5 Conditional Statements, 5 Loops)
             and verify your output instantly.
           </p>
         </div>
 
-        <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-1 gap-1">
+        <div className="inline-flex rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-1 gap-1">
           <button
             type="button"
             onClick={() => handleTopicSwitch('conditionals')}
             className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
               topicFilter === 'conditionals'
                 ? 'bg-[#E10906] text-white shadow-sm'
-                : 'text-[#8A8585] hover:text-[#100303]'
+                : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
             }`}
           >
             Topic 08 · Conditionals (5)
@@ -148,7 +148,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
             className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
               topicFilter === 'loops'
                 ? 'bg-[#E10906] text-white shadow-sm'
-                : 'text-[#8A8585] hover:text-[#100303]'
+                : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
             }`}
           >
             Topic 09 · Loops (5)
@@ -170,14 +170,14 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 className={`flex w-full items-center justify-between gap-3 rounded-xl border p-4 text-left transition-all ${
                   isSelected
                     ? 'border-[#E10906] bg-[#E10906]/10 shadow-sm'
-                    : 'border-[#E5DFDF] bg-white hover:border-[#E5DFDF] shadow-xs'
+                    : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] hover:border-[#E5DFDF] shadow-xs'
                 }`}
               >
                 <div>
-                  <span className="font-mono text-[11px] font-medium text-[#8A8585]">
+                  <span className="font-mono text-[11px] font-medium text-[#8A8585] dark:text-[#9a8585]">
                     Challenge 0{idx + 1} · {ch.difficulty}
                   </span>
-                  <h3 className="mt-0.5 font-display text-sm font-semibold text-[#100303]">
+                  <h3 className="mt-0.5 font-display text-sm font-semibold text-[#100303] dark:text-[#f0eaea]">
                     {ch.title}
                   </h3>
                 </div>
@@ -191,14 +191,14 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
 
         {/* Active Challenge Workspace */}
         <div className="space-y-5 lg:col-span-8">
-          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-5">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <span className="font-mono text-xs font-semibold text-[#E10906]">
                   {activeChallenge.topic === 'conditionals' ? 'Topic 08' : 'Topic 09'} ·{' '}
                   {activeChallenge.difficulty}
                 </span>
-                <h2 className="mt-0.5 font-display text-2xl font-bold text-[#100303]">
+                <h2 className="mt-0.5 font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
                   {activeChallenge.title}
                 </h2>
               </div>
@@ -210,18 +210,18 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
               )}
             </div>
 
-            <p className="text-sm leading-relaxed text-[#8A8585]">{activeChallenge.description}</p>
+            <p className="text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{activeChallenge.description}</p>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-4">
-                <p className="text-xs font-semibold text-[#100303]">Requirements</p>
-                <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-[#8A8585]">
+              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-4">
+                <p className="text-xs font-semibold text-[#100303] dark:text-[#f0eaea]">Requirements</p>
+                <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-[#8A8585] dark:text-[#9a8585]">
                   {activeChallenge.requirements.map((req, i) => (
                     <li key={i}>{req}</li>
                   ))}
                 </ul>
               </div>
-              <div className="rounded-xl border border-[#E5DFDF] bg-[#100303] p-4">
+              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] p-4">
                 <p className="text-xs font-semibold text-[#CFC8C8]">Expected Sample Output</p>
                 <pre className="mt-2 whitespace-pre-wrap font-mono text-xs text-emerald-300">
                   {activeChallenge.sampleOutput}
@@ -230,7 +230,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
             </div>
 
             {/* Editor */}
-            <div className="overflow-hidden rounded-xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-sm">
               <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2 text-xs text-[#CFC8C8]">
                 <span className="font-mono font-medium">solution.py</span>
                 <div className="flex items-center gap-3">
@@ -273,7 +273,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
 
             {showSolution && (
               <div className="space-y-2">
-                <p className="text-xs font-semibold text-[#8A8585]">Reference Solution:</p>
+                <p className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Reference Solution:</p>
                 <CodeBlock code={activeChallenge.solutionCode} title="reference_solution.py" compact />
               </div>
             )}
@@ -296,7 +296,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                   }));
                   setFeedback(null);
                 }}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2 text-xs font-medium text-[#100303] transition-colors hover:bg-[#F1EEEE] hover:text-[#100303]"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#F1EEEE] dark:hover:bg-[#221010] dark:bg-[#221010] hover:text-[#100303] dark:hover:text-[#f0eaea]"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset Code
@@ -324,7 +324,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                     </>
                   )}
                 </div>
-                <p className="mt-1.5 text-[#100303]">{feedback.message}</p>
+                <p className="mt-1.5 text-[#100303] dark:text-[#f0eaea]">{feedback.message}</p>
                 {feedback.output && (
                   <pre className="mt-2.5 rounded-xl bg-[#100303] p-3 font-mono text-xs text-emerald-300">
                     Your Output:{'\n'}

@@ -34,7 +34,7 @@ export const HeroVisual: React.FC = () => {
           </span>
         </div>
         <div className="flex items-center gap-2 font-mono text-[11px]">
-          <span className="text-[#8A8585]">state:</span>
+          <span className="text-[#8A8585] dark:text-[#9a8585]">state:</span>
           <span
             className={`rounded px-2 py-0.5 font-semibold ${
               passes
@@ -350,13 +350,13 @@ export const HeroVisual: React.FC = () => {
         />
 
         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#2C1616] pt-2.5 font-mono text-[11px]">
-          <span className="text-[#8A8585]">
+          <span className="text-[#8A8585] dark:text-[#9a8585]">
             Output:{' '}
             <strong className="text-[#FBF5F9]">
               {passes ? 'Star 1 · Star 2 · Star 3' : 'Retry'}
             </strong>
           </span>
-          <span className="text-[#8A8585] tabular-nums">
+          <span className="text-[#8A8585] dark:text-[#9a8585] tabular-nums">
             Iterations: <strong className="text-[#FF6B6B]">{loopCount}</strong>
           </span>
         </div>

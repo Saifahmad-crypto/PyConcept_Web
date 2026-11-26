@@ -57,7 +57,7 @@ function highlightPythonLine(line: string): React.ReactNode[] {
     const word = match[0];
     if (word.startsWith('#')) {
       tokens.push(
-        <span key={k++} className="text-[#8A8585] italic">
+        <span key={k++} className="text-[#8A8585] dark:text-[#9a8585] italic">
           {word}
         </span>
       );
@@ -121,7 +121,7 @@ export const TutorCodePanel: React.FC<TutorCodePanelProps> = ({
   };
 
   return (
-    <div className="my-3 overflow-hidden rounded-xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+    <div className="my-3 overflow-hidden rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#2C1616] bg-[#190909] px-3.5 py-2 text-xs">
         <span className="font-mono font-medium text-[#E10906]">{language || 'python'}</span>
         <div className="flex items-center gap-2">
@@ -158,7 +158,7 @@ export const TutorCodePanel: React.FC<TutorCodePanelProps> = ({
       <div className="overflow-x-auto py-3 font-mono text-xs sm:text-[13px] leading-6">
         {lines.map((line, idx) => (
           <div key={idx} className="flex px-3 hover:bg-[#190909]/40">
-            <span className="w-7 shrink-0 select-none pr-3 text-right text-[#8A8585] tabular-nums">
+            <span className="w-7 shrink-0 select-none pr-3 text-right text-[#8A8585] dark:text-[#9a8585] tabular-nums">
               {idx + 1}
             </span>
             <pre className="whitespace-pre text-[#FBF5F9]">

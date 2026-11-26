@@ -254,23 +254,23 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
   return (
     <div className="space-y-6">
       {/* Vault Banner */}
-      <div className="rounded-2xl border border-indigo-200/80 bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-indigo-200/80 bg-white dark:bg-[#1a0808] p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#E10906]">
               <KeyRound className="h-4 w-4" aria-hidden="true" />
               5-Stage Interactive Python Escape Mission
             </div>
-            <h2 className="font-display text-2xl font-extrabold text-[#100303] sm:text-3xl">
+            <h2 className="font-display text-2xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-3xl">
               The Python Code Vault
             </h2>
-            <p className="text-sm text-[#8A8585]">
+            <p className="text-sm text-[#8A8585] dark:text-[#9a8585]">
               Unlock all 5 rooms sequentially using variables, conditionals, loops, memory tracing, and combined logic.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#E5DFDF] bg-white px-5 py-3 text-center shadow-xs">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8585]">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-5 py-3 text-center shadow-xs">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8585] dark:text-[#9a8585]">
               Vault Progress
             </p>
             <p className="mt-1 font-mono text-2xl font-extrabold text-[#E10906] tabular-nums">
@@ -293,28 +293,28 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
                 onClick={() => selectRoom(idx)}
                 className={`rounded-xl border p-3 text-left transition-all ${
                   active
-                    ? 'border-[#E10906] bg-white shadow-md ring-2 ring-[#E10906]/30'
+                    ? 'border-[#E10906] bg-white dark:bg-[#1a0808] shadow-md ring-2 ring-[#E10906]/30'
                     : solved
                     ? 'border-emerald-200 bg-emerald-50/70 hover:border-emerald-300'
                     : unlocked
-                    ? 'border-[#E5DFDF] bg-white hover:border-[#E10906]'
-                    : 'border-[#E5DFDF] bg-[#FBF5F9] opacity-60 cursor-not-allowed'
+                    ? 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] hover:border-[#E10906]'
+                    : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] opacity-60 cursor-not-allowed'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className="font-mono text-[#8A8585]">{rm.number}</span>
+                  <span className="font-mono text-[#8A8585] dark:text-[#9a8585]">{rm.number}</span>
                   {solved ? (
                     <Unlock className="h-4 w-4 text-emerald-600" aria-label="Unlocked" />
                   ) : unlocked ? (
                     <KeyRound className="h-4 w-4 text-[#E10906]" aria-label="Ready" />
                   ) : (
-                    <Lock className="h-4 w-4 text-[#8A8585]" aria-label="Locked" />
+                    <Lock className="h-4 w-4 text-[#8A8585] dark:text-[#9a8585]" aria-label="Locked" />
                   )}
                 </div>
-                <p className="mt-1.5 font-display text-xs font-bold text-[#100303] line-clamp-2">
+                <p className="mt-1.5 font-display text-xs font-bold text-[#100303] dark:text-[#f0eaea] line-clamp-2">
                   {rm.title.split('—')[0].trim()}
                 </p>
-                <p className="mt-0.5 text-[11px] text-[#8A8585] truncate">{rm.concept}</p>
+                <p className="mt-0.5 text-[11px] text-[#8A8585] dark:text-[#9a8585] truncate">{rm.concept}</p>
               </button>
             );
           })}
@@ -337,7 +337,7 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
               </p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 border border-emerald-200">
+          <span className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-bold text-emerald-700 border border-emerald-200">
             <ShieldCheck className="h-4 w-4" aria-hidden="true" />
             Code Vault Cleared
           </span>
@@ -345,16 +345,16 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
       )}
 
       {/* Active Room Stage */}
-      <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-5">
+      <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <span className="font-mono text-xs font-semibold text-[#E10906]">
               {room.number} · {room.concept}
             </span>
-            <h3 className="mt-1 font-display text-2xl font-bold text-[#100303]">
+            <h3 className="mt-1 font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
               {room.title}
             </h3>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#8A8585]">{room.story}</p>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{room.story}</p>
           </div>
           {roomSolved && (
             <span className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
@@ -364,7 +364,7 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
           )}
         </div>
 
-        <div className="rounded-xl border border-[#E5DFDF] bg-[#FFF1F1] px-4 py-3 text-sm font-semibold text-[#100303]">
+        <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FFF1F1] dark:bg-[#2a0808] px-4 py-3 text-sm font-semibold text-[#100303] dark:text-[#f0eaea]">
           Mission Objective: {room.prompt}
         </div>
 
@@ -385,11 +385,11 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
                   }}
                   className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left font-mono text-xs sm:text-sm transition-all ${
                     selectedOpt === idx
-                      ? 'border-[#E10906] bg-[#EFF6FF] font-semibold text-[#100303] ring-1 ring-[#38BDF8]'
-                      : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906]'
+                      ? 'border-[#E10906] bg-[#EFF6FF] font-semibold text-[#100303] dark:text-[#f0eaea] ring-1 ring-[#38BDF8]'
+                      : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]'
                   }`}
                 >
-                  <span className="font-bold text-[#8A8585]">
+                  <span className="font-bold text-[#8A8585] dark:text-[#9a8585]">
                     {String.fromCharCode(65 + idx)}.
                   </span>
                   <span>{opt}</span>
@@ -420,7 +420,7 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
         ) : (
           <div className="space-y-4">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-              <div className="overflow-hidden rounded-xl border border-[#E5DFDF] bg-[#100303] lg:col-span-8">
+              <div className="overflow-hidden rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] lg:col-span-8">
                 <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2 text-xs text-[#CFC8C8]">
                   <span className="font-mono font-medium">room_terminal.py</span>
                   <button
@@ -450,7 +450,7 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
                 />
               </div>
 
-              <div className="rounded-xl border border-[#E5DFDF] bg-[#100303] p-4 lg:col-span-4">
+              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] p-4 lg:col-span-4">
                 <p className="text-xs font-semibold text-[#CFC8C8]">Target Unlock Output</p>
                 <pre className="mt-2 whitespace-pre-wrap font-mono text-xs text-emerald-300">
                   {room.expectedOutput}
@@ -518,7 +518,7 @@ export const PythonEscapeRoom: React.FC<PythonEscapeRoomProps> = ({
                 </button>
               )}
             </div>
-            <p className="mt-1.5 text-[#100303]">{feedback.message}</p>
+            <p className="mt-1.5 text-[#100303] dark:text-[#f0eaea]">{feedback.message}</p>
             {feedback.output && (
               <pre className="mt-2.5 rounded-xl bg-[#100303] p-3 font-mono text-xs text-emerald-300">
                 Your Output:{'\n'}

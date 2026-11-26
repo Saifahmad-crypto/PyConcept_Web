@@ -73,7 +73,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Building Elevator Shaft (Floors 0–7)
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Watch how <code className="font-mono text-sky-700">range(start, stop, step)</code> generates each floor.
             </p>
           </div>
@@ -86,16 +86,16 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 setDirection('auto');
               })
             }
-            className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-sky-300"
+            className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
           >
             Test Same Floor (3 → 3)
           </button>
         </div>
 
         {/* Building Shaft + Control Panel */}
-        <div className="grid grid-cols-1 gap-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-4 sm:grid-cols-12">
+        <div className="grid grid-cols-1 gap-5 rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-4 sm:grid-cols-12">
           {/* Elevator Shaft */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs sm:col-span-7">
+          <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs sm:col-span-7">
             <div className="mb-3 flex items-center justify-between text-xs">
               <span className="inline-flex items-center gap-1.5 font-semibold text-[#1E293B]">
                 <Building2 className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
@@ -121,7 +121,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </span>
             </div>
 
-            <div className="relative space-y-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
+            <div className="relative space-y-1.5 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-3">
               {FLOORS.map((f) => {
                 const isCabinHere = currentFloor === f;
                 const isDest = targetFloor === f;
@@ -134,8 +134,8 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                       isCabinHere
                         ? 'border-sky-400 bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-sm'
                         : isDest
-                        ? 'border-violet-300 bg-violet-50 text-[#100303]'
-                        : 'border-slate-200/70 bg-white text-[#8A8585]'
+                        ? 'border-violet-300 bg-violet-50 text-[#100303] dark:text-[#f0eaea]'
+                        : 'border-slate-200 dark:border-[#3a1a1a]/70 bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585]'
                     }`}
                   >
                     <span className="font-mono text-xs font-bold tabular-nums">
@@ -144,7 +144,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
                     <div className="flex items-center gap-2 font-mono text-[11px]">
                       {isStart && !isCabinHere && (
-                        <span className="text-slate-500">Start</span>
+                        <span className="text-slate-500 dark:text-[#9a8585]">Start</span>
                       )}
                       {isDest && !isCabinHere && (
                         <span className="font-semibold text-violet-700">Target</span>
@@ -162,7 +162,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           </div>
 
           {/* Floor Selectors & Readout */}
-          <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs sm:col-span-5">
+          <div className="space-y-4 rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-xs sm:col-span-5">
             <div className="rounded-xl bg-[#0F172A] p-4 text-center text-white">
               <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
                 Current Floor
@@ -173,7 +173,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div>
-              <label htmlFor="elev-start" className="block text-xs font-semibold text-[#8A8585]">
+              <label htmlFor="elev-start" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
                 Starting Floor: <span className="font-mono text-[#1E293B]">{startFloor}</span>
               </label>
               <select
@@ -182,7 +182,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onChange={(e) =>
                   handleResettingChange(() => setStartFloor(Number(e.target.value)))
                 }
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
               >
                 {FLOORS.slice().reverse().map((f) => (
                   <option key={f} value={f}>
@@ -193,7 +193,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div>
-              <label htmlFor="elev-dest" className="block text-xs font-semibold text-[#8A8585]">
+              <label htmlFor="elev-dest" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
                 Destination Floor: <span className="font-mono text-[#1E293B]">{targetFloor}</span>
               </label>
               <select
@@ -202,7 +202,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onChange={(e) =>
                   handleResettingChange(() => setTargetFloor(Number(e.target.value)))
                 }
-                className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-xs font-semibold text-[#1E293B] focus:border-sky-500 focus:outline-none"
               >
                 {FLOORS.slice().reverse().map((f) => (
                   <option key={f} value={f}>
@@ -213,10 +213,10 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div>
-              <span className="block text-xs font-semibold text-[#8A8585] mb-1.5">
+              <span className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] mb-1.5">
                 Step Direction
               </span>
-              <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] p-1">
+              <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1">
                 {(
                   [
                     { id: 'auto', label: 'Auto' },
@@ -231,7 +231,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     className={`rounded-lg py-1.5 text-[11px] font-semibold transition-all ${
                       direction === d.id
                         ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
-                        : 'text-[#8A8585] hover:text-[#1E293B]'
+                        : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#1E293B]'
                     }`}
                   >
                     {d.label}

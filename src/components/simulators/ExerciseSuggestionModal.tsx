@@ -172,11 +172,11 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg overflow-hidden rounded-3xl border border-[#E5DFDF] bg-white shadow-2xl"
+        className="w-full max-w-lg overflow-hidden rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Banner */}
-        <div className="flex items-start justify-between gap-3 border-b border-[#E5DFDF] bg-gradient-to-r from-[#FFF1F1] via-white to-[#F5F3FF] px-6 py-5">
+        <div className="flex items-start justify-between gap-3 border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-gradient-to-r from-[#FFF1F1] dark:from-[#2a0808] via-white to-[#F5F3FF] px-6 py-5">
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] text-white shadow-sm">
               <Sparkles className="h-5 w-5" aria-hidden="true" />
@@ -187,7 +187,7 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
               </p>
               <h2
                 id="exercise-suggestion-title"
-                className="mt-0.5 font-display text-xl font-extrabold text-[#100303]"
+                className="mt-0.5 font-display text-xl font-extrabold text-[#100303] dark:text-[#f0eaea]"
               >
                 Apply What You Just Visualized
               </h2>
@@ -198,7 +198,7 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
             type="button"
             onClick={onClose}
             aria-label="Close exercise suggestion"
-            className="rounded-xl p-1.5 text-[#8A8585] transition-colors hover:bg-[#F1EEEE] hover:text-[#100303]"
+            className="rounded-xl p-1.5 text-[#8A8585] dark:text-[#9a8585] transition-colors hover:bg-[#F1EEEE] dark:hover:bg-[#221010] dark:bg-[#221010] hover:text-[#100303] dark:hover:text-[#f0eaea]"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -206,17 +206,17 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
 
         {/* Recommendation Body */}
         <div className="space-y-4 p-6">
-          <div className="rounded-2xl border border-[#E5DFDF] bg-[#FFF1F1]/70 p-4">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 p-4">
             <div className="flex items-center gap-2 text-xs font-bold text-[#E10906]">
               <Target className="h-4 w-4 shrink-0" aria-hidden="true" />
               Pattern Practiced: {suggestion.patternName}
             </div>
-            <p className="mt-1 text-xs leading-relaxed text-[#8A8585]">
+            <p className="mt-1 text-xs leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
               {suggestion.patternSummary}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-xs space-y-3">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 shadow-xs space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-mono text-xs font-semibold text-[#E10906]">
                 {challenge.topic === 'conditionals' ? 'Conditionals' : 'Loops'} ·{' '}
@@ -230,14 +230,14 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
               )}
             </div>
 
-            <h3 className="font-display text-lg font-bold text-[#100303]">
+            <h3 className="font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
               {challenge.title}
             </h3>
 
-            <p className="text-xs leading-relaxed text-[#8A8585]">{challenge.description}</p>
+            <p className="text-xs leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{challenge.description}</p>
 
             <div className="rounded-xl bg-[#100303] p-3">
-              <p className="text-[11px] font-semibold text-[#8A8585]">Sample Target Output</p>
+              <p className="text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585]">Sample Target Output</p>
               <pre className="mt-1 whitespace-pre-wrap font-mono text-xs text-emerald-300">
                 {challenge.sampleOutput}
               </pre>
@@ -254,7 +254,7 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
                     onClose();
                     onReplay();
                   }}
-                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906] whitespace-nowrap"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] whitespace-nowrap"
                 >
                   <RotateCcw className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                   Replay Simulation
@@ -263,7 +263,7 @@ export const ExerciseSuggestionModal: React.FC<ExerciseSuggestionModalProps> = (
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex min-h-[40px] items-center rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-medium text-[#8A8585] hover:text-[#100303] whitespace-nowrap"
+                className="inline-flex min-h-[40px] items-center rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-medium text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea] whitespace-nowrap"
               >
                 Keep Exploring
               </button>

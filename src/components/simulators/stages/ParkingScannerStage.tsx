@@ -125,12 +125,12 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Top-View Parking Lot (Click Any Bay to Toggle)
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Scanner inspects slots 1–8 sequentially using <code className="font-mono text-sky-700">continue</code> &amp; <code className="font-mono text-violet-700">break</code>.
             </p>
           </div>
 
-          <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] p-1 gap-1">
             {(['for', 'while'] as const).map((mode) => (
               <button
                 key={mode}
@@ -142,7 +142,7 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                   loopStyle === mode
                     ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
-                    : 'text-[#8A8585] hover:text-[#1E293B]'
+                    : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#1E293B]'
                 }`}
               >
                 {mode} loop
@@ -157,14 +157,14 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <button
               type="button"
               onClick={() => applyPreset(DEFAULT_SLOTS)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-sky-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
             >
               Default Lot
             </button>
             <button
               type="button"
               onClick={() => applyPreset(Array(8).fill('Occupied'))}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-rose-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-rose-300"
             >
               All Occupied (Edge Case)
             </button>
@@ -182,7 +182,7 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   'Occupied',
                 ])
               }
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-emerald-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-emerald-300"
             >
               Slot 1 Free
             </button>
@@ -205,13 +205,13 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 Scanning Slot {activeScanIndex + 1}...
               </span>
             ) : (
-              <span className="text-slate-500">Ready to scan</span>
+              <span className="text-slate-500 dark:text-[#9a8585]">Ready to scan</span>
             )}
           </div>
         </div>
 
         {/* Top-View Parking Area Grid */}
-        <div className="rounded-2xl border border-slate-200 bg-[#1E293B] p-4 sm:p-5">
+        <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-[#1E293B] p-4 sm:p-5">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {slots.map((status, idx) => {
               const slotNum = idx + 1;

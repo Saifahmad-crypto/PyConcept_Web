@@ -198,26 +198,26 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
   return (
     <div>
       {/* Top Learning World Banner + XP / Level Bar */}
-      <div className="border-b border-[#E5DFDF] bg-white">
+      <div className="border-b border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808]">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
               <p className="text-xs font-semibold text-[#E10906]">
                 PyVerse Learning World
               </p>
-              <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
+              <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
                 Python Adventure Map &amp; Missions
               </h1>
-              <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585]">
+              <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
                 Explore connected levels, solve interactive missions, claim your Daily Quest, and
                 dive into visual lessons.
               </p>
             </div>
 
             {/* Live XP & Streak Pill-Free Readout Card */}
-            <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-3">
+            <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-3">
               <div>
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#100303]">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea]">
                   <Award className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   <span>
                     Lvl {levelInfo.current.level}: {levelInfo.current.title}
@@ -239,11 +239,11 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
               <div className="h-8 w-px bg-[#E5DFDF]" aria-hidden="true" />
 
               <div className="text-xs">
-                <span className="flex items-center gap-1 font-semibold text-[#100303] tabular-nums">
+                <span className="flex items-center gap-1 font-semibold text-[#100303] dark:text-[#f0eaea] tabular-nums">
                   <Flame className="h-4 w-4 text-amber-500" aria-hidden="true" />
                   {streakDays}d streak
                 </span>
-                <span className="font-mono text-[11px] text-[#8A8585] tabular-nums">
+                <span className="font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                   Best: {progress.longestStreak}d
                 </span>
               </div>
@@ -251,7 +251,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
           </div>
 
           {/* World Sub-Navigation Tabs */}
-          <div className="mt-5 inline-flex flex-wrap gap-1 rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-1">
+          <div className="mt-5 inline-flex flex-wrap gap-1 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-1">
             {(
               [
                 { id: 'map', label: 'Adventure Map', icon: Compass },
@@ -270,7 +270,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                   className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 font-display text-xs font-semibold transition-all whitespace-nowrap ${
                     active
                       ? 'bg-[#E10906] text-white shadow-sm'
-                      : 'text-[#8A8585] hover:bg-white hover:text-[#100303]'
+                      : 'text-[#8A8585] dark:text-[#9a8585] hover:bg-white dark:hover:bg-[#221010] hover:text-[#100303] dark:hover:text-[#f0eaea]'
                   }`}
                 >
                   <Icon className="h-3.5 w-3.5" aria-hidden="true" />
@@ -296,7 +296,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
               return (
                 <div
                   key={lvl.id}
-                  className="flex flex-col justify-between rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm"
+                  className="flex flex-col justify-between rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 text-xs">
@@ -309,7 +309,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                             ? 'text-emerald-700'
                             : lvl.status === 'In Progress'
                             ? 'text-[#E10906]'
-                            : 'text-[#8A8585]'
+                            : 'text-[#8A8585] dark:text-[#9a8585]'
                         }`}
                       >
                         {lvl.status}
@@ -323,25 +323,25 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                         <Icon className="h-6 w-6" aria-hidden="true" />
                       </div>
                       <div>
-                        <h2 className="font-display text-xl font-bold text-[#100303]">
+                        <h2 className="font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea]">
                           {lvl.title}
                         </h2>
-                        <span className="font-mono text-[11px] text-[#8A8585] tabular-nums">
+                        <span className="font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                           {lvl.missionsDone}/{lvl.missionsTotal} missions · +{lvl.xpPool} XP pool
                         </span>
                       </div>
                     </div>
 
-                    <p className="mt-3 text-sm leading-relaxed text-[#8A8585]">
+                    <p className="mt-3 text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
                       {lvl.description}
                     </p>
 
                     <div className="mt-4">
-                      <div className="flex justify-between text-[11px] font-mono text-[#8A8585] tabular-nums">
+                      <div className="flex justify-between text-[11px] font-mono text-[#8A8585] dark:text-[#9a8585] tabular-nums">
                         <span>Mastery</span>
                         <span>{pct}%</span>
                       </div>
-                      <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#F1EEEE]">
+                      <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#F1EEEE] dark:bg-[#221010]">
                         <div
                           className={`h-full rounded-full bg-gradient-to-r ${lvl.accent} transition-all duration-300`}
                           style={{ width: `${pct}%` }}
@@ -350,7 +350,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                     </div>
                   </div>
 
-                  <div className="mt-5 flex flex-wrap gap-2.5 border-t border-[#F1EEEE] pt-4">
+                  <div className="mt-5 flex flex-wrap gap-2.5 border-t border-[#F1EEEE] dark:border-[#2a1212] pt-4">
                     <button
                       type="button"
                       onClick={() => {
@@ -368,7 +368,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                         onChangeTopic(lvl.id);
                         setWorldTab('lessons');
                       }}
-                      className="inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 font-display text-xs font-semibold text-[#100303] hover:border-[#E10906]"
+                      className="inline-flex min-h-[40px] items-center justify-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]"
                     >
                       Lessons
                     </button>
@@ -379,15 +379,15 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
           </div>
 
           {/* Upcoming Python Expansion Roadmap (Honestly Marked — Not Fake Empty Lessons) */}
-          <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] pb-4">
+          <div className="rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] dark:border-[#2a1212] pb-4">
               <div>
-                <p className="text-xs font-semibold text-[#8A8585]">Curriculum Architecture</p>
-                <h2 className="mt-0.5 font-display text-lg font-bold text-[#100303]">
+                <p className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Curriculum Architecture</p>
+                <h2 className="mt-0.5 font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
                   Future Python Worlds (Planned Expansion)
                 </h2>
               </div>
-              <span className="font-mono text-xs text-[#8A8585]">
+              <span className="font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">
                 Locked until future curriculum modules are added
               </span>
             </div>
@@ -396,16 +396,16 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
               {UPCOMING_PYTHON_ROADMAP.map((item) => (
                 <div
                   key={item.title}
-                  className="flex items-start gap-3 rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 opacity-80"
+                  className="flex items-start gap-3 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-4 opacity-80"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E5DFDF] text-[#8A8585]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E5DFDF] text-[#8A8585] dark:text-[#9a8585]">
                     <Lock className="h-4 w-4" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="font-display text-sm font-bold text-[#100303]">
+                    <h3 className="font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">
                       {item.title}
                     </h3>
-                    <p className="mt-0.5 text-xs text-[#8A8585]">{item.summary}</p>
+                    <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{item.summary}</p>
                   </div>
                 </div>
               ))}
@@ -418,7 +418,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
       {worldTab === 'missions' && (
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-white p-1">
+            <div className="inline-flex rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-1">
               {(
                 [
                   { id: 'basics', label: `01. Python Basics (${basicsDone}/${basicsMissions.length})` },
@@ -436,7 +436,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                   className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
                     activeTopic === t.id
                       ? 'bg-[#E10906] text-white shadow-xs'
-                      : 'text-[#8A8585] hover:text-[#100303]'
+                      : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
                   }`}
                 >
                   {t.label}
@@ -466,21 +466,21 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                     onClick={() => openMission(m)}
                     className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-4 text-left transition-all ${
                       active
-                        ? 'border-[#E10906] bg-[#FFF1F1] shadow-xs'
+                        ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] shadow-xs'
                         : done
                         ? 'border-emerald-200 bg-emerald-50/40 hover:border-emerald-300'
-                        : 'border-[#E5DFDF] bg-white hover:border-[#E10906]'
+                        : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] hover:border-[#E10906]'
                     }`}
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 text-[11px] font-mono">
                         <span className="font-bold text-[#E10906]">{m.number}</span>
-                        <span className="text-[#8A8585]">· +{m.xpReward} XP</span>
+                        <span className="text-[#8A8585] dark:text-[#9a8585]">· +{m.xpReward} XP</span>
                       </div>
-                      <p className="mt-0.5 truncate font-display text-sm font-bold text-[#100303]">
+                      <p className="mt-0.5 truncate font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">
                         {m.title}
                       </p>
-                      <p className="mt-0.5 truncate text-xs text-[#8A8585]">{m.objective}</p>
+                      <p className="mt-0.5 truncate text-xs text-[#8A8585] dark:text-[#9a8585]">{m.objective}</p>
                     </div>
                     {done && (
                       <CheckCircle2
@@ -496,27 +496,27 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
             {/* Active Mission Workspace */}
             <div className="lg:col-span-7">
               {selectedMission ? (
-                <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-5">
-                  <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#F1EEEE] pb-4">
+                <div className="rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#F1EEEE] dark:border-[#2a1212] pb-4">
                     <div>
                       <span className="font-mono text-xs font-semibold text-[#E10906]">
                         Mission {selectedMission.number} · +{selectedMission.xpReward} XP
                       </span>
-                      <h2 className="mt-1 font-display text-2xl font-bold text-[#100303]">
+                      <h2 className="mt-1 font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
                         {selectedMission.title}
                       </h2>
-                      <p className="mt-1 text-sm text-[#8A8585]">{selectedMission.objective}</p>
+                      <p className="mt-1 text-sm text-[#8A8585] dark:text-[#9a8585]">{selectedMission.objective}</p>
                     </div>
                   </div>
 
-                  <p className="text-sm leading-relaxed text-[#100303]">
+                  <p className="text-sm leading-relaxed text-[#100303] dark:text-[#f0eaea]">
                     {selectedMission.intro}
                   </p>
 
                   <CodeBlock title="mission_example.py" code={selectedMission.exampleCode} />
 
-                  <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/70 p-4 space-y-3">
-                    <p className="font-display text-sm font-bold text-[#100303]">
+                  <div className="rounded-2xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#FFF1F1]/70 dark:bg-[#2a0808]/70 p-4 space-y-3">
+                    <p className="font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">
                       Mission Check: {selectedMission.prompt}
                     </p>
 
@@ -525,7 +525,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                         const chosen = missionAnswer === idx;
                         const isCorrect = idx === selectedMission.correctIndex;
                         let cls =
-                          'border-[#E5DFDF] bg-white text-[#100303] hover:border-[#E10906]';
+                          'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]';
                         if (missionSubmitted) {
                           if (isCorrect) {
                             cls = 'border-emerald-300 bg-emerald-50 text-emerald-900 font-semibold';
@@ -533,7 +533,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                             cls = 'border-rose-300 bg-rose-50 text-rose-900';
                           }
                         } else if (chosen) {
-                          cls = 'border-[#E10906] bg-[#FFF1F1] font-semibold';
+                          cls = 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] font-semibold';
                         }
 
                         return (
@@ -573,7 +573,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                       <button
                         type="button"
                         onClick={() => onOpenInSandbox(selectedMission.exampleCode)}
-                        className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906]"
+                        className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]"
                       >
                         Try Example in Studio
                       </button>
@@ -595,12 +595,12 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-3xl border border-dashed border-[#E5DFDF] bg-white p-8 text-center">
+                <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-3xl border border-dashed border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-8 text-center">
                   <Compass className="h-10 w-10 text-[#E10906]" aria-hidden="true" />
-                  <h3 className="mt-3 font-display text-lg font-bold text-[#100303]">
+                  <h3 className="mt-3 font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
                     Select a Mission to Begin
                   </h3>
-                  <p className="mt-1 max-w-sm text-xs text-[#8A8585]">
+                  <p className="mt-1 max-w-sm text-xs text-[#8A8585] dark:text-[#9a8585]">
                     Pick any mission on the left to study the concept, inspect the Python snippet,
                     and earn XP for completing the check.
                   </p>
@@ -615,7 +615,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
       {worldTab === 'lessons' && (
         <Suspense
           fallback={
-            <div className="mx-auto max-w-7xl px-4 py-12 text-center font-mono text-xs text-[#8A8585]">
+            <div className="mx-auto max-w-7xl px-4 py-12 text-center font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">
               Loading Visual Lessons...
             </div>
           }

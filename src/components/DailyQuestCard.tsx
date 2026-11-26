@@ -54,10 +54,10 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
   };
 
   return (
-    <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#F1EEEE] pb-4">
+    <div className="rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#F1EEEE] dark:border-[#2a1212] pb-4">
         <div>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-[#8A8585]">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-[#8A8585] dark:text-[#9a8585]">
             <span className="inline-flex items-center gap-1.5 font-semibold text-[#E10906]">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               Daily Python Quest
@@ -69,14 +69,14 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             </span>
             <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1 font-mono tabular-nums">
-              <Clock className="h-3.5 w-3.5 text-[#8A8585]" aria-hidden="true" />
+              <Clock className="h-3.5 w-3.5 text-[#8A8585] dark:text-[#9a8585]" aria-hidden="true" />
               ~{quest.estimatedMinutes} min
             </span>
           </div>
-          <h3 className="mt-1.5 font-display text-lg font-bold text-[#100303] sm:text-xl">
+          <h3 className="mt-1.5 font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea] sm:text-xl">
             {quest.title}
           </h3>
-          <p className="mt-1 text-xs sm:text-sm text-[#8A8585]">{quest.instructions}</p>
+          <p className="mt-1 text-xs sm:text-sm text-[#8A8585] dark:text-[#9a8585]">{quest.instructions}</p>
         </div>
 
         <div className="flex items-center gap-2 font-mono text-xs font-semibold">
@@ -100,17 +100,17 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             {quest.options.map((opt, idx) => {
               const chosen = selected === idx;
               let cls =
-                'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]';
+                'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808]';
               if (submitted) {
                 if (idx === quest.correctIndex) {
                   cls = 'border-emerald-300 bg-emerald-50 text-emerald-900 font-semibold';
                 } else if (chosen) {
                   cls = 'border-rose-300 bg-rose-50 text-rose-900';
                 } else {
-                  cls = 'border-[#E5DFDF] bg-white text-[#8A8585] opacity-75';
+                  cls = 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] opacity-75';
                 }
               } else if (chosen) {
-                cls = 'border-[#E10906] bg-[#FFF1F1] text-[#100303] font-semibold';
+                cls = 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea] font-semibold';
               }
 
               return (
@@ -152,7 +152,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
               <button
                 type="button"
                 onClick={handleRetry}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906]"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]"
               >
                 Try Again
               </button>
@@ -161,7 +161,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             <button
               type="button"
               onClick={() => setShowHint((h) => !h)}
-              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs font-medium text-[#8A8585] hover:text-[#100303]"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3.5 py-2 text-xs font-medium text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]"
             >
               <Lightbulb className="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
               {showHint ? 'Hide Hint' : 'Hint'}
@@ -193,7 +193,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             </div>
           )}
 
-          <p className="text-[11px] text-[#8A8585]">
+          <p className="text-[11px] text-[#8A8585] dark:text-[#9a8585]">
             Quest resets automatically each local calendar day and saves completion locally in your browser.
           </p>
         </div>

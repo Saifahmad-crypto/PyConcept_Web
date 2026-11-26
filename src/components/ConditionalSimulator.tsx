@@ -406,17 +406,17 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
   return (
     <div className="space-y-6">
       {/* Control Deck */}
-      <div className="rounded-3xl border border-[#E5DFDF] bg-white p-5 shadow-sm">
+      <div className="rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 shadow-sm">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-4">
-            <label htmlFor="sim-example" className="block text-xs font-semibold text-[#8A8585]">
+            <label htmlFor="sim-example" className="block text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               Select Conditional Example
             </label>
             <select
               id="sim-example"
               value={exampleId}
               onChange={(e) => handleSelectExample(e.target.value as SimExampleId)}
-              className="mt-1.5 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-sm font-medium text-[#100303] focus:border-[#E10906] focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-sm font-medium text-[#100303] dark:text-[#f0eaea] focus:border-[#E10906] focus:outline-none"
             >
               {EXAMPLES.map((ex) => (
                 <option key={ex.id} value={ex.id}>
@@ -427,7 +427,7 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
           </div>
 
           <div className="flex flex-wrap items-end gap-4 lg:col-span-4">
-            <label className="text-xs font-semibold text-[#8A8585]">
+            <label className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">
               Enter <code className="font-mono text-[#E10906]">{activeExample.inputLabel}</code>:
               <input
                 type="number"
@@ -437,12 +437,12 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
                   setStepIdx(0);
                   setIsPlaying(false);
                 }}
-                className="mt-1.5 block w-28 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-sm font-semibold text-[#100303] focus:border-[#E10906] focus:outline-none"
+                className="mt-1.5 block w-28 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 font-mono text-sm font-semibold text-[#100303] dark:text-[#f0eaea] focus:border-[#E10906] focus:outline-none"
               />
             </label>
 
             {activeExample.hasSecondary && (
-              <label className="flex min-h-[38px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] cursor-pointer">
+              <label className="flex min-h-[38px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] cursor-pointer">
                 <input
                   type="checkbox"
                   checked={hasId}
@@ -459,9 +459,9 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
           </div>
 
           <div className="lg:col-span-4">
-            <div className="flex items-center justify-between text-xs text-[#8A8585]">
+            <div className="flex items-center justify-between text-xs text-[#8A8585] dark:text-[#9a8585]">
               <label htmlFor="cond-speed" className="font-semibold">Animation Speed</label>
-              <span className="font-mono font-medium text-[#100303] tabular-nums">{speedMs} ms / step</span>
+              <span className="font-mono font-medium text-[#100303] dark:text-[#f0eaea] tabular-nums">{speedMs} ms / step</span>
             </div>
             <input
               id="cond-speed"
@@ -477,7 +477,7 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
         </div>
 
         {/* Playback Toolbar */}
-        <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#E5DFDF] pt-4">
+        <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[#E5DFDF] dark:border-[#3a1a1a] pt-4">
           <button
             type="button"
             onClick={() => {
@@ -494,7 +494,7 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
             type="button"
             onClick={handleNext}
             disabled={stepIdx >= steps.length - 1}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1] disabled:opacity-40 whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808] disabled:opacity-40 whitespace-nowrap"
           >
             <SkipForward className="h-4 w-4 text-[#E10906]" />
             Next Step
@@ -503,7 +503,7 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
           <button
             type="button"
             onClick={handleExecuteAll}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1]/40 whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808]/40 dark:bg-[#2a0808]/40 whitespace-nowrap"
           >
             <Terminal className="h-4 w-4 text-[#E10906]" />
             Execute Program
@@ -512,13 +512,13 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#8A8585] transition-colors hover:text-[#100303] whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585] transition-colors hover:text-[#100303] dark:hover:text-[#f0eaea] whitespace-nowrap"
           >
             <RotateCcw className="h-4 w-4" />
             Reset
           </button>
 
-          <span className="ml-auto font-mono text-xs font-medium text-[#8A8585] tabular-nums">
+          <span className="ml-auto font-mono text-xs font-medium text-[#8A8585] dark:text-[#9a8585] tabular-nums">
             Step {stepIdx + 1} of {steps.length}
           </span>
         </div>
@@ -527,12 +527,12 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
       {/* Three Coordinated Panels */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="space-y-3 lg:col-span-4">
-          <h3 className="font-display text-sm font-bold text-[#100303]">1. Python Code</h3>
+          <h3 className="font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">1. Python Code</h3>
           <CodeBlock code={code} activeLine={currentStep.line} title="simulator.py" showCopy={false} />
         </div>
 
         <div className="space-y-3 lg:col-span-4">
-          <h3 className="font-display text-sm font-bold text-[#100303]">2. Live Flowchart Path</h3>
+          <h3 className="font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">2. Live Flowchart Path</h3>
           <FlowchartSVG
             type={activeExample.flowchart}
             activeNode={currentStep.flowNode}
@@ -541,12 +541,12 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
         </div>
 
         <div className="space-y-3 lg:col-span-4">
-          <h3 className="font-display text-sm font-bold text-[#100303]">3. Execution &amp; Output</h3>
-          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm space-y-4">
+          <h3 className="font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">3. Execution &amp; Output</h3>
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-sm space-y-4">
             <div>
-              <p className="text-xs font-semibold text-[#8A8585]">Current Evaluation</p>
-              <div className="mt-1.5 flex items-center justify-between gap-2 rounded-xl border border-[#F1EEEE] bg-[#FFF1F1] px-3 py-2.5">
-                <code className="font-mono text-xs font-semibold text-[#100303]">{currentStep.conditionText}</code>
+              <p className="text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Current Evaluation</p>
+              <div className="mt-1.5 flex items-center justify-between gap-2 rounded-xl border border-[#F1EEEE] dark:border-[#2a1212] bg-[#FFF1F1] dark:bg-[#2a0808] px-3 py-2.5">
+                <code className="font-mono text-xs font-semibold text-[#100303] dark:text-[#f0eaea]">{currentStep.conditionText}</code>
                 {currentStep.conditionResult !== null && (
                   <span
                     className={`inline-flex items-center gap-1 font-mono text-xs font-bold ${
@@ -562,19 +562,19 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
                   </span>
                 )}
               </div>
-              <p className="mt-2 text-xs leading-relaxed text-[#8A8585]">{currentStep.note}</p>
+              <p className="mt-2 text-xs leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{currentStep.note}</p>
             </div>
 
-            <div className="border-t border-[#E5DFDF] pt-3">
-              <p className="mb-2 text-xs font-semibold text-[#8A8585]">Execution Timeline</p>
+            <div className="border-t border-[#E5DFDF] dark:border-[#3a1a1a] pt-3">
+              <p className="mb-2 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Execution Timeline</p>
               <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
                 {steps.slice(0, stepIdx + 1).map((st, idx) => (
                   <div
                     key={idx}
                     className={`flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 font-mono text-[11px] ${
                       idx === stepIdx
-                        ? 'bg-[#FFF1F1] text-[#100303] font-semibold border border-[#E5DFDF]'
-                        : 'text-[#8A8585]'
+                        ? 'bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea] font-semibold border border-[#E5DFDF] dark:border-[#3a1a1a]'
+                        : 'text-[#8A8585] dark:text-[#9a8585]'
                     }`}
                   >
                     <span className="truncate">
@@ -590,13 +590,13 @@ export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
               </div>
             </div>
 
-            <div className="border-t border-[#E5DFDF] pt-3">
-              <p className="mb-1.5 text-xs font-semibold text-[#8A8585]">Program Output</p>
-              <div className="min-h-[68px] rounded-xl border border-[#E5DFDF] bg-[#100303] p-3 font-mono text-xs text-emerald-300">
+            <div className="border-t border-[#E5DFDF] dark:border-[#3a1a1a] pt-3">
+              <p className="mb-1.5 text-xs font-semibold text-[#8A8585] dark:text-[#9a8585]">Program Output</p>
+              <div className="min-h-[68px] rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] p-3 font-mono text-xs text-emerald-300">
                 {accumulatedOutput.length > 0 ? (
                   accumulatedOutput.map((line, i) => <div key={i}>{line}</div>)
                 ) : (
-                  <span className="text-[#8A8585]">(No output emitted yet)</span>
+                  <span className="text-[#8A8585] dark:text-[#9a8585]">(No output emitted yet)</span>
                 )}
               </div>
             </div>

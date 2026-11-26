@@ -96,7 +96,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <h2 className="font-display text-base font-bold text-[#1E293B]">
               Demo ATM Terminal
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 dark:text-[#9a8585]">
               Sample/demo data only (Demo PIN: <strong className="font-mono text-[#1E293B]">1234</strong>). No real banking info is stored.
             </p>
           </div>
@@ -104,21 +104,21 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <button
               type="button"
               onClick={() => applyPreset('1234', 5000, 2000)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-sky-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-sky-300"
             >
               Valid ₹2000
             </button>
             <button
               type="button"
               onClick={() => applyPreset('9999', 5000, 2000)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-rose-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-rose-300"
             >
               Wrong PIN
             </button>
             <button
               type="button"
               onClick={() => applyPreset('1234', 1500, 3000)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-amber-300"
+              className="rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] dark:text-[#f0eaea] hover:border-amber-300"
             >
               Over Balance
             </button>
@@ -126,11 +126,11 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         </div>
 
         {/* Interactive ATM Machine Body */}
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5">
+        <div className="rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-gradient-to-br from-[#F8FAFC] to-[#F0F9FF] p-5">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-12">
             {/* ATM Screen & Card Slot */}
             <div className="space-y-4 md:col-span-7">
-              <div className="rounded-2xl border border-slate-300 bg-[#0F172A] p-5 text-white shadow-md">
+              <div className="rounded-2xl border border-slate-300 dark:border-[#4a2525] bg-[#0F172A] p-5 text-white shadow-md">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-3 text-xs">
                   <span className="font-mono font-semibold text-sky-300">PYVERSE DEMO ATM</span>
                   <span className="font-mono text-slate-400 tabular-nums">
@@ -199,8 +199,8 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
               {/* Card Slot & Cash Dispenser Visual */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs">
-                  <div className="flex items-center justify-between text-slate-500">
+                <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3 text-xs">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-[#9a8585]">
                     <span>Card Slot</span>
                     <span className="font-mono font-semibold text-[#1E293B]">
                       {atmPhase === 'wrong-pin'
@@ -224,8 +224,8 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs">
-                  <div className="flex items-center justify-between text-slate-500">
+                <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3 text-xs">
+                  <div className="flex items-center justify-between text-slate-500 dark:text-[#9a8585]">
                     <span>Cash Tray</span>
                     <span className="font-mono font-semibold text-[#1E293B]">
                       {atmPhase === 'approved' ? `₹${safeAmount}` : 'Closed'}
@@ -240,11 +240,11 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             {/* User Input Controls */}
-            <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 md:col-span-5">
+            <div className="space-y-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 md:col-span-5">
               <p className="text-xs font-semibold text-[#1E293B]">Demo Transaction Inputs</p>
 
               <div>
-                <label htmlFor="atm-pin" className="block text-xs font-medium text-[#8A8585]">
+                <label htmlFor="atm-pin" className="block text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
                   Demo PIN (Try 1234 or 9999)
                 </label>
                 <input
@@ -256,12 +256,12 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     setEnteredPin(e.target.value.replace(/\D/g, ''));
                     runner.reset();
                   }}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] focus:border-sky-500 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] focus:border-sky-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label htmlFor="atm-balance" className="block text-xs font-medium text-[#8A8585]">
+                <label htmlFor="atm-balance" className="block text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
                   Demo Account Balance (₹)
                 </label>
                 <input
@@ -275,12 +275,12 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     setBalanceInput(Number(e.target.value));
                     runner.reset();
                   }}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label htmlFor="atm-amount" className="block text-xs font-medium text-[#8A8585]">
+                <label htmlFor="atm-amount" className="block text-xs font-medium text-[#8A8585] dark:text-[#9a8585]">
                   Withdrawal Amount (₹)
                 </label>
                 <input
@@ -294,7 +294,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     setAmountInput(Number(e.target.value));
                     runner.reset();
                   }}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-bold text-[#1E293B] tabular-nums focus:border-sky-500 focus:outline-none"
                 />
               </div>
             </div>
