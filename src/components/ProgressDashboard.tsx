@@ -41,6 +41,7 @@ import {
   getLearnerLevel,
 } from '../data/ecosystemData';
 import { computeStreakDays, getLocalDateKey } from '../hooks/useProgress';
+import { CertificateModal } from './CertificateModal';
 
 interface ProgressDashboardProps {
   progress: LearningProgress;
@@ -65,6 +66,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 }) => {
   const [confirmReset, setConfirmReset] = useState(false);
   const [ioNotice, setIoNotice] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const [activeCert, setActiveCert] = useState<{ topicId: TopicId; topicTitle: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleExportJson = () => {
@@ -112,6 +114,10 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   const t9LessonsDone = TOPIC_09_LESSONS.filter((l) =>
     progress.completedLessons.includes(l.id)
   ).length;
+
+  const isBasicsComplete = basicsLessonsDone >= TOPIC_BASICS_LESSONS.length;
+  const isT8Complete = t8LessonsDone >= TOPIC_08_LESSONS.length;
+  const isT9Complete = t9LessonsDone >= TOPIC_09_LESSONS.length;
 
   const totalLessonsCount =
     TOPIC_BASICS_LESSONS.length + TOPIC_08_LESSONS.length + TOPIC_09_LESSONS.length;
@@ -639,6 +645,25 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               </p>
             </div>
           </div>
+
+          {isBasicsComplete ? (
+            <button
+              type="button"
+              onClick={() => setActiveCert({ topicId: 'basics', topicTitle: 'Python Basics' })}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#E10906] px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-[#C40705] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#100303]"
+            >
+              <Award className="h-4 w-4" aria-hidden="true" />
+              Download Certificate
+            </button>
+          ) : (
+            <div className="mt-4 flex items-center justify-between rounded-xl border border-dashed border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
+              <span className="flex items-center gap-1.5">
+                <Award className="h-3.5 w-3.5 text-[#8A8585] dark:text-[#9a8585]" />
+                Certificate: {basicsLessonsDone}/{TOPIC_BASICS_LESSONS.length} lessons
+              </span>
+              <span className="font-semibold text-[#E10906]">In Progress</span>
+            </div>
+          )}
         </div>
 
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
@@ -679,6 +704,25 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               </p>
             </div>
           </div>
+
+          {isT8Complete ? (
+            <button
+              type="button"
+              onClick={() => setActiveCert({ topicId: 'conditionals', topicTitle: 'Conditional Statements' })}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#E10906] px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-[#C40705] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#100303]"
+            >
+              <Award className="h-4 w-4" aria-hidden="true" />
+              Download Certificate
+            </button>
+          ) : (
+            <div className="mt-4 flex items-center justify-between rounded-xl border border-dashed border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
+              <span className="flex items-center gap-1.5">
+                <Award className="h-3.5 w-3.5 text-[#8A8585] dark:text-[#9a8585]" />
+                Certificate: {t8LessonsDone}/{TOPIC_08_LESSONS.length} lessons
+              </span>
+              <span className="font-semibold text-[#E10906]">In Progress</span>
+            </div>
+          )}
         </div>
 
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
@@ -717,6 +761,121 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               </p>
             </div>
           </div>
+
+          {isT9Complete ? (
+            <button
+              type="button"
+              onClick={() => setActiveCert({ topicId: 'loops', topicTitle: 'Loops & Iteration' })}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#E10906] px-4 py-2.5 text-xs font-bold text-white transition-all hover:bg-[#C40705] shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#100303]"
+            >
+              <Award className="h-4 w-4" aria-hidden="true" />
+              Download Certificate
+            </button>
+          ) : (
+            <div className="mt-4 flex items-center justify-between rounded-xl border border-dashed border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
+              <span className="flex items-center gap-1.5">
+                <Award className="h-3.5 w-3.5 text-[#8A8585] dark:text-[#9a8585]" />
+                Certificate: {t9LessonsDone}/{TOPIC_09_LESSONS.length} lessons
+              </span>
+              <span className="font-semibold text-[#E10906]">In Progress</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Certificates Showcase Section */}
+      <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#F1EEEE] dark:border-[#2C1616] pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#100303] dark:bg-[#190909] border border-[#3A1D1D] text-[#E10906] shrink-0">
+              <Award className="h-6 w-6" aria-hidden="true" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="font-display text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
+                  Topic Certificates of Completion
+                </h2>
+                {(isBasicsComplete || isT8Complete || isT9Complete) && (
+                  <span className="rounded-full bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 font-mono text-[11px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                    Unlocked
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#8A8585] dark:text-[#9a8585]">
+                Complete all lessons in a topic to unlock and download an official personalized PyVerse certificate.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            {
+              id: 'basics' as TopicId,
+              title: 'Python Basics',
+              done: basicsLessonsDone,
+              total: TOPIC_BASICS_LESSONS.length,
+              isComplete: isBasicsComplete,
+            },
+            {
+              id: 'conditionals' as TopicId,
+              title: 'Conditional Statements',
+              done: t8LessonsDone,
+              total: TOPIC_08_LESSONS.length,
+              isComplete: isT8Complete,
+            },
+            {
+              id: 'loops' as TopicId,
+              title: 'Loops & Iteration',
+              done: t9LessonsDone,
+              total: TOPIC_09_LESSONS.length,
+              isComplete: isT9Complete,
+            },
+          ].map((item) => (
+            <div
+              key={item.id}
+              className={`flex flex-col justify-between rounded-xl border p-4 transition-all ${
+                item.isComplete
+                  ? 'border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/40 dark:bg-emerald-950/20'
+                  : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585]">
+                    {item.done} / {item.total} Lessons
+                  </span>
+                  {item.isComplete ? (
+                    <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-emerald-700 dark:text-emerald-300">
+                      <CheckCircle2 className="h-3 w-3" /> Unlocked
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[10px] text-[#8A8585] dark:text-[#9a8585]">
+                      {Math.round((item.done / item.total) * 100)}%
+                    </span>
+                  )}
+                </div>
+                <h3 className="mt-2 font-display text-sm font-bold text-[#100303] dark:text-[#f0eaea]">
+                  {item.title}
+                </h3>
+              </div>
+
+              {item.isComplete ? (
+                <button
+                  type="button"
+                  onClick={() => setActiveCert({ topicId: item.id, topicTitle: item.title })}
+                  className="mt-3.5 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#E10906] px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-[#C40705]"
+                >
+                  <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                  Download Certificate
+                </button>
+              ) : (
+                <div className="mt-3.5 rounded-lg border border-dashed border-[#E5DFDF] dark:border-[#3a1a1a] py-1.5 text-center font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585]">
+                  Locked ({item.total - item.done} more lessons)
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -895,6 +1054,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
         ))}
       </div>
+
+      {activeCert && (
+        <CertificateModal
+          isOpen={!!activeCert}
+          onClose={() => setActiveCert(null)}
+          topicId={activeCert.topicId}
+          topicTitle={activeCert.topicTitle}
+        />
+      )}
     </div>
   );
 };
