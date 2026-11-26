@@ -27,7 +27,19 @@ const KEYWORDS = new Set([
   'None',
 ]);
 
-const BUILTINS = new Set(['print', 'range', 'len', 'int', 'str', 'float', 'bool', 'abs', 'min', 'max', 'sum']);
+const BUILTINS = new Set([
+  'print',
+  'range',
+  'len',
+  'int',
+  'str',
+  'float',
+  'bool',
+  'abs',
+  'min',
+  'max',
+  'sum',
+]);
 
 function highlightPythonLine(line: string): React.ReactNode[] {
   const tokens: React.ReactNode[] = [];
@@ -35,23 +47,21 @@ function highlightPythonLine(line: string): React.ReactNode[] {
   let key = 0;
 
   while (i < line.length) {
-    // Comment
     if (line[i] === '#') {
       tokens.push(
-        <span key={key++} className="text-slate-500 italic">
+        <span key={key++} className="text-slate-400 italic">
           {line.slice(i)}
         </span>
       );
       break;
     }
 
-    // String (with optional f prefix)
     if (
       (line[i] === 'f' && (line[i + 1] === '"' || line[i + 1] === "'")) ||
       line[i] === '"' ||
       line[i] === "'"
     ) {
-      let start = i;
+      const start = i;
       if (line[i] === 'f') i++;
       const quote = line[i];
       i++;
@@ -68,7 +78,6 @@ function highlightPythonLine(line: string): React.ReactNode[] {
       continue;
     }
 
-    // Number
     if (/[0-9]/.test(line[i]) && (i === 0 || !/[A-Za-z0-9_]/.test(line[i - 1]))) {
       const start = i;
       while (i < line.length && /[0-9.]/.test(line[i])) i++;
@@ -80,14 +89,13 @@ function highlightPythonLine(line: string): React.ReactNode[] {
       continue;
     }
 
-    // Word / identifier
     if (/[A-Za-z_]/.test(line[i])) {
       const start = i;
       while (i < line.length && /[A-Za-z0-9_]/.test(line[i])) i++;
       const word = line.slice(start, i);
       if (KEYWORDS.has(word)) {
         tokens.push(
-          <span key={key++} className="text-violet-400 font-medium">
+          <span key={key++} className="text-violet-300 font-semibold">
             {word}
           </span>
         );
@@ -107,10 +115,9 @@ function highlightPythonLine(line: string): React.ReactNode[] {
       continue;
     }
 
-    // Operators / punctuation
     if ('=<>!+-*/%:'.includes(line[i])) {
       tokens.push(
-        <span key={key++} className="text-blue-300">
+        <span key={key++} className="text-sky-400">
           {line[i]}
         </span>
       );
@@ -144,14 +151,14 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-800/90 bg-[#0A101E]">
-      <div className="flex items-center justify-between border-b border-slate-800/80 bg-[#0E1629] px-4 py-2">
-        <span className="text-xs font-medium text-slate-400">{title}</span>
+    <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-sm">
+      <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5">
+        <span className="font-mono text-xs font-medium text-slate-300">{title}</span>
         {showCopy && (
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
             aria-label="Copy code snippet"
           >
             {copied ? (
@@ -168,7 +175,11 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
           </button>
         )}
       </div>
-      <div className={`overflow-x-auto font-mono text-[13px] leading-relaxed ${compact ? 'py-2.5' : 'py-3.5'}`}>
+      <div
+        className={`overflow-x-auto font-mono text-[13px] leading-relaxed ${
+          compact ? 'py-2.5' : 'py-3.5'
+        }`}
+      >
         {lines.map((line, idx) => {
           const lineNum = idx + 1;
           const isCurrent = activeLine === lineNum;
@@ -177,18 +188,18 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
               key={lineNum}
               className={`flex items-start px-4 transition-colors duration-150 ${
                 isCurrent
-                  ? 'bg-blue-500/20 text-white'
-                  : 'hover:bg-slate-800/30'
+                  ? 'bg-gradient-to-r from-sky-500/25 to-violet-500/20 text-white'
+                  : 'hover:bg-slate-800/40'
               }`}
             >
               <span
                 className={`mr-4 w-5 shrink-0 select-none text-right tabular-nums text-xs leading-relaxed ${
-                  isCurrent ? 'font-bold text-blue-300' : 'text-slate-600'
+                  isCurrent ? 'font-bold text-sky-300' : 'text-slate-500'
                 }`}
               >
                 {lineNum}
               </span>
-              <pre className="whitespace-pre font-mono">
+              <pre className="whitespace-pre font-mono text-slate-100">
                 {highlightPythonLine(line)}
               </pre>
             </div>

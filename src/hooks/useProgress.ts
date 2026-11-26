@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { LearningProgress, TopicId } from '../types';
 
-const STORAGE_KEY = 'python_lab_progress_v1';
+const STORAGE_KEY = 'pyverse_progress_v1';
+const LEGACY_STORAGE_KEY = 'python_lab_progress_v1';
 
 const DEFAULT_PROGRESS: LearningProgress = {
   completedLessons: [],
@@ -15,7 +16,9 @@ const DEFAULT_PROGRESS: LearningProgress = {
 
 function loadProgress(): LearningProgress {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw =
+      window.localStorage.getItem(STORAGE_KEY) ||
+      window.localStorage.getItem(LEGACY_STORAGE_KEY);
     if (!raw) return DEFAULT_PROGRESS;
     const parsed = JSON.parse(raw) as Partial<LearningProgress>;
     return {
@@ -114,6 +117,7 @@ export function useProgress() {
     setProgress(DEFAULT_PROGRESS);
     try {
       window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {
       // Ignore storage errors
     }

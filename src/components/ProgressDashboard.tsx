@@ -67,36 +67,40 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-slate-800/80 pb-6 sm:flex-row sm:items-end">
+      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
         <div>
-          <p className="text-xs font-medium text-blue-400">Progress Tracker</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-white sm:text-4xl">
+          <p className="text-xs font-semibold text-sky-700">PyVerse Progress Tracker</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
             Your Learning Progress
           </h1>
-          <p className="mt-2 text-sm text-slate-300">
-            Stored locally in your browser via <code className="font-mono text-sky-300">localStorage</code>.
+          <p className="mt-2 text-sm text-slate-600">
+            Stored locally in your browser via{' '}
+            <code className="rounded border border-sky-200/70 bg-[#F0F9FF] px-1.5 py-0.5 font-mono text-xs font-semibold text-sky-700">
+              localStorage
+            </code>
+            .
           </p>
         </div>
 
         {/* Inline Two-Step Reset Confirmation */}
         <div className="flex items-center gap-2">
           {confirmReset ? (
-            <div className="flex items-center gap-2 rounded-xl border border-rose-500/40 bg-rose-500/10 px-3 py-2">
-              <span className="text-xs text-rose-200">Reset all saved progress?</span>
+            <div className="flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2">
+              <span className="text-xs font-medium text-rose-900">Reset all saved progress?</span>
               <button
                 type="button"
                 onClick={() => {
                   onResetProgress();
                   setConfirmReset(false);
                 }}
-                className="rounded-md bg-rose-600 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-500"
+                className="rounded-lg bg-rose-600 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-500"
               >
                 Confirm
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmReset(false)}
-                className="rounded-md border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-300 hover:text-white"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
               >
                 Cancel
               </button>
@@ -105,7 +109,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             <button
               type="button"
               onClick={() => setConfirmReset(true)}
-              className="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-300 transition-colors hover:border-rose-500/50 hover:text-rose-200"
+              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-xs transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               Reset Progress
@@ -116,38 +120,40 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Topic Completion Overview Cards */}
       <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-slate-800/90 bg-[#0D1426] p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="font-mono text-xs text-blue-400">Topic 08</span>
-              <h2 className="font-display text-xl font-bold text-white">Conditional Statements</h2>
+              <span className="font-mono text-xs font-semibold text-sky-700">Topic 08</span>
+              <h2 className="font-display text-xl font-bold text-[#1E293B]">
+                Conditional Statements
+              </h2>
             </div>
-            <span className="font-mono text-2xl font-bold text-blue-300 tabular-nums">
+            <span className="font-mono text-2xl font-bold text-sky-700 tabular-nums">
               {topic08Percent}%
             </span>
           </div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-800">
+          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-100">
             <div
-              className="h-full rounded-full bg-blue-500 transition-all duration-300"
+              className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#6366F1] transition-all duration-300"
               style={{ width: `${topic08Percent}%` }}
             />
           </div>
           <div className="mt-4 grid grid-cols-3 gap-3 text-xs">
-            <div className="rounded-lg border border-slate-800/80 bg-[#090E1A] p-3">
-              <span className="text-slate-400">Lessons</span>
-              <p className="mt-1 font-mono font-bold text-white tabular-nums">
+            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
+              <span className="text-slate-500">Lessons</span>
+              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
                 {t8LessonsDone} / {TOPIC_08_LESSONS.length}
               </p>
             </div>
-            <div className="rounded-lg border border-slate-800/80 bg-[#090E1A] p-3">
-              <span className="text-slate-400">Challenges</span>
-              <p className="mt-1 font-mono font-bold text-white tabular-nums">
+            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
+              <span className="text-slate-500">Challenges</span>
+              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
                 {t8ChallengesDone} / 5
               </p>
             </div>
-            <div className="rounded-lg border border-slate-800/80 bg-[#090E1A] p-3">
-              <span className="text-slate-400">Best Quiz</span>
-              <p className="mt-1 font-mono font-bold text-emerald-300 tabular-nums">
+            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
+              <span className="text-slate-500">Best Quiz</span>
+              <p className="mt-1 font-mono font-bold text-emerald-700 tabular-nums">
                 {progress.quizScores.conditionals
                   ? `${Math.round(t8QuizPct * 100)}%`
                   : '—'}
@@ -156,38 +162,38 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-800/90 bg-[#0D1426] p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="font-mono text-xs text-violet-400">Topic 09</span>
-              <h2 className="font-display text-xl font-bold text-white">Loops</h2>
+              <span className="font-mono text-xs font-semibold text-violet-700">Topic 09</span>
+              <h2 className="font-display text-xl font-bold text-[#1E293B]">Loops</h2>
             </div>
-            <span className="font-mono text-2xl font-bold text-violet-300 tabular-nums">
+            <span className="font-mono text-2xl font-bold text-violet-700 tabular-nums">
               {topic09Percent}%
             </span>
           </div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-800">
+          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-100">
             <div
-              className="h-full rounded-full bg-violet-500 transition-all duration-300"
+              className="h-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] transition-all duration-300"
               style={{ width: `${topic09Percent}%` }}
             />
           </div>
           <div className="mt-4 grid grid-cols-3 gap-3 text-xs">
-            <div className="rounded-lg border border-slate-800/80 bg-[#090E1A] p-3">
-              <span className="text-slate-400">Lessons</span>
-              <p className="mt-1 font-mono font-bold text-white tabular-nums">
+            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
+              <span className="text-slate-500">Lessons</span>
+              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
                 {t9LessonsDone} / {TOPIC_09_LESSONS.length}
               </p>
             </div>
-            <div className="rounded-lg border border-slate-800/80 bg-[#090E1A] p-3">
-              <span className="text-slate-400">Challenges</span>
-              <p className="mt-1 font-mono font-bold text-white tabular-nums">
+            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
+              <span className="text-slate-500">Challenges</span>
+              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
                 {t9ChallengesDone} / 5
               </p>
             </div>
-            <div className="rounded-lg border border-slate-800/80 bg-[#090E1A] p-3">
-              <span className="text-slate-400">Best Quiz</span>
-              <p className="mt-1 font-mono font-bold text-emerald-300 tabular-nums">
+            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
+              <span className="text-slate-500">Best Quiz</span>
+              <p className="mt-1 font-mono font-bold text-emerald-700 tabular-nums">
                 {progress.quizScores.loops ? `${Math.round(t9QuizPct * 100)}%` : '—'}
               </p>
             </div>
@@ -197,39 +203,39 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Summary Bar */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
-        <div className="rounded-xl border border-slate-800/90 bg-[#0D1426] p-4">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <BookOpen className="h-4 w-4 text-blue-400" aria-hidden="true" />
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+            <BookOpen className="h-4 w-4 text-sky-600" aria-hidden="true" />
             Total Lessons
           </div>
-          <p className="mt-2 font-mono text-2xl font-bold text-white tabular-nums">
+          <p className="mt-2 font-mono text-2xl font-bold text-[#1E293B] tabular-nums">
             {progress.completedLessons.length} / {TOPIC_08_LESSONS.length + TOPIC_09_LESSONS.length}
           </p>
         </div>
-        <div className="rounded-xl border border-slate-800/90 bg-[#0D1426] p-4">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Code2 className="h-4 w-4 text-violet-400" aria-hidden="true" />
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+            <Code2 className="h-4 w-4 text-violet-600" aria-hidden="true" />
             Coding Challenges
           </div>
-          <p className="mt-2 font-mono text-2xl font-bold text-white tabular-nums">
+          <p className="mt-2 font-mono text-2xl font-bold text-[#1E293B] tabular-nums">
             {progress.completedChallenges.length} / {CODING_CHALLENGES.length}
           </p>
         </div>
-        <div className="rounded-xl border border-slate-800/90 bg-[#0D1426] p-4">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Gamepad2 className="h-4 w-4 text-sky-400" aria-hidden="true" />
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+            <Gamepad2 className="h-4 w-4 text-sky-600" aria-hidden="true" />
             Mini-Games Played
           </div>
-          <p className="mt-2 font-mono text-2xl font-bold text-white tabular-nums">
+          <p className="mt-2 font-mono text-2xl font-bold text-[#1E293B] tabular-nums">
             {gamesCompleted} / 8
           </p>
         </div>
-        <div className="rounded-xl border border-slate-800/90 bg-[#0D1426] p-4">
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Award className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+            <Award className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             Quizzes Taken
           </div>
-          <p className="mt-2 font-mono text-2xl font-bold text-white tabular-nums">
+          <p className="mt-2 font-mono text-2xl font-bold text-[#1E293B] tabular-nums">
             {(progress.quizScores.conditionals ? 1 : 0) + (progress.quizScores.loops ? 1 : 0)} / 2
           </p>
         </div>
@@ -237,15 +243,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Detailed Lesson Checklists */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-slate-800/90 bg-[#0D1426] p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-display text-base font-bold text-white">
+            <h3 className="font-display text-base font-bold text-[#1E293B]">
               Topic 08 Lesson Checklist
             </h3>
             <button
               type="button"
               onClick={() => onOpenTopic('conditionals')}
-              className="inline-flex items-center gap-1 text-xs font-medium text-blue-400 hover:text-blue-300"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-sky-700 hover:text-sky-800"
             >
               Open Lessons <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -258,16 +264,16 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                   key={lesson.id}
                   type="button"
                   onClick={() => onToggleLesson(lesson.id)}
-                  className="flex w-full items-center justify-between gap-3 rounded-lg border border-slate-800/80 bg-[#090E1A] px-3.5 py-2.5 text-left text-xs transition-colors hover:border-slate-700"
+                  className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-[#F8FAFC] px-3.5 py-2.5 text-left text-xs transition-colors hover:border-sky-300 hover:bg-[#F0F9FF]/60"
                 >
-                  <span className="text-slate-200">
+                  <span className="font-medium text-[#1E293B]">
                     <span className="mr-2 font-mono text-slate-500">{lesson.number}</span>
                     {lesson.title}
                   </span>
                   {done ? (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                   ) : (
-                    <Circle className="h-4 w-4 shrink-0 text-slate-600" />
+                    <Circle className="h-4 w-4 shrink-0 text-slate-400" />
                   )}
                 </button>
               );
@@ -275,15 +281,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-800/90 bg-[#0D1426] p-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-display text-base font-bold text-white">
+            <h3 className="font-display text-base font-bold text-[#1E293B]">
               Topic 09 Lesson Checklist
             </h3>
             <button
               type="button"
               onClick={() => onOpenTopic('loops')}
-              className="inline-flex items-center gap-1 text-xs font-medium text-violet-400 hover:text-violet-300"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-violet-700 hover:text-violet-800"
             >
               Open Lessons <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -296,16 +302,16 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                   key={lesson.id}
                   type="button"
                   onClick={() => onToggleLesson(lesson.id)}
-                  className="flex w-full items-center justify-between gap-3 rounded-lg border border-slate-800/80 bg-[#090E1A] px-3.5 py-2.5 text-left text-xs transition-colors hover:border-slate-700"
+                  className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-[#F8FAFC] px-3.5 py-2.5 text-left text-xs transition-colors hover:border-violet-300 hover:bg-[#F5F3FF]/60"
                 >
-                  <span className="text-slate-200">
+                  <span className="font-medium text-[#1E293B]">
                     <span className="mr-2 font-mono text-slate-500">{lesson.number}</span>
                     {lesson.title}
                   </span>
                   {done ? (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                   ) : (
-                    <Circle className="h-4 w-4 shrink-0 text-slate-600" />
+                    <Circle className="h-4 w-4 shrink-0 text-slate-400" />
                   )}
                 </button>
               );
@@ -319,14 +325,14 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
         <button
           type="button"
           onClick={() => onNavigate('challenges')}
-          className="inline-flex min-h-[42px] items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500"
+          className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
         >
           Practice Coding Challenges
         </button>
         <button
           type="button"
           onClick={() => onNavigate('quiz')}
-          className="inline-flex min-h-[42px] items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-200 hover:text-white"
+          className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2 text-xs font-semibold text-[#1E293B] shadow-xs transition-colors hover:border-sky-300 hover:bg-[#F0F9FF]"
         >
           Take Topic Quizzes
         </button>

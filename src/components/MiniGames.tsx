@@ -414,9 +414,9 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
       {/* Left Game Selector */}
       <div className="space-y-5 lg:col-span-4">
-        <div className="rounded-2xl border border-slate-800/90 bg-[#0D1426] p-4 space-y-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-4">
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-400">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-sky-700">
               Conditional Games (4)
             </p>
             <div className="space-y-1.5">
@@ -428,15 +428,15 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                     key={g.id}
                     type="button"
                     onClick={() => startGame(g.id)}
-                    className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-xs font-medium transition-colors ${
+                    className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left text-xs font-medium transition-all ${
                       active
-                        ? 'border-blue-500 bg-blue-600/20 text-white'
-                        : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:text-white'
+                        ? 'border-sky-400 bg-gradient-to-r from-[#0EA5E9]/10 to-[#8B5CF6]/10 font-semibold text-[#1E293B] shadow-xs'
+                        : 'border-slate-200 bg-[#F8FAFC] text-slate-600 hover:border-slate-300 hover:text-[#1E293B]'
                     }`}
                   >
                     <span className="truncate">{g.title}</span>
                     {rec?.completed && (
-                      <span className="font-mono text-[11px] text-emerald-300 tabular-nums shrink-0">
+                      <span className="font-mono text-[11px] font-semibold text-emerald-700 tabular-nums shrink-0">
                         {rec.bestScore}/{rec.maxScore}
                       </span>
                     )}
@@ -446,8 +446,8 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
             </div>
           </div>
 
-          <div className="border-t border-slate-800/80 pt-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-violet-400">
+          <div className="border-t border-slate-200 pt-4">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-violet-700">
               Loops Games (4)
             </p>
             <div className="space-y-1.5">
@@ -459,15 +459,15 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                     key={g.id}
                     type="button"
                     onClick={() => startGame(g.id)}
-                    className={`flex w-full items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-xs font-medium transition-colors ${
+                    className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left text-xs font-medium transition-all ${
                       active
-                        ? 'border-violet-500 bg-violet-600/20 text-white'
-                        : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:text-white'
+                        ? 'border-violet-400 bg-gradient-to-r from-[#8B5CF6]/10 to-[#0EA5E9]/10 font-semibold text-[#1E293B] shadow-xs'
+                        : 'border-slate-200 bg-[#F8FAFC] text-slate-600 hover:border-slate-300 hover:text-[#1E293B]'
                     }`}
                   >
                     <span className="truncate">{g.title}</span>
                     {rec?.completed && (
-                      <span className="font-mono text-[11px] text-emerald-300 tabular-nums shrink-0">
+                      <span className="font-mono text-[11px] font-semibold text-emerald-700 tabular-nums shrink-0">
                         {rec.bestScore}/{rec.maxScore}
                       </span>
                     )}
@@ -481,24 +481,24 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
 
       {/* Right Active Game Stage */}
       <div className="lg:col-span-8">
-        <div className="rounded-2xl border border-slate-800/90 bg-[#0D1426] p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
-              <div className="flex items-center gap-2 text-xs text-slate-400">
-                <Gamepad2 className="h-4 w-4 text-blue-400" aria-hidden="true" />
+              <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <Gamepad2 className="h-4 w-4 text-sky-600" aria-hidden="true" />
                 <span>{game.topic === 'conditionals' ? 'Topic 08 · Conditionals' : 'Topic 09 · Loops'}</span>
               </div>
-              <h3 className="mt-1 font-display text-xl font-bold text-white">{game.title}</h3>
-              <p className="mt-0.5 text-xs text-slate-400">{game.description}</p>
+              <h3 className="mt-1 font-display text-xl font-bold text-[#1E293B]">{game.title}</h3>
+              <p className="mt-0.5 text-xs text-slate-600">{game.description}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-semibold text-blue-300 tabular-nums">
+              <span className="font-mono text-xs font-semibold text-sky-700 tabular-nums">
                 Score: {score} / {game.questions.length}
               </span>
               <button
                 type="button"
                 onClick={() => startGame(game.id)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-[#F8FAFC] px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#1E293B]"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Restart
@@ -508,13 +508,15 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
 
           {finished ? (
             <div className="py-10 text-center space-y-4">
-              <Trophy className="mx-auto h-12 w-12 text-amber-400" aria-hidden="true" />
-              <h4 className="font-display text-2xl font-bold text-white">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 border border-amber-200">
+                <Trophy className="h-8 w-8 text-amber-500" aria-hidden="true" />
+              </div>
+              <h4 className="font-display text-2xl font-bold text-[#1E293B]">
                 Level Complete!
               </h4>
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-slate-600">
                 You scored{' '}
-                <strong className="font-mono text-emerald-300 tabular-nums">
+                <strong className="font-mono text-emerald-700 tabular-nums">
                   {score} out of {game.questions.length}
                 </strong>{' '}
                 in {game.title}.
@@ -523,7 +525,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                 <button
                   type="button"
                   onClick={() => startGame(game.id)}
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Play Again
@@ -532,14 +534,14 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
             </div>
           ) : (
             <div className="mt-5 space-y-5">
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <span className="font-mono tabular-nums">
+              <div className="flex items-center justify-between text-xs text-slate-500">
+                <span className="font-mono font-semibold text-slate-700 tabular-nums">
                   Round {qIdx + 1} of {game.questions.length}
                 </span>
                 <button
                   type="button"
                   onClick={() => setShowHint((h) => !h)}
-                  className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200"
+                  className="inline-flex items-center gap-1.5 font-medium text-amber-700 hover:text-amber-800"
                 >
                   <Lightbulb className="h-3.5 w-3.5" aria-hidden="true" />
                   {showHint ? 'Hide Hint' : 'Need a Hint?'}
@@ -547,12 +549,12 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
               </div>
 
               {showHint && (
-                <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-xs text-amber-200">
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs text-amber-900">
                   <strong>Hint:</strong> {question.hint}
                 </div>
               )}
 
-              <p className="text-base font-semibold text-white">{question.prompt}</p>
+              <p className="text-base font-semibold text-[#1E293B]">{question.prompt}</p>
 
               {question.code && (
                 <CodeBlock code={question.code} title="puzzle.py" showCopy={false} compact />
@@ -572,12 +574,12 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                           onChange={(e) => setSequenceInput(e.target.value)}
                           placeholder="?"
                           aria-label="Missing sequence number"
-                          className="h-12 w-20 rounded-lg border-2 border-blue-500 bg-slate-900 text-center font-mono text-lg font-bold text-white focus:outline-none"
+                          className="h-12 w-20 rounded-xl border-2 border-sky-500 bg-[#F0F9FF] text-center font-mono text-lg font-bold text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-violet-400/50"
                         />
                       ) : (
                         <div
                           key={idx}
-                          className="flex h-12 min-w-[54px] items-center justify-center rounded-lg border border-slate-700 bg-slate-900 px-3 font-mono text-lg font-bold text-slate-200 tabular-nums"
+                          className="flex h-12 min-w-[54px] items-center justify-center rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 font-mono text-lg font-bold text-[#1E293B] tabular-nums"
                         >
                           {val}
                         </div>
@@ -591,15 +593,16 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                     const isPicked = selectedOpt === idx;
                     const isAnswer = idx === question.correctOption;
                     let cls =
-                      'border-slate-800 bg-[#090E1A] text-slate-200 hover:border-slate-600';
+                      'border-slate-200 bg-[#F8FAFC] text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]/60';
                     if (submitted) {
                       if (isAnswer) {
-                        cls = 'border-emerald-500 bg-emerald-500/15 text-emerald-200';
+                        cls = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold';
                       } else if (isPicked && !isAnswer) {
-                        cls = 'border-rose-500 bg-rose-500/15 text-rose-200';
+                        cls = 'border-rose-500 bg-rose-50 text-rose-900';
                       }
                     } else if (isPicked) {
-                      cls = 'border-blue-500 bg-blue-600/20 text-white';
+                      cls =
+                        'border-sky-500 bg-gradient-to-r from-[#0EA5E9]/12 to-[#8B5CF6]/12 text-[#1E293B] font-semibold ring-1 ring-sky-400/40';
                     }
 
                     return (
@@ -608,7 +611,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                         type="button"
                         disabled={submitted}
                         onClick={() => setSelectedOpt(idx)}
-                        className={`flex min-h-[44px] items-center gap-3 rounded-xl border px-4 py-2.5 text-left font-mono text-xs sm:text-sm transition-colors ${cls}`}
+                        className={`flex min-h-[44px] items-center gap-3 rounded-xl border px-4 py-2.5 text-left font-mono text-xs sm:text-sm transition-all ${cls}`}
                       >
                         <span className="font-bold text-slate-500">
                           {String.fromCharCode(65 + idx)}.
@@ -624,24 +627,24 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                 <div
                   className={`rounded-xl border p-4 text-xs sm:text-sm ${
                     isCorrect
-                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-                      : 'border-rose-500/40 bg-rose-500/10 text-rose-200'
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+                      : 'border-rose-200 bg-rose-50 text-rose-900'
                   }`}
                 >
                   <div className="flex items-center gap-2 font-semibold">
                     {isCorrect ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                         Correct!
                       </>
                     ) : (
                       <>
-                        <XCircle className="h-4 w-4 text-rose-400" />
+                        <XCircle className="h-4 w-4 text-rose-600" />
                         Not quite — {isSequenceQuestion ? `the missing value is ${question.missingAnswer}.` : 'review the explanation below.'}
                       </>
                     )}
                   </div>
-                  <p className="mt-1.5 text-slate-200">{question.explanation}</p>
+                  <p className="mt-1.5 text-slate-700">{question.explanation}</p>
                 </div>
               )}
 
@@ -653,7 +656,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                     disabled={
                       isSequenceQuestion ? sequenceInput.trim() === '' : selectedOpt === null
                     }
-                    className="inline-flex min-h-[42px] items-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-500 disabled:opacity-40"
+                    className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0"
                   >
                     Submit Answer
                   </button>
@@ -661,7 +664,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({ gameScores, onRecordGameSc
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="inline-flex min-h-[42px] items-center gap-2 rounded-lg bg-violet-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-500"
+                    className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
                     {qIdx + 1 >= game.questions.length ? 'Finish Game' : 'Next Round'}
                     <ArrowRight className="h-4 w-4" />

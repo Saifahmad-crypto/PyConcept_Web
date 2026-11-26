@@ -52,38 +52,49 @@ export const CodePlayground: React.FC = () => {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Header */}
-      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-slate-800/80 pb-6 md:flex-row md:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-end">
         <div>
-          <p className="text-xs font-medium text-blue-400">Code Playground</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-white sm:text-4xl">
+          <p className="text-xs font-semibold text-sky-700">PyVerse Code Playground</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
             Guided Python Simulation
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-300">
-            Experiment with conditionals, loops, <code className="font-mono text-sky-300">range()</code>,{' '}
-            <code className="font-mono text-sky-300">break</code>, and{' '}
-            <code className="font-mono text-sky-300">continue</code> directly in your browser.
+          <p className="mt-2 max-w-2xl text-sm text-slate-600">
+            Experiment with conditionals, loops,{' '}
+            <code className="rounded border border-sky-200/70 bg-[#F0F9FF] px-1.5 py-0.5 font-mono text-xs font-semibold text-sky-700">
+              range()
+            </code>
+            ,{' '}
+            <code className="rounded border border-sky-200/70 bg-[#F0F9FF] px-1.5 py-0.5 font-mono text-xs font-semibold text-sky-700">
+              break
+            </code>
+            , and{' '}
+            <code className="rounded border border-sky-200/70 bg-[#F0F9FF] px-1.5 py-0.5 font-mono text-xs font-semibold text-sky-700">
+              continue
+            </code>{' '}
+            directly in your browser.
           </p>
         </div>
 
-        <div className="flex items-start gap-2 rounded-xl border border-slate-800 bg-[#0D1426] px-3.5 py-2.5 text-xs text-slate-300 max-w-md">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-400" aria-hidden="true" />
+        <div className="flex max-w-md items-start gap-2.5 rounded-xl border border-sky-200/80 bg-[#F0F9FF] px-4 py-3 text-xs text-slate-700">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-600" aria-hidden="true" />
           <span>
-            This playground runs a <strong>guided in-browser Python logic simulation</strong> (no backend server required) supporting beginner syntax, indentation checks, and loop safety guards.
+            Runs a <strong>guided in-browser Python logic simulation</strong> supporting beginner
+            syntax, indentation validation, and infinite-loop safety guards.
           </span>
         </div>
       </div>
 
       {/* Controls & Example Selector */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800/90 bg-[#0D1426] p-4">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-3">
-          <label htmlFor="playground-example-select" className="text-xs font-medium text-slate-400">
+          <label htmlFor="playground-example-select" className="text-xs font-semibold text-slate-600">
             Load Example:
           </label>
           <select
             id="playground-example-select"
             value={selectedExampleId}
             onChange={(e) => handleSelectExample(e.target.value)}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs sm:text-sm text-white focus:border-blue-500 focus:outline-none"
+            className="rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-medium text-[#1E293B] focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 sm:text-sm"
           >
             {PLAYGROUND_EXAMPLES.map((ex) => (
               <option key={ex.id} value={ex.id}>
@@ -91,7 +102,7 @@ export const CodePlayground: React.FC = () => {
               </option>
             ))}
           </select>
-          <span className="text-xs text-slate-400 hidden xl:inline">
+          <span className="hidden text-xs text-slate-500 xl:inline">
             {selectedExample.description}
           </span>
         </div>
@@ -100,7 +111,7 @@ export const CodePlayground: React.FC = () => {
           <button
             type="button"
             onClick={handleRun}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-blue-500 whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
           >
             <Play className="h-3.5 w-3.5" aria-hidden="true" />
             Run Code
@@ -108,7 +119,7 @@ export const CodePlayground: React.FC = () => {
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs font-medium text-slate-200 hover:text-white whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#1E293B] whitespace-nowrap"
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Reset
@@ -116,7 +127,7 @@ export const CodePlayground: React.FC = () => {
           <button
             type="button"
             onClick={handleClearOutput}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-[#1E293B] whitespace-nowrap"
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             Clear Output
@@ -128,16 +139,16 @@ export const CodePlayground: React.FC = () => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Code Editor */}
         <div className="lg:col-span-7">
-          <div className="overflow-hidden rounded-2xl border border-slate-800/90 bg-[#0A101E]">
-            <div className="flex items-center justify-between border-b border-slate-800/80 bg-[#0E1629] px-4 py-2.5 text-xs text-slate-400">
-              <span className="font-mono">main.py</span>
-              <span>Tip: Press Tab to indent 4 spaces</span>
+          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-lg shadow-slate-900/5">
+            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs text-slate-300">
+              <span className="font-mono font-medium">main.py</span>
+              <span className="text-slate-400">Tip: Press Tab to indent 4 spaces</span>
             </div>
             <div className="flex">
               {/* Line Numbers */}
               <div
                 aria-hidden="true"
-                className="select-none border-r border-slate-800/70 bg-[#080D18] px-3 py-4 text-right font-mono text-xs leading-6 text-slate-600 tabular-nums"
+                className="select-none border-r border-slate-800 bg-[#0B1120] px-3 py-4 text-right font-mono text-xs leading-6 text-slate-500 tabular-nums"
               >
                 {Array.from({ length: Math.max(12, lineCount) }, (_, idx) => (
                   <div key={idx}>{idx + 1}</div>
@@ -158,9 +169,9 @@ export const CodePlayground: React.FC = () => {
 
         {/* Output Console */}
         <div className="lg:col-span-5">
-          <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-[#0A101E]">
-            <div className="flex items-center justify-between border-b border-slate-800/80 bg-[#0E1629] px-4 py-2.5 text-xs">
-              <span className="font-semibold text-slate-300">Output Console</span>
+          <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-lg shadow-slate-900/5">
+            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs">
+              <span className="font-semibold text-slate-200">Output Console</span>
               {result && (
                 <span
                   className={`inline-flex items-center gap-1.5 font-mono text-xs ${
@@ -184,7 +195,7 @@ export const CodePlayground: React.FC = () => {
 
             <div className="flex-1 p-4 font-mono text-sm leading-relaxed">
               {!result ? (
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-400">
                   Console cleared. Click &quot;Run Code&quot; to execute your script.
                 </p>
               ) : (
@@ -192,18 +203,18 @@ export const CodePlayground: React.FC = () => {
                   {result.output ? (
                     <pre className="whitespace-pre-wrap text-emerald-300">{result.output}</pre>
                   ) : result.success ? (
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-400">
                       Program ran without errors and produced no print() output.
                     </p>
                   ) : null}
 
                   {result.error && (
-                    <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-4 font-sans text-xs space-y-2">
+                    <div className="rounded-xl border border-rose-500/40 bg-rose-950/60 p-4 font-sans text-xs space-y-2">
                       <p className="font-mono font-bold text-rose-300">
                         {result.error.type} on Line {result.error.line}
                       </p>
-                      <p className="text-slate-200">{result.error.message}</p>
-                      <p className="rounded-lg bg-[#090E1A] p-2.5 text-amber-200">
+                      <p className="text-slate-100">{result.error.message}</p>
+                      <p className="rounded-lg border border-slate-700 bg-[#0B1120] p-2.5 text-amber-200">
                         <strong>Beginner Tip:</strong> {result.error.hint}
                       </p>
                     </div>

@@ -1100,3 +1100,333 @@ export function runPythonCode(code: string): PythonRunResult {
     };
   }
 }
+
+export type { PyValue };
+
+export interface PythonTraceStep {
+  stepNumber: number;
+  line: number;
+  codeLine: string;
+  kind: 'assign' | 'print' | 'if' | 'elif' | 'else' | 'for' | 'while' | 'break' | 'continue';
+  variables: Record<string, PyValue>;
+  conditionExpr?: string;
+  conditionResult?: boolean;
+  loopVar?: { name: string; value: PyValue; iteration: number };
+  outputLines: string[];
+  newOutput?: string;
+  explanation: string;
+  statusLabel: string;
+}
+
+export interface PythonTraceResult {
+  success: boolean;
+  steps: PythonTraceStep[];
+  finalOutput: string[];
+  error?: {
+    type: string;
+    line: number;
+    message: string;
+    hint: string;
+  };
+}
+
+function clonePyValue(v: PyValue): PyValue {
+  if (Array.isArray(v)) return v.map(clonePyValue);
+  return v;
+}
+
+function cloneEnv(env: Record<string, PyValue>): Record<string, PyValue> {
+  const copy: Record<string, PyValue> = {};
+  for (const [k, v] of Object.entries(env)) {
+    copy[k] = clonePyValue(v);
+  }
+  return copy;
+}
+
+export function formatPyLiteral(v: PyValue): string {
+  if (v === null) return 'None';
+  if (typeof v === 'boolean') return v ? 'True' : 'False';
+  if (typeof v === 'string') return `"${v}"`;
+  if (Array.isArray(v)) return `[${v.map(formatPyLiteral).join(', ')}]`;
+  return String(v);
+}
+
+function chunksToLines(chunks: string[]): string[] {
+  const joined = chunks.join('');
+  if (!joined) return [];
+  const raw = joined.split('\n');
+  if (raw.length > 0 && raw[raw.length - 1] === '') raw.pop();
+  return raw;
+}
+
+export function tracePythonCode(code: string): PythonTraceResult {
+  const rawTextLines = code.replace(/\r\n/g, '\n').split('\n');
+  const outputChunks: string[] = [];
+  const env: Record<string, PyValue> = {};
+  const steps: PythonTraceStep[] = [];
+  const MAX_TRACE_STEPS = 450;
+
+  const pushStep = (partial: Omit<PythonTraceStep, 'stepNumber' | 'codeLine' | 'variables' | 'outputLines'>) => {
+    if (steps.length >= MAX_TRACE_STEPS) {
+      throw new PyRuntimeError(
+        'InfiniteLoopGuard',
+        partial.line,
+        'Trace stopped after 450 steps to keep the simulator responsive.',
+        'Reduce loop count or check your loop termination condition.'
+      );
+    }
+    steps.push({
+      ...partial,
+      stepNumber: steps.length + 1,
+      codeLine: (rawTextLines[partial.line - 1] ?? '').trim(),
+      variables: cloneEnv(env),
+      outputLines: chunksToLines(outputChunks),
+    });
+  };
+
+  try {
+    const lines = preprocessLines(code);
+    if (lines.length === 0) {
+      return { success: true, steps: [], finalOutput: [] };
+    }
+    const { stmts } = parseBlock(lines, 0, 0);
+
+    const traceBlock = (block: Stmt[]): void => {
+      for (const stmt of block) {
+        if (stmt.kind === 'pass') continue;
+
+        if (stmt.kind === 'break') {
+          pushStep({
+            line: stmt.line,
+            kind: 'break',
+            statusLabel: 'Break Executed',
+            explanation: 'break stops the enclosing loop immediately and jumps to the code after the loop.',
+          });
+          throw new BreakSignal();
+        }
+
+        if (stmt.kind === 'continue') {
+          pushStep({
+            line: stmt.line,
+            kind: 'continue',
+            statusLabel: 'Continue Executed',
+            explanation: 'continue skips the rest of this loop iteration and jumps back to the next check.',
+          });
+          throw new ContinueSignal();
+        }
+
+        if (stmt.kind === 'assign') {
+          const val = evalExpression(stmt.expr, env, stmt.line, outputChunks);
+          const prevVal = env[stmt.target];
+          if (stmt.op === '=') {
+            env[stmt.target] = val;
+          } else {
+            if (!(stmt.target in env)) {
+              throw new PyRuntimeError('NameError', stmt.line, `Variable '${stmt.target}' is used before assignment.`, `Initialize '${stmt.target}' first.`);
+            }
+            const cur = env[stmt.target];
+            if (typeof cur === 'number' && typeof val === 'number') {
+              if (stmt.op === '+=') env[stmt.target] = cur + val;
+              else if (stmt.op === '-=') env[stmt.target] = cur - val;
+              else if (stmt.op === '*=') env[stmt.target] = cur * val;
+              else if (stmt.op === '/=') env[stmt.target] = cur / val;
+              else if (stmt.op === '//=') env[stmt.target] = Math.floor(cur / val);
+              else if (stmt.op === '%=') env[stmt.target] = cur % val;
+            } else if (stmt.op === '+=' && typeof cur === 'string' && typeof val === 'string') {
+              env[stmt.target] = cur + val;
+            } else {
+              throw new PyRuntimeError('TypeError', stmt.line, `Unsupported types for ${stmt.op}.`, 'Check variable types.');
+            }
+          }
+          const updatedVal = env[stmt.target];
+          pushStep({
+            line: stmt.line,
+            kind: 'assign',
+            statusLabel: `Updated ${stmt.target}`,
+            explanation:
+              stmt.op === '='
+                ? `Set variable ${stmt.target} = ${formatPyLiteral(updatedVal)}.`
+                : `Updated ${stmt.target} from ${formatPyLiteral(prevVal)} to ${formatPyLiteral(updatedVal)} (${stmt.target} ${stmt.op} ${stmt.expr}).`,
+          });
+          continue;
+        }
+
+        if (stmt.kind === 'expr') {
+          const prevLen = outputChunks.length;
+          evalExpression(stmt.expr, env, stmt.line, outputChunks);
+          const newChunk = outputChunks.slice(prevLen).join('').trimEnd();
+          pushStep({
+            line: stmt.line,
+            kind: 'print',
+            newOutput: newChunk || undefined,
+            statusLabel: 'Console Output',
+            explanation: newChunk
+              ? `print() outputs "${newChunk}" to the console.`
+              : `Evaluated expression: ${stmt.expr}.`,
+          });
+          continue;
+        }
+
+        if (stmt.kind === 'if') {
+          for (let bIdx = 0; bIdx < stmt.branches.length; bIdx++) {
+            const branch = stmt.branches[bIdx];
+            if (branch.cond === null) {
+              pushStep({
+                line: branch.line,
+                kind: 'else',
+                conditionResult: true,
+                statusLabel: 'Else Branch Entered',
+                explanation: 'All earlier conditions were False, so Python enters the else branch.',
+              });
+              traceBlock(branch.body);
+              break;
+            }
+
+            const condResult = isTruthy(evalExpression(branch.cond, env, branch.line, outputChunks));
+            const branchKind = bIdx === 0 ? 'if' : 'elif';
+            pushStep({
+              line: branch.line,
+              kind: branchKind,
+              conditionExpr: branch.cond,
+              conditionResult: condResult,
+              statusLabel: condResult ? 'Condition True' : 'Condition False',
+              explanation: condResult
+                ? `${branchKind} condition (${branch.cond}) is True — entering this block and skipping remaining branches.`
+                : `${branchKind} condition (${branch.cond}) is False — skipping this block and checking next branch.`,
+            });
+            if (condResult) {
+              traceBlock(branch.body);
+              break;
+            }
+          }
+          continue;
+        }
+
+        if (stmt.kind === 'for') {
+          const iterable = evalExpression(stmt.iterExpr, env, stmt.line, outputChunks);
+          let items: PyValue[] = [];
+          if (Array.isArray(iterable)) {
+            items = iterable;
+          } else if (typeof iterable === 'string') {
+            items = iterable.split('');
+          } else {
+            throw new PyRuntimeError('TypeError', stmt.line, 'Object is not iterable.', 'Use range(...) or a list.');
+          }
+
+          let broke = false;
+          for (let idx = 0; idx < items.length; idx++) {
+            const item = items[idx];
+            env[stmt.target] = item;
+            pushStep({
+              line: stmt.line,
+              kind: 'for',
+              conditionExpr: `${stmt.target} in ${stmt.iterExpr}`,
+              conditionResult: true,
+              loopVar: { name: stmt.target, value: item, iteration: idx + 1 },
+              statusLabel: `Iteration ${idx + 1} of ${items.length}`,
+              explanation: `For loop assigns ${stmt.target} = ${formatPyLiteral(item)} (iteration ${idx + 1} of ${items.length}) and runs the loop body.`,
+            });
+            try {
+              traceBlock(stmt.body);
+            } catch (sig) {
+              if (sig instanceof BreakSignal) {
+                broke = true;
+                break;
+              }
+              if (sig instanceof ContinueSignal) {
+                continue;
+              }
+              throw sig;
+            }
+          }
+
+          if (!broke) {
+            pushStep({
+              line: stmt.line,
+              kind: 'for',
+              conditionExpr: `${stmt.target} in ${stmt.iterExpr}`,
+              conditionResult: false,
+              statusLabel: 'Loop Completed',
+              explanation:
+                items.length === 0
+                  ? `${stmt.iterExpr} produced 0 items — skipping the loop body.`
+                  : `All ${items.length} items from ${stmt.iterExpr} finished — exiting the for loop.`,
+            });
+          }
+          continue;
+        }
+
+        if (stmt.kind === 'while') {
+          let iteration = 0;
+          while (true) {
+            const condVal = isTruthy(evalExpression(stmt.cond, env, stmt.line, outputChunks));
+            if (!condVal) {
+              pushStep({
+                line: stmt.line,
+                kind: 'while',
+                conditionExpr: stmt.cond,
+                conditionResult: false,
+                statusLabel: 'Loop Terminated',
+                explanation: `While condition (${stmt.cond}) is now False — loop terminates.`,
+              });
+              break;
+            }
+            iteration++;
+            pushStep({
+              line: stmt.line,
+              kind: 'while',
+              conditionExpr: stmt.cond,
+              conditionResult: true,
+              loopVar: { name: 'iteration', value: iteration, iteration },
+              statusLabel: `While Check True (Pass ${iteration})`,
+              explanation: `While condition (${stmt.cond}) is True — executing loop body (iteration ${iteration}).`,
+            });
+            try {
+              traceBlock(stmt.body);
+            } catch (sig) {
+              if (sig instanceof BreakSignal) {
+                break;
+              }
+              if (sig instanceof ContinueSignal) {
+                continue;
+              }
+              throw sig;
+            }
+          }
+        }
+      }
+    };
+
+    traceBlock(stmts);
+    return {
+      success: true,
+      steps,
+      finalOutput: chunksToLines(outputChunks),
+    };
+  } catch (err) {
+    if (err instanceof PyRuntimeError) {
+      return {
+        success: false,
+        steps,
+        finalOutput: chunksToLines(outputChunks),
+        error: {
+          type: err.errorType,
+          line: err.line,
+          message: err.message,
+          hint: err.hint,
+        },
+      };
+    }
+    return {
+      success: false,
+      steps,
+      finalOutput: chunksToLines(outputChunks),
+      error: {
+        type: 'Error',
+        line: 1,
+        message: err instanceof Error ? err.message : 'Unexpected execution error.',
+        hint: 'Check your syntax.',
+      },
+    };
+  }
+}

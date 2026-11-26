@@ -2,6 +2,7 @@ export type SectionId =
   | 'home'
   | 'learn'
   | 'lab'
+  | 'simulators'
   | 'playground'
   | 'challenges'
   | 'quiz'
@@ -10,6 +11,29 @@ export type SectionId =
 export type TopicId = 'conditionals' | 'loops';
 
 export type LabTabId = 'conditional-sim' | 'loop-viz' | 'games';
+
+export type SimulatorId =
+  | 'traffic-signal'
+  | 'atm-decision'
+  | 'smart-ac'
+  | 'shopping-discount'
+  | 'elevator-floor'
+  | 'countdown-timer'
+  | 'parking-scanner'
+  | 'atm-cash-counter';
+
+export type SimulatorCategory = 'conditionals' | 'loops';
+
+export interface SimulatorMeta {
+  id: SimulatorId;
+  number: string;
+  title: string;
+  category: SimulatorCategory;
+  difficulty: 'Beginner' | 'Intermediate' | 'Applied';
+  shortDescription: string;
+  realLifeScenario: string;
+  concepts: string[];
+}
 
 export interface LessonDef {
   id: string;

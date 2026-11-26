@@ -1,6 +1,8 @@
 {
-  "name": "PYTHON LAB",
-  "description": "Interactive Python learning platform teaching Conditional Statements (Topic 08) and Loops (Topic 09) through visual simulations, flowcharts, mini-games, quizzes, and coding challenges.",
+  "name": "PyVerse",
+  "description": "PyVerse — Think. Code. Experiment. An interactive Python learning platform mastering Conditional Statements (Topic 08) and Loops (Topic 09) through visual simulations, flowcharts, mini-games, quizzes, and coding challenges.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
