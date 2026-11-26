@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { useLanguage } from '../hooks/useLanguage';
+import { t } from '../data/translations';
 import {
   ArrowRight,
   BookOpen,
@@ -68,25 +70,31 @@ const LEARNING_STAGES = [
   {
     id: 'basics' as TopicId,
     number: '01',
-    title: 'Python Basics',
+    titleKey: 'home.stage.basics.title',
+    defaultTitle: 'Python Basics',
     difficulty: 'Beginner',
-    subtitle: 'Variables, object references, core types, f-strings, and 4-space indentation.',
+    subtitleKey: 'home.stage.basics.subtitle',
+    defaultSubtitle: 'Variables, object references, core types, f-strings, and 4-space indentation.',
     icon: Box,
   },
   {
     id: 'conditionals' as TopicId,
     number: '02',
-    title: 'Conditional Statements',
+    titleKey: 'home.stage.conditionals.title',
+    defaultTitle: 'Conditional Statements',
     difficulty: 'Guided',
-    subtitle: 'if / elif / else decision branches, nested checks, and boolean logic gates.',
+    subtitleKey: 'home.stage.conditionals.subtitle',
+    defaultSubtitle: 'if / elif / else decision branches, nested checks, and boolean logic gates.',
     icon: GitBranch,
   },
   {
     id: 'loops' as TopicId,
     number: '03',
-    title: 'Loops & Iteration',
+    titleKey: 'home.stage.loops.title',
+    defaultTitle: 'Loops & Iteration',
     difficulty: 'Applied',
-    subtitle: 'for loops, range(), while termination, break, continue, and nested grids.',
+    subtitleKey: 'home.stage.loops.subtitle',
+    defaultSubtitle: 'for loops, range(), while termination, break, continue, and nested grids.',
     icon: Repeat,
   },
 ];
@@ -122,6 +130,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onOpenRevisionTab,
   onCompleteDailyQuest,
 }) => {
+  const { lang } = useLanguage();
   const [simFilter, setSimFilter] = useState<'conditionals' | 'loops'>('conditionals');
   const [snippetIdx, setSnippetIdx] = useState(0);
   const [previewCode, setPreviewCode] = useState(PLAYGROUND_SNIPPETS[0].code);
@@ -209,17 +218,16 @@ export const HomePage: React.FC<HomePageProps> = ({
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-[#2C1616] bg-[#190909] px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-wider text-[#FBF5F9] uppercase">
                 <span className="h-2 w-2 rounded-full bg-[#E10906]" aria-hidden="true" />
-                PyVerse · Think. Code. Experiment.
+                {t(lang, 'home.hero.badge')}
               </div>
 
               <h1 className="mt-6 font-display text-4xl font-extrabold tracking-tight text-white text-balance sm:text-5xl lg:text-[3.75rem] lg:leading-[1.03]">
-                Don&apos;t Just Learn Python.{' '}
-                <span className="text-[#E10906]">Experience It.</span>
+                {t(lang, 'home.hero.titlePart1')}{' '}
+                <span className="text-[#E10906]">{t(lang, 'home.hero.titlePart2')}</span>
               </h1>
 
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#CFC8C8] sm:text-lg">
-                Explore programming through interactive simulations, visual experiments, challenges
-                and intelligent guidance.
+                {t(lang, 'home.hero.subtitle')}
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -228,7 +236,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   onClick={scrollToExplore}
                   className="inline-flex min-h-[48px] items-center gap-2 rounded-xl bg-[#E10906] px-6 py-3 font-display text-sm font-semibold text-white transition-colors hover:bg-[#C40705] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
-                  Explore PyVerse
+                  {t(lang, 'home.hero.ctaExplore')}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </button>
 
@@ -238,22 +246,22 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border border-[#3A2222] bg-[#190909] px-6 py-3 font-display text-sm font-semibold text-[#FBF5F9] transition-colors hover:border-[#E10906] hover:text-white whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
                 >
                   <Compass className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
-                  Enter Learning World
+                  {t(lang, 'home.hero.ctaLearn')}
                 </button>
               </div>
 
               <div className="mt-10 grid grid-cols-3 gap-4 border-t border-[#2C1616] pt-6">
                 <div>
                   <p className="font-mono text-xl font-bold text-white tabular-nums">8</p>
-                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">Real-Life Simulators</p>
+                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{t(lang, 'home.hero.stat1')}</p>
                 </div>
                 <div>
                   <p className="font-mono text-xl font-bold text-white tabular-nums">17</p>
-                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">Guided Missions</p>
+                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{t(lang, 'home.hero.stat2')}</p>
                 </div>
                 <div>
                   <p className="font-mono text-xl font-bold text-[#E10906] tabular-nums">8+</p>
-                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">Games &amp; Escape Vault</p>
+                  <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{t(lang, 'home.hero.stat3')}</p>
                 </div>
               </div>
             </motion.div>
@@ -284,14 +292,13 @@ export const HomePage: React.FC<HomePageProps> = ({
             className="max-w-2xl"
           >
             <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
-              01 · The Problem
+              {t(lang, 'home.problem.eyebrow')}
             </p>
             <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
-              Static code on a page hides how Python actually thinks.
+              {t(lang, 'home.problem.title')}
             </h2>
             <p className="mt-3 text-base text-[#8A8585] dark:text-[#9a8585]">
-              Traditional tutorials ask beginners to memorize syntax before they can picture
-              conditions, memory references, or loop iterations.
+              {t(lang, 'home.problem.subtitle')}
             </p>
           </motion.div>
 
@@ -503,8 +510,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 className="mt-5 inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl border border-[#100303] dark:border-[#9a8585] bg-white dark:bg-[#1a0808] px-4 py-2 font-display text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#100303] dark:hover:bg-[#f0eaea] hover:text-white dark:hover:text-[#100303]"
               >
                 Open Progress Dashboard
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-              </button>
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />              </button>
             </div>
           </div>
         </div>
@@ -516,7 +522,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
-                03 · Explore the Learning World
+                {t(lang, 'home.world.eyebrow')}
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-white sm:text-4xl">
                 Connected stages. Clear progression.
@@ -558,7 +564,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         </div>
                         <div>
                           <h3 className="font-display text-lg font-bold text-white">
-                            {stage.title}
+                            {t(lang, stage.titleKey)}
                           </h3>
                           <span className="font-mono text-[11px] text-[#8A8585] dark:text-[#9a8585]">
                             {stage.difficulty}
@@ -566,7 +572,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         </div>
                       </div>
                       <p className="mt-3 text-xs leading-relaxed text-[#CFC8C8]">
-                        {stage.subtitle}
+                        {t(lang, stage.subtitleKey)}
                       </p>
                     </div>
 
@@ -633,7 +639,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
-                04 · Interactive Simulators
+                {t(lang, 'home.sims.eyebrow')}
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
                 Eight real-life Python machines.
@@ -696,7 +702,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#100303] dark:bg-[#f0eaea] px-3 py-2 text-xs font-semibold text-white dark:text-[#100303] transition-colors hover:bg-[#E10906] dark:hover:bg-[#E10906] dark:hover:text-white"
                   >
                     <Play className="h-3.5 w-3.5" aria-hidden="true" />
-                    Launch in Lab
+                    {t(lang, 'home.sims.launchInLab')}
                   </button>
                 </div>
               </div>
@@ -711,10 +717,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
-                05 · Game Zone
+                {t(lang, 'home.games.eyebrow')}
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
-                Turn logic drills into playable challenges.
+                {t(lang, 'home.games.title')}
               </h2>
             </div>
             <div className="flex flex-wrap gap-2.5">
@@ -772,10 +778,10 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
-                06 · Python Playground
+                {t(lang, 'home.playground.eyebrow')}
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-white sm:text-4xl">
-                Write, edit, and run Python right away.
+                {t(lang, 'home.playground.title')}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-[#CFC8C8]">
                 Test ideas in the live coding workspace with syntax highlighting, sample scripts,
@@ -807,8 +813,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[#3A2222] bg-[#190909] px-4 py-2.5 font-display text-xs font-semibold text-[#FBF5F9] hover:border-[#E10906]"
                 >
                   View Coding Challenges
-                </button>
-              </div>
+                </button>              </div>
             </div>
 
             <div className="lg:col-span-7">
@@ -869,15 +874,13 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-1 items-center gap-10 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 sm:p-10 lg:grid-cols-12">
             <div className="lg:col-span-6">
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-[#E10906]">
-                07 · Adaptive AI Tutor
+                {t(lang, 'home.tutor.eyebrow')}
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea]">
-                Guidance that adapts to what you are learning right now.
+                {t(lang, 'home.tutor.title')}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
-                Unlike a generic chatbot, the PyVerse AI Tutor reads your active topic, difficulty
-                level, simulator state, and concepts needing review—giving progressive hints before
-                revealing full solutions.
+                {t(lang, 'home.tutor.subtitle')}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -887,7 +890,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2.5 font-display text-xs font-semibold text-white hover:bg-[#C40705]"
                 >
                   <Sparkles className="h-4 w-4" aria-hidden="true" />
-                  Open AI Tutor
+                  {t(lang, 'home.tutor.openBtn')}
                 </button>
                 <button
                   type="button"
@@ -942,7 +945,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Think. Code. Experiment.
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-white sm:text-4xl">
-                Ready to experience Python visually?
+                {t(lang, 'home.footer.title')}
               </h2>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -960,7 +963,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 className="inline-flex min-h-[46px] items-center gap-2 rounded-xl border border-[#3A2222] bg-[#190909] px-5 py-2.5 font-display text-sm font-semibold text-white hover:border-[#E10906]"
               >
                 <Cpu className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
-                Open Interactive Lab
+                {t(lang, 'home.footer.labBtn')}
               </button>
             </div>
           </div>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useLanguage } from '../hooks/useLanguage';
+import { t, tLesson } from '../data/translations';
 import {
   CheckCircle2,
   Circle,
@@ -142,6 +144,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
   onOpenGamesTab,
   onOpenInSandbox,
 }) => {
+  const { lang } = useLanguage();
   const [activeStage, setActiveStage] = useState<'all' | LearnStageId>('all');
   const [cheatOpen, setCheatOpen] = useState(false);
 
@@ -240,6 +243,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
     stageTag: string
   ) => {
     const isDone = completedLessons.includes(id);
+    const displayTitle = tLesson(lang, { id, title, summary: '' }).title;
     return (
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-4">
         <div>
@@ -247,7 +251,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
             Section {num} · {stageTag}
           </span>
           <h3 className="mt-0.5 font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea] sm:text-2xl">
-            {title}
+            {displayTitle}
           </h3>
         </div>
         <button
@@ -262,12 +266,12 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
           {isDone ? (
             <>
               <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-              Completed
+              {t(lang, 'learn.completed')}
             </>
           ) : (
             <>
               <Circle className="h-4 w-4 text-[#8A8585] dark:text-[#9a8585]" aria-hidden="true" />
-              Mark Complete
+              {t(lang, 'learn.markComplete')}
             </>
           )}
         </button>
@@ -355,7 +359,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-3.5 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] shadow-xs hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808] whitespace-nowrap"
             >
               <BookMarked className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
-              Cheat Sheet
+              {t(lang, 'learn.cheatSheet')}
             </button>
           </div>
 
@@ -395,7 +399,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
         <aside className="lg:col-span-3">
           <div className="sticky top-20 space-y-4 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-sm">
             <h2 className="font-display text-xs font-bold uppercase tracking-wider text-[#8A8585] dark:text-[#9a8585]">
-              Topic Chapters
+              {t(lang, 'learn.chapters')}
             </h2>
             <nav aria-label="Lesson chapters" className="space-y-1">
               {lessons.map((lesson) => {
@@ -409,7 +413,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                   >
                     <span className="truncate">
                       <span className="mr-1.5 font-mono text-[#8A8585] dark:text-[#9a8585]">{lesson.number}</span>
-                      {lesson.title}
+                      {tLesson(lang, lesson).title}
                     </span>
                     {isDone && (
                       <CheckCircle2
@@ -429,7 +433,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl bg-[#E10906] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-95"
               >
                 <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
-                Open Simulators
+                {t(lang, 'learn.openSimulators')}
               </button>
               <button
                 type="button"
@@ -441,7 +445,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-3 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#2a0808] dark:bg-[#2a0808]"
               >
                 <Gamepad2 className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
-                {activeTopic === 'basics' ? 'Play Mini-Games' : 'Open Logic Lab'}
+                {activeTopic === 'basics' ? t(lang, 'learn.playMiniGames') : t(lang, 'learn.openLogicLab')}
               </button>
             </div>
           </div>

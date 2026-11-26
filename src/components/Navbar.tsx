@@ -24,6 +24,8 @@ import { SectionId, UserPreferences } from '../types';
 import { getLearnerLevel } from '../data/ecosystemData';
 import { PyVerseLogo } from './PyVerseLogo';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useLanguage } from '../hooks/useLanguage';
+import { t } from '../data/translations';
 
 interface NavbarProps {
   activeSection: SectionId;
@@ -34,40 +36,40 @@ interface NavbarProps {
   onNavigate: (section: SectionId) => void;
 }
 
-const NAV_ITEMS: Array<{
+const NAV_ITEM_IDS: Array<{
   id: SectionId;
-  label: string;
+  key: string;
   icon: React.ComponentType<{ className?: string }>;
   matchSections?: SectionId[];
 }> = [
-  { id: 'home', label: 'Explore', icon: Layers },
-  { id: 'learn', label: 'Learning World', icon: Compass },
+  { id: 'home', key: 'nav.home', icon: Layers },
+  { id: 'learn', key: 'nav.learn', icon: Compass },
   {
     id: 'lab',
-    label: 'Interactive Lab',
+    key: 'nav.lab',
     icon: FlaskConical,
     matchSections: ['lab', 'simulators'],
   },
   {
     id: 'games',
-    label: 'Games',
+    key: 'nav.games',
     icon: Gamepad2,
     matchSections: ['games', 'challenges'],
   },
   {
     id: 'studio',
-    label: 'Python Playground',
+    key: 'nav.studio',
     icon: Code2,
     matchSections: ['studio', 'playground'],
   },
-  { id: 'tutor', label: 'AI Tutor', icon: Sparkles },
+  { id: 'tutor', key: 'nav.tutor', icon: Sparkles },
   {
     id: 'revision',
-    label: 'Revision',
+    key: 'nav.revision',
     icon: BookOpen,
     matchSections: ['revision', 'quiz'],
   },
-  { id: 'progress', label: 'Progress', icon: BarChart3 },
+  { id: 'progress', key: 'nav.progress', icon: BarChart3 },
 ];
 
 const SOCIAL_LINKS = [
@@ -88,6 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [prefsOpen, setPrefsOpen] = useState(false);
   const { isDark, toggle: toggleDark } = useDarkMode();
+  const { lang, isHinglish, toggleLanguage } = useLanguage();
 
   const levelInfo = getLearnerLevel(xp);
 
@@ -115,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Zone 2: Primary Single-Line Navigation */}
         <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-0.5">
-          {NAV_ITEMS.map((item) => {
+          {NAV_ITEM_IDS.map((item) => {
             const Icon = item.icon;
             const isActive = item.matchSections
               ? item.matchSections.includes(activeSection)
@@ -136,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-[#E10906]' : 'text-[#8A8585] dark:text-[#9a8585]'}`}
                   aria-hidden="true"
                 />
-                <span>{item.label}</span>
+                <span>{t(lang, item.key)}</span>
                 {isActive && (
                   <span
                     aria-hidden="true"
@@ -186,6 +189,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
           </button>
 
+          {/* Language toggle — desktop */}
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            aria-label="Toggle language EN / Hinglish"
+            title={isHinglish ? 'Switch to English' : 'हिंग्लिश में बदलें'}
+            className="inline-flex h-9 items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-semibold transition-colors hover:border-[#E10906] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+          >
+            <span className={!isHinglish ? 'text-[#E10906] font-bold' : 'text-[#8A8585] dark:text-[#9a8585]'}>EN</span>
+            <span className="text-[#8A8585] dark:text-[#9a8585]">/</span>
+            <span className={isHinglish ? 'text-[#E10906] font-bold' : 'text-[#8A8585] dark:text-[#9a8585]'}>हिंग्लिश</span>
+          </button>
+
           {/* Preferences */}
           <button
             type="button"
@@ -222,7 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNav('learn')}
             className="hidden md:inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#E10906] px-3.5 text-xs font-semibold text-white transition-colors hover:bg-[#C40705] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#100303]"
           >
-            <span>Start Learning</span>
+            <span>{t(lang, 'nav.startLearning')}</span>
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
 
@@ -300,7 +316,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <nav aria-label="Mobile navigation"
           className="border-t border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-4 xl:hidden">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {NAV_ITEMS.map((item) => {
+            {NAV_ITEM_IDS.map((item) => {
               const Icon = item.icon;
               const isActive = item.matchSections
                 ? item.matchSections.includes(activeSection)
@@ -313,7 +329,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
                   }`}>
                   <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-[#E10906]' : 'text-[#8A8585] dark:text-[#9a8585]'}`} aria-hidden="true" />
-                  <span className="truncate">{item.label}</span>
+                  <span className="truncate">{t(lang, item.key)}</span>
                 </button>
               );
             })}
@@ -334,10 +350,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]">
                 {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
               </button>
+              {/* Language toggle — mobile */}
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                aria-label="Toggle language EN / Hinglish"
+                className="inline-flex h-9 items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-2 text-xs font-semibold transition-colors hover:border-[#E10906]"
+              >
+                <span className={!isHinglish ? 'text-[#E10906] font-bold' : 'text-[#8A8585] dark:text-[#9a8585]'}>EN</span>
+                <span className="text-[#8A8585] dark:text-[#9a8585]">/</span>
+                <span className={isHinglish ? 'text-[#E10906] font-bold' : 'text-[#8A8585] dark:text-[#9a8585]'}>हिंग्लिश</span>
+              </button>
             </div>
             <button type="button" onClick={() => handleNav('learn')}
               className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#E10906] px-4 text-xs font-semibold text-white">
-              Start Learning
+              {t(lang, 'nav.startLearning')}
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
