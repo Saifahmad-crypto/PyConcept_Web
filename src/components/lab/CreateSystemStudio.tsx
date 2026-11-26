@@ -756,6 +756,34 @@ export const CreateSystemStudio: React.FC = () => {
                           {block.actionCode}
                         </div>
                       )}
+
+                      {/* Nested Children for Conditions / Loops */}
+                      {((block.children && block.children.length > 0) || (block.elseChildren && block.elseChildren.length > 0)) && (
+                        <div className="mt-2 pl-3 border-l-2 border-stone-800 space-y-1.5 pt-1">
+                          {block.children && block.children.length > 0 && (
+                            <div className="space-y-1">
+                              <span className="text-[9px] font-mono text-emerald-400 uppercase font-semibold">↳ If True:</span>
+                              {block.children.map(ch => (
+                                <div key={ch.id} className="p-1.5 bg-stone-950 rounded border border-stone-800 text-[11px] text-stone-300 font-mono flex items-center justify-between">
+                                  <span>{ch.label}</span>
+                                  <span className="text-[9px] text-blue-400">{ch.type}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {block.elseChildren && block.elseChildren.length > 0 && (
+                            <div className="space-y-1 pt-1">
+                              <span className="text-[9px] font-mono text-red-400 uppercase font-semibold">↳ Else Branch:</span>
+                              {block.elseChildren.map(ech => (
+                                <div key={ech.id} className="p-1.5 bg-stone-950 rounded border border-stone-800 text-[11px] text-stone-300 font-mono flex items-center justify-between">
+                                  <span>{ech.label}</span>
+                                  <span className="text-[9px] text-amber-400">{ech.type}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -1328,21 +1356,54 @@ function renderFlowchartSvg(blocks: LogicBlock[], activeBlockId?: string, isFull
     });
   };
 
-  // Linear layout with branching indicators
   for (let i = 0; i < blocks.length; i++) {
     const b = blocks[i];
     addNode(b, startX, currentY);
 
-    if (i < blocks.length - 1) {
+    // If condition has branch children, render branch cards
+    if (b.type === 'condition' && ((b.children && b.children.length > 0) || (b.elseChildren && b.elseChildren.length > 0))) {
+      const branchY = currentY + nodeHeight + 25;
+      
+      // True branch
+      if (b.children && b.children.length > 0) {
+        const trueX = Math.max(20, startX - 110);
+        const childBlock = b.children[0];
+        addNode(childBlock, trueX, branchY);
+        connectors.push({
+          x1: startX + 30,
+          y1: currentY + nodeHeight,
+          x2: trueX + nodeWidth / 2,
+          y2: branchY,
+          label: 'True'
+        });
+      }
+
+      // False / Else branch
+      if (b.elseChildren && b.elseChildren.length > 0) {
+        const falseX = startX + 110;
+        const elseBlock = b.elseChildren[0];
+        addNode(elseBlock, falseX, branchY);
+        connectors.push({
+          x1: startX + nodeWidth - 30,
+          y1: currentY + nodeHeight,
+          x2: falseX + nodeWidth / 2,
+          y2: branchY,
+          label: 'False'
+        });
+      }
+
+      currentY = branchY + nodeHeight + 20;
+    } else if (i < blocks.length - 1) {
       connectors.push({
         x1: startX + nodeWidth / 2,
         y1: currentY + nodeHeight,
         x2: startX + nodeWidth / 2,
         y2: currentY + nodeHeight + gapY - 10
       });
+      currentY += nodeHeight + gapY;
+    } else {
+      currentY += nodeHeight + gapY;
     }
-
-    currentY += nodeHeight + gapY;
   }
 
   const svgHeight = Math.max(currentY + 40, isFull ? 500 : 360);
@@ -1361,16 +1422,26 @@ function renderFlowchartSvg(blocks: LogicBlock[], activeBlockId?: string, isFull
 
       {/* Connectors */}
       {connectors.map((c, i) => (
-        <line
-          key={i}
-          x1={c.x1}
-          y1={c.y1}
-          x2={c.x2}
-          y2={c.y2}
-          stroke="#44403c"
-          strokeWidth="2"
-          markerEnd="url(#arrow)"
-        />
+        <g key={i}>
+          <line
+            x1={c.x1}
+            y1={c.y1}
+            x2={c.x2}
+            y2={c.y2}
+            stroke="#44403c"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          {c.label && (
+            <text
+              x={(c.x1 + c.x2) / 2 + (c.label === 'True' ? -18 : 6)}
+              y={(c.y1 + c.y2) / 2}
+              className={`text-[9px] font-mono font-bold select-none ${c.label === 'True' ? 'fill-emerald-400' : 'fill-red-400'}`}
+            >
+              {c.label}
+            </text>
+          )}
+        </g>
       ))}
 
       {/* Nodes */}
