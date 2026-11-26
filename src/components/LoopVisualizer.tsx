@@ -238,11 +238,11 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
   return (
     <div className="space-y-6">
       {/* Control Deck */}
-      <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm">
+      <div className="rounded-3xl border border-[#E5DFDF] bg-white p-5 shadow-sm">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:items-end">
           <div className="md:col-span-3">
-            <span className="block text-xs font-semibold text-slate-600">Loop Type</span>
-            <div className="mt-1.5 inline-flex w-full rounded-xl border border-slate-200 bg-[#F8FAFC] p-1">
+            <span className="block text-xs font-semibold text-[#8A8585]">Loop Type</span>
+            <div className="mt-1.5 inline-flex w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-1">
               <button
                 type="button"
                 onClick={() => {
@@ -251,8 +251,8 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                 }}
                 className={`flex-1 rounded-lg px-3 py-1.5 font-mono text-xs font-semibold transition-all ${
                   loopType === 'for'
-                    ? 'bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] text-white shadow-sm'
-                    : 'text-slate-600 hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-sm'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 for loop
@@ -265,8 +265,8 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                 }}
                 className={`flex-1 rounded-lg px-3 py-1.5 font-mono text-xs font-semibold transition-all ${
                   loopType === 'while'
-                    ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-sm'
-                    : 'text-slate-600 hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-sm'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 while loop
@@ -275,7 +275,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
           </div>
 
           <div className="grid grid-cols-3 gap-3 md:col-span-9">
-            <label className="text-xs font-semibold text-slate-600">
+            <label className="text-xs font-semibold text-[#8A8585]">
               Start
               <input
                 type="number"
@@ -284,10 +284,10 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                   setStartVal(Number(e.target.value));
                   resetSim();
                 }}
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-semibold text-[#1E293B]"
+                className="mt-1.5 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-sm font-semibold text-[#100303]"
               />
             </label>
-            <label className="text-xs font-semibold text-slate-600">
+            <label className="text-xs font-semibold text-[#8A8585]">
               Stop (excl.)
               <input
                 type="number"
@@ -296,10 +296,10 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                   setStopVal(Number(e.target.value));
                   resetSim();
                 }}
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-semibold text-[#1E293B]"
+                className="mt-1.5 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-sm font-semibold text-[#100303]"
               />
             </label>
-            <label className="text-xs font-semibold text-slate-600">
+            <label className="text-xs font-semibold text-[#8A8585]">
               Step
               <input
                 type="number"
@@ -308,7 +308,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                   setStepVal(Number(e.target.value));
                   resetSim();
                 }}
-                className="mt-1.5 w-full rounded-xl border border-slate-300 bg-[#F8FAFC] px-3 py-2 font-mono text-sm font-semibold text-[#1E293B]"
+                className="mt-1.5 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-sm font-semibold text-[#100303]"
               />
             </label>
           </div>
@@ -325,14 +325,14 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
           />
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4">
+        <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-[#E5DFDF] pt-4">
           <button
             type="button"
             onClick={() => {
               if (stepIdx >= steps.length - 1) setStepIdx(0);
               setIsPlaying((p) => !p);
             }}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-[#E10906] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 whitespace-nowrap"
           >
             {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             {isPlaying ? 'Pause' : 'Play'}
@@ -345,9 +345,9 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
               setStepIdx((prev) => Math.max(0, prev - 1));
             }}
             disabled={stepIdx <= 0}
-            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-violet-300 hover:bg-violet-50/40 disabled:opacity-40 whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1]/40 disabled:opacity-40 whitespace-nowrap"
           >
-            <SkipBack className="h-4 w-4 text-violet-600" />
+            <SkipBack className="h-4 w-4 text-[#E10906]" />
             Prev
           </button>
 
@@ -358,16 +358,16 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
               setStepIdx((prev) => Math.min(prev + 1, steps.length - 1));
             }}
             disabled={stepIdx >= steps.length - 1}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-violet-300 hover:bg-violet-50/40 disabled:opacity-40 whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1]/40 disabled:opacity-40 whitespace-nowrap"
           >
-            <SkipForward className="h-4 w-4 text-violet-600" />
+            <SkipForward className="h-4 w-4 text-[#E10906]" />
             Next Iteration
           </button>
 
           <button
             type="button"
             onClick={resetSim}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 transition-colors hover:text-[#1E293B] whitespace-nowrap"
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#8A8585] transition-colors hover:text-[#100303] whitespace-nowrap"
           >
             <RotateCcw className="h-4 w-4" />
             Reset
@@ -381,7 +381,7 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
               setStepVal(-2);
               resetSim();
             }}
-            className="ml-auto rounded-xl border border-sky-200 bg-[#F0F9FF] px-3.5 py-2 text-xs font-semibold text-sky-800 hover:border-sky-300 whitespace-nowrap"
+            className="ml-auto rounded-xl border border-[#E5DFDF] bg-[#FFF1F1] px-3.5 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906] whitespace-nowrap"
           >
             Load Countdown Preset (10 → 2)
           </button>
@@ -391,25 +391,25 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
       </div>
 
       {/* Live Metrics & Animated Sequence Strip */}
-      <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-sm space-y-5">
+      <div className="rounded-3xl border border-[#E5DFDF] bg-white p-5 shadow-sm space-y-5">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3.5">
-            <span className="text-xs font-medium text-slate-500">Iteration Counter</span>
-            <p className="mt-1 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5">
+            <span className="text-xs font-medium text-[#8A8585]">Iteration Counter</span>
+            <p className="mt-1 font-mono text-xl font-bold text-[#100303] tabular-nums">
               {currentStep.iteration}{' '}
-              <span className="text-xs font-normal text-slate-500">/ {sequenceValues.length}</span>
+              <span className="text-xs font-normal text-[#8A8585]">/ {sequenceValues.length}</span>
             </p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3.5">
-            <span className="text-xs font-medium text-slate-500">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5">
+            <span className="text-xs font-medium text-[#8A8585]">
               Loop Variable ({loopType === 'for' ? 'i' : 'count'})
             </span>
-            <p className="mt-1 font-mono text-xl font-bold text-violet-700 tabular-nums">
+            <p className="mt-1 font-mono text-xl font-bold text-[#E10906] tabular-nums">
               {currentStep.variableVal}
             </p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3.5">
-            <span className="text-xs font-medium text-slate-500">Condition Status</span>
+          <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5">
+            <span className="text-xs font-medium text-[#8A8585]">Condition Status</span>
             <div className="mt-1.5 flex items-center gap-1.5 font-mono text-sm font-bold">
               {currentStep.conditionResult ? (
                 <>
@@ -418,14 +418,14 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                 </>
               ) : (
                 <>
-                  <XCircle className="h-4 w-4 text-violet-600" aria-hidden="true" />
-                  <span className="text-violet-700">False (Exit)</span>
+                  <XCircle className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                  <span className="text-[#E10906]">False (Exit)</span>
                 </>
               )}
             </div>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3.5">
-            <span className="text-xs font-medium text-slate-500">Accumulated Output</span>
+          <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5">
+            <span className="text-xs font-medium text-[#8A8585]">Accumulated Output</span>
             <p className="mt-1.5 truncate font-mono text-sm font-bold text-emerald-700">
               {accumulatedOutputs.length > 0 ? accumulatedOutputs.join(', ') : '(none)'}
             </p>
@@ -434,9 +434,9 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
 
         {/* Animated Number Sequence */}
         <div>
-          <p className="mb-2 text-xs font-semibold text-slate-600">Animated Number Sequence</p>
+          <p className="mb-2 text-xs font-semibold text-[#8A8585]">Animated Number Sequence</p>
           {sequenceValues.length === 0 ? (
-            <p className="text-xs text-slate-500">No values generated for this start/stop/step combination.</p>
+            <p className="text-xs text-[#8A8585]">No values generated for this start/stop/step combination.</p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {sequenceValues.map((val, idx) => {
@@ -449,14 +449,14 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                       style={{ transitionDuration: `${scaleAnimationMs(200, speedMs)}ms` }}
                       className={`flex h-11 min-w-[48px] flex-col items-center justify-center rounded-xl border px-2.5 font-mono transition-all ${
                         isActive
-                          ? 'border-violet-400 bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white shadow-sm scale-105'
+                          ? 'border-[#E10906] bg-[#E10906] text-white shadow-sm scale-105'
                           : isCompleted
                           ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                          : 'border-slate-200 bg-[#F8FAFC] text-slate-400'
+                          : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585]'
                       }`}
                     >
                       <span className="text-sm font-bold tabular-nums">{val}</span>
-                      <span className={`text-[9px] ${isActive ? 'text-white/90' : 'text-slate-400'}`}>
+                      <span className={`text-[9px] ${isActive ? 'text-white/90' : 'text-[#8A8585]'}`}>
                         #{iterNum}
                       </span>
                     </div>
@@ -468,12 +468,12 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
 
         {/* Graphical Visualization: Loop Iteration Bars & Counter Progression Chart */}
         {sequenceValues.length > 0 && (
-          <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4">
+          <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/60 p-4">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs font-bold text-[#1E293B]">
+              <p className="text-xs font-bold text-[#100303]">
                 Counter Progression &amp; Iteration Bars
               </p>
-              <span className="text-xs text-slate-600">
+              <span className="text-xs text-[#8A8585]">
                 Bar height represents absolute variable magnitude per iteration
               </span>
             </div>
@@ -485,21 +485,21 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
                 const isDone = iterNum <= accumulatedOutputs.length;
                 return (
                   <div key={idx} className="flex min-w-[34px] flex-1 flex-col items-center justify-end h-full">
-                    <span className="mb-1 font-mono text-[10px] font-semibold text-slate-700 tabular-nums">{val}</span>
+                    <span className="mb-1 font-mono text-[10px] font-semibold text-[#100303] tabular-nums">{val}</span>
                     <div
                       className={`w-full max-w-[36px] rounded-t-lg transition-all ${
                         isCurrent
-                          ? 'bg-gradient-to-t from-[#0EA5E9] to-[#8B5CF6]'
+                          ? 'bg-gradient-to-t from-[#E10906] to-[#8B5CF6]'
                           : isDone
                           ? 'bg-sky-400'
-                          : 'bg-slate-200'
+                          : 'bg-[#E5DFDF]'
                       }`}
                       style={{
                         height: `${heightPct}%`,
                         transitionDuration: `${scaleAnimationMs(220, speedMs)}ms`,
                       }}
                     />
-                    <span className="mt-1 font-mono text-[10px] text-slate-500 tabular-nums">i{iterNum}</span>
+                    <span className="mt-1 font-mono text-[10px] text-[#8A8585] tabular-nums">i{iterNum}</span>
                   </div>
                 );
               })}
@@ -511,15 +511,15 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
       {/* Code + Flowchart + Execution History */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="space-y-3 lg:col-span-4">
-          <h3 className="font-display text-sm font-bold text-[#1E293B]">Python Code</h3>
+          <h3 className="font-display text-sm font-bold text-[#100303]">Python Code</h3>
           <CodeBlock code={code} activeLine={currentStep.line} title="loop_sim.py" showCopy={false} />
-          <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF] p-3.5 text-xs text-slate-700">
-            <strong className="text-[#1E293B]">Current Step Note:</strong> {currentStep.note}
+          <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1] p-3.5 text-xs text-[#100303]">
+            <strong className="text-[#100303]">Current Step Note:</strong> {currentStep.note}
           </div>
         </div>
 
         <div className="space-y-3 lg:col-span-4">
-          <h3 className="font-display text-sm font-bold text-[#1E293B]">Loop Flowchart</h3>
+          <h3 className="font-display text-sm font-bold text-[#100303]">Loop Flowchart</h3>
           <FlowchartSVG
             type={loopType}
             activeNode={currentStep.flowNode}
@@ -532,25 +532,25 @@ export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
         </div>
 
         <div className="space-y-3 lg:col-span-4">
-          <h3 className="font-display text-sm font-bold text-[#1E293B]">Execution History</h3>
-          <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm">
+          <h3 className="font-display text-sm font-bold text-[#100303]">Execution History</h3>
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm">
             {historyRows.length === 0 ? (
-              <p className="text-xs text-slate-500">Press Play or Next Iteration to trace each loop pass.</p>
+              <p className="text-xs text-[#8A8585]">Press Play or Next Iteration to trace each loop pass.</p>
             ) : (
               <div className="max-h-72 overflow-y-auto">
                 <table className="w-full text-left font-mono text-xs">
                   <thead>
-                    <tr className="border-b border-slate-200 text-slate-500">
+                    <tr className="border-b border-[#E5DFDF] text-[#8A8585]">
                       <th className="py-1.5 pr-3">Iter</th>
                       <th className="py-1.5 pr-3">Var</th>
                       <th className="py-1.5">Output</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-[#F1EEEE]">
                     {historyRows.map((row, i) => (
-                      <tr key={i} className="text-[#1E293B]">
-                        <td className="py-1.5 pr-3 text-slate-500 tabular-nums">#{row.iteration}</td>
-                        <td className="py-1.5 pr-3 font-semibold text-violet-700 tabular-nums">{row.variableVal}</td>
+                      <tr key={i} className="text-[#100303]">
+                        <td className="py-1.5 pr-3 text-[#8A8585] tabular-nums">#{row.iteration}</td>
+                        <td className="py-1.5 pr-3 font-semibold text-[#E10906] tabular-nums">{row.variableVal}</td>
                         <td className="py-1.5 font-bold text-emerald-700 tabular-nums">{row.outputEmitted}</td>
                       </tr>
                     ))}

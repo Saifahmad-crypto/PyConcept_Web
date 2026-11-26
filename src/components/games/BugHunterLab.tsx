@@ -91,21 +91,21 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
   return (
     <div className="space-y-6">
       {/* Header & Difficulty Filter */}
-      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs md:flex-row md:items-center">
+      <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-xs md:flex-row md:items-center">
         <div>
           <div className="inline-flex items-center gap-2 text-xs font-semibold text-rose-700">
             <Bug className="h-4 w-4" aria-hidden="true" />
             Dedicated Debugging Workspace
           </div>
-          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B]">
+          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#100303]">
             Bug Hunter Lab
           </h2>
-          <p className="mt-1 text-xs text-[#64748B]">
+          <p className="mt-1 text-xs text-[#8A8585]">
             Inspect broken Python snippets, repair syntax or logic errors, and verify exact console output.
           </p>
         </div>
 
-        <div className="inline-flex flex-wrap gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] p-1">
+        <div className="inline-flex flex-wrap gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-1">
           {(['All', 'Easy', 'Medium', 'Advanced'] as const).map((lvl) => (
             <button
               key={lvl}
@@ -119,8 +119,8 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
               }}
               className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
                 difficultyFilter === lvl
-                  ? 'bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] text-white shadow-xs'
-                  : 'text-[#64748B] hover:text-[#1E293B]'
+                  ? 'bg-[#E10906] text-white shadow-xs'
+                  : 'text-[#8A8585] hover:text-[#100303]'
               }`}
             >
               {lvl}
@@ -143,18 +143,18 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                 onClick={() => selectBug(bug.id)}
                 className={`flex w-full items-start justify-between gap-3 rounded-xl border p-4 text-left transition-all ${
                   active
-                    ? 'border-sky-400 bg-[#F0F9FF] shadow-sm'
-                    : 'border-slate-200 bg-white hover:border-slate-300'
+                    ? 'border-[#E10906] bg-[#FFF1F1] shadow-sm'
+                    : 'border-[#E5DFDF] bg-white hover:border-[#E5DFDF]'
                 }`}
               >
                 <div>
-                  <p className="font-mono text-[11px] font-semibold text-[#64748B]">
+                  <p className="font-mono text-[11px] font-semibold text-[#8A8585]">
                     {bug.difficulty} · {bug.category}
                   </p>
-                  <h3 className="mt-1 font-display text-sm font-bold text-[#1E293B]">
+                  <h3 className="mt-1 font-display text-sm font-bold text-[#100303]">
                     {bug.title}
                   </h3>
-                  <p className="mt-1 font-mono text-[11px] text-[#2563EB]">+{bug.xpReward} XP</p>
+                  <p className="mt-1 font-mono text-[11px] text-[#E10906]">+{bug.xpReward} XP</p>
                 </div>
                 {solved && (
                   <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-emerald-600" aria-label="Fixed" />
@@ -166,13 +166,13 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
 
         {/* Active Bug Editor & Hints */}
         <div className="space-y-5 lg:col-span-8">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-5">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <p className="font-mono text-xs font-semibold text-[#8B5CF6]">
+                <p className="font-mono text-xs font-semibold text-[#E10906]">
                   {activeBug.difficulty} · {activeBug.category}
                 </p>
-                <h3 className="mt-0.5 font-display text-2xl font-bold text-[#1E293B]">
+                <h3 className="mt-0.5 font-display text-2xl font-bold text-[#100303]">
                   {activeBug.title}
                 </h3>
               </div>
@@ -184,11 +184,11 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
               )}
             </div>
 
-            <p className="text-sm text-[#64748B]">{activeBug.description}</p>
+            <p className="text-sm text-[#8A8585]">{activeBug.description}</p>
 
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-              <div className="overflow-hidden rounded-xl border border-slate-200/90 bg-[#0F172A] lg:col-span-8">
-                <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2 text-xs text-slate-300">
+              <div className="overflow-hidden rounded-xl border border-[#E5DFDF] bg-[#100303] lg:col-span-8">
+                <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2 text-xs text-[#CFC8C8]">
                   <span className="font-mono">buggy_script.py</span>
                   <div className="flex items-center gap-3">
                     <button
@@ -206,7 +206,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowSolution((s) => !s)}
-                      className="inline-flex items-center gap-1 text-slate-200 hover:text-white"
+                      className="inline-flex items-center gap-1 text-[#CFC8C8] hover:text-white"
                     >
                       <Eye className="h-3.5 w-3.5" aria-hidden="true" />
                       {showSolution ? 'Hide Fix' : 'Solution'}
@@ -221,12 +221,12 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                   }
                   spellCheck={false}
                   rows={7}
-                  className="w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-slate-100 focus:outline-none"
+                  className="w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-[#FBF5F9] focus:outline-none"
                 />
               </div>
 
-              <div className="rounded-xl border border-slate-200/90 bg-[#0F172A] p-4 lg:col-span-4">
-                <p className="text-xs font-semibold text-slate-300">Expected Output</p>
+              <div className="rounded-xl border border-[#E5DFDF] bg-[#100303] p-4 lg:col-span-4">
+                <p className="text-xs font-semibold text-[#CFC8C8]">Expected Output</p>
                 <pre className="mt-2 whitespace-pre-wrap font-mono text-xs text-emerald-300">
                   {activeBug.expectedOutput}
                 </pre>
@@ -245,7 +245,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
 
             {showSolution && (
               <div className="space-y-2">
-                <p className="text-xs font-semibold text-[#64748B]">Working Fix:</p>
+                <p className="text-xs font-semibold text-[#8A8585]">Working Fix:</p>
                 <CodeBlock code={activeBug.solutionCode} title="fixed_script.py" compact />
               </div>
             )}
@@ -254,7 +254,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
               <button
                 type="button"
                 onClick={handleRunAndVerify}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-5 py-2 text-xs font-semibold text-white shadow-sm"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-xs font-semibold text-white shadow-sm"
               >
                 <Play className="h-4 w-4" aria-hidden="true" />
                 Test &amp; Verify Fix
@@ -268,7 +268,7 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                   }));
                   setResultFeedback(null);
                 }}
-                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold text-[#64748B]"
+                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2 text-xs font-semibold text-[#8A8585]"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset Buggy Code
@@ -296,9 +296,9 @@ export const BugHunterLab: React.FC<BugHunterLabProps> = ({
                     </>
                   )}
                 </div>
-                <p className="mt-1 text-slate-700">{resultFeedback.message}</p>
+                <p className="mt-1 text-[#100303]">{resultFeedback.message}</p>
                 {resultFeedback.output && (
-                  <pre className="mt-2.5 rounded-xl bg-[#0F172A] p-3 font-mono text-xs text-emerald-300">
+                  <pre className="mt-2.5 rounded-xl bg-[#100303] p-3 font-mono text-xs text-emerald-300">
                     Your Output:{'\n'}
                     {resultFeedback.output}
                   </pre>

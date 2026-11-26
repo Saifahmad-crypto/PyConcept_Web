@@ -36,21 +36,21 @@ export const VariableBoxVisualizer: React.FC = () => {
     ) {
       return {
         typeName: 'str',
-        color: 'text-violet-700 border-violet-200 bg-violet-50',
+        color: 'text-[#E10906] border-[#E5DFDF] bg-[#FFF1F1]',
         hint: 'String — text wrapped inside matching quotes.',
       };
     }
     if (/^-?\d+$/.test(trimmed)) {
       return {
         typeName: 'int',
-        color: 'text-sky-700 border-sky-200 bg-sky-50',
+        color: 'text-[#E10906] border-[#E5DFDF] bg-[#FFF1F1]',
         hint: 'Integer — whole number without a decimal point.',
       };
     }
     if (/^-?\d+\.\d+$/.test(trimmed)) {
       return {
         typeName: 'float',
-        color: 'text-indigo-700 border-indigo-200 bg-indigo-50',
+        color: 'text-indigo-700 border-indigo-200 bg-[#FFF1F1]',
         hint: 'Float — number with a decimal point.',
       };
     }
@@ -64,17 +64,17 @@ export const VariableBoxVisualizer: React.FC = () => {
   const detected = detectType(customText);
 
   return (
-    <div className="rounded-2xl border border-sky-200/80 bg-gradient-to-br from-[#F0F9FF] to-white p-5">
+    <div className="rounded-2xl border border-[#E5DFDF] bg-gradient-to-br from-[#FFF1F1] to-white p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="font-display text-sm font-bold text-[#1E293B]">
+          <p className="font-display text-sm font-bold text-[#100303]">
             Interactive Variable Memory Box
           </p>
-          <p className="text-xs text-[#64748B]">
+          <p className="text-xs text-[#8A8585]">
             Click a type or type any Python literal to see how Python labels the box.
           </p>
         </div>
-        <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1">
+        <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-white p-1">
           {(['int', 'float', 'str', 'bool'] as const).map((k) => (
             <button
               key={k}
@@ -82,8 +82,8 @@ export const VariableBoxVisualizer: React.FC = () => {
               onClick={() => handleSelectPreset(k)}
               className={`rounded-lg px-2.5 py-1 font-mono text-xs font-semibold transition-all ${
                 preset === k
-                  ? 'bg-gradient-to-r from-[#38BDF8] to-[#2563EB] text-white'
-                  : 'text-[#64748B] hover:text-[#1E293B]'
+                  ? 'bg-[#E10906] text-white'
+                  : 'text-[#8A8585] hover:text-[#100303]'
               }`}
             >
               {k}
@@ -96,29 +96,29 @@ export const VariableBoxVisualizer: React.FC = () => {
         <div className="space-y-2 md:col-span-5">
           <label
             htmlFor="var-box-input"
-            className="block text-xs font-semibold text-[#1E293B]"
+            className="block text-xs font-semibold text-[#100303]"
           >
-            Assign <code className="font-mono text-[#2563EB]">my_var =</code>
+            Assign <code className="font-mono text-[#E10906]">my_var =</code>
           </label>
           <input
             id="var-box-input"
             type="text"
             value={customText}
             onChange={(e) => setCustomText(e.target.value)}
-            className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 font-mono text-sm text-[#1E293B] focus:border-[#2563EB] focus:outline-none"
+            className="w-full rounded-xl border border-[#E5DFDF] bg-white px-3 py-2 font-mono text-sm text-[#100303] focus:border-[#E10906] focus:outline-none"
           />
-          <pre className="rounded-xl bg-[#0F172A] p-3 font-mono text-xs text-slate-200">
+          <pre className="rounded-xl bg-[#100303] p-3 font-mono text-xs text-[#CFC8C8]">
             my_var = {customText || '...'}
             {'\n'}
-            <span className="text-sky-300">print</span>(type(my_var))  # &lt;class &apos;{detected.typeName}&apos;&gt;
+            <span className="text-[#E10906]">print</span>(type(my_var))  # &lt;class &apos;{detected.typeName}&apos;&gt;
           </pre>
         </div>
 
         {/* Visual Memory Box */}
         <div className="flex flex-col items-center justify-center md:col-span-7">
-          <div className="w-full max-w-sm rounded-2xl border-2 border-dashed border-sky-300 bg-white p-4 shadow-sm">
+          <div className="w-full max-w-sm rounded-2xl border-2 border-dashed border-[#E10906] bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between text-xs">
-              <span className="inline-flex items-center gap-1.5 font-mono font-bold text-[#2563EB]">
+              <span className="inline-flex items-center gap-1.5 font-mono font-bold text-[#E10906]">
                 <Box className="h-3.5 w-3.5" aria-hidden="true" />
                 Label: my_var
               </span>
@@ -126,10 +126,10 @@ export const VariableBoxVisualizer: React.FC = () => {
                 {detected.typeName}
               </span>
             </div>
-            <div className="mt-3 rounded-xl bg-[#F8FAFC] py-4 text-center font-mono text-xl font-extrabold text-[#1E293B]">
+            <div className="mt-3 rounded-xl bg-[#FBF5F9] py-4 text-center font-mono text-xl font-extrabold text-[#100303]">
               {customText || '(empty)'}
             </div>
-            <p className="mt-2.5 text-center text-xs text-[#64748B]">{detected.hint}</p>
+            <p className="mt-2.5 text-center text-xs text-[#8A8585]">{detected.hint}</p>
           </div>
         </div>
       </div>
@@ -159,12 +159,12 @@ export const ComparisonScaleSVG: React.FC<ComparisonScaleProps> = ({
       : `${leftVal} == ${rightVal} (Balanced!)`;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+    <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-display font-bold text-[#1E293B]">
+        <span className="font-display font-bold text-[#100303]">
           Comparison Balance Scale
         </span>
-        <span className="font-mono font-bold text-[#2563EB] tabular-nums">
+        <span className="font-mono font-bold text-[#E10906] tabular-nums">
           {relation}
         </span>
       </div>
@@ -232,19 +232,19 @@ export const LoopTimelineStepper: React.FC = () => {
     .reduce((acc, v) => acc + v, 0);
 
   return (
-    <div className="rounded-2xl border border-violet-200/80 bg-gradient-to-br from-[#F5F3FF]/70 via-white to-[#F0F9FF] p-5">
+    <div className="rounded-2xl border border-[#E5DFDF] bg-gradient-to-br from-[#F5F3FF]/70 via-white to-[#F0F9FF] p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="font-display text-sm font-bold text-[#1E293B]">
+          <p className="font-display text-sm font-bold text-[#100303]">
             Loop Iteration Timeline &amp; Accumulator Tracker
           </p>
-          <p className="text-xs text-[#64748B]">
-            Watch <code className="font-mono text-[#8B5CF6]">total += i</code> accumulate step by step.
+          <p className="text-xs text-[#8A8585]">
+            Watch <code className="font-mono text-[#E10906]">total += i</code> accumulate step by step.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <label className="text-xs font-medium text-[#1E293B]">
+          <label className="text-xs font-medium text-[#100303]">
             Passes:
             <select
               value={maxN}
@@ -253,7 +253,7 @@ export const LoopTimelineStepper: React.FC = () => {
                 setMaxN(Number(e.target.value));
                 setStepIndex(0);
               }}
-              className="ml-1.5 rounded-lg border border-slate-300 bg-white px-2 py-1 font-mono text-xs font-semibold"
+              className="ml-1.5 rounded-lg border border-[#E5DFDF] bg-white px-2 py-1 font-mono text-xs font-semibold"
             >
               {[3, 4, 5, 6].map((n) => (
                 <option key={n} value={n}>
@@ -269,7 +269,7 @@ export const LoopTimelineStepper: React.FC = () => {
               if (stepIndex >= maxN) setStepIndex(0);
               setPlaying((p) => !p);
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-3 py-1.5 text-xs font-semibold text-white"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#E10906] px-3 py-1.5 text-xs font-semibold text-white"
           >
             {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
             {playing ? 'Pause' : stepIndex >= maxN ? 'Replay' : 'Play'}
@@ -282,7 +282,7 @@ export const LoopTimelineStepper: React.FC = () => {
               setStepIndex((s) => Math.min(maxN, s + 1));
             }}
             disabled={stepIndex >= maxN}
-            className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-[#1E293B] disabled:opacity-40"
+            className="rounded-xl border border-[#E5DFDF] bg-white px-3 py-1.5 text-xs font-semibold text-[#100303] disabled:opacity-40"
           >
             Next Pass
           </button>
@@ -293,7 +293,7 @@ export const LoopTimelineStepper: React.FC = () => {
               setPlaying(false);
               setStepIndex(0);
             }}
-            className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-[#64748B]"
+            className="inline-flex items-center gap-1 rounded-xl border border-[#E5DFDF] bg-white px-2.5 py-1.5 text-xs font-medium text-[#8A8585]"
             aria-label="Reset loop timeline"
           >
             <RotateCcw className="h-3.5 w-3.5" />
@@ -303,20 +303,20 @@ export const LoopTimelineStepper: React.FC = () => {
 
       {/* Timeline Track */}
       <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-12">
-        <div className="rounded-xl bg-[#0F172A] p-3.5 font-mono text-xs text-slate-200 md:col-span-4">
-          <div className={stepIndex === 0 ? 'text-sky-300 font-bold' : ''}>total = 0</div>
+        <div className="rounded-xl bg-[#100303] p-3.5 font-mono text-xs text-[#CFC8C8] md:col-span-4">
+          <div className={stepIndex === 0 ? 'text-[#E10906] font-bold' : ''}>total = 0</div>
           <div>
-            <span className="text-violet-300">for</span> i{' '}
-            <span className="text-violet-300">in</span>{' '}
-            <span className="text-sky-300">range</span>(1, {maxN + 1}):
+            <span className="text-[#FF6B6B]">for</span> i{' '}
+            <span className="text-[#FF6B6B]">in</span>{' '}
+            <span className="text-[#E10906]">range</span>(1, {maxN + 1}):
           </div>
           <div className={`pl-4 ${stepIndex > 0 && stepIndex <= maxN ? 'text-emerald-300 font-bold' : ''}`}>
             total += i
           </div>
-          <div className="mt-2 border-t border-slate-800 pt-2 text-[11px] text-slate-400">
+          <div className="mt-2 border-t border-[#2C1616] pt-2 text-[11px] text-[#8A8585]">
             Current: <span className="text-white font-bold">total = {runningTotal}</span>
             {stepIndex > 0 && (
-              <span className="ml-2 text-violet-300">(i = {stepIndex})</span>
+              <span className="ml-2 text-[#FF6B6B]">(i = {stepIndex})</span>
             )}
           </div>
         </div>
@@ -342,7 +342,7 @@ export const LoopTimelineStepper: React.FC = () => {
                       ? 'border-violet-500 bg-gradient-to-br from-[#2563EB] to-[#8B5CF6] text-white shadow-md scale-[1.03]'
                       : completed
                       ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                      : 'border-slate-200 bg-white text-slate-400'
+                      : 'border-[#E5DFDF] bg-white text-[#8A8585]'
                   }`}
                 >
                   <div className="text-[10px]">i = {n}</div>
@@ -353,7 +353,7 @@ export const LoopTimelineStepper: React.FC = () => {
               );
             })}
           </div>
-          <p className="text-xs text-[#64748B]">
+          <p className="text-xs text-[#8A8585]">
             {stepIndex === 0
               ? 'Click Play or Next Pass to trace each iteration.'
               : stepIndex < maxN

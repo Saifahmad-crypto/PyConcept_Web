@@ -100,7 +100,7 @@ function highlightLine(line: string): React.ReactNode[] {
     const word = match[0];
     if (word.startsWith('#')) {
       tokens.push(
-        <span key={k++} className="text-slate-500 italic">
+        <span key={k++} className="text-[#8A8585] italic">
           {word}
         </span>
       );
@@ -118,19 +118,19 @@ function highlightLine(line: string): React.ReactNode[] {
       );
     } else if (PY_KEYWORDS.has(word)) {
       tokens.push(
-        <span key={k++} className="font-semibold text-violet-300">
+        <span key={k++} className="font-semibold text-[#FF6B6B]">
           {word}
         </span>
       );
     } else if (PY_BUILTINS.has(word)) {
       tokens.push(
-        <span key={k++} className="text-sky-300">
+        <span key={k++} className="text-[#E10906]">
           {word}
         </span>
       );
     } else {
       tokens.push(
-        <span key={k++} className="text-slate-100">
+        <span key={k++} className="text-[#FBF5F9]">
           {word}
         </span>
       );
@@ -349,19 +349,19 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
       {/* Top Navigation & Simulator Identity Header */}
-      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200 pb-5 lg:flex-row lg:items-center">
+      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-5 lg:flex-row lg:items-center">
         <div>
           <button
             type="button"
             onClick={onBackToHub}
-            className="mb-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] transition-colors hover:text-[#8B5CF6]"
+            className="mb-2.5 inline-flex items-center gap-1.5 text-xs font-semibold text-[#E10906] transition-colors hover:text-[#E10906]"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             Back to Simulators Hub
           </button>
 
-          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#64748B]">
-            <span className="font-mono font-semibold text-[#2563EB]">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-[#8A8585]">
+            <span className="font-mono font-semibold text-[#E10906]">
               Simulator {meta.number}
             </span>
             <span aria-hidden="true">·</span>
@@ -372,19 +372,19 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
             <span>{meta.difficulty}</span>
           </div>
 
-          <h1 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B] sm:text-3xl">
+          <h1 className="mt-1 font-display text-2xl font-extrabold text-[#100303] sm:text-3xl">
             {meta.title}
           </h1>
-          <p className="mt-1 max-w-3xl text-sm text-[#64748B]">
+          <p className="mt-1 max-w-3xl text-sm text-[#8A8585]">
             {meta.realLifeScenario} Concepts:{' '}
-            <span className="font-mono text-xs font-semibold text-[#8B5CF6]">
+            <span className="font-mono text-xs font-semibold text-[#E10906]">
               {meta.concepts.join(' · ')}
             </span>
           </p>
         </div>
 
-        <div className="flex max-w-sm items-start gap-2 rounded-xl border border-sky-200/80 bg-[#F0F9FF] px-3.5 py-2.5 text-xs text-[#1E293B]">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" aria-hidden="true" />
+        <div className="flex max-w-sm items-start gap-2 rounded-xl border border-[#E5DFDF] bg-[#FFF1F1] px-3.5 py-2.5 text-xs text-[#100303]">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
           <span>
             Purpose-built educational execution engine for synchronized step-by-step Python
             visualization.
@@ -405,7 +405,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
         >
           {/* LEFT SIDE — REAL-LIFE SIMULATION */}
           <div className="lg:col-span-7">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+            <div className="rounded-2xl border border-[#E5DFDF] bg-white p-5 sm:p-6 shadow-sm">
               {children}
             </div>
           </div>
@@ -413,12 +413,12 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           {/* RIGHT SIDE — PYTHON CODE & VARIABLE INSPECTOR */}
           <div className="lg:col-span-5 space-y-4">
             {/* Code Execution Viewer */}
-            <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-lg shadow-slate-900/5">
-              <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs">
-                <span className="font-mono font-medium text-slate-200">
+            <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-lg shadow-[#100303]/5">
+              <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs">
+                <span className="font-mono font-medium text-[#CFC8C8]">
                   {meta.id.replace(/-/g, '_')}.py
                 </span>
-                <span className="font-mono text-sky-300 tabular-nums">
+                <span className="font-mono text-[#E10906] tabular-nums">
                   {activeStep
                     ? `Line ${activeStep.line} · ${activeStep.statusLabel}`
                     : isFinished
@@ -437,21 +437,21 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                       style={{ transitionDuration: `${speedCtxValue.scaleMs(160)}ms` }}
                       className={`flex items-center px-3 transition-colors ${
                         isActive
-                          ? 'bg-gradient-to-r from-[#38BDF8]/25 via-[#2563EB]/20 to-[#8B5CF6]/20'
-                          : 'hover:bg-slate-800/40'
+                          ? 'bg-[#E10906]/15'
+                          : 'hover:bg-[#190909]/40'
                       }`}
                     >
-                    <span className="w-5 shrink-0 select-none text-center text-[10px] font-bold text-sky-400">
+                    <span className="w-5 shrink-0 select-none text-center text-[10px] font-bold text-[#E10906]">
                       {isActive ? '▶' : ''}
                     </span>
                     <span
                       className={`w-7 shrink-0 select-none pr-2 text-right tabular-nums ${
-                        isActive ? 'font-bold text-sky-300' : 'text-slate-500'
+                        isActive ? 'font-bold text-[#E10906]' : 'text-[#8A8585]'
                       }`}
                     >
                       {lineNum}
                     </span>
-                    <pre className="whitespace-pre text-slate-100">
+                    <pre className="whitespace-pre text-[#FBF5F9]">
                       {lineText.length > 0 ? highlightLine(lineText) : ' '}
                     </pre>
                   </div>
@@ -461,14 +461,14 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           </div>
 
           {/* Variables & Condition Evaluator Card */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
-                <Cpu className="h-4 w-4 text-[#8B5CF6]" aria-hidden="true" />
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-[#F1EEEE] pb-2.5">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#100303]">
+                <Cpu className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                 Live Variables &amp; Memory
               </div>
               {activeStep?.loopVar && (
-                <span className="font-mono text-xs font-semibold text-[#2563EB] tabular-nums">
+                <span className="font-mono text-xs font-semibold text-[#E10906] tabular-nums">
                   Loop Pass #{activeStep.loopVar.iteration}
                 </span>
               )}
@@ -496,16 +496,16 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                     style={{ transitionDuration: `${speedCtxValue.scaleMs(240)}ms` }}
                     className={`flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs transition-colors ${
                       changed
-                        ? 'border-sky-300 bg-[#F0F9FF]'
-                        : 'border-slate-200/80 bg-[#F8FAFC]'
+                        ? 'border-[#E10906] bg-[#FFF1F1]'
+                        : 'border-[#E5DFDF] bg-[#FBF5F9]'
                     }`}
                   >
-                    <span className="font-mono font-medium text-[#64748B] truncate">
+                    <span className="font-mono font-medium text-[#8A8585] truncate">
                       {name}
                     </span>
                     <span
                       className={`font-mono font-bold tabular-nums truncate max-w-[130px] ${
-                        changed ? 'text-[#2563EB]' : 'text-[#1E293B]'
+                        changed ? 'text-[#E10906]' : 'text-[#100303]'
                       }`}
                     >
                       {formatted}
@@ -555,14 +555,14 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
       {/* BOTTOM SECTION — CONTROLS, EXPLANATION, CONSOLE & EXECUTION HISTORY */}
       <div className="mt-6 space-y-5">
         {/* Execution Controls Bar */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               {!isPlaying ? (
                 <button
                   type="button"
                   onClick={onPlay}
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
                 >
                   <Play className="h-3.5 w-3.5" aria-hidden="true" />
                   {isFinished ? 'Replay' : stepIndex === 0 ? 'Play' : 'Resume'}
@@ -571,7 +571,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 <button
                   type="button"
                   onClick={onPause}
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-violet-300 bg-violet-50 px-5 py-2 text-xs font-semibold text-violet-800 transition-colors hover:bg-violet-100 whitespace-nowrap"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E10906] bg-[#FFF1F1] px-5 py-2 text-xs font-semibold text-[#100303] transition-colors hover:bg-[#FFF1F1] whitespace-nowrap"
                 >
                   <Pause className="h-3.5 w-3.5" aria-hidden="true" />
                   Pause
@@ -583,9 +583,9 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                   type="button"
                   onClick={onPrevStep}
                   disabled={stepIndex <= 0}
-                  className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] disabled:opacity-40 whitespace-nowrap"
+                  className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs font-semibold text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1] disabled:opacity-40 whitespace-nowrap"
                 >
-                  <SkipBack className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
+                  <SkipBack className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                   Prev
                 </button>
               )}
@@ -597,16 +597,16 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                   onNextStep();
                 }}
                 disabled={isFinished}
-                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] disabled:opacity-40 whitespace-nowrap"
+                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2 text-xs font-semibold text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1] disabled:opacity-40 whitespace-nowrap"
               >
-                <SkipForward className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
+                <SkipForward className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                 Next Step
               </button>
 
               <button
                 type="button"
                 onClick={onReset}
-                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-[#64748B] transition-colors hover:bg-slate-50 hover:text-[#1E293B] whitespace-nowrap"
+                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-medium text-[#8A8585] transition-colors hover:bg-[#FBF5F9] hover:text-[#100303] whitespace-nowrap"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset
@@ -615,27 +615,27 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
 
             <div className="flex flex-col items-end gap-1.5">
               <div className="flex items-center gap-2.5">
-                <span className="font-mono text-xs font-semibold text-[#1E293B] tabular-nums">
+                <span className="font-mono text-xs font-semibold text-[#100303] tabular-nums">
                   Step {stepIndex} / {totalSteps}
                 </span>
-                <div className="h-2 w-28 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-2 w-28 overflow-hidden rounded-full bg-[#F1EEEE]">
                   <div
                     style={{
                       width: `${progressPct}%`,
                       transitionDuration: `${speedCtxValue.scaleMs(220)}ms`,
                     }}
-                    className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] transition-all"
+                    className="h-full rounded-full bg-[#E10906] transition-all"
                   />
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-[11px] font-mono text-[#64748B] tabular-nums">
+              <div className="flex items-center gap-2 text-[11px] font-mono text-[#8A8585] tabular-nums">
                 <span>
                   {effectiveFps.toFixed(2)} FPS · {effectiveFrameMs}ms
                   {pauseOnBranches && isDecisionStep ? ' (branch focus)' : ''}
                 </span>
-                <div className="h-1 w-16 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-1 w-16 overflow-hidden rounded-full bg-[#F1EEEE]">
                   <div
-                    className="h-full rounded-full bg-sky-500"
+                    className="h-full rounded-full bg-[#FFF1F1]0"
                     style={{ width: `${Math.round(frameProgress * 100)}%` }}
                   />
                 </div>
@@ -655,17 +655,17 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
 
         {/* Step-by-Step Explanation + Live Output Console */}
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-6">
-            <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#2563EB]">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-sm lg:col-span-6">
+            <div className="flex items-center justify-between gap-2 border-b border-[#F1EEEE] pb-3">
+              <div className="flex items-center gap-2 text-xs font-semibold text-[#E10906]">
                 <BookOpen className="h-4 w-4" aria-hidden="true" />
                 Step-by-Step Explanation
               </div>
-              <span className="font-mono text-[11px] font-medium text-[#64748B] tabular-nums">
+              <span className="font-mono text-[11px] font-medium text-[#8A8585] tabular-nums">
                 {activeStep ? `Line ${activeStep.line}` : 'Initial State'}
               </span>
             </div>
-            <p className="mt-3 text-sm leading-relaxed text-[#1E293B]">
+            <p className="mt-3 text-sm leading-relaxed text-[#100303]">
               {activeStep ? activeStep.explanation : initialExplanation}
             </p>
             {isFinished && (
@@ -674,42 +674,42 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               </p>
             )}
             {onAskTutor && (
-              <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
-                <span className="text-[11px] text-[#64748B]">
+              <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#F1EEEE] pt-3">
+                <span className="text-[11px] text-[#8A8585]">
                   Want a deeper breakdown of this step?
                 </span>
                 <button
                   type="button"
                   onClick={handleAskTutorAboutStep}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-sky-200 bg-gradient-to-r from-[#F0F9FF] to-violet-50 px-3 py-1.5 text-xs font-semibold text-[#2563EB] transition-colors hover:border-violet-300 hover:text-[#8B5CF6] whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FFF1F1] px-3 py-1.5 text-xs font-semibold text-[#E10906] transition-colors hover:border-[#E10906] hover:text-[#E10906] whitespace-nowrap"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
+                  <Sparkles className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                   Ask AI Tutor about this step
                 </button>
               </div>
             )}
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-sm lg:col-span-6">
-            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs">
-              <span className="inline-flex items-center gap-2 font-semibold text-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-sm lg:col-span-6">
+            <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs">
+              <span className="inline-flex items-center gap-2 font-semibold text-[#CFC8C8]">
                 <Terminal className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
                 Live Output Console
               </span>
-              <span className="font-mono text-[11px] text-slate-400 tabular-nums">
+              <span className="font-mono text-[11px] text-[#8A8585] tabular-nums">
                 {currentOutput.length} line{currentOutput.length === 1 ? '' : 's'}
               </span>
             </div>
             <div className="min-h-[104px] max-h-[180px] overflow-y-auto p-4 font-mono text-xs leading-relaxed">
               {currentOutput.length === 0 ? (
-                <p className="text-slate-500">
+                <p className="text-[#8A8585]">
                   No console output yet. Step through print() statements to see live output.
                 </p>
               ) : (
                 <div className="space-y-1">
                   {currentOutput.map((line, i) => (
                     <div key={i} className="flex gap-2 text-emerald-300">
-                      <span className="select-none text-slate-600">&gt;</span>
+                      <span className="select-none text-[#8A8585]">&gt;</span>
                       <span>{line}</span>
                     </div>
                   ))}
@@ -720,19 +720,19 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
         </div>
 
         {/* Execution History Timeline */}
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white shadow-sm">
           <button
             type="button"
             onClick={() => setHistoryOpen((o) => !o)}
             aria-expanded={historyOpen}
             className="flex w-full items-center justify-between px-5 py-3.5 text-left"
           >
-            <span className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#1E293B]">
-              <History className="h-4 w-4 text-[#2563EB]" aria-hidden="true" />
+            <span className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#100303]">
+              <History className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
               Execution History ({executedHistory.length} / {totalSteps} steps logged)
             </span>
             <ChevronDown
-              className={`h-4 w-4 text-[#64748B] transition-transform ${
+              className={`h-4 w-4 text-[#8A8585] transition-transform ${
                 historyOpen ? 'rotate-180' : ''
               }`}
               aria-hidden="true"
@@ -740,9 +740,9 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           </button>
 
           {historyOpen && (
-            <div className="border-t border-slate-100 px-5 py-3">
+            <div className="border-t border-[#F1EEEE] px-5 py-3">
               {executedHistory.length === 0 ? (
-                <p className="text-xs text-[#64748B]">
+                <p className="text-xs text-[#8A8585]">
                   Press Play or Next Step to record execution history here.
                 </p>
               ) : (
@@ -752,12 +752,12 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                     const rowContent = (
                       <>
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="font-mono text-[11px] font-bold text-[#2563EB] tabular-nums">
+                          <span className="font-mono text-[11px] font-bold text-[#E10906] tabular-nums">
                             #{idx + 1} · L{step.line}
                           </span>
-                          <span className="truncate text-[#1E293B]">{step.explanation}</span>
+                          <span className="truncate text-[#100303]">{step.explanation}</span>
                         </div>
-                        <span className="font-mono text-[11px] font-semibold text-[#64748B] shrink-0">
+                        <span className="font-mono text-[11px] font-semibold text-[#8A8585] shrink-0">
                           {step.statusLabel}
                         </span>
                       </>
@@ -771,8 +771,8 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                           onClick={() => onJumpToStep(idx + 1)}
                           className={`flex w-full flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs transition-colors ${
                             isCurrent
-                              ? 'border-sky-300 bg-[#F0F9FF]'
-                              : 'border-slate-100 bg-[#F8FAFC] hover:border-sky-200'
+                              ? 'border-[#E10906] bg-[#FFF1F1]'
+                              : 'border-[#F1EEEE] bg-[#FBF5F9] hover:border-[#E10906]'
                           }`}
                         >
                           {rowContent}
@@ -785,8 +785,8 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                         key={idx}
                         className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs ${
                           isCurrent
-                            ? 'border-sky-300 bg-[#F0F9FF]'
-                            : 'border-slate-100 bg-[#F8FAFC]'
+                            ? 'border-[#E10906] bg-[#FFF1F1]'
+                            : 'border-[#F1EEEE] bg-[#FBF5F9]'
                         }`}
                       >
                         {rowContent}

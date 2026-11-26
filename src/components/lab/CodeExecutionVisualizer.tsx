@@ -69,13 +69,13 @@ export const CodeExecutionVisualizer: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:flex-row lg:items-center">
+      <div className="flex flex-col justify-between gap-4 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:flex-row lg:items-center">
         <div>
-          <p className="text-xs font-semibold text-[#8B5CF6]">Line-by-Line Tracer</p>
-          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B]">
+          <p className="text-xs font-semibold text-[#E10906]">Line-by-Line Tracer</p>
+          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#100303]">
             Code Execution Visualizer
           </h2>
-          <p className="mt-1 max-w-2xl text-sm text-[#64748B]">
+          <p className="mt-1 max-w-2xl text-sm text-[#8A8585]">
             Watch Python execute line-by-line, inspect previous/current/next lines, trace variable
             updates, and jump cleanly to any step on the timeline.
           </p>
@@ -89,8 +89,8 @@ export const CodeExecutionVisualizer: React.FC = () => {
               onClick={() => setCode(tpl.code)}
               className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${
                 code === tpl.code
-                  ? 'border-[#8B5CF6] bg-violet-50 text-violet-800'
-                  : 'border-slate-200 bg-[#F8FAFC] text-[#64748B] hover:text-[#1E293B]'
+                  ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
+                  : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] hover:text-[#100303]'
               }`}
             >
               {tpl.label}
@@ -100,7 +100,7 @@ export const CodeExecutionVisualizer: React.FC = () => {
       </div>
 
       {/* Controls Bar */}
-      <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+      <div className="space-y-3 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -113,7 +113,7 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 }
               }}
               disabled={steps.length === 0}
-              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-2 text-xs font-semibold text-white shadow-xs disabled:opacity-40"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#E10906] px-4 py-2 text-xs font-semibold text-white shadow-xs disabled:opacity-40"
             >
               {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
               {isPlaying ? 'Pause' : stepIndex >= steps.length && steps.length > 0 ? 'Replay' : 'Run'}
@@ -125,9 +125,9 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 setStepIndex((s) => Math.max(0, s - 1));
               }}
               disabled={stepIndex <= 0}
-              className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-semibold text-[#1E293B] disabled:opacity-40"
+              className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] disabled:opacity-40"
             >
-              <SkipBack className="h-3.5 w-3.5 text-[#2563EB]" />
+              <SkipBack className="h-3.5 w-3.5 text-[#E10906]" />
               Prev
             </button>
             <button
@@ -137,9 +137,9 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 setStepIndex((s) => Math.min(steps.length, s + 1));
               }}
               disabled={stepIndex >= steps.length}
-              className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-semibold text-[#1E293B] disabled:opacity-40"
+              className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] disabled:opacity-40"
             >
-              <SkipForward className="h-3.5 w-3.5 text-[#2563EB]" />
+              <SkipForward className="h-3.5 w-3.5 text-[#E10906]" />
               Next
             </button>
             <button
@@ -148,7 +148,7 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 setIsPlaying(false);
                 setStepIndex(0);
               }}
-              className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-[#64748B]"
+              className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-white px-3 py-2 text-xs font-medium text-[#8A8585]"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reset
@@ -156,16 +156,16 @@ export const CodeExecutionVisualizer: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 font-mono text-xs tabular-nums">
-            <span className="text-[#64748B]">
-              Prev: <strong className="text-[#1E293B]">{prevStep ? `L${prevStep.line}` : '—'}</strong>
+            <span className="text-[#8A8585]">
+              Prev: <strong className="text-[#100303]">{prevStep ? `L${prevStep.line}` : '—'}</strong>
             </span>
-            <span className="text-[#2563EB]">
+            <span className="text-[#E10906]">
               Current: <strong>{activeStep ? `L${activeStep.line}` : 'Ready'}</strong>
             </span>
-            <span className="text-[#64748B]">
-              Next: <strong className="text-[#1E293B]">{nextStepPreview ? `L${nextStepPreview.line}` : 'End'}</strong>
+            <span className="text-[#8A8585]">
+              Next: <strong className="text-[#100303]">{nextStepPreview ? `L${nextStepPreview.line}` : 'End'}</strong>
             </span>
-            <span className="font-bold text-[#1E293B]">
+            <span className="font-bold text-[#100303]">
               Step {stepIndex}/{steps.length}
             </span>
           </div>
@@ -184,10 +184,10 @@ export const CodeExecutionVisualizer: React.FC = () => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Code Editor & Line Highlighting */}
         <div className="space-y-4 lg:col-span-6">
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#0F172A] shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs text-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+            <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs text-[#CFC8C8]">
               <span className="font-mono font-semibold">Editable Python Input</span>
-              <span className="text-slate-400">Edit code to regenerate execution trace</span>
+              <span className="text-[#8A8585]">Edit code to regenerate execution trace</span>
             </div>
             <div className="p-3">
               <textarea
@@ -196,11 +196,11 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 onChange={(e) => setCode(e.target.value)}
                 rows={8}
                 spellCheck={false}
-                className="w-full resize-y rounded-xl border border-slate-800 bg-[#0B1120] p-3 font-mono text-xs sm:text-sm leading-6 text-slate-100 focus:border-sky-500 focus:outline-none"
+                className="w-full resize-y rounded-xl border border-[#2C1616] bg-[#0B1120] p-3 font-mono text-xs sm:text-sm leading-6 text-[#FBF5F9] focus:border-[#E10906] focus:outline-none"
               />
             </div>
 
-            <div className="border-t border-slate-800 py-2 font-mono text-xs leading-6">
+            <div className="border-t border-[#2C1616] py-2 font-mono text-xs leading-6">
               {codeLines.map((ln, idx) => {
                 const lineNum = idx + 1;
                 const isActive = activeStep?.line === lineNum;
@@ -210,16 +210,16 @@ export const CodeExecutionVisualizer: React.FC = () => {
                     key={lineNum}
                     className={`flex items-center px-3 ${
                       isActive
-                        ? 'bg-sky-500/25 text-white'
+                        ? 'bg-[#FFF1F1]0/25 text-white'
                         : isPrev
-                        ? 'bg-slate-800/60 text-slate-300'
-                        : 'text-slate-400'
+                        ? 'bg-[#190909]/60 text-[#CFC8C8]'
+                        : 'text-[#8A8585]'
                     }`}
                   >
-                    <span className="w-5 shrink-0 text-[10px] font-bold text-sky-400">
+                    <span className="w-5 shrink-0 text-[10px] font-bold text-[#E10906]">
                       {isActive ? '▶' : isPrev ? '•' : ''}
                     </span>
-                    <span className="w-7 shrink-0 pr-2 text-right text-slate-500 tabular-nums">
+                    <span className="w-7 shrink-0 pr-2 text-right text-[#8A8585] tabular-nums">
                       {lineNum}
                     </span>
                     <pre className="whitespace-pre">{ln || ' '}</pre>
@@ -245,13 +245,13 @@ export const CodeExecutionVisualizer: React.FC = () => {
 
         {/* Right: Variables, Condition Check, Output & Timeline */}
         <div className="space-y-4 lg:col-span-6">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-              <h3 className="font-display text-sm font-bold text-[#1E293B]">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-[#F1EEEE] pb-2.5">
+              <h3 className="font-display text-sm font-bold text-[#100303]">
                 Live State &amp; Variables
               </h3>
               {activeStep?.loopVar && (
-                <span className="font-mono text-xs font-semibold text-[#8B5CF6] tabular-nums">
+                <span className="font-mono text-xs font-semibold text-[#E10906] tabular-nums">
                   {activeStep.loopVar.name} = {activeStep.loopVar.value} · pass #
                   {activeStep.loopVar.iteration}
                 </span>
@@ -263,17 +263,17 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 {Object.entries(activeStep.variables).map(([k, v]) => (
                   <div
                     key={k}
-                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-xs"
+                    className="flex items-center justify-between rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-xs"
                   >
-                    <span className="text-[#64748B]">{k}</span>
-                    <span className="font-bold text-[#2563EB] tabular-nums">
+                    <span className="text-[#8A8585]">{k}</span>
+                    <span className="font-bold text-[#E10906] tabular-nums">
                       {formatPyLiteral(v as never)}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-[#64748B]">
+              <p className="text-xs text-[#8A8585]">
                 Step forward to watch variables initialize and change.
               </p>
             )}
@@ -304,8 +304,8 @@ export const CodeExecutionVisualizer: React.FC = () => {
                 </div>
               )}
 
-            <div className="rounded-xl border border-sky-100 bg-[#F0F9FF] p-3 text-xs text-[#1E293B]">
-              <strong className="text-[#2563EB]">Execution Note: </strong>
+            <div className="rounded-xl border border-[#F1EEEE] bg-[#FFF1F1] p-3 text-xs text-[#100303]">
+              <strong className="text-[#E10906]">Execution Note: </strong>
               {activeStep
                 ? activeStep.explanation
                 : 'Ready to begin line-by-line tracing.'}
@@ -313,13 +313,13 @@ export const CodeExecutionVisualizer: React.FC = () => {
           </div>
 
           {/* Output Console */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#0F172A]">
-            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2 text-xs text-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303]">
+            <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2 text-xs text-[#CFC8C8]">
               <span className="inline-flex items-center gap-1.5 font-semibold">
                 <Terminal className="h-3.5 w-3.5 text-emerald-400" />
                 Live Output
               </span>
-              <span className="font-mono text-[11px] text-slate-400">
+              <span className="font-mono text-[11px] text-[#8A8585]">
                 {activeStep?.outputLines.length ?? 0} lines
               </span>
             </div>
@@ -327,14 +327,14 @@ export const CodeExecutionVisualizer: React.FC = () => {
               {activeStep && activeStep.outputLines.length > 0 ? (
                 activeStep.outputLines.map((ln, idx) => <div key={idx}>&gt; {ln}</div>)
               ) : (
-                <span className="text-slate-500">No print() output yet.</span>
+                <span className="text-[#8A8585]">No print() output yet.</span>
               )}
             </div>
           </div>
 
           {/* Interactive Execution Timeline */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-            <p className="mb-2 font-display text-xs font-bold text-[#1E293B]">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+            <p className="mb-2 font-display text-xs font-bold text-[#100303]">
               Execution Trace Timeline (Click any step)
             </p>
             <div className="max-h-40 space-y-1 overflow-y-auto pr-1">
@@ -350,14 +350,14 @@ export const CodeExecutionVisualizer: React.FC = () => {
                     }}
                     className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-left text-xs transition-colors ${
                       current
-                        ? 'border-[#2563EB] bg-[#F0F9FF] font-semibold'
-                        : 'border-slate-100 bg-[#F8FAFC] hover:border-sky-200'
+                        ? 'border-[#E10906] bg-[#FFF1F1] font-semibold'
+                        : 'border-[#F1EEEE] bg-[#FBF5F9] hover:border-[#E10906]'
                     }`}
                   >
-                    <span className="truncate font-mono text-[11px] text-[#1E293B]">
+                    <span className="truncate font-mono text-[11px] text-[#100303]">
                       #{idx + 1} · L{st.line} · {st.statusLabel}
                     </span>
-                    <span className="shrink-0 font-mono text-[10px] text-[#64748B]">
+                    <span className="shrink-0 font-mono text-[10px] text-[#8A8585]">
                       {st.kind}
                     </span>
                   </button>
@@ -366,8 +366,8 @@ export const CodeExecutionVisualizer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-start gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[11px] text-[#64748B]">
-            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2563EB]" />
+          <div className="flex items-start gap-2 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2.5 text-[11px] text-[#8A8585]">
+            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#E10906]" />
             <span>
               Educational tracer subset: supports assignments, arithmetic/Boolean expressions,
               if/elif/else, for/range(), while, break, continue, and print(). For full CPython,

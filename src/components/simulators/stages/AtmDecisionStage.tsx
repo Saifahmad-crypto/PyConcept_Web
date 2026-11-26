@@ -104,21 +104,21 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <button
               type="button"
               onClick={() => applyPreset('1234', 5000, 2000)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-sky-300"
             >
               Valid ₹2000
             </button>
             <button
               type="button"
               onClick={() => applyPreset('9999', 5000, 2000)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-rose-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-rose-300"
             >
               Wrong PIN
             </button>
             <button
               type="button"
               onClick={() => applyPreset('1234', 1500, 3000)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-amber-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-amber-300"
             >
               Over Balance
             </button>
@@ -217,7 +217,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                         atmPhase === 'wrong-pin'
                           ? 'w-1/4 bg-rose-500'
                           : runner.stepIndex > 0
-                          ? 'w-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6]'
+                          ? 'w-full bg-gradient-to-r from-[#E10906] to-[#8B5CF6]'
                           : 'w-1/3 bg-slate-400'
                       }`}
                     />
@@ -244,7 +244,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               <p className="text-xs font-semibold text-[#1E293B]">Demo Transaction Inputs</p>
 
               <div>
-                <label htmlFor="atm-pin" className="block text-xs font-medium text-slate-600">
+                <label htmlFor="atm-pin" className="block text-xs font-medium text-[#8A8585]">
                   Demo PIN (Try 1234 or 9999)
                 </label>
                 <input
@@ -261,7 +261,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
 
               <div>
-                <label htmlFor="atm-balance" className="block text-xs font-medium text-slate-600">
+                <label htmlFor="atm-balance" className="block text-xs font-medium text-[#8A8585]">
                   Demo Account Balance (₹)
                 </label>
                 <input
@@ -280,7 +280,7 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
 
               <div>
-                <label htmlFor="atm-amount" className="block text-xs font-medium text-slate-600">
+                <label htmlFor="atm-amount" className="block text-xs font-medium text-[#8A8585]">
                   Withdrawal Amount (₹)
                 </label>
                 <input

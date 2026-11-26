@@ -13,7 +13,7 @@ function renderInlineFormatting(text: string): React.ReactNode[] {
       return (
         <code
           key={idx}
-          className="rounded border border-sky-200/70 bg-[#F0F9FF] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-sky-800"
+          className="rounded border border-[#E5DFDF]/70 bg-[#FFF1F1] px-1.5 py-0.5 font-mono text-[12px] font-semibold text-[#100303]"
         >
           {part.slice(1, -1)}
         </code>
@@ -21,7 +21,7 @@ function renderInlineFormatting(text: string): React.ReactNode[] {
     }
     if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
       return (
-        <strong key={idx} className="font-semibold text-[#1E293B]">
+        <strong key={idx} className="font-semibold text-[#100303]">
           {part.slice(2, -2)}
         </strong>
       );
@@ -40,7 +40,7 @@ function renderTextBlock(block: string, keyPrefix: string): React.ReactNode {
     if (listItems.length === 0) return;
     if (listOrdered) {
       elements.push(
-        <ol key={`${keyPrefix}-ol-${idx}`} className="my-2 list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
+        <ol key={`${keyPrefix}-ol-${idx}`} className="my-2 list-decimal space-y-1.5 pl-5 text-sm text-[#100303]">
           {listItems.map((item, i) => (
             <li key={i} className="leading-relaxed">
               {renderInlineFormatting(item)}
@@ -50,7 +50,7 @@ function renderTextBlock(block: string, keyPrefix: string): React.ReactNode {
       );
     } else {
       elements.push(
-        <ul key={`${keyPrefix}-ul-${idx}`} className="my-2 list-disc space-y-1.5 pl-5 text-sm text-slate-700">
+        <ul key={`${keyPrefix}-ul-${idx}`} className="my-2 list-disc space-y-1.5 pl-5 text-sm text-[#100303]">
           {listItems.map((item, i) => (
             <li key={i} className="leading-relaxed">
               {renderInlineFormatting(item)}
@@ -75,7 +75,7 @@ function renderTextBlock(block: string, keyPrefix: string): React.ReactNode {
       elements.push(
         <h4
           key={`${keyPrefix}-h-${idx}`}
-          className="mt-3 mb-1 font-display text-sm font-bold text-[#1E293B]"
+          className="mt-3 mb-1 font-display text-sm font-bold text-[#100303]"
         >
           {renderInlineFormatting(headingMatch[2])}
         </h4>
@@ -101,7 +101,7 @@ function renderTextBlock(block: string, keyPrefix: string): React.ReactNode {
 
     flushList(idx);
     elements.push(
-      <p key={`${keyPrefix}-p-${idx}`} className="my-1.5 text-sm leading-relaxed text-slate-700">
+      <p key={`${keyPrefix}-p-${idx}`} className="my-1.5 text-sm leading-relaxed text-[#100303]">
         {renderInlineFormatting(trimmed)}
       </p>
     );

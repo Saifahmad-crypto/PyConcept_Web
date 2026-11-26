@@ -81,25 +81,25 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
+      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-6 sm:flex-row sm:items-end">
         <div>
-          <p className="text-xs font-semibold text-sky-700">PyVerse Knowledge Check</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
+          <p className="text-xs font-semibold text-[#E10906]">PyVerse Knowledge Check</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
             Topic-Wise Quizzes
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-[#8A8585]">
             10 beginner-friendly questions per topic covering syntax, output prediction, and debugging.
           </p>
         </div>
 
-        <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+        <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-1 gap-1">
           <button
             type="button"
             onClick={() => resetQuiz('conditionals')}
             className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
               topic === 'conditionals'
-                ? 'bg-gradient-to-r from-[#0EA5E9] to-[#6366F1] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#1E293B]'
+                ? 'bg-[#E10906] text-white shadow-sm'
+                : 'text-[#8A8585] hover:text-[#100303]'
             }`}
           >
             <GitBranch className="h-3.5 w-3.5" aria-hidden="true" />
@@ -110,8 +110,8 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             onClick={() => resetQuiz('loops')}
             className={`inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
               topic === 'loops'
-                ? 'bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#1E293B]'
+                ? 'bg-[#E10906] text-white shadow-sm'
+                : 'text-[#8A8585] hover:text-[#100303]'
             }`}
           >
             <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
@@ -121,15 +121,15 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
       </div>
 
       {finished ? (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-6">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8 space-y-6">
           <div className="text-center space-y-3">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50">
               <Award className="h-8 w-8 text-amber-500" aria-hidden="true" />
             </div>
-            <h2 className="font-display text-2xl font-bold text-[#1E293B] sm:text-3xl">
+            <h2 className="font-display text-2xl font-bold text-[#100303] sm:text-3xl">
               {topic === 'conditionals' ? 'Topic 08 Quiz Complete' : 'Topic 09 Quiz Complete'}
             </h2>
-            <p className="text-base text-slate-600">
+            <p className="text-base text-[#8A8585]">
               Final Score:{' '}
               <strong className="font-mono text-2xl text-emerald-700 tabular-nums">
                 {score} / {questions.length}
@@ -137,7 +137,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
               ({Math.round((score / questions.length) * 100)}%)
             </p>
             {bestRecord && (
-              <p className="text-xs text-slate-500 tabular-nums">
+              <p className="text-xs text-[#8A8585] tabular-nums">
                 Saved Best Score: {bestRecord.bestScore}/{bestRecord.total} · Total Attempts:{' '}
                 {bestRecord.attempts}
               </p>
@@ -145,18 +145,18 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
           </div>
 
           {/* Question Review List */}
-          <div className="space-y-3 border-t border-slate-200 pt-5">
-            <h3 className="font-display text-sm font-semibold text-[#1E293B]">Question Review</h3>
+          <div className="space-y-3 border-t border-[#E5DFDF] pt-5">
+            <h3 className="font-display text-sm font-semibold text-[#100303]">Question Review</h3>
             {questions.map((q, idx) => {
               const entry = answersLog[idx];
               const right = entry && entry.chosen === entry.correct;
               return (
                 <div
                   key={q.id}
-                  className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-4 text-xs space-y-1.5"
+                  className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 text-xs space-y-1.5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-semibold text-[#1E293B]">
+                    <span className="font-semibold text-[#100303]">
                       {idx + 1}. {q.question}
                     </span>
                     {right ? (
@@ -171,11 +171,11 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                       </span>
                     )}
                   </div>
-                  <p className="text-slate-600">
+                  <p className="text-[#8A8585]">
                     Correct Answer:{' '}
-                    <strong className="text-[#1E293B]">{q.options[q.correctIndex]}</strong>
+                    <strong className="text-[#100303]">{q.options[q.correctIndex]}</strong>
                   </p>
-                  <p className="text-slate-600">{q.explanation}</p>
+                  <p className="text-[#8A8585]">{q.explanation}</p>
                 </div>
               );
             })}
@@ -185,7 +185,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             <button
               type="button"
               onClick={() => resetQuiz(topic)}
-              className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+              className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
             >
               <RotateCcw className="h-4 w-4" aria-hidden="true" />
               Restart Quiz
@@ -193,31 +193,31 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-6">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8 space-y-6">
           {/* Quiz Top Progress */}
           <div className="space-y-2">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
-              <span className="font-mono font-semibold text-[#1E293B] tabular-nums">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#8A8585]">
+              <span className="font-mono font-semibold text-[#100303] tabular-nums">
                 Question {currentIdx + 1} of {questions.length}
               </span>
-              <span className="font-mono font-semibold text-sky-700 tabular-nums">
+              <span className="font-mono font-semibold text-[#E10906] tabular-nums">
                 Current Score: {score}
                 {bestRecord ? ` · Best: ${bestRecord.bestScore}/${bestRecord.total}` : ''}
               </span>
             </div>
-            <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-2.5 overflow-hidden rounded-full bg-[#F1EEEE]">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${
                   topic === 'conditionals'
-                    ? 'bg-gradient-to-r from-[#0EA5E9] to-[#6366F1]'
-                    : 'bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9]'
+                    ? 'bg-[#E10906]'
+                    : 'bg-[#E10906]'
                 }`}
                 style={{ width: `${((currentIdx + (submitted ? 1 : 0)) / questions.length) * 100}%` }}
               />
             </div>
           </div>
 
-          <h2 className="font-display text-lg font-bold text-[#1E293B] sm:text-xl">
+          <h2 className="font-display text-lg font-bold text-[#100303] sm:text-xl">
             {currentQ.question}
           </h2>
 
@@ -231,7 +231,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
               const isSelected = selectedOpt === idx;
               const isCorrect = idx === currentQ.correctIndex;
               let style =
-                'border-slate-200 bg-[#F8FAFC] text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]/60';
+                'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]/60';
 
               if (submitted) {
                 if (isCorrect) {
@@ -241,7 +241,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                 }
               } else if (isSelected) {
                 style =
-                  'border-sky-500 bg-gradient-to-r from-[#0EA5E9]/12 to-[#8B5CF6]/12 text-[#1E293B] font-semibold ring-1 ring-sky-400/40';
+                  'border-[#E10906] bg-[#E10906]/12 text-[#100303] font-semibold ring-1 ring-sky-400/40';
               }
 
               return (
@@ -252,7 +252,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                   onClick={() => setSelectedOpt(idx)}
                   className={`flex min-h-[48px] w-full items-start gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all ${style}`}
                 >
-                  <span className="mt-0.5 font-mono text-xs font-bold text-slate-500">
+                  <span className="mt-0.5 font-mono text-xs font-bold text-[#8A8585]">
                     {String.fromCharCode(65 + idx)}.
                   </span>
                   <span className="whitespace-pre-line font-mono text-xs sm:text-sm">{opt}</span>
@@ -283,16 +283,16 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                   </>
                 )}
               </div>
-              <p className="mt-1.5 text-slate-700">{currentQ.explanation}</p>
+              <p className="mt-1.5 text-[#100303]">{currentQ.explanation}</p>
             </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E5DFDF] pt-4">
             <button
               type="button"
               onClick={() => resetQuiz(topic)}
-              className="inline-flex min-h-[40px] items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[#1E293B]"
+              className="inline-flex min-h-[40px] items-center gap-1.5 text-xs font-medium text-[#8A8585] hover:text-[#100303]"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               Restart Quiz
@@ -303,7 +303,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                 type="button"
                 onClick={handleSubmitAnswer}
                 disabled={selectedOpt === null}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0"
               >
                 Submit Answer
               </button>
@@ -311,7 +311,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
                 {currentIdx + 1 >= questions.length ? 'View Results' : 'Next Question'}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

@@ -243,13 +243,13 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12 space-y-8">
       {/* Header */}
-      <div className="flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-end">
+      <div className="flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-6 sm:flex-row sm:items-end">
         <div>
-          <p className="text-xs font-semibold text-sky-700">PyVerse Learner Analytics</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
+          <p className="text-xs font-semibold text-[#E10906]">PyVerse Learner Analytics</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
             Progress Dashboard
           </h1>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-[#8A8585]">
             Track real XP, streaks, skill accuracy, mission unlocks, and activity history saved locally in your browser.
           </p>
         </div>
@@ -272,7 +272,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               <button
                 type="button"
                 onClick={() => setConfirmReset(false)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-3 py-1 text-xs font-medium text-[#100303] hover:bg-[#FBF5F9]"
               >
                 Cancel
               </button>
@@ -281,7 +281,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             <button
               type="button"
               onClick={() => setConfirmReset(true)}
-              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600 shadow-xs transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
+              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-xs font-semibold text-[#8A8585] shadow-xs transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               Reset Progress
@@ -292,27 +292,27 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* XP, Level & Streak Hero Summary */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="rounded-2xl border border-sky-200/80 bg-gradient-to-br from-[#F0F9FF] via-white to-[#F5F3FF] p-6 shadow-sm lg:col-span-8">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:col-span-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <span className="font-mono text-xs font-semibold text-[#2563EB]">
+              <span className="font-mono text-xs font-semibold text-[#E10906]">
                 Level {levelInfo.current.level} · {levelInfo.current.title}
               </span>
               <div className="mt-1 flex items-baseline gap-2">
-                <span className="font-mono text-4xl font-extrabold text-[#1E293B] tabular-nums">
+                <span className="font-mono text-4xl font-extrabold text-[#100303] tabular-nums">
                   {progress.xp}
                 </span>
-                <span className="text-sm font-semibold text-[#64748B]">Total XP Earned</span>
+                <span className="text-sm font-semibold text-[#8A8585]">Total XP Earned</span>
               </div>
             </div>
 
             {levelInfo.next ? (
-              <div className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-right">
-                <p className="text-[11px] font-semibold text-[#64748B]">Next Rank</p>
-                <p className="font-display text-sm font-bold text-[#1E293B]">
+              <div className="rounded-xl border border-[#E5DFDF] bg-white px-4 py-2 text-right">
+                <p className="text-[11px] font-semibold text-[#8A8585]">Next Rank</p>
+                <p className="font-display text-sm font-bold text-[#100303]">
                   {levelInfo.next.title}
                 </p>
-                <p className="font-mono text-[11px] text-[#2563EB] tabular-nums">
+                <p className="font-mono text-[11px] text-[#E10906] tabular-nums">
                   {levelInfo.xpToNext} XP remaining
                 </p>
               </div>
@@ -324,30 +324,30 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
 
           <div className="mt-4">
-            <div className="h-3 overflow-hidden rounded-full bg-slate-200/80">
+            <div className="h-3 overflow-hidden rounded-full bg-[#E5DFDF]/80">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] transition-all duration-500"
+                className="h-full rounded-full bg-[#E10906] transition-all duration-500"
                 style={{ width: `${levelInfo.progressPercent}%` }}
               />
             </div>
-            <div className="mt-2 flex items-center justify-between text-xs text-[#64748B]">
+            <div className="mt-2 flex items-center justify-between text-xs text-[#8A8585]">
               <span>
-                Missions Solved: <strong className="font-mono text-[#1E293B]">{progress.completedMissions.length}/{LEARNING_MISSIONS.length}</strong>
+                Missions Solved: <strong className="font-mono text-[#100303]">{progress.completedMissions.length}/{LEARNING_MISSIONS.length}</strong>
               </span>
-              <span className="font-mono font-semibold text-[#2563EB] tabular-nums">
+              <span className="font-mono font-semibold text-[#E10906] tabular-nums">
                 {levelInfo.progressPercent}% to next level
               </span>
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4 flex flex-col justify-between">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:col-span-4 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-2 font-display text-sm font-bold text-[#1E293B]">
+            <span className="inline-flex items-center gap-2 font-display text-sm font-bold text-[#100303]">
               <Flame className="h-5 w-5 text-amber-500" aria-hidden="true" />
               Learning Streaks
             </span>
-            <span className="font-mono text-xs text-[#64748B]">Local Calendar</span>
+            <span className="font-mono text-xs text-[#8A8585]">Local Calendar</span>
           </div>
 
           <div className="my-4 grid grid-cols-2 gap-3">
@@ -357,15 +357,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 {streakDays}d
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3.5 text-center">
-              <p className="text-[11px] font-semibold text-[#64748B]">Longest Streak</p>
-              <p className="mt-1 font-mono text-3xl font-extrabold text-[#1E293B] tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5 text-center">
+              <p className="text-[11px] font-semibold text-[#8A8585]">Longest Streak</p>
+              <p className="mt-1 font-mono text-3xl font-extrabold text-[#100303] tabular-nums">
                 {longestStreak}d
               </p>
             </div>
           </div>
 
-          <p className="text-xs text-[#64748B]">
+          <p className="text-xs text-[#8A8585]">
             Complete any lesson, mission, daily quest, bug fix, or simulator run each day to grow your streak.
           </p>
         </div>
@@ -373,72 +373,72 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Real Activity Metrics Strip */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-            <BookOpen className="h-4 w-4 text-sky-600" aria-hidden="true" />
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
+            <BookOpen className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
             Lessons
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {progress.completedLessons.length}/{totalLessonsCount}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-            <Code2 className="h-4 w-4 text-violet-600" aria-hidden="true" />
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
+            <Code2 className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
             Challenges
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {progress.completedChallenges.length}/{CODING_CHALLENGES.length}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
             <Bug className="h-4 w-4 text-rose-600" aria-hidden="true" />
             Bug Hunts
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {progress.completedBugHunts.length}/{BUG_HUNT_CHALLENGES.length}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-            <KeyRound className="h-4 w-4 text-indigo-600" aria-hidden="true" />
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
+            <KeyRound className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
             Vault Rooms
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {progress.completedEscapeRooms.filter((r) => r.startsWith('room-')).length}/5
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-            <Gamepad2 className="h-4 w-4 text-sky-600" aria-hidden="true" />
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
+            <Gamepad2 className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
             Mini-Games
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {gamesCompleted}/8
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
             <Cpu className="h-4 w-4 text-blue-600" aria-hidden="true" />
             Simulators
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {progress.visitedSimulators.length}/{SIMULATORS_CATALOG.length}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-[#8A8585]">
             <Terminal className="h-4 w-4 text-emerald-600" aria-hidden="true" />
             Sandbox Runs
           </div>
-          <p className="mt-2 font-mono text-xl font-bold text-[#1E293B] tabular-nums">
+          <p className="mt-2 font-mono text-xl font-bold text-[#100303] tabular-nums">
             {progress.sandboxRuns}
           </p>
         </div>
@@ -446,15 +446,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Weekly Activity Chart & 28-Day Learning Calendar */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-6 space-y-4">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:col-span-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-[#2563EB]" aria-hidden="true" />
-              <h2 className="font-display text-lg font-bold text-[#1E293B]">
+              <TrendingUp className="h-5 w-5 text-[#E10906]" aria-hidden="true" />
+              <h2 className="font-display text-lg font-bold text-[#100303]">
                 Weekly Activity (Last 7 Days)
               </h2>
             </div>
-            <span className="font-mono text-xs text-[#64748B]">Real completed actions</span>
+            <span className="font-mono text-xs text-[#8A8585]">Real completed actions</span>
           </div>
 
           <div className="grid grid-cols-7 gap-2 items-end h-40 pt-4">
@@ -462,21 +462,21 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               const heightPct = day.count === 0 ? 6 : Math.max(16, Math.round((day.count / maxWeeklyCount) * 100));
               return (
                 <div key={day.key} className="flex flex-col items-center justify-end h-full gap-1.5">
-                  <span className="font-mono text-[10px] text-[#64748B] tabular-nums">
+                  <span className="font-mono text-[10px] text-[#8A8585] tabular-nums">
                     {day.count > 0 ? `+${day.xp}` : ''}
                   </span>
-                  <div className="w-full max-w-[34px] flex-1 flex items-end rounded-lg bg-slate-100 p-0.5">
+                  <div className="w-full max-w-[34px] flex-1 flex items-end rounded-lg bg-[#F1EEEE] p-0.5">
                     <div
                       className={`w-full rounded-md transition-all ${
                         day.count > 0
-                          ? 'bg-gradient-to-t from-[#2563EB] to-[#38BDF8]'
-                          : 'bg-slate-200'
+                          ? 'bg-[#E10906]'
+                          : 'bg-[#E5DFDF]'
                       }`}
                       style={{ height: `${heightPct}%` }}
                       title={`${day.key}: ${day.count} actions (${day.xp} XP)`}
                     />
                   </div>
-                  <span className="font-mono text-[11px] font-semibold text-[#1E293B]">
+                  <span className="font-mono text-[11px] font-semibold text-[#100303]">
                     {day.label}
                   </span>
                 </div>
@@ -485,11 +485,11 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-6 space-y-4">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:col-span-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-[#8B5CF6]" aria-hidden="true" />
-              <h2 className="font-display text-lg font-bold text-[#1E293B]">
+              <Calendar className="h-5 w-5 text-[#E10906]" aria-hidden="true" />
+              <h2 className="font-display text-lg font-bold text-[#100303]">
                 28-Day Practice Calendar
               </h2>
             </div>
@@ -506,7 +506,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 className={`flex h-9 items-center justify-center rounded-lg border font-mono text-xs tabular-nums ${
                   cell.active
                     ? 'border-emerald-300 bg-emerald-50 font-bold text-emerald-800'
-                    : 'border-slate-200/80 bg-[#F8FAFC] text-slate-400'
+                    : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585]'
                 }`}
               >
                 {cell.dayNum}
@@ -518,43 +518,43 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Topic Mastery & Weak-Area Analysis */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="font-mono text-xs font-semibold text-sky-700">Topic 01</span>
-              <h2 className="font-display text-xl font-bold text-[#1E293B]">Python Basics</h2>
+              <span className="font-mono text-xs font-semibold text-[#E10906]">Topic 01</span>
+              <h2 className="font-display text-xl font-bold text-[#100303]">Python Basics</h2>
             </div>
-            <span className="font-mono text-2xl font-bold text-sky-700 tabular-nums">
+            <span className="font-mono text-2xl font-bold text-[#E10906] tabular-nums">
               {basicsPercent}%
             </span>
           </div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-[#F1EEEE]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#2563EB]"
+              className="h-full rounded-full bg-[#E10906]"
               style={{ width: `${basicsPercent}%` }}
             />
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Lessons</span>
-              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Lessons</span>
+              <p className="mt-1 font-mono font-bold text-[#100303] tabular-nums">
                 {basicsLessonsDone} / {TOPIC_BASICS_LESSONS.length}
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Saved Scripts</span>
-              <p className="mt-1 font-mono font-bold text-sky-700 tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Saved Scripts</span>
+              <p className="mt-1 font-mono font-bold text-[#E10906] tabular-nums">
                 {progress.savedSnippets.length}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
               <span className="font-mono text-xs font-semibold text-blue-700">Topic 08</span>
-              <h2 className="font-display text-xl font-bold text-[#1E293B]">
+              <h2 className="font-display text-xl font-bold text-[#100303]">
                 Conditional Statements
               </h2>
             </div>
@@ -562,27 +562,27 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               {topic08Percent}%
             </span>
           </div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-[#F1EEEE]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#6366F1]"
+              className="h-full rounded-full bg-[#E10906]"
               style={{ width: `${topic08Percent}%` }}
             />
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Lessons</span>
-              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Lessons</span>
+              <p className="mt-1 font-mono font-bold text-[#100303] tabular-nums">
                 {t8LessonsDone}/{TOPIC_08_LESSONS.length}
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Challenges</span>
-              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Challenges</span>
+              <p className="mt-1 font-mono font-bold text-[#100303] tabular-nums">
                 {t8ChallengesDone}/5
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Best Quiz</span>
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Best Quiz</span>
               <p className="mt-1 font-mono font-bold text-emerald-700 tabular-nums">
                 {progress.quizScores.conditionals ? `${Math.round(t8QuizPct * 100)}%` : '—'}
               </p>
@@ -590,37 +590,37 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <span className="font-mono text-xs font-semibold text-violet-700">Topic 09</span>
-              <h2 className="font-display text-xl font-bold text-[#1E293B]">Loops</h2>
+              <span className="font-mono text-xs font-semibold text-[#E10906]">Topic 09</span>
+              <h2 className="font-display text-xl font-bold text-[#100303]">Loops</h2>
             </div>
-            <span className="font-mono text-2xl font-bold text-violet-700 tabular-nums">
+            <span className="font-mono text-2xl font-bold text-[#E10906] tabular-nums">
               {topic09Percent}%
             </span>
           </div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-slate-100">
+          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-[#F1EEEE]">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9]"
+              className="h-full rounded-full bg-[#E10906]"
               style={{ width: `${topic09Percent}%` }}
             />
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Lessons</span>
-              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Lessons</span>
+              <p className="mt-1 font-mono font-bold text-[#100303] tabular-nums">
                 {t9LessonsDone}/{TOPIC_09_LESSONS.length}
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Challenges</span>
-              <p className="mt-1 font-mono font-bold text-[#1E293B] tabular-nums">
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Challenges</span>
+              <p className="mt-1 font-mono font-bold text-[#100303] tabular-nums">
                 {t9ChallengesDone}/5
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200/80 bg-[#F8FAFC] p-3">
-              <span className="text-slate-500">Best Quiz</span>
+            <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3">
+              <span className="text-[#8A8585]">Best Quiz</span>
               <p className="mt-1 font-mono font-bold text-emerald-700 tabular-nums">
                 {progress.quizScores.loops ? `${Math.round(t9QuizPct * 100)}%` : '—'}
               </p>
@@ -631,15 +631,15 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
       {/* Achievements & XP History */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-7">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:col-span-7">
           <div className="mb-4 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-amber-500" aria-hidden="true" />
-              <h2 className="font-display text-lg font-bold text-[#1E293B]">
+              <h2 className="font-display text-lg font-bold text-[#100303]">
                 Achievement Gallery
               </h2>
             </div>
-            <span className="font-mono text-xs font-semibold text-slate-500 tabular-nums">
+            <span className="font-mono text-xs font-semibold text-[#8A8585] tabular-nums">
               {unlockedCount} / {achievements.length} unlocked
             </span>
           </div>
@@ -651,21 +651,21 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 className={`flex items-start gap-3 rounded-xl border p-3.5 transition-colors ${
                   ach.unlocked
                     ? 'border-emerald-200 bg-emerald-50/50'
-                    : 'border-slate-200/80 bg-[#F8FAFC] opacity-75'
+                    : 'border-[#E5DFDF] bg-[#FBF5F9] opacity-75'
                 }`}
               >
                 <div
                   className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
                     ach.unlocked
-                      ? 'bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white shadow-xs'
-                      : 'bg-slate-200/80 text-slate-500'
+                      ? 'bg-[#E10906] text-white shadow-xs'
+                      : 'bg-[#E5DFDF]/80 text-[#8A8585]'
                   }`}
                 >
                   <Award className="h-4 w-4" aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-display text-xs font-bold text-[#1E293B]">{ach.title}</p>
-                  <p className="mt-0.5 text-[11px] leading-snug text-slate-600">{ach.desc}</p>
+                  <p className="font-display text-xs font-bold text-[#100303]">{ach.title}</p>
+                  <p className="mt-0.5 text-[11px] leading-snug text-[#8A8585]">{ach.desc}</p>
                 </div>
               </div>
             ))}
@@ -674,14 +674,14 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
         <div className="space-y-6 lg:col-span-5">
           {/* Weak-Area Suggestions OR Next Steps */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-3">
             <div className="flex items-center gap-2">
               {weakAreas.length > 0 ? (
                 <AlertTriangle className="h-5 w-5 text-amber-500" aria-hidden="true" />
               ) : (
-                <Sparkles className="h-5 w-5 text-violet-600" aria-hidden="true" />
+                <Sparkles className="h-5 w-5 text-[#E10906]" aria-hidden="true" />
               )}
-              <h2 className="font-display text-lg font-bold text-[#1E293B]">
+              <h2 className="font-display text-lg font-bold text-[#100303]">
                 {weakAreas.length > 0 ? 'Suggested Revision Focus' : 'Recommended Next Steps'}
               </h2>
             </div>
@@ -697,7 +697,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                   <button
                     type="button"
                     onClick={w.onClick}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#2563EB] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#E10906] hover:underline"
                   >
                     {w.actionLabel}
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -709,36 +709,36 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 <button
                   type="button"
                   onClick={() => onNavigate('learn')}
-                  className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-[#F8FAFC] p-3.5 text-left text-xs font-semibold text-[#1E293B] hover:border-sky-300"
+                  className="flex w-full items-center justify-between rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5 text-left text-xs font-semibold text-[#100303] hover:border-[#E10906]"
                 >
                   <span>Continue Missions in Learning World</span>
-                  <ArrowRight className="h-4 w-4 text-[#2563EB]" />
+                  <ArrowRight className="h-4 w-4 text-[#E10906]" />
                 </button>
                 <button
                   type="button"
                   onClick={() => onOpenGamesTab('escape-room')}
-                  className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-[#F8FAFC] p-3.5 text-left text-xs font-semibold text-[#1E293B] hover:border-violet-300"
+                  className="flex w-full items-center justify-between rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5 text-left text-xs font-semibold text-[#100303] hover:border-[#E10906]"
                 >
                   <span>Challenge The Python Code Vault</span>
-                  <ArrowRight className="h-4 w-4 text-[#8B5CF6]" />
+                  <ArrowRight className="h-4 w-4 text-[#E10906]" />
                 </button>
                 <button
                   type="button"
                   onClick={() => onNavigate('studio')}
-                  className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-[#F8FAFC] p-3.5 text-left text-xs font-semibold text-[#1E293B] hover:border-sky-300"
+                  className="flex w-full items-center justify-between rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5 text-left text-xs font-semibold text-[#100303] hover:border-[#E10906]"
                 >
                   <span>Write &amp; Save Python in Coding Studio</span>
-                  <ArrowRight className="h-4 w-4 text-[#2563EB]" />
+                  <ArrowRight className="h-4 w-4 text-[#E10906]" />
                 </button>
               </div>
             )}
           </div>
 
           {/* Real XP History Feed */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-            <h2 className="font-display text-lg font-bold text-[#1E293B]">Recent XP Log</h2>
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-3">
+            <h2 className="font-display text-lg font-bold text-[#100303]">Recent XP Log</h2>
             {progress.xpHistory.length === 0 ? (
-              <p className="text-xs text-[#64748B]">
+              <p className="text-xs text-[#8A8585]">
                 No XP earned yet. Complete your first mission, lesson, simulator, or daily quest to start recording progress!
               </p>
             ) : (
@@ -746,9 +746,9 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                 {progress.xpHistory.slice(0, 10).map((entry) => (
                   <div
                     key={entry.id}
-                    className="flex items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-[#F8FAFC] px-3 py-2 text-xs"
+                    className="flex items-center justify-between gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs"
                   >
-                    <span className="truncate font-medium text-[#1E293B]">{entry.label}</span>
+                    <span className="truncate font-medium text-[#100303]">{entry.label}</span>
                     <span className="font-mono font-bold text-emerald-700 shrink-0 tabular-nums">
                       +{entry.amount} XP
                     </span>
@@ -767,13 +767,13 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           { topic: 'conditionals' as TopicId, title: 'Topic 08 · Conditionals', list: TOPIC_08_LESSONS },
           { topic: 'loops' as TopicId, title: 'Topic 09 · Loops', list: TOPIC_09_LESSONS },
         ].map((group) => (
-          <div key={group.topic} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div key={group.topic} className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="font-display text-base font-bold text-[#1E293B]">{group.title}</h3>
+              <h3 className="font-display text-base font-bold text-[#100303]">{group.title}</h3>
               <button
                 type="button"
                 onClick={() => onOpenTopic(group.topic)}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-sky-700 hover:text-sky-800"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-[#E10906] hover:text-[#100303]"
               >
                 Open <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
@@ -786,16 +786,16 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                     key={lesson.id}
                     type="button"
                     onClick={() => onToggleLesson(lesson.id)}
-                    className="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-[#F8FAFC] px-3.5 py-2.5 text-left text-xs transition-colors hover:border-sky-300 hover:bg-[#F0F9FF]/60"
+                    className="flex w-full items-center justify-between gap-3 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2.5 text-left text-xs transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1]/60"
                   >
-                    <span className="font-medium text-[#1E293B]">
-                      <span className="mr-2 font-mono text-slate-500">{lesson.number}</span>
+                    <span className="font-medium text-[#100303]">
+                      <span className="mr-2 font-mono text-[#8A8585]">{lesson.number}</span>
                       {lesson.title}
                     </span>
                     {done ? (
                       <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                     ) : (
-                      <Circle className="h-4 w-4 shrink-0 text-slate-400" />
+                      <Circle className="h-4 w-4 shrink-0 text-[#8A8585]" />
                     )}
                   </button>
                 );

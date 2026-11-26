@@ -110,7 +110,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
                   temperature === preset.val
                     ? 'border-sky-400 bg-[#F0F9FF] text-sky-700'
-                    : 'border-slate-200 bg-[#F8FAFC] text-slate-600 hover:border-slate-300'
+                    : 'border-slate-200 bg-[#F8FAFC] text-[#8A8585] hover:border-slate-300'
                 }`}
               >
                 {preset.label}
@@ -129,8 +129,8 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   <div
                     className={`flex h-10 w-10 items-center justify-center rounded-xl ${
                       acRunning
-                        ? 'bg-gradient-to-br from-[#0EA5E9] to-[#8B5CF6] text-white'
-                        : 'bg-slate-100 text-slate-500'
+                        ? 'bg-gradient-to-br from-[#E10906] to-[#8B5CF6] text-white'
+                        : 'bg-[#F1EEEE] text-slate-500'
                     }`}
                   >
                     <Fan
@@ -155,7 +155,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 font-mono text-xs font-bold ${
                     acRunning
                       ? 'border-sky-200 bg-[#F0F9FF] text-sky-700'
-                      : 'border-slate-200 bg-slate-50 text-slate-600'
+                      : 'border-slate-200 bg-slate-50 text-[#8A8585]'
                   }`}
                 >
                   <Power className="h-3.5 w-3.5" aria-hidden="true" />
@@ -164,8 +164,8 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
 
               {/* Airflow Visualization */}
-              <div className="mt-5 rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
-                <div className="flex items-center justify-between text-xs text-slate-600">
+              <div className="mt-5 rounded-xl border border-[#F1EEEE] bg-[#F8FAFC] p-4">
+                <div className="flex items-center justify-between text-xs text-[#8A8585]">
                   <span className="inline-flex items-center gap-1.5 font-medium">
                     <Snowflake
                       className={`h-4 w-4 ${acRunning ? 'text-sky-500' : 'text-slate-400'}`}
@@ -186,7 +186,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                       key={bar}
                       className={`h-2 rounded-full transition-all duration-300 ${
                         acRunning
-                          ? 'bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] animate-pulse'
+                          ? 'bg-[#E10906] animate-pulse'
                           : 'bg-slate-200'
                       }`}
                     />
@@ -211,7 +211,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 step={1}
                 value={temperature}
                 onChange={(e) => handleSliderChange(Number(e.target.value))}
-                className="mt-3 w-full accent-[#0EA5E9] cursor-pointer"
+                className="mt-3 w-full accent-[#E10906] cursor-pointer"
               />
               <div className="mt-1 flex justify-between font-mono text-[11px] text-slate-500">
                 <span>16°C Cool</span>
@@ -223,12 +223,12 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
           {/* Live Thermometer Column */}
           <div className="flex flex-col items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-xs sm:col-span-4">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#8A8585]">
               <Thermometer className="h-4 w-4 text-rose-500" aria-hidden="true" />
               Thermometer
             </div>
 
-            <div className="relative my-3 flex h-44 w-12 items-end justify-center rounded-full border-2 border-slate-200 bg-slate-100 p-1.5">
+            <div className="relative my-3 flex h-44 w-12 items-end justify-center rounded-full border-2 border-slate-200 bg-[#F1EEEE] p-1.5">
               {/* 28°C Threshold Marker */}
               <div
                 className="absolute inset-x-0 border-t-2 border-dashed border-violet-500 z-10"
@@ -239,7 +239,7 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 className={`w-full rounded-full transition-all ${
                   temperature > 28
                     ? 'bg-gradient-to-t from-amber-500 to-rose-500'
-                    : 'bg-gradient-to-t from-[#0EA5E9] to-[#38BDF8]'
+                    : 'bg-gradient-to-t from-[#E10906] to-[#38BDF8]'
                 }`}
                 style={{
                   height: `${Math.max(10, thermometerPct)}%`,

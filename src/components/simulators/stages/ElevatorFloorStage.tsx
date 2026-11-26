@@ -86,7 +86,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 setDirection('auto');
               })
             }
-            className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-sky-300"
+            className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-sky-300"
           >
             Test Same Floor (3 → 3)
           </button>
@@ -98,7 +98,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs sm:col-span-7">
             <div className="mb-3 flex items-center justify-between text-xs">
               <span className="inline-flex items-center gap-1.5 font-semibold text-[#1E293B]">
-                <Building2 className="h-4 w-4 text-sky-600" aria-hidden="true" />
+                <Building2 className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                 Live Shaft View
               </span>
               <span className="inline-flex items-center gap-1 font-mono font-bold text-violet-700 tabular-nums">
@@ -109,12 +109,12 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   </>
                 ) : computedStep > 0 ? (
                   <>
-                    <ArrowUp className="h-3.5 w-3.5 text-sky-600" aria-hidden="true" />
+                    <ArrowUp className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                     Going Up
                   </>
                 ) : (
                   <>
-                    <ArrowDown className="h-3.5 w-3.5 text-violet-600" aria-hidden="true" />
+                    <ArrowDown className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                     Going Down
                   </>
                 )}
@@ -132,10 +132,10 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     style={{ transitionDuration: `${scaleAnimationMs(300, runner.speedMs)}ms` }}
                     className={`flex h-9 items-center justify-between rounded-lg border px-3 transition-all ${
                       isCabinHere
-                        ? 'border-sky-400 bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-sm'
+                        ? 'border-sky-400 bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-sm'
                         : isDest
-                        ? 'border-violet-300 bg-violet-50 text-violet-900'
-                        : 'border-slate-200/70 bg-white text-slate-600'
+                        ? 'border-violet-300 bg-violet-50 text-[#100303]'
+                        : 'border-slate-200/70 bg-white text-[#8A8585]'
                     }`}
                   >
                     <span className="font-mono text-xs font-bold tabular-nums">
@@ -173,7 +173,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div>
-              <label htmlFor="elev-start" className="block text-xs font-semibold text-slate-600">
+              <label htmlFor="elev-start" className="block text-xs font-semibold text-[#8A8585]">
                 Starting Floor: <span className="font-mono text-[#1E293B]">{startFloor}</span>
               </label>
               <select
@@ -193,7 +193,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div>
-              <label htmlFor="elev-dest" className="block text-xs font-semibold text-slate-600">
+              <label htmlFor="elev-dest" className="block text-xs font-semibold text-[#8A8585]">
                 Destination Floor: <span className="font-mono text-[#1E293B]">{targetFloor}</span>
               </label>
               <select
@@ -213,7 +213,7 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div>
-              <span className="block text-xs font-semibold text-slate-600 mb-1.5">
+              <span className="block text-xs font-semibold text-[#8A8585] mb-1.5">
                 Step Direction
               </span>
               <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] p-1">
@@ -230,8 +230,8 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                     onClick={() => handleResettingChange(() => setDirection(d.id))}
                     className={`rounded-lg py-1.5 text-[11px] font-semibold transition-all ${
                       direction === d.id
-                        ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
-                        : 'text-slate-600 hover:text-[#1E293B]'
+                        ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
+                        : 'text-[#8A8585] hover:text-[#1E293B]'
                     }`}
                   >
                     {d.label}

@@ -4,18 +4,32 @@
   --font-display: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-pv-red: #E10906;
+  --color-pv-red-hover: #C40705;
+  --color-pv-black: #100303;
+  --color-pv-surface-dark: #190909;
+  --color-pv-offwhite: #FBF5F9;
+  --color-pv-gray: #8A8585;
+  --color-pv-light-gray: #F1EEEE;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
     scroll-behavior: smooth;
-    background-color: #F8FAFC;
-    color: #1E293B;
+    background-color: #FBF5F9;
+    color: #100303;
+    overflow-x: hidden;
+  }
+
+  body {
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 
   code, pre, .font-mono {
@@ -31,19 +45,26 @@
   text-wrap: balance;
 }
 
-/* Interactive Laboratory architectural mesh background */
-.bg-pyverse-mesh {
-  background-color: #F8FAFC;
+/* Architectural Editorial Grid Surfaces */
+.bg-pyverse-editorial {
+  background-color: #FBF5F9;
   background-image:
-    radial-gradient(circle at 10% 6%, rgba(56, 189, 248, 0.16), transparent 36%),
-    radial-gradient(circle at 90% 10%, rgba(139, 92, 246, 0.14), transparent 38%),
-    linear-gradient(to right, rgba(37, 99, 235, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    linear-gradient(to right, rgba(16, 3, 3, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 3, 3, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.bg-pyverse-dark-grid {
+  background-color: #100303;
+  background-image:
+    radial-gradient(circle at 72% 38%, rgba(225, 9, 6, 0.16), transparent 46%),
+    linear-gradient(to right, rgba(251, 245, 249, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(251, 245, 249, 0.045) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
 }
 
 .bg-pyverse-soft {
-  background: linear-gradient(180deg, #F0F9FF 0%, #F8FAFC 45%, #FFFFFF 100%);
+  background-color: #FBF5F9;
 }
 
 @keyframes flow-dash {
@@ -57,23 +78,36 @@
   animation: flow-dash 1.2s linear infinite;
 }
 
-/* Clean light scrollbar */
+@keyframes pv-orbit-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-pv-orbit {
+  animation: pv-orbit-slow 26s linear infinite;
+}
+
+/* Clean Editorial Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8FAFC;
+  background: #F1EEEE;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #8A8585;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #100303;
 }
 
 @media (prefers-reduced-motion: reduce) {

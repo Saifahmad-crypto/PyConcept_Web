@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, MotionConfig } from 'motion/react';
 import {
   GamesHubTabId,
   LabTabId,
@@ -170,152 +170,154 @@ export default function App() {
   const reducedMotion = progress.preferences.reducedMotion;
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F8FAFC] text-[#1E293B]">
-      <Navbar
-        activeSection={activeSection}
-        xp={progress.xp}
-        preferences={progress.preferences}
-        onUpdatePreferences={updatePreferences}
-        onOpenSearch={() => setSearchOpen(true)}
-        onNavigate={navigateTo}
-      />
+    <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
+      <div className="flex min-h-screen flex-col bg-[#FBF5F9] text-[#100303]">
+        <Navbar
+          activeSection={activeSection}
+          xp={progress.xp}
+          preferences={progress.preferences}
+          onUpdatePreferences={updatePreferences}
+          onOpenSearch={() => setSearchOpen(true)}
+          onNavigate={navigateTo}
+        />
 
-      <main className="flex-1 bg-pyverse-soft">
-        <motion.div
-          key={`${activeSection}-${activeLabTab}-${selectedSimulator ?? 'hub'}`}
-          initial={reducedMotion ? false : { opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reducedMotion ? 0 : 0.18, ease: 'easeOut' }}
-        >
-          {activeSection === 'home' && (
-            <HomePage
-              progress={progress}
-              onNavigate={navigateTo}
-              onOpenTopic={openTopic}
-              onOpenLabTab={openLabTab}
-              onOpenGamesTab={openGamesTab}
-              onOpenRevisionTab={openRevisionTab}
-              onCompleteDailyQuest={completeDailyQuest}
-            />
-          )}
+        <main className="flex-1 bg-[#FBF5F9]">
+          <motion.div
+            key={`${activeSection}-${activeLabTab}-${selectedSimulator ?? 'hub'}`}
+            initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.2, ease: 'easeOut' }}
+          >
+            {activeSection === 'home' && (
+              <HomePage
+                progress={progress}
+                onNavigate={navigateTo}
+                onOpenTopic={openTopic}
+                onOpenLabTab={openLabTab}
+                onOpenGamesTab={openGamesTab}
+                onOpenRevisionTab={openRevisionTab}
+                onCompleteDailyQuest={completeDailyQuest}
+              />
+            )}
 
-          {activeSection === 'learn' && (
-            <LearningWorldPage
-              activeTopic={activeTopic}
-              onChangeTopic={setActiveTopic}
-              progress={progress}
-              onToggleLesson={toggleLesson}
-              onCompleteMission={completeMission}
-              onCompleteDailyQuest={completeDailyQuest}
-              onNavigate={navigateTo}
-              onOpenGamesTab={openGamesTab}
-              onOpenInSandbox={handleOpenInPlayground}
-            />
-          )}
+            {activeSection === 'learn' && (
+              <LearningWorldPage
+                activeTopic={activeTopic}
+                onChangeTopic={setActiveTopic}
+                progress={progress}
+                onToggleLesson={toggleLesson}
+                onCompleteMission={completeMission}
+                onCompleteDailyQuest={completeDailyQuest}
+                onNavigate={navigateTo}
+                onOpenGamesTab={openGamesTab}
+                onOpenInSandbox={handleOpenInPlayground}
+              />
+            )}
 
-          {activeSection === 'lab' && (
-            <InteractiveLabPage
-              activeTab={activeLabTab}
-              onChangeTab={setActiveLabTab}
-              selectedSimulator={selectedSimulator}
-              onSelectSimulator={setSelectedSimulator}
-              visitedSimulators={progress.visitedSimulators}
-              onRecordSimulatorRun={recordSimulatorRun}
-              onAskTutor={handleAskTutorFromSimulator}
-              onOpenInStudio={handleOpenInPlayground}
-              completedChallenges={progress.completedChallenges}
-              onOpenChallenge={handleOpenChallenge}
-            />
-          )}
+            {activeSection === 'lab' && (
+              <InteractiveLabPage
+                activeTab={activeLabTab}
+                onChangeTab={setActiveLabTab}
+                selectedSimulator={selectedSimulator}
+                onSelectSimulator={setSelectedSimulator}
+                visitedSimulators={progress.visitedSimulators}
+                onRecordSimulatorRun={recordSimulatorRun}
+                onAskTutor={handleAskTutorFromSimulator}
+                onOpenInStudio={handleOpenInPlayground}
+                completedChallenges={progress.completedChallenges}
+                onOpenChallenge={handleOpenChallenge}
+              />
+            )}
 
-          {activeSection === 'games' && (
-            <GameZonePage
-              activeTab={activeGamesTab}
-              onChangeTab={setActiveGamesTab}
-              gameScores={progress.gameScores}
-              gameAttempts={progress.gameAttempts}
-              onRecordGameScore={recordGameScore}
-              completedEscapeRooms={progress.completedEscapeRooms}
-              onCompleteEscapeRoom={completeEscapeRoom}
-              completedBugHunts={progress.completedBugHunts}
-              onCompleteBugHunt={completeBugHunt}
-              completedChallenges={progress.completedChallenges}
-              onCompleteChallenge={markChallengeComplete}
-              quizScores={progress.quizScores}
-              onRecordQuizResult={recordQuizResult}
-            />
-          )}
+            {activeSection === 'games' && (
+              <GameZonePage
+                activeTab={activeGamesTab}
+                onChangeTab={setActiveGamesTab}
+                gameScores={progress.gameScores}
+                gameAttempts={progress.gameAttempts}
+                onRecordGameScore={recordGameScore}
+                completedEscapeRooms={progress.completedEscapeRooms}
+                onCompleteEscapeRoom={completeEscapeRoom}
+                completedBugHunts={progress.completedBugHunts}
+                onCompleteBugHunt={completeBugHunt}
+                completedChallenges={progress.completedChallenges}
+                onCompleteChallenge={markChallengeComplete}
+                quizScores={progress.quizScores}
+                onRecordQuizResult={recordQuizResult}
+              />
+            )}
 
-          {activeSection === 'studio' && (
-            <CodingStudioPage
-              activeTab={activeStudioTab}
-              onChangeTab={setActiveStudioTab}
-              externalCode={sandboxCode}
-              onConsumeExternalCode={handleConsumeSandboxCode}
-              onRecordSandboxRun={recordSandboxRun}
-              savedSnippets={progress.savedSnippets}
-              onSaveSnippet={saveSnippet}
-              onDeleteSnippet={deleteSnippet}
-              completedChallenges={progress.completedChallenges}
-              onCompleteChallenge={markChallengeComplete}
-              externalChallengeId={selectedChallengeId}
-              onConsumeExternalChallenge={handleConsumeChallengeId}
-            />
-          )}
+            {activeSection === 'studio' && (
+              <CodingStudioPage
+                activeTab={activeStudioTab}
+                onChangeTab={setActiveStudioTab}
+                externalCode={sandboxCode}
+                onConsumeExternalCode={handleConsumeSandboxCode}
+                onRecordSandboxRun={recordSandboxRun}
+                savedSnippets={progress.savedSnippets}
+                onSaveSnippet={saveSnippet}
+                onDeleteSnippet={deleteSnippet}
+                completedChallenges={progress.completedChallenges}
+                onCompleteChallenge={markChallengeComplete}
+                externalChallengeId={selectedChallengeId}
+                onConsumeExternalChallenge={handleConsumeChallengeId}
+              />
+            )}
 
-          {activeSection === 'tutor' && (
-            <AdaptiveTutorPage
-              progress={progress}
-              onSetTopic={setTutorTopic}
-              onSetDifficulty={setTutorDifficulty}
-              onMarkUnderstood={markConceptUnderstood}
-              onMarkToReview={markConceptToReview}
-              onRemoveConcept={removeConceptTag}
-              onRecordPracticeAttempt={recordPracticeAttempt}
-              onResetProgress={resetProgress}
-              onNavigate={navigateTo}
-              onOpenTopic={openTopic}
-              onOpenInPlayground={handleOpenInPlayground}
-              pendingSimulatorContext={pendingTutorSimContext}
-              onConsumeSimulatorContext={handleConsumeSimulatorContext}
-            />
-          )}
+            {activeSection === 'tutor' && (
+              <AdaptiveTutorPage
+                progress={progress}
+                onSetTopic={setTutorTopic}
+                onSetDifficulty={setTutorDifficulty}
+                onMarkUnderstood={markConceptUnderstood}
+                onMarkToReview={markConceptToReview}
+                onRemoveConcept={removeConceptTag}
+                onRecordPracticeAttempt={recordPracticeAttempt}
+                onResetProgress={resetProgress}
+                onNavigate={navigateTo}
+                onOpenTopic={openTopic}
+                onOpenInPlayground={handleOpenInPlayground}
+                pendingSimulatorContext={pendingTutorSimContext}
+                onConsumeSimulatorContext={handleConsumeSimulatorContext}
+              />
+            )}
 
-          {activeSection === 'revision' && (
-            <RevisionHubPage
-              activeTab={activeRevisionTab}
-              onChangeTab={setActiveRevisionTab}
-              understoodFlashcards={progress.understoodFlashcards}
-              onToggleFlashcardUnderstood={toggleFlashcardUnderstood}
-              quizScores={progress.quizScores}
-              onRecordQuizResult={recordQuizResult}
-              onOpenInStudio={handleOpenInPlayground}
-            />
-          )}
+            {activeSection === 'revision' && (
+              <RevisionHubPage
+                activeTab={activeRevisionTab}
+                onChangeTab={setActiveRevisionTab}
+                understoodFlashcards={progress.understoodFlashcards}
+                onToggleFlashcardUnderstood={toggleFlashcardUnderstood}
+                quizScores={progress.quizScores}
+                onRecordQuizResult={recordQuizResult}
+                onOpenInStudio={handleOpenInPlayground}
+              />
+            )}
 
-          {activeSection === 'progress' && (
-            <ProgressDashboard
-              progress={progress}
-              onToggleLesson={toggleLesson}
-              onResetProgress={resetProgress}
-              onNavigate={navigateTo}
-              onOpenTopic={openTopic}
-              onOpenGamesTab={openGamesTab}
-              onOpenRevisionTab={openRevisionTab}
-            />
-          )}
-        </motion.div>
-      </main>
+            {activeSection === 'progress' && (
+              <ProgressDashboard
+                progress={progress}
+                onToggleLesson={toggleLesson}
+                onResetProgress={resetProgress}
+                onNavigate={navigateTo}
+                onOpenTopic={openTopic}
+                onOpenGamesTab={openGamesTab}
+                onOpenRevisionTab={openRevisionTab}
+              />
+            )}
+          </motion.div>
+        </main>
 
-      <GlobalSearchModal
-        isOpen={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        onNavigate={navigateTo}
-        onOpenTopic={openTopic}
-        onOpenLabTab={openLabTab}
-        onOpenGamesTab={openGamesTab}
-        onOpenRevisionTab={openRevisionTab}
-      />
-    </div>
+        <GlobalSearchModal
+          isOpen={searchOpen}
+          onClose={() => setSearchOpen(false)}
+          onNavigate={navigateTo}
+          onOpenTopic={openTopic}
+          onOpenLabTab={openLabTab}
+          onOpenGamesTab={openGamesTab}
+          onOpenRevisionTab={openRevisionTab}
+        />
+      </div>
+    </MotionConfig>
   );
 }

@@ -313,19 +313,19 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
     <div
       className={`flex flex-wrap items-center gap-2.5 ${
         compact
-          ? 'rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2'
-          : 'rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2'
+          ? 'rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2'
+          : 'rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2'
       }`}
     >
       <div className="flex items-center gap-1.5">
-        <Gauge className="h-4 w-4 text-[#2563EB]" aria-hidden="true" />
+        <Gauge className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
         <label
           htmlFor={compact ? 'compact-speed-slider' : 'sim-speed-slider'}
-          className="text-xs font-semibold text-[#1E293B]"
+          className="text-xs font-semibold text-[#100303]"
         >
           Frame Rate
         </label>
-        <span className="font-mono text-xs font-bold text-[#2563EB] tabular-nums">
+        <span className="font-mono text-xs font-bold text-[#E10906] tabular-nums">
           {multiplier % 1 === 0 ? `${multiplier}.0x` : `${multiplier}x`}
         </span>
       </div>
@@ -339,10 +339,10 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
         value={multiplier}
         aria-label="Simulation frame rate speed multiplier"
         onChange={(e) => handleSpeedChange(multiplierToSpeedMs(Number(e.target.value)))}
-        className="w-24 sm:w-28 accent-[#2563EB] cursor-pointer"
+        className="w-24 sm:w-28 accent-[#E10906] cursor-pointer"
       />
 
-      <div className="inline-flex rounded-lg border border-slate-200 bg-white p-0.5">
+      <div className="inline-flex rounded-lg border border-[#E5DFDF] bg-white p-0.5">
         {SPEED_PRESETS.map((preset) => {
           const active = Math.abs(multiplier - preset.multiplier) < 0.08;
           return (
@@ -352,8 +352,8 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
               onClick={() => handleSpeedChange(multiplierToSpeedMs(preset.multiplier))}
               className={`rounded-md px-2 py-1 font-mono text-[11px] font-semibold transition-all whitespace-nowrap ${
                 active
-                  ? 'bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] text-white shadow-xs'
-                  : 'text-[#64748B] hover:text-[#1E293B]'
+                  ? 'bg-[#E10906] text-white shadow-xs'
+                  : 'text-[#8A8585] hover:text-[#100303]'
               }`}
             >
               {preset.label}
@@ -363,12 +363,12 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
       </div>
 
       {!compact && (
-        <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#64748B]">
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#8A8585]">
           <span className="font-mono tabular-nums">
             {paceLabel} · {fps.toFixed(2)} FPS · {speedMs}ms/step
           </span>
           {remainingSeconds !== null && remainingSteps !== null && remainingSteps > 0 && (
-            <span className="font-mono text-slate-500 tabular-nums">
+            <span className="font-mono text-[#8A8585] tabular-nums">
               · ~{remainingSeconds}s left
             </span>
           )}
@@ -383,11 +383,11 @@ export const AnimationSpeedController: React.FC<AnimationSpeedControllerProps> =
           title="Automatically slow down briefly when evaluating if/elif or loop conditions"
           className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition-colors whitespace-nowrap ${
             pauseOnBranches
-              ? 'border-violet-300 bg-violet-50 text-violet-800'
-              : 'border-slate-200 bg-white text-[#64748B] hover:text-[#1E293B]'
+              ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
+              : 'border-[#E5DFDF] bg-white text-[#8A8585] hover:text-[#100303]'
           }`}
         >
-          <Sparkles className="h-3 w-3 text-[#8B5CF6]" aria-hidden="true" />
+          <Sparkles className="h-3 w-3 text-[#E10906]" aria-hidden="true" />
           Smart Branch Pause: {pauseOnBranches ? 'On' : 'Off'}
         </button>
       )}

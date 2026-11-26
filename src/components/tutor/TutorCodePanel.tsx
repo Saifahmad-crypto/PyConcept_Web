@@ -57,7 +57,7 @@ function highlightPythonLine(line: string): React.ReactNode[] {
     const word = match[0];
     if (word.startsWith('#')) {
       tokens.push(
-        <span key={k++} className="text-slate-400 italic">
+        <span key={k++} className="text-[#8A8585] italic">
           {word}
         </span>
       );
@@ -75,19 +75,19 @@ function highlightPythonLine(line: string): React.ReactNode[] {
       );
     } else if (PY_KEYWORDS.has(word)) {
       tokens.push(
-        <span key={k++} className="font-semibold text-violet-300">
+        <span key={k++} className="font-semibold text-[#FF6B6B]">
           {word}
         </span>
       );
     } else if (PY_BUILTINS.has(word)) {
       tokens.push(
-        <span key={k++} className="text-sky-300">
+        <span key={k++} className="text-[#E10906]">
           {word}
         </span>
       );
     } else {
       tokens.push(
-        <span key={k++} className="text-slate-100">
+        <span key={k++} className="text-[#FBF5F9]">
           {word}
         </span>
       );
@@ -121,15 +121,15 @@ export const TutorCodePanel: React.FC<TutorCodePanelProps> = ({
   };
 
   return (
-    <div className="my-3 overflow-hidden rounded-xl border border-slate-200 bg-[#0F172A] shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 bg-[#1E293B] px-3.5 py-2 text-xs">
-        <span className="font-mono font-medium text-sky-300">{language || 'python'}</span>
+    <div className="my-3 overflow-hidden rounded-xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#2C1616] bg-[#190909] px-3.5 py-2 text-xs">
+        <span className="font-mono font-medium text-[#E10906]">{language || 'python'}</span>
         <div className="flex items-center gap-2">
           {onOpenInPlayground && (
             <button
               type="button"
               onClick={() => onOpenInPlayground(cleanCode)}
-              className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-2.5 py-1 text-[11px] font-semibold text-white transition-opacity hover:opacity-95 whitespace-nowrap"
+              className="inline-flex items-center gap-1 rounded-lg bg-[#E10906] px-2.5 py-1 text-[11px] font-semibold text-white transition-opacity hover:opacity-95 whitespace-nowrap"
             >
               <Play className="h-3 w-3" aria-hidden="true" />
               Test in Playground
@@ -138,7 +138,7 @@ export const TutorCodePanel: React.FC<TutorCodePanelProps> = ({
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-[11px] font-medium text-slate-200 transition-colors hover:text-white whitespace-nowrap"
+            className="inline-flex items-center gap-1 rounded-lg border border-[#2C1616] bg-[#190909]/80 px-2.5 py-1 text-[11px] font-medium text-[#CFC8C8] transition-colors hover:text-white whitespace-nowrap"
           >
             {copied ? (
               <>
@@ -157,11 +157,11 @@ export const TutorCodePanel: React.FC<TutorCodePanelProps> = ({
 
       <div className="overflow-x-auto py-3 font-mono text-xs sm:text-[13px] leading-6">
         {lines.map((line, idx) => (
-          <div key={idx} className="flex px-3 hover:bg-slate-800/40">
-            <span className="w-7 shrink-0 select-none pr-3 text-right text-slate-500 tabular-nums">
+          <div key={idx} className="flex px-3 hover:bg-[#190909]/40">
+            <span className="w-7 shrink-0 select-none pr-3 text-right text-[#8A8585] tabular-nums">
               {idx + 1}
             </span>
-            <pre className="whitespace-pre text-slate-100">
+            <pre className="whitespace-pre text-[#FBF5F9]">
               {line.length > 0 ? highlightPythonLine(line) : ' '}
             </pre>
           </div>

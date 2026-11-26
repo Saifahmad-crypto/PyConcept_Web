@@ -111,12 +111,12 @@ const ExpandableConcept: React.FC<{ title?: string; children: React.ReactNode }>
 }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-[#F8FAFC]">
+    <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9]">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between px-4 py-2.5 text-left font-display text-xs font-semibold text-[#2563EB] hover:bg-sky-50/50 rounded-2xl transition-colors"
+        className="flex w-full items-center justify-between px-4 py-2.5 text-left font-display text-xs font-semibold text-[#E10906] hover:bg-[#FFF1F1]/50 rounded-2xl transition-colors"
       >
         <span>{title}</span>
         <ChevronDown
@@ -125,7 +125,7 @@ const ExpandableConcept: React.FC<{ title?: string; children: React.ReactNode }>
         />
       </button>
       {open && (
-        <div className="border-t border-slate-200/70 px-4 py-3 text-xs sm:text-sm leading-relaxed text-[#64748B] space-y-2">
+        <div className="border-t border-[#E5DFDF]/70 px-4 py-3 text-xs sm:text-sm leading-relaxed text-[#8A8585] space-y-2">
           {children}
         </div>
       )}
@@ -241,12 +241,12 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
   ) => {
     const isDone = completedLessons.includes(id);
     return (
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#E5DFDF] pb-4">
         <div>
-          <span className="font-mono text-xs font-semibold text-[#2563EB]">
+          <span className="font-mono text-xs font-semibold text-[#E10906]">
             Section {num} · {stageTag}
           </span>
-          <h3 className="mt-0.5 font-display text-xl font-bold text-[#1E293B] sm:text-2xl">
+          <h3 className="mt-0.5 font-display text-xl font-bold text-[#100303] sm:text-2xl">
             {title}
           </h3>
         </div>
@@ -256,7 +256,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
           className={`inline-flex min-h-[40px] items-center gap-2 rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-colors whitespace-nowrap ${
             isDone
               ? 'border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100/70'
-              : 'border-slate-200 bg-[#F8FAFC] text-slate-700 hover:border-sky-300 hover:bg-[#F0F9FF]'
+              : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]'
           }`}
         >
           {isDone ? (
@@ -266,7 +266,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
             </>
           ) : (
             <>
-              <Circle className="h-4 w-4 text-slate-400" aria-hidden="true" />
+              <Circle className="h-4 w-4 text-[#8A8585]" aria-hidden="true" />
               Mark Complete
             </>
           )}
@@ -278,19 +278,19 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
       {/* Top Topic Header + Controls */}
-      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-6 lg:flex-row lg:items-end">
         <div>
-          <p className="text-xs font-semibold text-[#2563EB]">
+          <p className="text-xs font-semibold text-[#E10906]">
             PyVerse Visual Learning World
           </p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
             {activeTopic === 'basics'
               ? '01. Python Basics'
               : activeTopic === 'conditionals'
               ? '02. Conditional Statements'
               : '03. Loops'}
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-[#64748B]">
+          <p className="mt-2 max-w-2xl text-sm text-[#8A8585]">
             {activeTopic === 'basics'
               ? 'Visual foundation: variables as memory boxes, data types, print() output, and Python spacing.'
               : activeTopic === 'conditionals'
@@ -301,7 +301,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
         <div className="flex flex-col items-start gap-2.5 lg:items-end">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1 shadow-xs">
+            <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-white p-1 shadow-xs">
               <button
                 type="button"
                 onClick={() => {
@@ -310,8 +310,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 }}
                 className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
                   activeTopic === 'basics'
-                    ? 'bg-gradient-to-r from-[#38BDF8] to-[#2563EB] text-white shadow-xs'
-                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-xs'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 <Box className="h-3.5 w-3.5" aria-hidden="true" />
@@ -325,8 +325,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 }}
                 className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
                   activeTopic === 'conditionals'
-                    ? 'bg-gradient-to-r from-[#2563EB] to-[#6366F1] text-white shadow-xs'
-                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-xs'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 <GitBranch className="h-3.5 w-3.5" aria-hidden="true" />
@@ -340,8 +340,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 }}
                 className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
                   activeTopic === 'loops'
-                    ? 'bg-gradient-to-r from-[#8B5CF6] to-[#2563EB] text-white shadow-xs'
-                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-xs'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 <Repeat className="h-3.5 w-3.5" aria-hidden="true" />
@@ -352,14 +352,14 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
             <button
               type="button"
               onClick={() => setCheatOpen(true)}
-              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] shadow-xs hover:border-sky-300 hover:bg-[#F0F9FF] whitespace-nowrap"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] shadow-xs hover:border-[#E10906] hover:bg-[#FFF1F1] whitespace-nowrap"
             >
-              <BookMarked className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
+              <BookMarked className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
               Cheat Sheet
             </button>
           </div>
 
-          <span className="font-mono text-xs text-[#64748B] tabular-nums">
+          <span className="font-mono text-xs text-[#8A8585] tabular-nums">
             {doneCount} of {lessons.length} sections completed in this topic
           </span>
         </div>
@@ -367,7 +367,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
       {/* 6-Stage Visual Learning Flow Tabs */}
       <div className="mb-8 overflow-x-auto pb-1">
-        <div className="inline-flex min-w-full sm:min-w-0 items-center gap-1.5 rounded-2xl border border-slate-200/90 bg-white p-1.5 shadow-xs">
+        <div className="inline-flex min-w-full sm:min-w-0 items-center gap-1.5 rounded-2xl border border-[#E5DFDF] bg-white p-1.5 shadow-xs">
           {STAGES.map((st) => {
             const Icon = st.icon;
             const active = activeStage === st.id;
@@ -378,8 +378,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 onClick={() => setActiveStage(st.id)}
                 className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-2 font-display text-xs font-semibold transition-all whitespace-nowrap ${
                   active
-                    ? 'bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] text-white shadow-sm'
-                    : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-sm'
+                    : 'text-[#8A8585] hover:bg-[#FBF5F9] hover:text-[#100303]'
                 }`}
               >
                 <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -393,8 +393,8 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
       {/* Main Split: Chapter Index + Visual Content */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <aside className="lg:col-span-3">
-          <div className="sticky top-20 space-y-4 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm">
-            <h2 className="font-display text-xs font-bold uppercase tracking-wider text-[#64748B]">
+          <div className="sticky top-20 space-y-4 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm">
+            <h2 className="font-display text-xs font-bold uppercase tracking-wider text-[#8A8585]">
               Topic Chapters
             </h2>
             <nav aria-label="Lesson chapters" className="space-y-1">
@@ -405,10 +405,10 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                     key={lesson.id}
                     href={`#${lesson.id}`}
                     onClick={() => setActiveStage('all')}
-                    className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-[#1E293B] transition-colors hover:bg-[#F0F9FF] hover:text-[#2563EB]"
+                    className="flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-[#100303] transition-colors hover:bg-[#FFF1F1] hover:text-[#E10906]"
                   >
                     <span className="truncate">
-                      <span className="mr-1.5 font-mono text-slate-400">{lesson.number}</span>
+                      <span className="mr-1.5 font-mono text-[#8A8585]">{lesson.number}</span>
                       {lesson.title}
                     </span>
                     {isDone && (
@@ -422,11 +422,11 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               })}
             </nav>
 
-            <div className="space-y-2 border-t border-slate-200 pt-4">
+            <div className="space-y-2 border-t border-[#E5DFDF] pt-4">
               <button
                 type="button"
                 onClick={() => onNavigate('simulators')}
-                className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-95"
+                className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl bg-[#E10906] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-95"
               >
                 <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
                 Open Simulators
@@ -438,9 +438,9 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                     activeTopic === 'basics' ? 'mini-games' : 'logic-lab'
                   )
                 }
-                className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-semibold text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]"
+                className="flex min-h-[40px] w-full items-center justify-center gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]"
               >
-                <Gamepad2 className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
+                <Gamepad2 className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
                 {activeTopic === 'basics' ? 'Play Mini-Games' : 'Open Logic Lab'}
               </button>
             </div>
@@ -455,12 +455,12 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               {(showStage('explore') || showStage('visualize')) && (
                 <section
                   id="b-vars"
-                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                 >
                   {renderLessonHeader('b-vars', '1.1', 'Variables & Memory Boxes', 'Explore & Visualize')}
-                  <div className="space-y-4 text-sm text-[#1E293B]">
-                    <p className="text-[#64748B]">
-                      Think of a <strong className="text-[#1E293B]">variable</strong> as a labeled storage box. Python writes the label on the outside and stores your value inside.
+                  <div className="space-y-4 text-sm text-[#100303]">
+                    <p className="text-[#8A8585]">
+                      Think of a <strong className="text-[#100303]">variable</strong> as a labeled storage box. Python writes the label on the outside and stores your value inside.
                     </p>
                     <VariableBoxVisualizer />
                     <ExpandableConcept title="Explore Concept: Rules for Naming Variables">
@@ -475,15 +475,15 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               {(showStage('understand') || showStage('experiment')) && (
                 <section
                   id="b-types"
-                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                 >
                   {renderLessonHeader('b-types', '1.2', 'Core Data Types (int, float, str, bool)', 'Understand & Experiment')}
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                       {[
-                        { type: 'int', ex: '42', desc: 'Whole numbers', tone: 'border-sky-200 bg-sky-50/70 text-sky-800' },
-                        { type: 'float', ex: '3.14', desc: 'Decimal numbers', tone: 'border-indigo-200 bg-indigo-50/70 text-indigo-800' },
-                        { type: 'str', ex: '"Hi"', desc: 'Text in quotes', tone: 'border-violet-200 bg-violet-50/70 text-violet-800' },
+                        { type: 'int', ex: '42', desc: 'Whole numbers', tone: 'border-[#E5DFDF] bg-[#FFF1F1]/70 text-[#100303]' },
+                        { type: 'float', ex: '3.14', desc: 'Decimal numbers', tone: 'border-indigo-200 bg-[#FFF1F1]/70 text-[#100303]' },
+                        { type: 'str', ex: '"Hi"', desc: 'Text in quotes', tone: 'border-[#E5DFDF] bg-[#FFF1F1]/70 text-[#100303]' },
                         { type: 'bool', ex: 'True', desc: 'True or False', tone: 'border-emerald-200 bg-emerald-50/70 text-emerald-800' },
                       ].map((t) => (
                         <div key={t.type} className={`rounded-2xl border p-4 ${t.tone}`}>
@@ -495,37 +495,37 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                     </div>
 
                     {/* Interactive f-string & print() Builder */}
-                    <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 space-y-3">
-                      <p className="font-display text-xs font-bold uppercase tracking-wider text-[#2563EB]">
+                    <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/70 p-4 space-y-3">
+                      <p className="font-display text-xs font-bold uppercase tracking-wider text-[#E10906]">
                         Experiment: Live f-string &amp; print() Builder
                       </p>
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <label className="text-xs font-semibold text-[#1E293B]">
+                        <label className="text-xs font-semibold text-[#100303]">
                           student_name (str):
                           <input
                             type="text"
                             value={fName}
                             onChange={(e) => setFName(e.target.value)}
-                            className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                            className="mt-1 w-full rounded-xl border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm"
                           />
                         </label>
-                        <label className="text-xs font-semibold text-[#1E293B]">
+                        <label className="text-xs font-semibold text-[#100303]">
                           score (int):
                           <input
                             type="number"
                             value={fScore}
                             onChange={(e) => setFScore(Number(e.target.value))}
-                            className="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                            className="mt-1 w-full rounded-xl border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm"
                           />
                         </label>
                       </div>
                       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <pre className="rounded-xl bg-[#0F172A] p-3 font-mono text-xs text-slate-200">
+                        <pre className="rounded-xl bg-[#100303] p-3 font-mono text-xs text-[#CFC8C8]">
                           {`name = "${fName}"\nscore = ${fScore}\nprint(f"Hi {name}, score: {score}")`}
                         </pre>
                         <div className="flex flex-col justify-center rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 font-mono text-xs">
                           <span className="text-[11px] font-semibold text-emerald-700">Live Output:</span>
-                          <span className="mt-1 text-sm font-bold text-[#1E293B]">
+                          <span className="mt-1 text-sm font-bold text-[#100303]">
                             Hi {fName}, score: {fScore}
                           </span>
                         </div>
@@ -538,48 +538,48 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               {(showStage('understand') || showStage('experiment')) && (
                 <section
                   id="b-io"
-                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                 >
                   {renderLessonHeader('b-io', '1.3', 'Math Expressions & Python Indentation', 'Experiment')}
                   <div className="space-y-4">
-                    <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                    <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-3">
                       <div className="flex flex-wrap items-center gap-4">
-                        <label className="text-xs font-semibold text-[#1E293B]">
+                        <label className="text-xs font-semibold text-[#100303]">
                           a:
                           <input
                             type="number"
                             value={mathA}
                             onChange={(e) => setMathA(Number(e.target.value))}
-                            className="ml-2 w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                            className="ml-2 w-20 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-mono text-sm"
                           />
                         </label>
-                        <label className="text-xs font-semibold text-[#1E293B]">
+                        <label className="text-xs font-semibold text-[#100303]">
                           b:
                           <input
                             type="number"
                             value={mathB}
                             onChange={(e) => setMathB(Number(e.target.value) || 1)}
-                            className="ml-2 w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                            className="ml-2 w-20 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-mono text-sm"
                           />
                         </label>
                       </div>
                       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 font-mono text-xs">
-                        <div className="rounded-xl border border-slate-200 bg-white p-3">
-                          <div className="text-[#64748B]">{mathA} + {mathB}</div>
-                          <div className="mt-1 font-bold text-[#2563EB]">{mathA + mathB}</div>
+                        <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
+                          <div className="text-[#8A8585]">{mathA} + {mathB}</div>
+                          <div className="mt-1 font-bold text-[#E10906]">{mathA + mathB}</div>
                         </div>
-                        <div className="rounded-xl border border-slate-200 bg-white p-3">
-                          <div className="text-[#64748B]">{mathA} * {mathB}</div>
-                          <div className="mt-1 font-bold text-[#2563EB]">{mathA * mathB}</div>
+                        <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
+                          <div className="text-[#8A8585]">{mathA} * {mathB}</div>
+                          <div className="mt-1 font-bold text-[#E10906]">{mathA * mathB}</div>
                         </div>
-                        <div className="rounded-xl border border-slate-200 bg-white p-3">
-                          <div className="text-[#64748B]">{mathA} // {mathB} (floor)</div>
-                          <div className="mt-1 font-bold text-[#8B5CF6]">
+                        <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
+                          <div className="text-[#8A8585]">{mathA} // {mathB} (floor)</div>
+                          <div className="mt-1 font-bold text-[#E10906]">
                             {Math.floor(mathA / (mathB || 1))}
                           </div>
                         </div>
-                        <div className="rounded-xl border border-slate-200 bg-white p-3">
-                          <div className="text-[#64748B]">{mathA} % {mathB} (rem)</div>
+                        <div className="rounded-xl border border-[#E5DFDF] bg-white p-3">
+                          <div className="text-[#8A8585]">{mathA} % {mathB} (rem)</div>
                           <div className="mt-1 font-bold text-emerald-700">
                             {mathA % (mathB || 1)}
                           </div>
@@ -604,26 +604,26 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               {showStage('explore') && (
                 <section
                   id="c-intro"
-                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                 >
                   {renderLessonHeader('c-intro', '4.1', 'Introduction to Conditional Statements', 'Explore')}
-                  <div className="space-y-4 text-sm text-[#64748B]">
+                  <div className="space-y-4 text-sm text-[#8A8585]">
                     <p>
                       Programs make decisions just like traffic lights or grading rules: evaluate a{' '}
-                      <strong className="text-[#1E293B]">Boolean condition</strong> into{' '}
+                      <strong className="text-[#100303]">Boolean condition</strong> into{' '}
                       <code className="font-mono font-semibold text-emerald-700">True</code> or{' '}
-                      <code className="font-mono font-semibold text-violet-700">False</code>, then pick one branch.
+                      <code className="font-mono font-semibold text-[#E10906]">False</code>, then pick one branch.
                     </p>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4">
                         <p className="font-mono text-xs font-bold text-emerald-800">Condition is True</p>
-                        <p className="mt-1 text-xs text-[#1E293B]">
+                        <p className="mt-1 text-xs text-[#100303]">
                           <code className="font-mono">temp &gt; 30</code> when temp is 34 → Python runs the indented block.
                         </p>
                       </div>
-                      <div className="rounded-2xl border border-violet-200 bg-violet-50/70 p-4">
-                        <p className="font-mono text-xs font-bold text-violet-800">Condition is False</p>
-                        <p className="mt-1 text-xs text-[#1E293B]">
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FFF1F1]/70 p-4">
+                        <p className="font-mono text-xs font-bold text-[#100303]">Condition is False</p>
+                        <p className="mt-1 text-xs text-[#100303]">
                           <code className="font-mono">temp &gt; 30</code> when temp is 22 → Python skips the block.
                         </p>
                       </div>
@@ -641,7 +641,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 <>
                   <section
                     id="c-if"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-if', '4.2', 'The if Statement', 'Understand')}
                     <div className="space-y-4">
@@ -650,10 +650,10 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           title="if_example.py"
                           code={'age = 18\n\nif age >= 18:\n    print("Eligible")'}
                         />
-                        <div className="space-y-2.5 rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs text-[#1E293B]">
+                        <div className="space-y-2.5 rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/70 p-4 text-xs text-[#100303]">
                           <p className="font-bold">Visual Rule Breakdown</p>
-                          <p><span className="font-mono font-semibold text-[#2563EB]">1. Colon (:):</span> Marks the end of the condition line.</p>
-                          <p><span className="font-mono font-semibold text-[#2563EB]">2. 4 Spaces:</span> Indented lines belong inside the <code className="font-mono">if</code> block.</p>
+                          <p><span className="font-mono font-semibold text-[#E10906]">1. Colon (:):</span> Marks the end of the condition line.</p>
+                          <p><span className="font-mono font-semibold text-[#E10906]">2. 4 Spaces:</span> Indented lines belong inside the <code className="font-mono">if</code> block.</p>
                           <p><span className="font-mono font-semibold text-emerald-700">3. Output:</span> Runs only when the condition is <code className="font-mono">True</code>.</p>
                         </div>
                       </div>
@@ -662,7 +662,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="c-ifelse"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-ifelse', '4.3', 'The if-else Statement', 'Understand')}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -683,7 +683,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="c-elif"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-elif', '4.4', 'The if-elif-else Ladder', 'Understand')}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -692,9 +692,9 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         code={'marks = 85\n\nif marks >= 90:\n    print("Grade A")\nelif marks >= 75:\n    print("Grade B")\nelif marks >= 40:\n    print("Pass")\nelse:\n    print("Fail")'}
                       />
                       <div className="space-y-3">
-                        <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/70 p-4 text-xs space-y-2 text-[#1E293B]">
+                        <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/70 p-4 text-xs space-y-2 text-[#100303]">
                           <p className="font-bold">Top-to-Bottom Execution Order (marks = 85)</p>
-                          <p>1. <code className="font-mono">85 &gt;= 90</code> → <span className="text-violet-700 font-semibold">False</span></p>
+                          <p>1. <code className="font-mono">85 &gt;= 90</code> → <span className="text-[#E10906] font-semibold">False</span></p>
                           <p>2. <code className="font-mono">85 &gt;= 75</code> → <span className="text-emerald-700 font-bold">True!</span> Prints &quot;Grade B&quot; and exits ladder.</p>
                         </div>
                         <ExpandableConcept title="Explore Concept: Why Condition Order Matters">
@@ -708,7 +708,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="c-nested"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-nested', '4.5', 'Nested if Statements', 'Understand')}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -732,10 +732,10 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               {showStage('visualize') && (
                 <section
                   id="c-flowchart"
-                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                 >
                   {renderLessonHeader('c-flowchart', '4.9', 'Interactive Decision Tree & Flowcharts', 'Visualize')}
-                  <p className="mb-4 text-sm text-[#64748B]">
+                  <p className="mb-4 text-sm text-[#8A8585]">
                     Pick a structure and change the input value to watch the True/False path light up from Start to End:
                   </p>
 
@@ -747,31 +747,31 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         onClick={() => setFcType(t)}
                         className={`rounded-xl border px-3.5 py-1.5 font-mono text-xs font-semibold transition-all ${
                           fcType === t
-                            ? 'border-transparent bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] text-white shadow-sm'
-                            : 'border-slate-200 bg-white text-[#1E293B] hover:border-sky-300'
+                            ? 'border-transparent bg-[#E10906] text-white shadow-sm'
+                            : 'border-[#E5DFDF] bg-white text-[#100303] hover:border-[#E10906]'
                         }`}
                       >
                         {t}
                       </button>
                     ))}
 
-                    <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
+                    <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-[#100303]">
                       {fcType === 'if' || fcType === 'nested-if' ? 'age:' : 'marks:'}
                       <input
                         type="number"
                         value={fcValue}
                         onChange={(e) => setFcValue(Number(e.target.value))}
-                        className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                        className="w-20 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-mono text-sm"
                       />
                     </label>
 
                     {fcType === 'nested-if' && (
-                      <label className="flex items-center gap-2 text-xs font-medium text-[#1E293B] cursor-pointer">
+                      <label className="flex items-center gap-2 text-xs font-medium text-[#100303] cursor-pointer">
                         <input
                           type="checkbox"
                           checked={fcHasId}
                           onChange={(e) => setFcHasId(e.target.checked)}
-                          className="accent-[#2563EB]"
+                          className="accent-[#E10906]"
                         />
                         has_id = True
                       </label>
@@ -790,28 +790,28 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 <>
                   <section
                     id="c-compare"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-compare', '4.6', 'Comparison Operators & Balance Scale', 'Visualize & Experiment')}
                     <div className="space-y-4">
-                      <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4 space-y-4">
+                      <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/60 p-4 space-y-4">
                         <div className="flex flex-wrap items-center gap-4">
-                          <label className="flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
+                          <label className="flex items-center gap-2 text-xs font-semibold text-[#100303]">
                             Value a:
                             <input
                               type="number"
                               value={cmpA}
                               onChange={(e) => setCmpA(Number(e.target.value))}
-                              className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-mono text-sm"
+                              className="w-20 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1.5 font-mono text-sm"
                             />
                           </label>
-                          <label className="flex items-center gap-2 text-xs font-semibold text-[#1E293B]">
+                          <label className="flex items-center gap-2 text-xs font-semibold text-[#100303]">
                             Value b:
                             <input
                               type="number"
                               value={cmpB}
                               onChange={(e) => setCmpB(Number(e.target.value))}
-                              className="w-20 rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-mono text-sm"
+                              className="w-20 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1.5 font-mono text-sm"
                             />
                           </label>
                         </div>
@@ -820,17 +820,17 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           <div className="lg:col-span-5">
                             <ComparisonScaleSVG leftVal={cmpA} rightVal={cmpB} />
                           </div>
-                          <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white px-4 lg:col-span-7">
+                          <div className="overflow-x-auto rounded-xl border border-[#E5DFDF] bg-white px-4 lg:col-span-7">
                             <table className="w-full text-left text-xs">
                               <thead>
-                                <tr className="border-b border-slate-200 text-[#64748B]">
+                                <tr className="border-b border-[#E5DFDF] text-[#8A8585]">
                                   <th className="py-2.5 pr-3 font-semibold">Op</th>
                                   <th className="py-2.5 pr-3 font-semibold">Meaning</th>
                                   <th className="py-2.5 pr-3 font-semibold">Expr</th>
                                   <th className="py-2.5 font-semibold">Result</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-slate-100 font-mono">
+                              <tbody className="divide-y divide-[#F1EEEE] font-mono">
                                 {[
                                   { op: '==', desc: 'Equal to', res: cmpA === cmpB },
                                   { op: '!=', desc: 'Not equal', res: cmpA !== cmpB },
@@ -840,14 +840,14 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                                   { op: '<=', desc: 'Less or equal', res: cmpA <= cmpB },
                                 ].map((row) => (
                                   <tr key={row.op}>
-                                    <td className="py-2 pr-3 font-bold text-[#2563EB]">{row.op}</td>
-                                    <td className="py-2 pr-3 font-sans text-[#1E293B]">{row.desc}</td>
-                                    <td className="py-2 pr-3 text-[#64748B] tabular-nums">
+                                    <td className="py-2 pr-3 font-bold text-[#E10906]">{row.op}</td>
+                                    <td className="py-2 pr-3 font-sans text-[#100303]">{row.desc}</td>
+                                    <td className="py-2 pr-3 text-[#8A8585] tabular-nums">
                                       {cmpA} {row.op} {cmpB}
                                     </td>
                                     <td
                                       className={`py-2 font-bold ${
-                                        row.res ? 'text-emerald-700' : 'text-violet-700'
+                                        row.res ? 'text-emerald-700' : 'text-[#E10906]'
                                       }`}
                                     >
                                       {row.res ? 'True' : 'False'}
@@ -869,18 +869,18 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="c-logical"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-logical', '4.7', 'Logical Operators (and, or, not)', 'Experiment')}
                     <div className="space-y-4">
-                      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4">
+                      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/60 p-4">
                         <button
                           type="button"
                           onClick={() => setBoolA((v) => !v)}
                           className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
                             boolA
                               ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                              : 'border-violet-300 bg-violet-50 text-violet-800'
+                              : 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
                           }`}
                         >
                           A = {boolA ? 'True' : 'False'} (Toggle)
@@ -891,37 +891,37 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           className={`min-h-[40px] rounded-xl border px-4 py-1.5 font-mono text-xs font-semibold transition-colors ${
                             boolB
                               ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                              : 'border-violet-300 bg-violet-50 text-violet-800'
+                              : 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
                           }`}
                         >
                           B = {boolB ? 'True' : 'False'} (Toggle)
                         </button>
-                        <div className="ml-auto flex flex-wrap gap-4 font-mono text-xs text-[#1E293B]">
+                        <div className="ml-auto flex flex-wrap gap-4 font-mono text-xs text-[#100303]">
                           <span>
                             A and B:{' '}
-                            <strong className={boolA && boolB ? 'text-emerald-700' : 'text-violet-700'}>
+                            <strong className={boolA && boolB ? 'text-emerald-700' : 'text-[#E10906]'}>
                               {boolA && boolB ? 'True' : 'False'}
                             </strong>
                           </span>
                           <span>
                             A or B:{' '}
-                            <strong className={boolA || boolB ? 'text-emerald-700' : 'text-violet-700'}>
+                            <strong className={boolA || boolB ? 'text-emerald-700' : 'text-[#E10906]'}>
                               {boolA || boolB ? 'True' : 'False'}
                             </strong>
                           </span>
                           <span>
                             not A:{' '}
-                            <strong className={!boolA ? 'text-emerald-700' : 'text-violet-700'}>
+                            <strong className={!boolA ? 'text-emerald-700' : 'text-[#E10906]'}>
                               {!boolA ? 'True' : 'False'}
                             </strong>
                           </span>
                         </div>
                       </div>
 
-                      <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white p-4">
+                      <div className="overflow-x-auto rounded-2xl border border-[#E5DFDF] bg-white p-4">
                         <table className="w-full text-left font-mono text-xs">
                           <thead>
-                            <tr className="border-b border-slate-200 text-[#64748B]">
+                            <tr className="border-b border-[#E5DFDF] text-[#8A8585]">
                               <th className="py-2 pr-4">A</th>
                               <th className="py-2 pr-4">B</th>
                               <th className="py-2 pr-4">A and B</th>
@@ -929,7 +929,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                               <th className="py-2">not A</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-slate-100">
+                          <tbody className="divide-y divide-[#F1EEEE]">
                             {[
                               [true, true],
                               [true, false],
@@ -938,16 +938,16 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                             ].map(([a, b], idx) => {
                               const isActiveRow = a === boolA && b === boolB;
                               return (
-                                <tr key={idx} className={isActiveRow ? 'bg-sky-50 font-bold' : ''}>
+                                <tr key={idx} className={isActiveRow ? 'bg-[#FFF1F1] font-bold' : ''}>
                                   <td className="py-2.5 pr-4">{a ? 'True' : 'False'}</td>
                                   <td className="py-2.5 pr-4">{b ? 'True' : 'False'}</td>
-                                  <td className={`py-2.5 pr-4 ${a && b ? 'text-emerald-700' : 'text-violet-700'}`}>
+                                  <td className={`py-2.5 pr-4 ${a && b ? 'text-emerald-700' : 'text-[#E10906]'}`}>
                                     {a && b ? 'True' : 'False'}
                                   </td>
-                                  <td className={`py-2.5 pr-4 ${a || b ? 'text-emerald-700' : 'text-violet-700'}`}>
+                                  <td className={`py-2.5 pr-4 ${a || b ? 'text-emerald-700' : 'text-[#E10906]'}`}>
                                     {a || b ? 'True' : 'False'}
                                   </td>
-                                  <td className={`py-2.5 ${!a ? 'text-emerald-700' : 'text-violet-700'}`}>
+                                  <td className={`py-2.5 ${!a ? 'text-emerald-700' : 'text-[#E10906]'}`}>
                                     {!a ? 'True' : 'False'}
                                   </td>
                                 </tr>
@@ -961,19 +961,19 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="c-realworld"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('c-realworld', '4.8', 'Real-World Conditional Checkers', 'Experiment')}
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
-                        <h4 className="font-display text-sm font-bold text-[#1E293B]">1. Marks &amp; Grade Checker</h4>
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#100303]">1. Marks &amp; Grade Checker</h4>
                         <input
                           type="number"
                           min={0}
                           max={100}
                           value={rwMarks}
                           onChange={(e) => setRwMarks(Number(e.target.value))}
-                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                          className="w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm"
                         />
                         <p className="font-mono text-xs font-bold text-emerald-700">
                           Result:{' '}
@@ -981,66 +981,66 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
-                        <h4 className="font-display text-sm font-bold text-[#1E293B]">2. Age Eligibility Checker</h4>
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#100303]">2. Age Eligibility Checker</h4>
                         <input
                           type="number"
                           min={0}
                           max={120}
                           value={rwAge}
                           onChange={(e) => setRwAge(Number(e.target.value))}
-                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                          className="w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm"
                         />
                         <p className="font-mono text-xs font-bold text-emerald-700">
                           {rwAge >= 18 ? 'Eligible to vote & drive' : 'Not eligible yet (< 18)'}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
-                        <h4 className="font-display text-sm font-bold text-[#1E293B]">3. Positive, Negative, or Zero</h4>
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#100303]">3. Positive, Negative, or Zero</h4>
                         <input
                           type="number"
                           value={rwSignNum}
                           onChange={(e) => setRwSignNum(Number(e.target.value))}
-                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                          className="w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm"
                         />
                         <p className="font-mono text-xs font-bold text-emerald-700">
                           {rwSignNum > 0 ? 'Positive (> 0)' : rwSignNum < 0 ? 'Negative (< 0)' : 'Zero (== 0)'}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2">
-                        <h4 className="font-display text-sm font-bold text-[#1E293B]">4. Even &amp; Odd Checker</h4>
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-2">
+                        <h4 className="font-display text-sm font-bold text-[#100303]">4. Even &amp; Odd Checker</h4>
                         <input
                           type="number"
                           value={rwEvenNum}
                           onChange={(e) => setRwEvenNum(Math.trunc(Number(e.target.value)))}
-                          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm"
+                          className="w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm"
                         />
                         <p className="font-mono text-xs font-bold text-emerald-700">
                           {rwEvenNum} % 2 == {Math.abs(rwEvenNum % 2)} → {rwEvenNum % 2 === 0 ? 'Even' : 'Odd'}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-2 md:col-span-2">
-                        <h4 className="font-display text-sm font-bold text-[#1E293B]">5. Discount Eligibility Checker</h4>
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-2 md:col-span-2">
+                        <h4 className="font-display text-sm font-bold text-[#100303]">5. Discount Eligibility Checker</h4>
                         <div className="flex flex-wrap items-center gap-4">
-                          <label className="text-xs font-medium text-[#1E293B]">
+                          <label className="text-xs font-medium text-[#100303]">
                             Total ($):
                             <input
                               type="number"
                               min={0}
                               value={rwTotal}
                               onChange={(e) => setRwTotal(Number(e.target.value))}
-                              className="ml-2 w-24 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono text-sm"
+                              className="ml-2 w-24 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-mono text-sm"
                             />
                           </label>
-                          <label className="flex items-center gap-2 text-xs font-medium text-[#1E293B] cursor-pointer">
+                          <label className="flex items-center gap-2 text-xs font-medium text-[#100303] cursor-pointer">
                             <input
                               type="checkbox"
                               checked={rwMember}
                               onChange={(e) => setRwMember(e.target.checked)}
-                              className="accent-[#2563EB]"
+                              className="accent-[#E10906]"
                             />
                             is_member = True
                           </label>
@@ -1064,13 +1064,13 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
               {showStage('explore') && (
                 <section
                   id="l-intro"
-                  className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                  className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                 >
                   {renderLessonHeader('l-intro', '6.1', 'Introduction to Loops', 'Explore')}
                   <div className="space-y-4">
-                    <p className="text-sm text-[#64748B]">
-                      A <strong className="text-[#1E293B]">loop</strong> repeats instructions automatically. Each single pass is called an{' '}
-                      <strong className="text-[#8B5CF6]">iteration</strong>.
+                    <p className="text-sm text-[#8A8585]">
+                      A <strong className="text-[#100303]">loop</strong> repeats instructions automatically. Each single pass is called an{' '}
+                      <strong className="text-[#E10906]">iteration</strong>.
                     </p>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <CodeBlock
@@ -1093,7 +1093,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 <>
                   <section
                     id="l-for"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-for', '6.2', 'The for Loop', 'Understand & Visualize')}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -1114,7 +1114,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="l-while"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-while', '6.4', 'The while Loop', 'Understand & Visualize')}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -1139,42 +1139,42 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                 <>
                   <section
                     id="l-range"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-range', '6.3', 'Interactive range() Builder', 'Experiment')}
-                    <div className="rounded-2xl border border-violet-100 bg-[#F0F9FF]/60 p-4 space-y-4">
+                    <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/60 p-4 space-y-4">
                       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                        <label className="text-xs font-medium text-[#64748B]">
+                        <label className="text-xs font-medium text-[#8A8585]">
                           start:
                           <input
                             type="number"
                             value={rangeStart}
                             onChange={(e) => setRangeStart(Number(e.target.value))}
-                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
+                            className="mt-1 w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm text-[#100303]"
                           />
                         </label>
-                        <label className="text-xs font-medium text-[#64748B]">
+                        <label className="text-xs font-medium text-[#8A8585]">
                           stop (excluded):
                           <input
                             type="number"
                             value={rangeStop}
                             onChange={(e) => setRangeStop(Number(e.target.value))}
-                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
+                            className="mt-1 w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm text-[#100303]"
                           />
                         </label>
-                        <label className="text-xs font-medium text-[#64748B]">
+                        <label className="text-xs font-medium text-[#8A8585]">
                           step:
                           <input
                             type="number"
                             value={rangeStep}
                             onChange={(e) => setRangeStep(Number(e.target.value))}
-                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm text-[#1E293B]"
+                            className="mt-1 w-full rounded-lg border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm text-[#100303]"
                           />
                         </label>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2 text-xs">
-                        <span className="font-mono font-medium text-[#1E293B]">
+                        <span className="font-mono font-medium text-[#100303]">
                           range({rangeStart}, {rangeStop}, {rangeStep}) →
                         </span>
                         {rangePreview.warning ? (
@@ -1183,7 +1183,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           rangePreview.values.map((val, idx) => (
                             <span
                               key={`${val}-${idx}`}
-                              className="inline-flex h-8 min-w-[34px] items-center justify-center rounded-lg border border-violet-200 bg-white px-2 font-mono font-bold text-[#8B5CF6] shadow-xs tabular-nums"
+                              className="inline-flex h-8 min-w-[34px] items-center justify-center rounded-lg border border-[#E5DFDF] bg-white px-2 font-mono font-bold text-[#E10906] shadow-xs tabular-nums"
                             >
                               {val}
                             </span>
@@ -1195,19 +1195,19 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="l-compare"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-compare', '6.5', 'for Loop vs while Loop', 'Understand')}
-                    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4">
+                    <div className="overflow-x-auto rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4">
                       <table className="w-full text-left text-xs sm:text-sm">
                         <thead>
-                          <tr className="border-b border-slate-200 text-[#64748B]">
+                          <tr className="border-b border-[#E5DFDF] text-[#8A8585]">
                             <th className="py-2.5 pr-4 font-semibold">Feature</th>
-                            <th className="py-2.5 pr-4 font-bold text-[#2563EB]">for Loop</th>
-                            <th className="py-2.5 font-bold text-[#8B5CF6]">while Loop</th>
+                            <th className="py-2.5 pr-4 font-bold text-[#E10906]">for Loop</th>
+                            <th className="py-2.5 font-bold text-[#E10906]">while Loop</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200/70 text-[#1E293B]">
+                        <tbody className="divide-y divide-[#E5DFDF]/70 text-[#100303]">
                           <tr>
                             <td className="py-3 pr-4 font-semibold">Best used when</td>
                             <td className="py-3 pr-4">Known count or sequence (<code className="font-mono">range()</code>)</td>
@@ -1225,21 +1225,21 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="l-break"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-break', '6.6', 'The break Statement', 'Experiment')}
                     <div className="space-y-4">
-                      <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                      <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-3">
                         <div className="flex flex-wrap items-center justify-between gap-3">
-                          <span className="text-xs font-semibold text-[#1E293B]">
-                            Interactive <code className="font-mono text-[#8B5CF6]">break</code> Demo (1..6)
+                          <span className="text-xs font-semibold text-[#100303]">
+                            Interactive <code className="font-mono text-[#E10906]">break</code> Demo (1..6)
                           </span>
-                          <label className="text-xs font-medium text-[#1E293B]">
+                          <label className="text-xs font-medium text-[#100303]">
                             Break when <code className="font-mono">i ==</code>
                             <select
                               value={breakAt}
                               onChange={(e) => setBreakAt(Number(e.target.value))}
-                              className="ml-2 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono"
+                              className="ml-2 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-mono"
                             >
                               {[2, 3, 4, 5, 6].map((n) => (
                                 <option key={n} value={n}>{n}</option>
@@ -1256,9 +1256,9 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                                 key={n}
                                 className={`rounded-xl border p-2 text-center font-mono text-xs ${
                                   isBreak
-                                    ? 'border-violet-300 bg-violet-100 text-violet-900 font-bold'
+                                    ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303] font-bold'
                                     : isAfter
-                                    ? 'border-slate-200 bg-slate-100 text-slate-400 line-through'
+                                    ? 'border-[#E5DFDF] bg-[#F1EEEE] text-[#8A8585] line-through'
                                     : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
                                 }`}
                               >
@@ -1277,20 +1277,20 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="l-continue"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-continue', '6.7', 'The continue Statement', 'Experiment')}
-                    <div className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                    <div className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-3">
                       <div className="flex flex-wrap items-center justify-between gap-3">
-                        <span className="text-xs font-semibold text-[#1E293B]">
-                          Interactive <code className="font-mono text-[#2563EB]">continue</code> Demo (1..6)
+                        <span className="text-xs font-semibold text-[#100303]">
+                          Interactive <code className="font-mono text-[#E10906]">continue</code> Demo (1..6)
                         </span>
-                        <label className="text-xs font-medium text-[#1E293B]">
+                        <label className="text-xs font-medium text-[#100303]">
                           Skip when <code className="font-mono">i ==</code>
                           <select
                             value={skipAt}
                             onChange={(e) => setSkipAt(Number(e.target.value))}
-                            className="ml-2 rounded-lg border border-slate-300 bg-white px-2.5 py-1 font-mono"
+                            className="ml-2 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-mono"
                           >
                             {[1, 2, 3, 4, 5, 6].map((n) => (
                               <option key={n} value={n}>{n}</option>
@@ -1306,7 +1306,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                               key={n}
                               className={`rounded-xl border p-2 text-center font-mono text-xs ${
                                 isSkip
-                                  ? 'border-sky-300 bg-sky-100 text-sky-900 font-bold'
+                                  ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303] font-bold'
                                   : 'border-emerald-200 bg-emerald-50 text-emerald-800 font-semibold'
                               }`}
                             >
@@ -1321,25 +1321,25 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="l-nested"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-nested', '6.8', 'Nested Loops Grid', 'Visualize & Experiment')}
                     <div className="space-y-4">
-                      <div className="rounded-2xl border border-sky-100 bg-[#F0F9FF]/60 p-4 space-y-4">
+                      <div className="rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1]/60 p-4 space-y-4">
                         <div className="flex flex-wrap items-center gap-6">
-                          <label className="text-xs font-medium text-[#1E293B]">
-                            Outer Rows: <strong className="font-mono text-[#2563EB]">{nestRows}</strong>
+                          <label className="text-xs font-medium text-[#100303]">
+                            Outer Rows: <strong className="font-mono text-[#E10906]">{nestRows}</strong>
                             <input
                               type="range"
                               min={1}
                               max={5}
                               value={nestRows}
                               onChange={(e) => setNestRows(Number(e.target.value))}
-                              className="ml-2 accent-[#2563EB] cursor-pointer"
+                              className="ml-2 accent-[#E10906] cursor-pointer"
                             />
                           </label>
-                          <label className="text-xs font-medium text-[#1E293B]">
-                            Inner Columns: <strong className="font-mono text-[#8B5CF6]">{nestCols}</strong>
+                          <label className="text-xs font-medium text-[#100303]">
+                            Inner Columns: <strong className="font-mono text-[#E10906]">{nestCols}</strong>
                             <input
                               type="range"
                               min={1}
@@ -1357,12 +1357,12 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         <div className="space-y-1.5 font-mono text-xs">
                           {Array.from({ length: nestRows }, (_, r) => (
                             <div key={r} className="flex items-center gap-2">
-                              <span className="w-16 text-[#64748B]">row {r + 1}:</span>
+                              <span className="w-16 text-[#8A8585]">row {r + 1}:</span>
                               <div className="flex flex-wrap gap-1.5">
                                 {Array.from({ length: nestCols }, (_, c) => (
                                   <span
                                     key={c}
-                                    className="rounded-lg border border-sky-200 bg-white px-2.5 py-1 font-semibold text-[#2563EB] tabular-nums"
+                                    className="rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 font-semibold text-[#E10906] tabular-nums"
                                   >
                                     ({r + 1},{c + 1})
                                   </span>
@@ -1378,7 +1378,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
                   <section
                     id="l-mistakes"
-                    className="scroll-mt-24 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8"
+                    className="scroll-mt-24 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8"
                   >
                     {renderLessonHeader('l-mistakes', '6.9', 'Common Loop Mistakes & Fixes', 'Understand')}
                     <div className="space-y-4">
@@ -1396,7 +1396,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                           why: 'range(start, stop) always excludes stop.',
                         },
                       ].map((item) => (
-                        <div key={item.title} className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3">
+                        <div key={item.title} className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-3">
                           <div className="flex items-center gap-2 font-display text-sm font-bold text-amber-800">
                             <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" />
                             {item.title}
@@ -1405,7 +1405,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                             <CodeBlock title="Broken" code={item.bad} compact showCopy={false} />
                             <CodeBlock title="Fixed" code={item.good} compact showCopy={false} />
                           </div>
-                          <p className="text-xs text-[#64748B]">{item.why}</p>
+                          <p className="text-xs text-[#8A8585]">{item.why}</p>
                         </div>
                       ))}
                     </div>
@@ -1417,24 +1417,24 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
           {/* ======================= STAGE 5: PRACTISE LAUNCHER ======================= */}
           {showStage('practise') && (
-            <section className="rounded-3xl border border-sky-200/80 bg-gradient-to-br from-[#F0F9FF] via-white to-violet-50/50 p-6 shadow-sm sm:p-8">
-              <p className="font-mono text-xs font-semibold text-[#2563EB]">
+            <section className="rounded-3xl border border-[#E5DFDF] bg-gradient-to-br from-[#FFF1F1] via-white to-violet-50/50 p-6 shadow-sm sm:p-8">
+              <p className="font-mono text-xs font-semibold text-[#E10906]">
                 Stage 5 · Hands-On Practice
               </p>
-              <h3 className="mt-1 font-display text-xl font-bold text-[#1E293B]">
+              <h3 className="mt-1 font-display text-xl font-bold text-[#100303]">
                 Apply What You Just Visualized
               </h3>
-              <p className="mt-1 text-sm text-[#64748B]">
+              <p className="mt-1 text-sm text-[#8A8585]">
                 Jump straight into a real-life simulator, write code in the Sandbox, or test your skills in mini-games.
               </p>
               <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <button
                   type="button"
                   onClick={() => onNavigate('simulators')}
-                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#1E293B] shadow-xs hover:border-sky-300"
+                  className="flex items-center justify-between rounded-2xl border border-[#E5DFDF] bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#100303] shadow-xs hover:border-[#E10906]"
                 >
                   <span>Run Real-Life Simulators</span>
-                  <ArrowRight className="h-4 w-4 text-[#2563EB]" />
+                  <ArrowRight className="h-4 w-4 text-[#E10906]" />
                 </button>
                 <button
                   type="button"
@@ -1447,15 +1447,15 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         : 'for i in range(1, 6):\n    print("Step", i)'
                     )
                   }
-                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#1E293B] shadow-xs hover:border-violet-300"
+                  className="flex items-center justify-between rounded-2xl border border-[#E5DFDF] bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#100303] shadow-xs hover:border-[#E10906]"
                 >
                   <span>Try in Python Sandbox</span>
-                  <ArrowRight className="h-4 w-4 text-[#8B5CF6]" />
+                  <ArrowRight className="h-4 w-4 text-[#E10906]" />
                 </button>
                 <button
                   type="button"
                   onClick={() => onOpenGamesTab('challenges')}
-                  className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#1E293B] shadow-xs hover:border-emerald-300"
+                  className="flex items-center justify-between rounded-2xl border border-[#E5DFDF] bg-white px-4 py-3.5 text-left text-xs font-semibold text-[#100303] shadow-xs hover:border-emerald-300"
                 >
                   <span>Solve Coding Challenges</span>
                   <ArrowRight className="h-4 w-4 text-emerald-600" />
@@ -1466,20 +1466,20 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
 
           {/* ======================= STAGE 6: TEST YOURSELF ======================= */}
           {showStage('test') && (
-            <section className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
+            <section className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="font-mono text-xs font-semibold text-[#8B5CF6]">
+                  <p className="font-mono text-xs font-semibold text-[#E10906]">
                     Stage 6 · Quick Concept Check
                   </p>
-                  <h3 className="mt-1 font-display text-xl font-bold text-[#1E293B]">
+                  <h3 className="mt-1 font-display text-xl font-bold text-[#100303]">
                     Test Yourself
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => onOpenGamesTab('quizzes')}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-4 py-2 text-xs font-semibold text-white"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#E10906] px-4 py-2 text-xs font-semibold text-white"
                 >
                   Open Full 20-Question Quiz
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -1494,15 +1494,15 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                   return (
                     <div
                       key={key}
-                      className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4 space-y-3"
+                      className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4 space-y-3"
                     >
-                      <p className="text-sm font-semibold text-[#1E293B]">{item.q}</p>
+                      <p className="text-sm font-semibold text-[#100303]">{item.q}</p>
                       <div className="space-y-1.5">
                         {item.options.map((opt, oIdx) => {
                           const isSelected = chosen === oIdx;
                           const isCorrect = oIdx === item.answer;
                           let cls =
-                            'border-slate-200 bg-white text-[#1E293B] hover:border-sky-300';
+                            'border-[#E5DFDF] bg-white text-[#100303] hover:border-[#E10906]';
                           if (answered) {
                             if (isCorrect)
                               cls = 'border-emerald-300 bg-emerald-50 text-emerald-800 font-semibold';
@@ -1524,7 +1524,7 @@ export const LearnSection: React.FC<LearnSectionProps> = ({
                         })}
                       </div>
                       {answered && (
-                        <p className="text-xs text-[#64748B]">{item.why}</p>
+                        <p className="text-xs text-[#8A8585]">{item.why}</p>
                       )}
                     </div>
                   );

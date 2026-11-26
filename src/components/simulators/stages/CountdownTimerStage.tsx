@@ -99,7 +99,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   setEnableBreak(false);
                 })
               }
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-sky-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-sky-300"
             >
               Test Start = 0
             </button>
@@ -112,7 +112,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   setStopAt(2);
                 })
               }
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-violet-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-violet-300"
             >
               Demo break at 2
             </button>
@@ -126,7 +126,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               <svg className="h-44 w-44 -rotate-90" viewBox="0 0 160 160" aria-hidden="true">
                 <defs>
                   <linearGradient id="cdGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#0EA5E9" />
+                    <stop offset="0%" stopColor="#E10906" />
                     <stop offset="100%" stopColor="#8B5CF6" />
                   </linearGradient>
                 </defs>
@@ -179,7 +179,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 </>
               ) : (
                 <>
-                  <Timer className="h-4 w-4 text-sky-600" aria-hidden="true" />
+                  <Timer className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   <span className="font-mono text-[#1E293B]">
                     count &gt; 0 → {currentCount > 0 ? 'True' : 'False'}
                   </span>
@@ -204,7 +204,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 step={1}
                 value={startCount}
                 onChange={(e) => handleUpdate(() => setStartCount(Number(e.target.value)))}
-                className="mt-2 w-full accent-[#0EA5E9] cursor-pointer"
+                className="mt-2 w-full accent-[#E10906] cursor-pointer"
               />
               <div className="flex justify-between font-mono text-[11px] text-slate-500">
                 <span>0 (Edge Case)</span>
@@ -212,7 +212,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
               </div>
             </div>
 
-            <div className="border-t border-slate-100 pt-3">
+            <div className="border-t border-[#F1EEEE] pt-3">
               <label className="flex items-center gap-2.5 text-xs font-semibold text-[#1E293B] cursor-pointer">
                 <input
                   type="checkbox"
@@ -225,7 +225,7 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
               {enableBreak && (
                 <div className="mt-3">
-                  <label htmlFor="cd-stop-at" className="block text-xs text-slate-600">
+                  <label htmlFor="cd-stop-at" className="block text-xs text-[#8A8585]">
                     Break when <code className="font-mono">count ==</code>
                   </label>
                   <input

@@ -31,7 +31,7 @@ export class ErrorBoundary extends React.Component<
               <AlertCircle className="h-5 w-5 shrink-0" aria-hidden="true" />
               <h1 className="font-display text-lg font-bold">PyVerse Recovery</h1>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#8A8585]">
               Something went wrong while rendering this view: {this.state.message}
             </p>
             <button

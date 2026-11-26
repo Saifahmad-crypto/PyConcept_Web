@@ -37,28 +37,28 @@ export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
   return (
     <div>
       {/* Studio Header & Sub-Navigation */}
-      <div className="border-b border-slate-200 bg-white">
+      <div className="border-b border-[#E5DFDF] bg-white">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 py-6 sm:px-6 lg:flex-row lg:items-end lg:px-8">
           <div>
-            <p className="text-xs font-semibold text-[#2563EB]">
+            <p className="text-xs font-semibold text-[#E10906]">
               PyVerse Coding Studio
             </p>
-            <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
+            <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
               Write, Save &amp; Verify Python
             </h1>
-            <p className="mt-1.5 max-w-2xl text-sm text-[#64748B]">
+            <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585]">
               Experiment freely in the interactive Python Sandbox with saved snippets, or verify your skills across 10 guided coding challenges.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="hidden sm:flex items-center gap-3 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2 text-xs">
-              <span className="inline-flex items-center gap-1 text-[#64748B]">
-                <Bookmark className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
-                Snippets: <strong className="font-mono text-[#1E293B]">{savedSnippets.length}</strong>
+            <div className="hidden sm:flex items-center gap-3 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs">
+              <span className="inline-flex items-center gap-1 text-[#8A8585]">
+                <Bookmark className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
+                Snippets: <strong className="font-mono text-[#100303]">{savedSnippets.length}</strong>
               </span>
-              <span className="text-slate-300">|</span>
-              <span className="text-[#64748B]">
+              <span className="text-[#CFC8C8]">|</span>
+              <span className="text-[#8A8585]">
                 Challenges:{' '}
                 <strong className="font-mono text-emerald-700">
                   {completedChallenges.length}/{CODING_CHALLENGES.length}
@@ -66,14 +66,14 @@ export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
               </span>
             </div>
 
-            <div className="inline-flex rounded-2xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+            <div className="inline-flex rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-1 gap-1">
               <button
                 type="button"
                 onClick={() => onChangeTab('sandbox')}
                 className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 font-display text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
                   activeTab === 'sandbox'
-                    ? 'bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] text-white shadow-sm'
-                    : 'text-[#64748B] hover:bg-white hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-sm'
+                    : 'text-[#8A8585] hover:bg-white hover:text-[#100303]'
                 }`}
               >
                 <Terminal className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -84,8 +84,8 @@ export const CodingStudioPage: React.FC<CodingStudioPageProps> = ({
                 onClick={() => onChangeTab('challenges')}
                 className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 font-display text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
                   activeTab === 'challenges'
-                    ? 'bg-gradient-to-r from-[#8B5CF6] via-[#2563EB] to-[#38BDF8] text-white shadow-sm'
-                    : 'text-[#64748B] hover:bg-white hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-sm'
+                    : 'text-[#8A8585] hover:bg-white hover:text-[#100303]'
                 }`}
               >
                 <Code2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />

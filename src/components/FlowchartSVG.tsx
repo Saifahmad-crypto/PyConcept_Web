@@ -34,7 +34,7 @@ const ACTIVE_TRUE_STROKE = '#059669';
 const ACTIVE_FALSE_FILL = '#F5F3FF';
 const ACTIVE_FALSE_STROKE = '#7C3AED';
 const LINE_BASE = '#CBD5E1';
-const LINE_ACTIVE = '#0EA5E9';
+const LINE_ACTIVE = '#E10906';
 const LINE_TRUE = '#059669';
 const LINE_FALSE = '#8B5CF6';
 
@@ -64,7 +64,7 @@ export const FlowchartSVG: React.FC<FlowchartSVGProps> = ({
   const edgeWidth = (branchId: string) => (isBranch(branchId) ? 2.6 : 1.5);
 
   return (
-    <div className="w-full overflow-x-auto rounded-2xl border border-slate-200/90 bg-gradient-to-br from-white to-[#F0F9FF] p-3.5 shadow-sm">
+    <div className="w-full overflow-x-auto rounded-2xl border border-[#E5DFDF] bg-gradient-to-br from-white to-[#F0F9FF] p-3.5 shadow-sm">
       <svg
         viewBox={
           type === 'if-elif-else'
@@ -84,7 +84,7 @@ export const FlowchartSVG: React.FC<FlowchartSVGProps> = ({
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#94A3B8" />
           </marker>
           <marker id="pv-arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#0EA5E9" />
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#E10906" />
           </marker>
           <marker id="pv-arrow-true" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
@@ -355,7 +355,7 @@ export const FlowchartSVG: React.FC<FlowchartSVGProps> = ({
             <path d="M 315 215 L 352 215 L 352 147 L 329 147" fill="none" stroke="#8B5CF6" strokeWidth="1.6" markerEnd="url(#pv-arrow-false)" />
             <text x="366" y="184" fill="#6D28D9" fontSize="10" fontWeight="600">Next col</text>
 
-            <path d="M 135 147 L 48 147 L 48 36 L 126 36" fill="none" stroke="#0EA5E9" strokeWidth="1.6" markerEnd="url(#pv-arrow-blue)" />
+            <path d="M 135 147 L 48 147 L 48 36 L 126 36" fill="none" stroke="#E10906" strokeWidth="1.6" markerEnd="url(#pv-arrow-blue)" />
             <text x="38" y="94" fill="#0284C7" fontSize="10" fontWeight="600">Next row</text>
 
             <line x1="230" y1="256" x2="230" y2="292" stroke="#94A3B8" strokeWidth="1.5" markerEnd="url(#pv-arrow-muted)" />

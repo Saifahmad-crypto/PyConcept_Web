@@ -118,26 +118,26 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-end">
+      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] pb-6 md:flex-row md:items-end">
         <div>
-          <p className="text-xs font-semibold text-violet-700">PyVerse Practice Challenges</p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] sm:text-4xl">
+          <p className="text-xs font-semibold text-[#E10906]">PyVerse Practice Challenges</p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] sm:text-4xl">
             Beginner Coding Challenges
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-600">
+          <p className="mt-2 max-w-2xl text-sm text-[#8A8585]">
             Write real Python solutions for 10 structured problems (5 Conditional Statements, 5 Loops)
             and verify your output instantly.
           </p>
         </div>
 
-        <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+        <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-1 gap-1">
           <button
             type="button"
             onClick={() => handleTopicSwitch('conditionals')}
             className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
               topicFilter === 'conditionals'
-                ? 'bg-gradient-to-r from-[#0EA5E9] to-[#6366F1] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#1E293B]'
+                ? 'bg-[#E10906] text-white shadow-sm'
+                : 'text-[#8A8585] hover:text-[#100303]'
             }`}
           >
             Topic 08 · Conditionals (5)
@@ -147,8 +147,8 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
             onClick={() => handleTopicSwitch('loops')}
             className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
               topicFilter === 'loops'
-                ? 'bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] text-white shadow-sm'
-                : 'text-slate-600 hover:text-[#1E293B]'
+                ? 'bg-[#E10906] text-white shadow-sm'
+                : 'text-[#8A8585] hover:text-[#100303]'
             }`}
           >
             Topic 09 · Loops (5)
@@ -169,15 +169,15 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 onClick={() => selectChallenge(ch.id)}
                 className={`flex w-full items-center justify-between gap-3 rounded-xl border p-4 text-left transition-all ${
                   isSelected
-                    ? 'border-sky-400 bg-gradient-to-r from-[#0EA5E9]/10 to-[#8B5CF6]/10 shadow-sm'
-                    : 'border-slate-200 bg-white hover:border-slate-300 shadow-xs'
+                    ? 'border-[#E10906] bg-[#E10906]/10 shadow-sm'
+                    : 'border-[#E5DFDF] bg-white hover:border-[#E5DFDF] shadow-xs'
                 }`}
               >
                 <div>
-                  <span className="font-mono text-[11px] font-medium text-slate-500">
+                  <span className="font-mono text-[11px] font-medium text-[#8A8585]">
                     Challenge 0{idx + 1} · {ch.difficulty}
                   </span>
-                  <h3 className="mt-0.5 font-display text-sm font-semibold text-[#1E293B]">
+                  <h3 className="mt-0.5 font-display text-sm font-semibold text-[#100303]">
                     {ch.title}
                   </h3>
                 </div>
@@ -191,14 +191,14 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
 
         {/* Active Challenge Workspace */}
         <div className="space-y-5 lg:col-span-8">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-5">
+          <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <span className="font-mono text-xs font-semibold text-sky-700">
+                <span className="font-mono text-xs font-semibold text-[#E10906]">
                   {activeChallenge.topic === 'conditionals' ? 'Topic 08' : 'Topic 09'} ·{' '}
                   {activeChallenge.difficulty}
                 </span>
-                <h2 className="mt-0.5 font-display text-2xl font-bold text-[#1E293B]">
+                <h2 className="mt-0.5 font-display text-2xl font-bold text-[#100303]">
                   {activeChallenge.title}
                 </h2>
               </div>
@@ -210,19 +210,19 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
               )}
             </div>
 
-            <p className="text-sm leading-relaxed text-slate-600">{activeChallenge.description}</p>
+            <p className="text-sm leading-relaxed text-[#8A8585]">{activeChallenge.description}</p>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-4">
-                <p className="text-xs font-semibold text-[#1E293B]">Requirements</p>
-                <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-slate-600">
+              <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-4">
+                <p className="text-xs font-semibold text-[#100303]">Requirements</p>
+                <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-[#8A8585]">
                   {activeChallenge.requirements.map((req, i) => (
                     <li key={i}>{req}</li>
                   ))}
                 </ul>
               </div>
-              <div className="rounded-xl border border-slate-200/90 bg-[#0F172A] p-4">
-                <p className="text-xs font-semibold text-slate-300">Expected Sample Output</p>
+              <div className="rounded-xl border border-[#E5DFDF] bg-[#100303] p-4">
+                <p className="text-xs font-semibold text-[#CFC8C8]">Expected Sample Output</p>
                 <pre className="mt-2 whitespace-pre-wrap font-mono text-xs text-emerald-300">
                   {activeChallenge.sampleOutput}
                 </pre>
@@ -230,8 +230,8 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
             </div>
 
             {/* Editor */}
-            <div className="overflow-hidden rounded-xl border border-slate-200/90 bg-[#0F172A] shadow-sm">
-              <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2 text-xs text-slate-300">
+            <div className="overflow-hidden rounded-xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+              <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2 text-xs text-[#CFC8C8]">
                 <span className="font-mono font-medium">solution.py</span>
                 <div className="flex items-center gap-3">
                   <button
@@ -245,7 +245,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                   <button
                     type="button"
                     onClick={() => setShowSolution((s) => !s)}
-                    className="inline-flex items-center gap-1 text-slate-200 hover:text-white"
+                    className="inline-flex items-center gap-1 text-[#CFC8C8] hover:text-white"
                   >
                     <Eye className="h-3.5 w-3.5" aria-hidden="true" />
                     {showSolution ? 'Hide Solution' : 'Solution'}
@@ -261,7 +261,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 onKeyDown={handleKeyDown}
                 spellCheck={false}
                 rows={8}
-                className="w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-slate-100 focus:outline-none"
+                className="w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-[#FBF5F9] focus:outline-none"
               />
             </div>
 
@@ -273,7 +273,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
 
             {showSolution && (
               <div className="space-y-2">
-                <p className="text-xs font-semibold text-slate-600">Reference Solution:</p>
+                <p className="text-xs font-semibold text-[#8A8585]">Reference Solution:</p>
                 <CodeBlock code={activeChallenge.solutionCode} title="reference_solution.py" compact />
               </div>
             )}
@@ -282,7 +282,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
               <button
                 type="button"
                 onClick={handleVerify}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
                 <Play className="h-4 w-4" aria-hidden="true" />
                 Run &amp; Verify
@@ -296,7 +296,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                   }));
                   setFeedback(null);
                 }}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#1E293B]"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2 text-xs font-medium text-[#100303] transition-colors hover:bg-[#F1EEEE] hover:text-[#100303]"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset Code
@@ -324,9 +324,9 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                     </>
                   )}
                 </div>
-                <p className="mt-1.5 text-slate-700">{feedback.message}</p>
+                <p className="mt-1.5 text-[#100303]">{feedback.message}</p>
                 {feedback.output && (
-                  <pre className="mt-2.5 rounded-xl bg-[#0F172A] p-3 font-mono text-xs text-emerald-300">
+                  <pre className="mt-2.5 rounded-xl bg-[#100303] p-3 font-mono text-xs text-emerald-300">
                     Your Output:{'\n'}
                     {feedback.output}
                   </pre>

@@ -24,14 +24,14 @@ interface SimulatorsHubProps {
 type FilterOption = 'all' | SimulatorCategory;
 
 const SIMULATOR_ICONS: Record<SimulatorId, React.ReactNode> = {
-  'traffic-signal': <TrafficCone className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
-  'atm-decision': <Landmark className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
-  'smart-ac': <ThermometerSnowflake className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
-  'shopping-discount': <ShoppingBag className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
-  'elevator-floor': <Building2 className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
-  'countdown-timer': <Timer className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
-  'parking-scanner': <CarFront className="h-6 w-6 text-[#2563EB]" aria-hidden="true" />,
-  'atm-cash-counter': <Banknote className="h-6 w-6 text-[#8B5CF6]" aria-hidden="true" />,
+  'traffic-signal': <TrafficCone className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'atm-decision': <Landmark className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'smart-ac': <ThermometerSnowflake className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'shopping-discount': <ShoppingBag className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'elevator-floor': <Building2 className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'countdown-timer': <Timer className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'parking-scanner': <CarFront className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'atm-cash-counter': <Banknote className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
 };
 
 export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
@@ -64,20 +64,20 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
     return (
       <article
         key={sim.id}
-        className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-md"
+        className="group flex flex-col justify-between rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#E10906] hover:shadow-md"
       >
         <div>
           <div className="flex items-start justify-between gap-4">
             <div
               className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${
                 isCond
-                  ? 'border-sky-200/80 bg-[#F0F9FF]'
-                  : 'border-violet-200/80 bg-[#F5F3FF]'
+                  ? 'border-[#E5DFDF] bg-[#FFF1F1]'
+                  : 'border-[#E5DFDF] bg-[#FFF1F1]'
               }`}
             >
               {SIMULATOR_ICONS[sim.id]}
             </div>
-            <div className="text-right font-mono text-xs font-semibold text-[#64748B]">
+            <div className="text-right font-mono text-xs font-semibold text-[#8A8585]">
               <div>
                 {sim.number} · {sim.difficulty}
               </div>
@@ -89,18 +89,18 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
             </div>
           </div>
 
-          <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B] group-hover:text-[#2563EB] transition-colors">
+          <h3 className="mt-4 font-display text-lg font-bold text-[#100303] group-hover:text-[#E10906] transition-colors">
             {sim.title}
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-[#64748B]">
+          <p className="mt-2 text-sm leading-relaxed text-[#8A8585]">
             {sim.shortDescription}
           </p>
         </div>
 
-        <div className="mt-5 border-t border-slate-100 pt-4 space-y-4">
-          <div className="text-xs text-[#64748B]">
-            <span className="font-medium text-[#1E293B]">Python concepts: </span>
-            <span className="font-mono font-semibold text-[#8B5CF6]">
+        <div className="mt-5 border-t border-[#F1EEEE] pt-4 space-y-4">
+          <div className="text-xs text-[#8A8585]">
+            <span className="font-medium text-[#100303]">Python concepts: </span>
+            <span className="font-mono font-semibold text-[#E10906]">
               {sim.concepts.join(' · ')}
             </span>
           </div>
@@ -108,7 +108,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
           <button
             type="button"
             onClick={() => onSelectSimulator(sim.id)}
-            className="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 hover:shadow-md"
+            className="inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl bg-[#E10906] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 hover:shadow-md"
           >
             Start Simulator
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -121,21 +121,21 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Hub Header */}
-      <div className="mb-8 border-b border-slate-200 pb-8">
-        <p className="text-xs font-semibold text-sky-700">
+      <div className="mb-8 border-b border-[#E5DFDF] pb-8">
+        <p className="text-xs font-semibold text-[#E10906]">
           PyVerse Interactive Simulators
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold text-[#1E293B] text-balance sm:text-4xl lg:text-[2.75rem]">
+        <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] text-balance sm:text-4xl lg:text-[2.75rem]">
           Learn Python Through Real Life
         </h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-600">
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#8A8585]">
           Explore 8 hands-on real-world systems powered by step-by-step Python execution. Adjust live
           inputs, watch variables update in real time, and see how every line drives the simulation.
         </p>
 
         {/* Category Filter Tabs + Search */}
         <div className="mt-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <div className="inline-flex flex-wrap rounded-xl border border-slate-200 bg-[#F8FAFC] p-1 gap-1">
+          <div className="inline-flex flex-wrap rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-1 gap-1">
             {(
               [
                 { id: 'all', label: 'All Simulators (8)' },
@@ -149,8 +149,8 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
                 onClick={() => setFilter(tab.id)}
                 className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
                   filter === tab.id
-                    ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-sm'
-                    : 'text-slate-600 hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-sm'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 {tab.label}
@@ -160,7 +160,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
 
           <div className="relative w-full sm:w-72">
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8585]"
               aria-hidden="true"
             />
             <input
@@ -169,7 +169,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter by title or concept..."
               aria-label="Filter simulators"
-              className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-[#1E293B] placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+              className="w-full rounded-xl border border-[#E5DFDF] bg-white py-2 pl-9 pr-3 text-xs text-[#100303] placeholder:text-[#8A8585] focus:border-[#E10906] focus:outline-none focus:ring-2 focus:ring-[#E10906]/20"
             />
           </div>
         </div>
@@ -177,11 +177,11 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
 
       {/* Empty Search State */}
       {!showConditionals && !showLoops && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center">
-          <p className="font-display text-base font-bold text-[#1E293B]">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-10 text-center">
+          <p className="font-display text-base font-bold text-[#100303]">
             No matching simulators found
           </p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-[#8A8585]">
             Try clearing your search or switching back to All Simulators.
           </p>
           <button
@@ -190,7 +190,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
               setQuery('');
               setFilter('all');
             }}
-            className="mt-4 inline-flex items-center rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold text-[#1E293B] hover:border-sky-300"
+            className="mt-4 inline-flex items-center rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-4 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906]"
           >
             Show All 8 Simulators
           </button>
@@ -201,14 +201,14 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
       {showConditionals && (
         <section className="mb-12">
           <div className="mb-5 flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F0F9FF] text-sky-700">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF1F1] text-[#E10906]">
               <GitBranch className="h-4 w-4" aria-hidden="true" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-bold text-[#1E293B]">
+              <h2 className="font-display text-xl font-bold text-[#100303]">
                 Conditional Statement Simulators
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#8A8585]">
                 if · elif · else · nested conditions · comparison &amp; logical operators
               </p>
             </div>
@@ -223,14 +223,14 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
       {showLoops && (
         <section>
           <div className="mb-5 flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F5F3FF] text-violet-700">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF1F1] text-[#E10906]">
               <Repeat className="h-4 w-4" aria-hidden="true" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-bold text-[#1E293B]">
+              <h2 className="font-display text-xl font-bold text-[#100303]">
                 Loop Simulators
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#8A8585]">
                 for · while · range() · accumulation · break · continue
               </p>
             </div>

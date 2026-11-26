@@ -662,10 +662,10 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     <div className="flex h-full flex-col justify-between gap-4">
       <div className="space-y-4">
         {/* Branding */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="flex items-center justify-between border-b border-[#F1EEEE] pb-3">
           <div>
             <PyVerseLogo size="sm" />
-            <p className="mt-1 text-[11px] font-medium text-slate-500">
+            <p className="mt-1 text-[11px] font-medium text-[#8A8585]">
               Adaptive AI Tutor
             </p>
           </div>
@@ -677,7 +677,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
               setAttachedSimContext(null);
               setMobileLeftOpen(false);
             }}
-            className="inline-flex items-center gap-1 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:opacity-95 whitespace-nowrap"
+            className="inline-flex items-center gap-1 rounded-xl bg-[#E10906] px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:opacity-95 whitespace-nowrap"
           >
             <Plus className="h-3.5 w-3.5" aria-hidden="true" />
             New Chat
@@ -686,7 +686,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
 
         {/* Learning Topics */}
         <div>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[#8A8585]">
             Learning Topics
           </p>
           <div className="space-y-1">
@@ -702,12 +702,12 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   }}
                   className={`flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left text-xs font-medium transition-all ${
                     active
-                      ? 'border-sky-300 bg-[#F0F9FF] font-semibold text-sky-900'
-                      : 'border-transparent bg-transparent text-slate-600 hover:bg-slate-50 hover:text-[#1E293B]'
+                      ? 'border-[#E10906] bg-[#FFF1F1] font-semibold text-[#100303]'
+                      : 'border-transparent bg-transparent text-[#8A8585] hover:bg-[#FBF5F9] hover:text-[#100303]'
                   }`}
                 >
                   <span>{t}</span>
-                  {active && <Check className="h-3.5 w-3.5 text-sky-600" aria-hidden="true" />}
+                  {active && <Check className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />}
                 </button>
               );
             })}
@@ -716,7 +716,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
 
         {/* Chat History */}
         <div>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[#8A8585]">
             Chat History
           </p>
           <div className="max-h-40 space-y-1 overflow-y-auto pr-1">
@@ -733,11 +733,11 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   }}
                   className={`flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left text-xs transition-colors ${
                     active
-                      ? 'bg-violet-50 font-semibold text-violet-900 border border-violet-200/80'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-[#1E293B]'
+                      ? 'bg-[#FFF1F1] font-semibold text-[#100303] border border-[#E5DFDF]'
+                      : 'text-[#8A8585] hover:bg-[#FBF5F9] hover:text-[#100303]'
                   }`}
                 >
-                  <MessageSquare className="h-3.5 w-3.5 shrink-0 text-slate-400" aria-hidden="true" />
+                  <MessageSquare className="h-3.5 w-3.5 shrink-0 text-[#8A8585]" aria-hidden="true" />
                   <span className="truncate">{sess.title}</span>
                 </button>
               );
@@ -746,27 +746,27 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         </div>
 
         {/* My Learning Progress */}
-        <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3 text-xs space-y-2">
+        <div className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3 text-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-[#1E293B]">My Learning Progress</span>
+            <span className="font-semibold text-[#100303]">My Learning Progress</span>
             <button
               type="button"
               onClick={() => onNavigate('progress')}
-              className="text-[11px] font-semibold text-sky-700 hover:underline"
+              className="text-[11px] font-semibold text-[#E10906] hover:underline"
             >
               View All
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2 text-[11px]">
-            <div className="rounded-lg bg-white p-2 border border-slate-200/70">
-              <span className="text-slate-500">Total XP</span>
-              <p className="font-mono font-bold text-sky-700 tabular-nums">
+            <div className="rounded-lg bg-white p-2 border border-[#E5DFDF]/70">
+              <span className="text-[#8A8585]">Total XP</span>
+              <p className="font-mono font-bold text-[#E10906] tabular-nums">
                 {progress.xp} XP
               </p>
             </div>
-            <div className="rounded-lg bg-white p-2 border border-slate-200/70">
-              <span className="text-slate-500">Lessons</span>
-              <p className="font-mono font-bold text-[#1E293B] tabular-nums">
+            <div className="rounded-lg bg-white p-2 border border-[#E5DFDF]/70">
+              <span className="text-[#8A8585]">Lessons</span>
+              <p className="font-mono font-bold text-[#100303] tabular-nums">
                 {progress.completedLessons.length} /{' '}
                 {TOPIC_BASICS_LESSONS.length + TOPIC_08_LESSONS.length + TOPIC_09_LESSONS.length}
               </p>
@@ -775,13 +775,13 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         </div>
 
         {/* Recommended Next Steps */}
-        <div className="rounded-xl border border-sky-200/80 bg-[#F0F9FF] p-3 text-xs space-y-1.5">
-          <p className="font-semibold text-sky-900">Recommended Next Step</p>
-          <p className="text-[11px] text-slate-600">{recommendedAction.sub}</p>
+        <div className="rounded-xl border border-[#E5DFDF] bg-[#FFF1F1] p-3 text-xs space-y-1.5">
+          <p className="font-semibold text-[#100303]">Recommended Next Step</p>
+          <p className="text-[11px] text-[#8A8585]">{recommendedAction.sub}</p>
           <button
             type="button"
             onClick={recommendedAction.onClick}
-            className="inline-flex items-center gap-1 font-semibold text-sky-700 hover:text-violet-700"
+            className="inline-flex items-center gap-1 font-semibold text-[#E10906] hover:text-[#E10906]"
           >
             {recommendedAction.label}
             <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -790,7 +790,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       </div>
 
       {/* Clear Chat History */}
-      <div className="border-t border-slate-100 pt-3">
+      <div className="border-t border-[#F1EEEE] pt-3">
         {confirmClearChats ? (
           <div className="rounded-xl border border-rose-200 bg-rose-50 p-2.5 text-xs space-y-2">
             <p className="font-medium text-rose-900">Clear all chat history?</p>
@@ -808,7 +808,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setConfirmClearChats(false)}
-                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] font-medium text-[#100303]"
               >
                 Cancel
               </button>
@@ -818,7 +818,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
           <button
             type="button"
             onClick={() => setConfirmClearChats(true)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3 py-2 text-xs font-medium text-[#8A8585] transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700"
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             Clear Chat History
@@ -831,28 +831,28 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
   const renderContextPanelContent = () => (
     <div className="space-y-5">
       <div>
-        <h3 className="font-display text-sm font-bold text-[#1E293B]">
+        <h3 className="font-display text-sm font-bold text-[#100303]">
           Adaptive Learning Context
         </h3>
-        <p className="mt-0.5 text-[11px] text-slate-500">
+        <p className="mt-0.5 text-[11px] text-[#8A8585]">
           Sent with every message so the tutor adapts to your pace.
         </p>
       </div>
 
       {/* Topic & Difficulty */}
-      <div className="space-y-3 rounded-xl border border-slate-200 bg-[#F8FAFC] p-3.5">
+      <div className="space-y-3 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3.5">
         <div>
-          <span className="text-[11px] font-semibold text-slate-500">Current Topic</span>
-          <p className="mt-0.5 font-display text-sm font-bold text-sky-800">
+          <span className="text-[11px] font-semibold text-[#8A8585]">Current Topic</span>
+          <p className="mt-0.5 font-display text-sm font-bold text-[#100303]">
             {progress.activeTutorTopic}
           </p>
         </div>
 
         <div>
-          <span className="block text-[11px] font-semibold text-slate-500 mb-1.5">
+          <span className="block text-[11px] font-semibold text-[#8A8585] mb-1.5">
             Difficulty Level
           </span>
-          <div className="grid grid-cols-3 gap-1 rounded-lg border border-slate-200 bg-white p-1">
+          <div className="grid grid-cols-3 gap-1 rounded-lg border border-[#E5DFDF] bg-white p-1">
             {DIFFICULTIES.map((lvl) => (
               <button
                 key={lvl}
@@ -860,8 +860,8 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 onClick={() => onSetDifficulty(lvl)}
                 className={`rounded-md py-1 text-[11px] font-semibold transition-all ${
                   progress.tutorDifficulty === lvl
-                    ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white'
-                    : 'text-slate-600 hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 {lvl}
@@ -874,7 +874,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       {/* Concepts Already Understood */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-[#1E293B]">
+          <span className="text-xs font-semibold text-[#100303]">
             Concepts Understood
           </span>
           <span className="font-mono text-[11px] text-emerald-700 tabular-nums">
@@ -883,7 +883,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         </div>
 
         {progress.conceptsUnderstood.length === 0 ? (
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#8A8585]">
             Concepts appear here when you answer checks or click Helpful.
           </p>
         ) : (
@@ -918,11 +918,11 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
             value={newConceptInput}
             onChange={(e) => setNewConceptInput(e.target.value)}
             placeholder="Mark concept understood..."
-            className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] text-[#1E293B] focus:border-sky-500 focus:outline-none"
+            className="min-w-0 flex-1 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] text-[#100303] focus:border-[#E10906] focus:outline-none"
           />
           <button
             type="submit"
-            className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-sky-300"
+            className="rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-[#E10906]"
           >
             Add
           </button>
@@ -932,7 +932,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       {/* Concepts Needing Improvement */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-[#1E293B]">
+          <span className="text-xs font-semibold text-[#100303]">
             Needs Improvement
           </span>
           <span className="font-mono text-[11px] text-amber-700 tabular-nums">
@@ -941,7 +941,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         </div>
 
         {progress.conceptsToReview.length === 0 ? (
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#8A8585]">
             No revision areas flagged yet.
           </p>
         ) : (
@@ -956,7 +956,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   <button
                     type="button"
                     onClick={() => void handleGeneratePractice('simpler', `Practice ${c}`)}
-                    className="font-semibold text-sky-700 hover:underline"
+                    className="font-semibold text-[#E10906] hover:underline"
                   >
                     Practice
                   </button>
@@ -975,13 +975,13 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       </div>
 
       {/* Suggested Next Lesson */}
-      <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-xs space-y-2">
-        <span className="font-semibold text-[#1E293B]">Suggested Next Lesson</span>
-        <p className="text-slate-600">{recommendedAction.label}</p>
+      <div className="rounded-xl border border-[#E5DFDF] bg-white p-3.5 text-xs space-y-2">
+        <span className="font-semibold text-[#100303]">Suggested Next Lesson</span>
+        <p className="text-[#8A8585]">{recommendedAction.label}</p>
         <button
           type="button"
           onClick={recommendedAction.onClick}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-sky-200 bg-[#F0F9FF] px-3 py-1.5 text-xs font-semibold text-sky-800 hover:bg-sky-100"
+          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-[#E5DFDF] bg-[#FFF1F1] px-3 py-1.5 text-xs font-semibold text-[#100303] hover:bg-[#FFF1F1]"
         >
           Open Lesson / Activity
           <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -989,8 +989,8 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       </div>
 
       {/* Local Storage Disclosure & Reset */}
-      <div className="border-t border-slate-200 pt-3 space-y-2.5">
-        <p className="text-[11px] leading-relaxed text-slate-500">
+      <div className="border-t border-[#E5DFDF] pt-3 space-y-2.5">
+        <p className="text-[11px] leading-relaxed text-[#8A8585]">
           Progress and chat history are saved locally in this browser and are not automatically synced across devices.
         </p>
 
@@ -1011,7 +1011,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setConfirmResetProg(false)}
-                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] font-medium text-[#100303]"
               >
                 Cancel
               </button>
@@ -1021,7 +1021,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
           <button
             type="button"
             onClick={() => setConfirmResetProg(true)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-rose-300 hover:text-rose-700"
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3 py-2 text-xs font-medium text-[#8A8585] hover:border-rose-300 hover:text-rose-700"
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Reset Learning Progress
@@ -1040,21 +1040,21 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         <button
           type="button"
           onClick={() => setMobileLeftOpen(true)}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] shadow-xs lg:hidden"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] shadow-xs lg:hidden"
         >
-          <PanelLeft className="h-4 w-4 text-sky-600" aria-hidden="true" />
+          <PanelLeft className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
           Chats &amp; Topics
         </button>
-        <div className="hidden lg:block text-xs font-medium text-slate-500">
-          Topic: <strong className="text-[#1E293B]">{progress.activeTutorTopic}</strong> · Level:{' '}
-          <strong className="text-sky-700">{progress.tutorDifficulty}</strong>
+        <div className="hidden lg:block text-xs font-medium text-[#8A8585]">
+          Topic: <strong className="text-[#100303]">{progress.activeTutorTopic}</strong> · Level:{' '}
+          <strong className="text-[#E10906]">{progress.tutorDifficulty}</strong>
         </div>
         <button
           type="button"
           onClick={() => setMobileRightOpen(true)}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] shadow-xs"
+          className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] shadow-xs"
         >
-          <SlidersHorizontal className="h-4 w-4 text-violet-600" aria-hidden="true" />
+          <SlidersHorizontal className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
           Learning Context
         </button>
       </div>
@@ -1062,14 +1062,14 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       {/* Main 3-Column Adaptive Tutor Shell */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 items-start">
         {/* LEFT SIDEBAR (Desktop) */}
-        <aside className="hidden lg:block lg:col-span-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto">
+        <aside className="hidden lg:block lg:col-span-3 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto">
           {renderLeftSidebarContent()}
         </aside>
 
         {/* CENTER CONVERSATION AREA */}
-        <section className="lg:col-span-9 xl:col-span-6 flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden min-h-[640px]">
+        <section className="lg:col-span-9 xl:col-span-6 flex flex-col rounded-2xl border border-[#E5DFDF] bg-white shadow-sm overflow-hidden min-h-[640px]">
           {/* Mode Switcher Bar */}
-          <div className="border-b border-slate-200 bg-[#F8FAFC] p-3.5 space-y-2.5">
+          <div className="border-b border-[#E5DFDF] bg-[#FBF5F9] p-3.5 space-y-2.5">
             <div className="flex flex-wrap items-center gap-1.5">
               {MODES.map((m) => {
                 const active = mode === m.id;
@@ -1083,8 +1083,8 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                     }}
                     className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
                       active
-                        ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
-                        : 'border border-slate-200 bg-white text-slate-600 hover:border-sky-300 hover:text-[#1E293B]'
+                        ? 'bg-[#E10906] text-white shadow-xs'
+                        : 'border border-[#E5DFDF] bg-white text-[#8A8585] hover:border-[#E10906] hover:text-[#100303]'
                     }`}
                   >
                     {m.icon}
@@ -1093,7 +1093,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 );
               })}
             </div>
-            <p className="text-xs text-slate-500">{activeModeInfo.desc}</p>
+            <p className="text-xs text-[#8A8585]">{activeModeInfo.desc}</p>
           </div>
 
           {/* Honest Configuration Notice when GEMINI_API_KEY is missing */}
@@ -1113,9 +1113,9 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
 
           {/* Attached Simulator Context Banner */}
           {attachedSimContext && (
-            <div className="flex items-center justify-between gap-3 border-b border-sky-200 bg-[#F0F9FF] px-4 py-2.5 text-xs">
+            <div className="flex items-center justify-between gap-3 border-b border-[#E5DFDF] bg-[#FFF1F1] px-4 py-2.5 text-xs">
               <div className="flex items-center gap-2 min-w-0">
-                <Cpu className="h-4 w-4 shrink-0 text-sky-600" aria-hidden="true" />
+                <Cpu className="h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
                 <span className="truncate text-sky-950">
                   <strong>Simulator Context:</strong> {attachedSimContext.simulatorTitle}
                   {attachedSimContext.currentLine
@@ -1126,7 +1126,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
               <button
                 type="button"
                 onClick={() => setAttachedSimContext(null)}
-                className="shrink-0 font-semibold text-slate-500 hover:text-[#1E293B]"
+                className="shrink-0 font-semibold text-[#8A8585] hover:text-[#100303]"
               >
                 Clear
               </button>
@@ -1137,25 +1137,25 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5 max-h-[540px]">
             {activeSession.messages.length === 0 ? (
               <div className="space-y-5 py-4">
-                <div className="rounded-2xl border border-sky-200/80 bg-gradient-to-br from-[#F0F9FF] to-white p-5">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-sky-700">
+                <div className="rounded-2xl border border-[#E5DFDF] bg-gradient-to-br from-[#FFF1F1] to-white p-5">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#E10906]">
                     <Sparkles className="h-4 w-4" aria-hidden="true" />
                     Welcome to PyVerse Adaptive AI Tutor
                   </div>
-                  <h2 className="mt-1.5 font-display text-xl font-bold text-[#1E293B]">
+                  <h2 className="mt-1.5 font-display text-xl font-bold text-[#100303]">
                     Think. Code. Experiment. — Let&apos;s learn at your pace.
                   </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  <p className="mt-2 text-sm leading-relaxed text-[#8A8585]">
                     I adapt to your current topic (
-                    <strong className="text-[#1E293B]">{progress.activeTutorTopic}</strong>) and
-                    level (<strong className="text-sky-700">{progress.tutorDifficulty}</strong>). Ask
+                    <strong className="text-[#100303]">{progress.activeTutorTopic}</strong>) and
+                    level (<strong className="text-[#E10906]">{progress.tutorDifficulty}</strong>). Ask
                     a question, paste Python code for line-by-line review, or try a practice
                     challenge with step-by-step hints.
                   </p>
                 </div>
 
                 <div>
-                  <p className="mb-2.5 text-xs font-semibold text-slate-500">
+                  <p className="mb-2.5 text-xs font-semibold text-[#8A8585]">
                     Quick Beginner Starters
                   </p>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -1206,7 +1206,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                         key={starter.label}
                         type="button"
                         onClick={starter.action}
-                        className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3 text-left text-xs font-medium text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF]"
+                        className="rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] p-3 text-left text-xs font-medium text-[#100303] transition-colors hover:border-[#E10906] hover:bg-[#FFF1F1]"
                       >
                         {starter.label}
                       </button>
@@ -1225,10 +1225,10 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                     <div
                       className={`max-w-[94%] sm:max-w-[88%] rounded-2xl px-4 py-3 ${
                         isUser
-                          ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
+                          ? 'bg-[#E10906] text-white shadow-xs'
                           : msg.isError
                           ? 'border border-rose-200 bg-rose-50 text-rose-950'
-                          : 'border border-slate-200 bg-[#F8FAFC] text-[#1E293B]'
+                          : 'border border-[#E5DFDF] bg-[#FBF5F9] text-[#100303]'
                       }`}
                     >
                       {isUser ? (
@@ -1243,8 +1243,8 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                               onOpenInPlayground={onOpenInPlayground}
                             />
                           ) : (
-                            <span className="inline-flex items-center gap-2 text-xs text-slate-500">
-                              <Loader2 className="h-3.5 w-3.5 animate-spin text-sky-600" aria-hidden="true" />
+                            <span className="inline-flex items-center gap-2 text-xs text-[#8A8585]">
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-[#E10906]" aria-hidden="true" />
                               Thinking through the best way to explain...
                             </span>
                           )}
@@ -1349,7 +1349,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                           className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium transition-colors ${
                             msg.feedbackGiven === 'helpful'
                               ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                              : 'border-slate-200 bg-white text-slate-500 hover:text-[#1E293B]'
+                              : 'border-[#E5DFDF] bg-white text-[#8A8585] hover:text-[#100303]'
                           }`}
                         >
                           <ThumbsUp className="h-3 w-3" aria-hidden="true" />
@@ -1361,7 +1361,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                           className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium transition-colors ${
                             msg.feedbackGiven === 'confused'
                               ? 'border-amber-300 bg-amber-50 text-amber-800'
-                              : 'border-slate-200 bg-white text-slate-500 hover:text-amber-700'
+                              : 'border-[#E5DFDF] bg-white text-[#8A8585] hover:text-amber-700'
                           }`}
                         >
                           <RefreshCw className="h-3 w-3" aria-hidden="true" />
@@ -1372,8 +1372,8 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                           onClick={() => handleFeedback(msg, 'harder')}
                           className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-medium transition-colors ${
                             msg.feedbackGiven === 'harder'
-                              ? 'border-violet-300 bg-violet-50 text-violet-800'
-                              : 'border-slate-200 bg-white text-slate-500 hover:text-violet-700'
+                              ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
+                              : 'border-[#E5DFDF] bg-white text-[#8A8585] hover:text-[#E10906]'
                           }`}
                         >
                           <Sparkles className="h-3 w-3" aria-hidden="true" />
@@ -1408,7 +1408,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
           )}
 
           {/* Message Input & Quick Action Chips */}
-          <div className="border-t border-slate-200 bg-[#F8FAFC] p-3.5 space-y-2.5">
+          <div className="border-t border-[#E5DFDF] bg-[#FBF5F9] p-3.5 space-y-2.5">
             <div className="flex flex-wrap gap-1.5">
               <button
                 type="button"
@@ -1418,7 +1418,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   setInputText(`Explain simply in ${progress.activeTutorTopic}: `);
                   textareaRef.current?.focus();
                 }}
-                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300 disabled:opacity-40"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-[#E10906] disabled:opacity-40"
               >
                 Explain Simply
               </button>
@@ -1430,7 +1430,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   setInputText(`Give me a real-life example for `);
                   textareaRef.current?.focus();
                 }}
-                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300 disabled:opacity-40"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-[#E10906] disabled:opacity-40"
               >
                 Real-Life Example
               </button>
@@ -1442,7 +1442,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   setInputText('Please debug my Python code:\n\n');
                   textareaRef.current?.focus();
                 }}
-                className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-sky-300 disabled:opacity-40"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] font-medium text-[#100303] hover:border-[#E10906] disabled:opacity-40"
               >
                 Debug My Code
               </button>
@@ -1462,7 +1462,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 type="button"
                 disabled={isLoading}
                 onClick={() => void handleGeneratePractice('same')}
-                className="rounded-lg border border-violet-200 bg-violet-50 px-2.5 py-1 text-[11px] font-semibold text-violet-800 hover:bg-violet-100 disabled:opacity-40"
+                className="rounded-lg border border-[#E5DFDF] bg-[#FFF1F1] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:bg-[#FFF1F1] disabled:opacity-40"
               >
                 Practice Task
               </button>
@@ -1470,7 +1470,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 type="button"
                 disabled={isLoading}
                 onClick={() => void handleGenerateQuiz('same')}
-                className="rounded-lg border border-sky-200 bg-[#F0F9FF] px-2.5 py-1 text-[11px] font-semibold text-sky-800 hover:bg-sky-100 disabled:opacity-40"
+                className="rounded-lg border border-[#E5DFDF] bg-[#FFF1F1] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:bg-[#FFF1F1] disabled:opacity-40"
               >
                 Test My Knowledge
               </button>
@@ -1489,13 +1489,13 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                     : `Ask PyVerse AI Tutor about ${progress.activeTutorTopic}...`
                 }
                 aria-label="Message PyVerse AI Tutor"
-                className="min-h-[46px] max-h-40 flex-1 resize-y rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-[#1E293B] placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                className="min-h-[46px] max-h-40 flex-1 resize-y rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2.5 text-sm text-[#100303] placeholder:text-[#8A8585] focus:border-[#E10906] focus:outline-none focus:ring-2 focus:ring-[#E10906]/20"
               />
               <button
                 type="button"
                 disabled={isLoading || !inputText.trim()}
                 onClick={() => void sendUserMessage(inputText)}
-                className="inline-flex h-[46px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-4 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-95 disabled:opacity-40 shrink-0"
+                className="inline-flex h-[46px] items-center gap-2 rounded-xl bg-[#E10906] px-4 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-95 disabled:opacity-40 shrink-0"
               >
                 <Send className="h-4 w-4" aria-hidden="true" />
                 <span className="hidden sm:inline">{isLoading ? 'Thinking...' : 'Send'}</span>
@@ -1505,7 +1505,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
         </section>
 
         {/* RIGHT CONTEXT PANEL (Desktop xl+) */}
-        <aside className="hidden xl:block xl:col-span-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto">
+        <aside className="hidden xl:block xl:col-span-3 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm sticky top-20 max-h-[calc(100vh-6.5rem)] overflow-y-auto">
           {renderContextPanelContent()}
         </aside>
       </div>
@@ -1523,7 +1523,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 type="button"
                 onClick={() => setMobileLeftOpen(false)}
                 aria-label="Close sidebar"
-                className="rounded-lg p-1 text-slate-500 hover:bg-slate-100"
+                className="rounded-lg p-1 text-[#8A8585] hover:bg-[#F1EEEE]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -1546,7 +1546,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                 type="button"
                 onClick={() => setMobileRightOpen(false)}
                 aria-label="Close learning context"
-                className="rounded-lg p-1 text-slate-500 hover:bg-slate-100"
+                className="rounded-lg p-1 text-[#8A8585] hover:bg-[#F1EEEE]"
               >
                 <X className="h-5 w-5" />
               </button>

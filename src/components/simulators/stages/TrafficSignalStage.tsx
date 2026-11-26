@@ -103,7 +103,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   type="button"
                   onClick={() => handleSelectSignal(sig)}
                   className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold capitalize transition-all whitespace-nowrap ${
-                    active ? activeCls : 'text-slate-600 hover:text-[#1E293B]'
+                    active ? activeCls : 'text-[#8A8585] hover:text-[#1E293B]'
                   }`}
                 >
                   {sig}
@@ -114,7 +114,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         </div>
 
         {/* Animated Intersection Canvas */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-[#F0F9FF] to-[#E0F2FE]/60 p-4 sm:p-5">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-[#FFF1F1] to-[#E0F2FE]/60 p-4 sm:p-5">
           {/* Status Banner (Icon + Text — never hue-only) */}
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white/95 px-4 py-2.5 shadow-xs">
             <div className="flex items-center gap-2.5 text-xs font-semibold text-[#1E293B]">
@@ -132,9 +132,9 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 </strong>
               </span>
             </div>
-            <span className="font-mono text-xs text-slate-600">
+            <span className="font-mono text-xs text-[#8A8585]">
               Pedestrian Crosswalk:{' '}
-              <strong className={isPedestrianCrossing ? 'text-emerald-700' : 'text-slate-700'}>
+              <strong className={isPedestrianCrossing ? 'text-emerald-700' : 'text-[#100303]'}>
                 {isPedestrianCrossing ? 'WALK SAFE' : 'WAIT AT CURB'}
               </strong>
             </span>
@@ -184,7 +184,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 transition: `transform ${scaleAnimationMs(650, runner.speedMs)}ms cubic-bezier(0.16, 1, 0.3, 1)`,
               }}
             >
-              <circle cx="0" cy="-10" r="8" fill="#0EA5E9" stroke="#FFFFFF" strokeWidth="2" />
+              <circle cx="0" cy="-10" r="8" fill="#E10906" stroke="#FFFFFF" strokeWidth="2" />
               <rect x="-7" y="-1" width="14" height="18" rx="5" fill="#8B5CF6" />
               <text
                 x="0"
@@ -211,7 +211,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   : `transform ${scaleAnimationMs(650, runner.speedMs)}ms cubic-bezier(0.16, 1, 0.3, 1)`,
               }}
             >
-              <rect x="10" y="88" width="74" height="34" rx="8" fill="#0EA5E9" />
+              <rect x="10" y="88" width="74" height="34" rx="8" fill="#E10906" />
               <rect x="24" y="93" width="38" height="24" rx="4" fill="#E0F2FE" />
               <circle cx="24" cy="123" r="6" fill="#0F172A" />
               <circle cx="68" cy="123" r="6" fill="#0F172A" />

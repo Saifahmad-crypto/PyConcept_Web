@@ -141,8 +141,8 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 }}
                 className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                   loopStyle === mode
-                    ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-[#1E293B]'
+                    ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
+                    : 'text-[#8A8585] hover:text-[#1E293B]'
                 }`}
               >
                 {mode} loop
@@ -157,14 +157,14 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <button
               type="button"
               onClick={() => applyPreset(DEFAULT_SLOTS)}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-sky-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-sky-300"
             >
               Default Lot
             </button>
             <button
               type="button"
               onClick={() => applyPreset(Array(8).fill('Occupied'))}
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-rose-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-rose-300"
             >
               All Occupied (Edge Case)
             </button>
@@ -182,7 +182,7 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   'Occupied',
                 ])
               }
-              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:border-emerald-300"
+              className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1 text-[11px] font-semibold text-[#100303] hover:border-emerald-300"
             >
               Slot 1 Free
             </button>
@@ -234,7 +234,7 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                       : isScanning
                       ? 'border-sky-400 bg-sky-500/20 ring-2 ring-violet-400/50'
                       : status === 'Occupied'
-                      ? 'border-slate-600 bg-slate-800/90 hover:border-slate-500'
+                      ? 'border-slate-600 bg-[#190909]/90 hover:border-slate-500'
                       : 'border-emerald-500/50 bg-emerald-950/30 hover:border-emerald-400'
                   }`}
                 >

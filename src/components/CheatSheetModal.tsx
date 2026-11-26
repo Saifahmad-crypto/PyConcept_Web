@@ -108,36 +108,36 @@ export const CheatSheetModal: React.FC<CheatSheetModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/45 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#100303]/45 p-4 backdrop-blur-xs"
       role="dialog"
       aria-modal="true"
       aria-labelledby="cheat-sheet-title"
     >
-      <div className="max-h-[88vh] w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-slate-200 bg-[#F0F9FF] px-6 py-4">
+      <div className="max-h-[88vh] w-full max-w-2xl overflow-hidden rounded-3xl border border-[#E5DFDF] bg-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-[#E5DFDF] bg-[#FFF1F1] px-6 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E10906] text-white">
               <BookMarked className="h-4 w-4" aria-hidden="true" />
             </div>
             <div>
-              <h2 id="cheat-sheet-title" className="font-display text-lg font-bold text-[#1E293B]">
+              <h2 id="cheat-sheet-title" className="font-display text-lg font-bold text-[#100303]">
                 Python Quick Cheat Sheet
               </h2>
-              <p className="text-xs text-[#64748B]">Instant syntax cards you can copy or test</p>
+              <p className="text-xs text-[#8A8585]">Instant syntax cards you can copy or test</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#E5DFDF] bg-white text-[#8A8585] hover:bg-[#FBF5F9]"
             aria-label="Close cheat sheet"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="border-b border-slate-200 bg-[#F8FAFC] px-6 py-2.5">
-          <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1">
+        <div className="border-b border-[#E5DFDF] bg-[#FBF5F9] px-6 py-2.5">
+          <div className="inline-flex rounded-xl border border-[#E5DFDF] bg-white p-1">
             {(
               [
                 { id: 'basics', label: '01. Basics' },
@@ -151,8 +151,8 @@ export const CheatSheetModal: React.FC<CheatSheetModalProps> = ({
                 onClick={() => setTab(t.id)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
                   tab === t.id
-                    ? 'bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] text-white shadow-xs'
-                    : 'text-[#64748B] hover:text-[#1E293B]'
+                    ? 'bg-[#E10906] text-white shadow-xs'
+                    : 'text-[#8A8585] hover:text-[#100303]'
                 }`}
               >
                 {t.label}
@@ -162,21 +162,21 @@ export const CheatSheetModal: React.FC<CheatSheetModalProps> = ({
         </div>
 
         <div className="max-h-[60vh] space-y-4 overflow-y-auto p-6">
-          <h3 className="font-display text-sm font-bold text-[#1E293B]">{current.title}</h3>
+          <h3 className="font-display text-sm font-bold text-[#100303]">{current.title}</h3>
           {current.items.map((item, idx) => (
             <div
               key={item.label}
-              className="rounded-2xl border border-slate-200 bg-[#F8FAFC] p-4"
+              className="rounded-2xl border border-[#E5DFDF] bg-[#FBF5F9] p-4"
             >
               <div className="flex items-center justify-between gap-2">
-                <span className="font-display text-sm font-bold text-[#1E293B]">
+                <span className="font-display text-sm font-bold text-[#100303]">
                   {item.label}
                 </span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => handleCopy(item.syntax, idx)}
-                    className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-medium text-slate-600 hover:border-sky-300"
+                    className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] bg-white px-2.5 py-1 text-[11px] font-medium text-[#8A8585] hover:border-[#E10906]"
                   >
                     {copiedIdx === idx ? (
                       <>
@@ -205,10 +205,10 @@ export const CheatSheetModal: React.FC<CheatSheetModalProps> = ({
                   )}
                 </div>
               </div>
-              <pre className="mt-2.5 overflow-x-auto rounded-xl bg-[#0F172A] p-3 font-mono text-xs text-sky-200">
+              <pre className="mt-2.5 overflow-x-auto rounded-xl bg-[#100303] p-3 font-mono text-xs text-sky-200">
                 {item.syntax}
               </pre>
-              <p className="mt-2 text-xs text-[#64748B]">{item.note}</p>
+              <p className="mt-2 text-xs text-[#8A8585]">{item.note}</p>
             </div>
           ))}
         </div>

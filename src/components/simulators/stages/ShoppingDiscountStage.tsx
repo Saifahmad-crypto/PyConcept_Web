@@ -142,7 +142,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                 className={`rounded-lg border px-2.5 py-1 font-mono text-[11px] font-semibold transition-colors ${
                   effectiveAmount === amt
                     ? 'border-violet-400 bg-violet-50 text-violet-700'
-                    : 'border-slate-200 bg-[#F8FAFC] text-slate-600 hover:border-slate-300'
+                    : 'border-slate-200 bg-[#F8FAFC] text-[#8A8585] hover:border-slate-300'
                 }`}
               >
                 Test ₹{amt.toLocaleString('en-IN')}
@@ -173,7 +173,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                       type="button"
                       onClick={() => updateQty(item.id, -1)}
                       aria-label={`Decrease ${item.name} quantity`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#100303] hover:bg-[#F1EEEE]"
                     >
                       <Minus className="h-3.5 w-3.5" />
                     </button>
@@ -184,7 +184,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                       type="button"
                       onClick={() => updateQty(item.id, 1)}
                       aria-label={`Increase ${item.name} quantity`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:border-sky-300 hover:bg-[#F0F9FF]"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#100303] hover:border-sky-300 hover:bg-[#F0F9FF]"
                     >
                       <Plus className="h-3.5 w-3.5" />
                     </button>
@@ -195,7 +195,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
 
             {/* Direct Amount Override */}
             <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5">
-              <label htmlFor="custom-cart-amt" className="text-xs font-medium text-slate-600">
+              <label htmlFor="custom-cart-amt" className="text-xs font-medium text-[#8A8585]">
                 Or enter custom amount (₹):
               </label>
               <input
@@ -219,7 +219,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs font-semibold text-[#1E293B]">
                 <span className="inline-flex items-center gap-1.5">
-                  <ShoppingCart className="h-4 w-4 text-sky-600" aria-hidden="true" />
+                  <ShoppingCart className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   Order Summary
                 </span>
                 <span className="inline-flex items-center gap-1 font-mono text-violet-700">
@@ -237,7 +237,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-slate-200">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] transition-all"
+                    className="h-full rounded-full bg-gradient-to-r from-[#E10906] to-[#8B5CF6] transition-all"
                     style={{
                       width: `${tierProgress}%`,
                       transitionDuration: `${scaleAnimationMs(300, runner.speedMs)}ms`,
@@ -248,7 +248,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
             </div>
 
             <div className="mt-4 space-y-2 border-t border-slate-200 pt-3 text-xs">
-              <div className="flex justify-between text-slate-600">
+              <div className="flex justify-between text-[#8A8585]">
                 <span>Cart Amount</span>
                 <span className="font-mono font-semibold text-[#1E293B] tabular-nums">
                   ₹{effectiveAmount.toLocaleString('en-IN')}
@@ -262,7 +262,7 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
               </div>
               <div className="flex items-center justify-between border-t border-slate-200 pt-2 text-sm font-bold text-[#1E293B]">
                 <span className="inline-flex items-center gap-1.5">
-                  <Receipt className="h-4 w-4 text-violet-600" aria-hidden="true" />
+                  <Receipt className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                   Final Bill
                 </span>
                 <span className="font-mono text-lg text-sky-700 tabular-nums">

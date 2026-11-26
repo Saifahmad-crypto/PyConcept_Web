@@ -63,7 +63,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
 
   const noteColors =
     denomination === 500
-      ? 'border-violet-400 bg-violet-50 text-violet-900'
+      ? 'border-violet-400 bg-violet-50 text-[#100303]'
       : denomination === 200
       ? 'border-amber-400 bg-amber-50 text-amber-900'
       : 'border-sky-400 bg-[#F0F9FF] text-sky-900';
@@ -117,8 +117,8 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 onClick={() => resetWith(() => setLoopMode(m))}
                 className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                   loopMode === m
-                    ? 'bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-[#1E293B]'
+                    ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
+                    : 'text-[#8A8585] hover:text-[#1E293B]'
                 }`}
               >
                 {m} loop
@@ -130,7 +130,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         {/* Inputs Row */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
-            <span className="block text-xs font-semibold text-slate-600 mb-2">
+            <span className="block text-xs font-semibold text-[#8A8585] mb-2">
               Note Denomination
             </span>
             <div className="grid grid-cols-3 gap-1.5">
@@ -141,7 +141,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   onClick={() => resetWith(() => setDenomination(d))}
                   className={`rounded-lg border py-1.5 font-mono text-xs font-bold transition-all ${
                     denomination === d
-                      ? 'border-sky-500 bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-xs'
+                      ? 'border-sky-500 bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
                       : 'border-slate-200 bg-white text-[#1E293B] hover:border-sky-300'
                   }`}
                 >
@@ -152,7 +152,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
-            <label htmlFor="cash-notes" className="block text-xs font-semibold text-slate-600">
+            <label htmlFor="cash-notes" className="block text-xs font-semibold text-[#8A8585]">
               Number of Notes (0–20)
             </label>
             <input
@@ -167,7 +167,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] p-3">
-            <label htmlFor="cash-target" className="block text-xs font-semibold text-slate-600">
+            <label htmlFor="cash-target" className="block text-xs font-semibold text-[#8A8585]">
               Target Limit ₹ (0 = All)
             </label>
             <input
@@ -210,7 +210,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           {/* Hopper -> Roller -> Output Stack */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 items-stretch">
             <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center">
-              <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-slate-600">
+              <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-[#8A8585]">
                 <Layers className="h-3.5 w-3.5" aria-hidden="true" />
                 Input Hopper
               </div>
@@ -230,7 +230,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-3.5 text-center">
-              <span className="text-xs font-semibold text-slate-600">Optical Counter</span>
+              <span className="text-xs font-semibold text-[#8A8585]">Optical Counter</span>
               <div
                 style={{ transitionDuration: `${scaleAnimationMs(260, runner.speedMs)}ms` }}
                 className={`mt-2 flex h-12 w-24 items-center justify-center rounded-xl border-2 font-mono text-sm font-extrabold transition-all ${
@@ -245,7 +245,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center">
-              <span className="text-xs font-semibold text-slate-600">Counted Stack</span>
+              <span className="text-xs font-semibold text-[#8A8585]">Counted Stack</span>
               <p className="mt-2 font-mono text-xl font-bold text-emerald-700 tabular-nums">
                 {counted} counted
               </p>

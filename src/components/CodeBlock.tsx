@@ -22,6 +22,8 @@ const KEYWORDS = new Set([
   'break',
   'continue',
   'pass',
+  'def',
+  'return',
   'True',
   'False',
   'None',
@@ -29,6 +31,7 @@ const KEYWORDS = new Set([
 
 const BUILTINS = new Set([
   'print',
+  'input',
   'range',
   'len',
   'int',
@@ -39,6 +42,7 @@ const BUILTINS = new Set([
   'min',
   'max',
   'sum',
+  'type',
 ]);
 
 function highlightPythonLine(line: string): React.ReactNode[] {
@@ -49,7 +53,7 @@ function highlightPythonLine(line: string): React.ReactNode[] {
   while (i < line.length) {
     if (line[i] === '#') {
       tokens.push(
-        <span key={key++} className="text-slate-400 italic">
+        <span key={key++} className="text-[#8A8585] italic">
           {line.slice(i)}
         </span>
       );
@@ -95,19 +99,19 @@ function highlightPythonLine(line: string): React.ReactNode[] {
       const word = line.slice(start, i);
       if (KEYWORDS.has(word)) {
         tokens.push(
-          <span key={key++} className="text-violet-300 font-semibold">
+          <span key={key++} className="font-semibold text-[#FF6B6B]">
             {word}
           </span>
         );
       } else if (BUILTINS.has(word)) {
         tokens.push(
-          <span key={key++} className="text-sky-300">
+          <span key={key++} className="text-[#FBF5F9] underline decoration-[#E10906]/60 underline-offset-2">
             {word}
           </span>
         );
       } else {
         tokens.push(
-          <span key={key++} className="text-slate-100">
+          <span key={key++} className="text-[#F1EEEE]">
             {word}
           </span>
         );
@@ -117,7 +121,7 @@ function highlightPythonLine(line: string): React.ReactNode[] {
 
     if ('=<>!+-*/%:'.includes(line[i])) {
       tokens.push(
-        <span key={key++} className="text-sky-400">
+        <span key={key++} className="text-[#FF8A88]">
           {line[i]}
         </span>
       );
@@ -151,14 +155,17 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-sm">
-      <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5">
-        <span className="font-mono text-xs font-medium text-slate-300">{title}</span>
+    <div className="overflow-hidden rounded-xl border border-[#2C1616] bg-[#100303] shadow-sm">
+      <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-[#E10906]" aria-hidden="true" />
+          <span className="font-mono text-xs font-medium text-[#FBF5F9]">{title}</span>
+        </div>
         {showCopy && (
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium text-[#8A8585] transition-colors hover:bg-[#2C1616] hover:text-[#FBF5F9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
             aria-label="Copy code snippet"
           >
             {copied ? (
@@ -188,18 +195,18 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
               key={lineNum}
               className={`flex items-start px-4 transition-colors duration-150 ${
                 isCurrent
-                  ? 'bg-gradient-to-r from-sky-500/25 to-violet-500/20 text-white'
-                  : 'hover:bg-slate-800/40'
+                  ? 'border-l-2 border-[#E10906] bg-[#E10906]/20 text-white'
+                  : 'hover:bg-[#190909]'
               }`}
             >
               <span
                 className={`mr-4 w-5 shrink-0 select-none text-right tabular-nums text-xs leading-relaxed ${
-                  isCurrent ? 'font-bold text-sky-300' : 'text-slate-500'
+                  isCurrent ? 'font-bold text-[#FF6B6B]' : 'text-[#8A8585]'
                 }`}
               >
                 {lineNum}
               </span>
-              <pre className="whitespace-pre font-mono text-slate-100">
+              <pre className="whitespace-pre font-mono text-[#FBF5F9]">
                 {highlightPythonLine(line)}
               </pre>
             </div>

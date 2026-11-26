@@ -341,14 +341,14 @@ export const FlowchartBuilder: React.FC<{
   return (
     <div className="space-y-6">
       {/* Header + Templates */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+      <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm space-y-4">
         <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
           <div>
-            <p className="text-xs font-semibold text-[#2563EB]">Interactive Flowchart Studio</p>
-            <h2 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B]">
+            <p className="text-xs font-semibold text-[#E10906]">Interactive Flowchart Studio</p>
+            <h2 className="mt-1 font-display text-2xl font-extrabold text-[#100303]">
               Flowchart Builder &amp; Visual Executor
             </h2>
-            <p className="mt-1 max-w-2xl text-sm text-[#64748B]">
+            <p className="mt-1 max-w-2xl text-sm text-[#8A8585]">
               Add blocks, wire True/False branches, validate logic paths, step through execution,
               and generate Python code automatically.
             </p>
@@ -360,20 +360,20 @@ export const FlowchartBuilder: React.FC<{
               onClick={() => setReverseMode((v) => !v)}
               className={`inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-colors ${
                 reverseMode
-                  ? 'border-violet-300 bg-violet-50 text-violet-800'
-                  : 'border-slate-200 bg-[#F8FAFC] text-[#1E293B] hover:border-violet-300'
+                  ? 'border-[#E10906] bg-[#FFF1F1] text-[#100303]'
+                  : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906]'
               }`}
             >
-              <Sparkles className="h-3.5 w-3.5 text-[#8B5CF6]" aria-hidden="true" />
+              <Sparkles className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
               {reverseMode ? 'Exit Reverse Challenge' : 'Reverse Activity: Code → Flowchart'}
             </button>
           </div>
         </div>
 
         {/* Template Selector + Block Adder */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#F1EEEE] pt-4">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-xs font-semibold text-[#64748B]">Templates:</span>
+            <span className="mr-1 text-xs font-semibold text-[#8A8585]">Templates:</span>
             {FLOW_TEMPLATES.map((tpl) => (
               <button
                 key={tpl.id}
@@ -385,7 +385,7 @@ export const FlowchartBuilder: React.FC<{
                   setExecHistory([]);
                   setIsStepping(false);
                 }}
-                className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-2.5 py-1.5 font-mono text-xs font-semibold text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]"
+                className="rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] px-2.5 py-1.5 font-mono text-xs font-semibold text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]"
               >
                 {tpl.name}
               </button>
@@ -393,7 +393,7 @@ export const FlowchartBuilder: React.FC<{
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-xs font-semibold text-[#64748B]">Add Block:</span>
+            <span className="mr-1 text-xs font-semibold text-[#8A8585]">Add Block:</span>
             {(
               [
                 { kind: 'process', label: '+ Process' },
@@ -407,7 +407,7 @@ export const FlowchartBuilder: React.FC<{
                 key={btn.kind}
                 type="button"
                 onClick={() => addBlock(btn.kind)}
-                className="inline-flex items-center gap-1 rounded-lg border border-sky-200 bg-sky-50 px-2.5 py-1.5 text-xs font-semibold text-[#2563EB] hover:bg-sky-100"
+                className="inline-flex items-center gap-1 rounded-lg border border-[#E5DFDF] bg-[#FFF1F1] px-2.5 py-1.5 text-xs font-semibold text-[#E10906] hover:bg-[#FFF1F1]"
               >
                 <Plus className="h-3 w-3" aria-hidden="true" />
                 {btn.label.replace('+ ', '')}
@@ -419,13 +419,13 @@ export const FlowchartBuilder: React.FC<{
 
       {/* Optional Reverse Activity Banner */}
       {reverseMode && (
-        <div className="rounded-3xl border border-violet-200 bg-violet-50/60 p-5 space-y-3">
+        <div className="rounded-3xl border border-[#E5DFDF] bg-[#FFF1F1]/60 p-5 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h3 className="font-display text-base font-bold text-[#1E293B]">
+              <h3 className="font-display text-base font-bold text-[#100303]">
                 {activeReverse.title}
               </h3>
-              <p className="text-xs text-[#64748B]">
+              <p className="text-xs text-[#8A8585]">
                 Construct a valid connected flowchart below matching every step in this snippet.
               </p>
             </div>
@@ -437,8 +437,8 @@ export const FlowchartBuilder: React.FC<{
                   onClick={() => setReverseIdx(i)}
                   className={`rounded-lg px-3 py-1 text-xs font-semibold ${
                     reverseIdx === i
-                      ? 'bg-[#8B5CF6] text-white'
-                      : 'border border-slate-200 bg-white text-[#64748B]'
+                      ? 'bg-[#E10906] text-white'
+                      : 'border border-[#E5DFDF] bg-white text-[#8A8585]'
                   }`}
                 >
                   Challenge {i + 1}
@@ -453,7 +453,7 @@ export const FlowchartBuilder: React.FC<{
                   ]);
                   setSelectedId('n1');
                 }}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-[#1E293B]"
+                className="rounded-lg border border-[#E5DFDF] bg-white px-3 py-1 text-xs font-semibold text-[#100303]"
               >
                 Clear Canvas
               </button>
@@ -461,14 +461,14 @@ export const FlowchartBuilder: React.FC<{
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <pre className="rounded-2xl bg-[#0F172A] p-4 font-mono text-xs text-sky-200">
+            <pre className="rounded-2xl bg-[#100303] p-4 font-mono text-xs text-sky-200">
               {activeReverse.code}
             </pre>
             <div
               className={`flex items-center gap-3 rounded-2xl border p-4 text-xs ${
                 reversePassed
                   ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
-                  : 'border-amber-200 bg-white text-[#1E293B]'
+                  : 'border-amber-200 bg-white text-[#100303]'
               }`}
             >
               {reversePassed ? (
@@ -496,8 +496,8 @@ export const FlowchartBuilder: React.FC<{
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Left: Interactive Flowchart Node Canvas */}
         <div className="space-y-4 lg:col-span-7">
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div className="rounded-3xl border border-[#E5DFDF] bg-white p-5 shadow-sm space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] pb-3">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -509,7 +509,7 @@ export const FlowchartBuilder: React.FC<{
                     }
                   }}
                   disabled={validationIssues.length > 0}
-                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-1.5 text-xs font-semibold text-white shadow-xs disabled:opacity-40"
+                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl bg-[#E10906] px-4 py-1.5 text-xs font-semibold text-white shadow-xs disabled:opacity-40"
                 >
                   <Play className="h-3.5 w-3.5" />
                   {isStepping ? 'Running...' : 'Run Flow'}
@@ -518,7 +518,7 @@ export const FlowchartBuilder: React.FC<{
                   type="button"
                   onClick={stepFlowchart}
                   disabled={validationIssues.length > 0}
-                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-1.5 text-xs font-semibold text-[#1E293B] disabled:opacity-40"
+                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-1.5 text-xs font-semibold text-[#100303] disabled:opacity-40"
                 >
                   Step Path
                 </button>
@@ -529,14 +529,14 @@ export const FlowchartBuilder: React.FC<{
                     setActiveExecId(null);
                     setExecHistory([]);
                   }}
-                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-[#64748B]"
+                  className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3 py-1.5 text-xs font-medium text-[#8A8585]"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                   Reset
                 </button>
               </div>
 
-              <span className="font-mono text-xs text-[#64748B]">
+              <span className="font-mono text-xs text-[#8A8585]">
                 {blocks.length} blocks
               </span>
             </div>
@@ -548,12 +548,12 @@ export const FlowchartBuilder: React.FC<{
                 const isActive = activeExecId === block.id;
                 const shapeBadge =
                   block.kind === 'start' || block.kind === 'end'
-                    ? 'rounded-full border-sky-300 bg-sky-50 text-sky-800'
+                    ? 'rounded-full border-[#E10906] bg-[#FFF1F1] text-[#100303]'
                     : block.kind === 'decision'
-                    ? 'rounded-xl border-violet-300 bg-violet-50 text-violet-900'
+                    ? 'rounded-xl border-[#E10906] bg-[#FFF1F1] text-[#100303]'
                     : block.kind === 'io'
                     ? 'rounded-xl border-emerald-300 bg-emerald-50 text-emerald-900'
-                    : 'rounded-xl border-slate-300 bg-[#F8FAFC] text-[#1E293B]';
+                    : 'rounded-xl border-[#E5DFDF] bg-[#FBF5F9] text-[#100303]';
 
                 const findLabel = (targetId?: string | null) =>
                   blocks.find((b) => b.id === targetId)?.label ?? 'Unconnected';
@@ -574,8 +574,8 @@ export const FlowchartBuilder: React.FC<{
                       isActive
                         ? 'border-emerald-500 bg-emerald-50/70 ring-2 ring-emerald-300'
                         : isSelected
-                        ? 'border-[#2563EB] bg-[#F0F9FF]/60'
-                        : 'border-slate-200 bg-white hover:border-sky-300'
+                        ? 'border-[#E10906] bg-[#FFF1F1]/60'
+                        : 'border-[#E5DFDF] bg-white hover:border-[#E10906]'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -584,7 +584,7 @@ export const FlowchartBuilder: React.FC<{
                       >
                         {block.kind}
                       </span>
-                      <span className="truncate font-mono text-xs sm:text-sm font-bold text-[#1E293B]">
+                      <span className="truncate font-mono text-xs sm:text-sm font-bold text-[#100303]">
                         {block.label}
                       </span>
                     </div>
@@ -617,12 +617,12 @@ export const FlowchartBuilder: React.FC<{
                           </button>
                         </div>
                       ) : block.kind !== 'end' ? (
-                        <span className="inline-flex items-center gap-1 text-[#64748B]">
+                        <span className="inline-flex items-center gap-1 text-[#8A8585]">
                           <ArrowRight className="h-3 w-3" />
                           {findLabel(block.nextId)}
                         </span>
                       ) : (
-                        <span className="text-slate-400">Terminates</span>
+                        <span className="text-[#8A8585]">Terminates</span>
                       )}
 
                       <div className="flex items-center gap-1">
@@ -634,7 +634,7 @@ export const FlowchartBuilder: React.FC<{
                           }}
                           disabled={idx === 0}
                           aria-label="Move block up"
-                          className="rounded border border-slate-200 p-1 text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+                          className="rounded border border-[#E5DFDF] p-1 text-[#8A8585] hover:bg-[#F1EEEE] disabled:opacity-30"
                         >
                           <ArrowUp className="h-3 w-3" />
                         </button>
@@ -646,7 +646,7 @@ export const FlowchartBuilder: React.FC<{
                           }}
                           disabled={idx === blocks.length - 1}
                           aria-label="Move block down"
-                          className="rounded border border-slate-200 p-1 text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+                          className="rounded border border-[#E5DFDF] p-1 text-[#8A8585] hover:bg-[#F1EEEE] disabled:opacity-30"
                         >
                           <ArrowDown className="h-3 w-3" />
                         </button>
@@ -669,9 +669,9 @@ export const FlowchartBuilder: React.FC<{
         <div className="space-y-4 lg:col-span-5">
           {/* Block Inspector */}
           {selectedBlock && (
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs space-y-3.5">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <h3 className="font-display text-sm font-bold text-[#1E293B]">
+            <div className="rounded-2xl border border-[#E5DFDF] bg-white p-5 shadow-xs space-y-3.5">
+              <div className="flex items-center justify-between border-b border-[#F1EEEE] pb-2.5">
+                <h3 className="font-display text-sm font-bold text-[#100303]">
                   Edit Selected Block ({selectedBlock.kind})
                 </h3>
                 <button
@@ -685,14 +685,14 @@ export const FlowchartBuilder: React.FC<{
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#64748B]">
+                <label className="block text-xs font-semibold text-[#8A8585]">
                   Block Label / Statement
                 </label>
                 <input
                   type="text"
                   value={selectedBlock.label}
                   onChange={(e) => updateBlock(selectedBlock.id, { label: e.target.value })}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-xs text-[#1E293B] focus:border-[#2563EB] focus:outline-none"
+                  className="mt-1 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 font-mono text-xs text-[#100303] focus:border-[#E10906] focus:outline-none"
                 />
               </div>
 
@@ -707,7 +707,7 @@ export const FlowchartBuilder: React.FC<{
                       onChange={(e) =>
                         updateBlock(selectedBlock.id, { trueId: e.target.value || null })
                       }
-                      className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-2.5 py-2 text-xs font-medium"
+                      className="mt-1 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-2.5 py-2 text-xs font-medium"
                     >
                       <option value="">-- Select target --</option>
                       {blocks
@@ -728,7 +728,7 @@ export const FlowchartBuilder: React.FC<{
                       onChange={(e) =>
                         updateBlock(selectedBlock.id, { falseId: e.target.value || null })
                       }
-                      className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-2.5 py-2 text-xs font-medium"
+                      className="mt-1 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-2.5 py-2 text-xs font-medium"
                     >
                       <option value="">-- Select target --</option>
                       {blocks
@@ -743,7 +743,7 @@ export const FlowchartBuilder: React.FC<{
                 </div>
               ) : selectedBlock.kind !== 'end' ? (
                 <div>
-                  <label className="block text-xs font-semibold text-[#64748B]">
+                  <label className="block text-xs font-semibold text-[#8A8585]">
                     Next Block →
                   </label>
                   <select
@@ -751,7 +751,7 @@ export const FlowchartBuilder: React.FC<{
                     onChange={(e) =>
                       updateBlock(selectedBlock.id, { nextId: e.target.value || null })
                     }
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-2.5 py-2 text-xs font-medium"
+                    className="mt-1 w-full rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-2.5 py-2 text-xs font-medium"
                   >
                     <option value="">-- Select target --</option>
                     {blocks
@@ -788,10 +788,10 @@ export const FlowchartBuilder: React.FC<{
           )}
 
           {/* Generated Python Code */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#0F172A]">
-            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs text-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303]">
+            <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs text-[#CFC8C8]">
               <span className="inline-flex items-center gap-1.5 font-semibold">
-                <Code2 className="h-3.5 w-3.5 text-sky-400" />
+                <Code2 className="h-3.5 w-3.5 text-[#E10906]" />
                 Generated Python Preview
               </span>
               {onOpenInStudio && (

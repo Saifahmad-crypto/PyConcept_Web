@@ -39,16 +39,16 @@ function inferPyType(val: unknown): { typeName: string; tone: string } {
   }
   if (typeof val === 'number') {
     return Number.isInteger(val)
-      ? { typeName: 'int', tone: 'border-sky-300 bg-sky-50 text-sky-800' }
-      : { typeName: 'float', tone: 'border-indigo-300 bg-indigo-50 text-indigo-800' };
+      ? { typeName: 'int', tone: 'border-[#E10906] bg-[#FFF1F1] text-[#100303]' }
+      : { typeName: 'float', tone: 'border-indigo-300 bg-[#FFF1F1] text-[#100303]' };
   }
   if (typeof val === 'string') {
-    return { typeName: 'str', tone: 'border-violet-300 bg-violet-50 text-violet-800' };
+    return { typeName: 'str', tone: 'border-[#E10906] bg-[#FFF1F1] text-[#100303]' };
   }
   if (Array.isArray(val)) {
     return { typeName: 'list', tone: 'border-amber-300 bg-amber-50 text-amber-800' };
   }
-  return { typeName: 'object', tone: 'border-slate-300 bg-slate-50 text-slate-800' };
+  return { typeName: 'object', tone: 'border-[#E5DFDF] bg-[#FBF5F9] text-slate-800' };
 }
 
 export const VisualMemoryExplorer: React.FC = () => {
@@ -104,13 +104,13 @@ export const VisualMemoryExplorer: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:flex-row lg:items-center">
+      <div className="flex flex-col justify-between gap-4 rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm lg:flex-row lg:items-center">
         <div>
-          <p className="text-xs font-semibold text-[#2563EB]">Visual Learning Tool</p>
-          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B]">
+          <p className="text-xs font-semibold text-[#E10906]">Visual Learning Tool</p>
+          <h2 className="mt-1 font-display text-2xl font-extrabold text-[#100303]">
             Visual Memory Explorer (Names &amp; Object References)
           </h2>
-          <p className="mt-1 max-w-2xl text-sm text-[#64748B]">
+          <p className="mt-1 max-w-2xl text-sm text-[#8A8585]">
             Step through Python assignments to see how variable names point to typed value objects
             in memory—and how reassignment rebinds a name to a new object.
           </p>
@@ -124,8 +124,8 @@ export const VisualMemoryExplorer: React.FC = () => {
               onClick={() => setCode(p.code)}
               className={`rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${
                 code === p.code
-                  ? 'border-[#2563EB] bg-[#F0F9FF] text-[#2563EB]'
-                  : 'border-slate-200 bg-[#F8FAFC] text-[#64748B] hover:text-[#1E293B]'
+                  ? 'border-[#E10906] bg-[#FFF1F1] text-[#E10906]'
+                  : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] hover:text-[#100303]'
               }`}
             >
               {p.label}
@@ -137,10 +137,10 @@ export const VisualMemoryExplorer: React.FC = () => {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Left: Editable Code + Execution Stepper */}
         <div className="space-y-4 lg:col-span-5">
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#0F172A] shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs text-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] bg-[#100303] shadow-sm">
+            <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs text-[#CFC8C8]">
               <span className="font-mono font-semibold">memory_trace.py</span>
-              <span className="font-mono text-sky-300 tabular-nums">
+              <span className="font-mono text-[#E10906] tabular-nums">
                 {activeStep ? `Line ${activeStep.line}` : 'Before execution'}
               </span>
             </div>
@@ -152,13 +152,13 @@ export const VisualMemoryExplorer: React.FC = () => {
                 onChange={(e) => setCode(e.target.value)}
                 rows={7}
                 spellCheck={false}
-                className="w-full resize-y rounded-xl border border-slate-800 bg-[#0B1120] p-3 font-mono text-sm leading-6 text-slate-100 focus:border-sky-500 focus:outline-none"
+                className="w-full resize-y rounded-xl border border-[#2C1616] bg-[#0B1120] p-3 font-mono text-sm leading-6 text-[#FBF5F9] focus:border-[#E10906] focus:outline-none"
               />
             </div>
 
             {/* Active Line Preview Strip */}
-            <div className="border-t border-slate-800 bg-[#0B1120] px-4 py-2.5 font-mono text-xs">
-              <span className="text-slate-400">Active Line: </span>
+            <div className="border-t border-[#2C1616] bg-[#0B1120] px-4 py-2.5 font-mono text-xs">
+              <span className="text-[#8A8585]">Active Line: </span>
               <span className="text-emerald-300">
                 {activeStep
                   ? `${activeStep.line}: ${codeLines[activeStep.line - 1] ?? ''}`
@@ -180,7 +180,7 @@ export const VisualMemoryExplorer: React.FC = () => {
           )}
 
           {/* Playback Controls */}
-          <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-xs">
+          <div className="space-y-3 rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-xs">
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
@@ -192,7 +192,7 @@ export const VisualMemoryExplorer: React.FC = () => {
                   }
                 }}
                 disabled={steps.length === 0}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-2 text-xs font-semibold text-white shadow-xs disabled:opacity-40"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl bg-[#E10906] px-4 py-2 text-xs font-semibold text-white shadow-xs disabled:opacity-40"
               >
                 {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                 {isPlaying ? 'Pause' : stepIndex >= steps.length && steps.length > 0 ? 'Replay' : 'Run'}
@@ -205,9 +205,9 @@ export const VisualMemoryExplorer: React.FC = () => {
                   setStepIndex((s) => Math.max(0, s - 1));
                 }}
                 disabled={stepIndex <= 0}
-                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-semibold text-[#1E293B] disabled:opacity-40"
+                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] disabled:opacity-40"
               >
-                <SkipBack className="h-3.5 w-3.5 text-[#2563EB]" />
+                <SkipBack className="h-3.5 w-3.5 text-[#E10906]" />
                 Back
               </button>
 
@@ -218,9 +218,9 @@ export const VisualMemoryExplorer: React.FC = () => {
                   setStepIndex((s) => Math.min(steps.length, s + 1));
                 }}
                 disabled={stepIndex >= steps.length}
-                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs font-semibold text-[#1E293B] disabled:opacity-40"
+                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-2 text-xs font-semibold text-[#100303] disabled:opacity-40"
               >
-                <SkipForward className="h-3.5 w-3.5 text-[#2563EB]" />
+                <SkipForward className="h-3.5 w-3.5 text-[#E10906]" />
                 Step
               </button>
 
@@ -230,13 +230,13 @@ export const VisualMemoryExplorer: React.FC = () => {
                   setIsPlaying(false);
                   setStepIndex(0);
                 }}
-                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-[#64748B]"
+                className="inline-flex min-h-[40px] items-center gap-1 rounded-xl border border-[#E5DFDF] bg-white px-3 py-2 text-xs font-medium text-[#8A8585]"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Reset
               </button>
 
-              <span className="ml-auto font-mono text-xs font-semibold text-[#64748B] tabular-nums">
+              <span className="ml-auto font-mono text-xs font-semibold text-[#8A8585] tabular-nums">
                 {stepIndex}/{steps.length}
               </span>
             </div>
@@ -253,18 +253,18 @@ export const VisualMemoryExplorer: React.FC = () => {
 
         {/* Right: Names -> Object References Diagram + Explanation */}
         <div className="space-y-4 lg:col-span-7">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
-              <h3 className="font-display text-base font-bold text-[#1E293B]">
+          <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] pb-3">
+              <h3 className="font-display text-base font-bold text-[#100303]">
                 Names &amp; Object Reference Diagram
               </h3>
-              <span className="font-mono text-xs text-[#64748B]">
+              <span className="font-mono text-xs text-[#8A8585]">
                 {Object.keys(currentVars).length} active binding(s)
               </span>
             </div>
 
             {groupedObjects.length === 0 ? (
-              <div className="py-12 text-center text-sm text-[#64748B]">
+              <div className="py-12 text-center text-sm text-[#8A8585]">
                 No variables bound yet. Click <strong>Step</strong> or <strong>Run</strong> to see
                 Python bind variable names to objects.
               </div>
@@ -283,8 +283,8 @@ export const VisualMemoryExplorer: React.FC = () => {
                       key={group.key}
                       className={`flex flex-col items-stretch justify-between gap-3 rounded-2xl border p-4 transition-all sm:flex-row sm:items-center ${
                         anyChanged
-                          ? 'border-sky-300 bg-[#F0F9FF]/70'
-                          : 'border-slate-200 bg-[#F8FAFC]'
+                          ? 'border-[#E10906] bg-[#FFF1F1]/70'
+                          : 'border-[#E5DFDF] bg-[#FBF5F9]'
                       }`}
                     >
                       {/* Variable Name Labels */}
@@ -292,15 +292,15 @@ export const VisualMemoryExplorer: React.FC = () => {
                         {group.names.map((name) => (
                           <div
                             key={name}
-                            className="rounded-xl border border-slate-300 bg-white px-3 py-1.5 font-mono text-sm font-bold text-[#1E293B] shadow-xs"
+                            className="rounded-xl border border-[#E5DFDF] bg-white px-3 py-1.5 font-mono text-sm font-bold text-[#100303] shadow-xs"
                           >
                             {name}
                           </div>
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs text-[#2563EB]">
-                        <span className="font-mono text-[11px] font-medium text-[#64748B]">
+                      <div className="flex items-center gap-2 text-xs text-[#E10906]">
+                        <span className="font-mono text-[11px] font-medium text-[#8A8585]">
                           references
                         </span>
                         <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -325,8 +325,8 @@ export const VisualMemoryExplorer: React.FC = () => {
               </div>
             )}
 
-            <div className="mt-5 rounded-2xl border border-sky-100 bg-[#F0F9FF] p-4 text-xs leading-relaxed text-[#1E293B]">
-              <p className="font-bold text-[#2563EB]">Step Explanation</p>
+            <div className="mt-5 rounded-2xl border border-[#F1EEEE] bg-[#FFF1F1] p-4 text-xs leading-relaxed text-[#100303]">
+              <p className="font-bold text-[#E10906]">Step Explanation</p>
               <p className="mt-1">
                 {activeStep
                   ? activeStep.explanation
@@ -335,8 +335,8 @@ export const VisualMemoryExplorer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-start gap-2.5 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs text-[#64748B]">
-            <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" aria-hidden="true" />
+          <div className="flex items-start gap-2.5 rounded-2xl border border-[#E5DFDF] bg-white px-4 py-3 text-xs text-[#8A8585]">
+            <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
             <span>
               Conceptual model: supports variable assignments, reassignments, numbers, strings,
               Booleans, lists, and arithmetic expressions via PyVerse&apos;s educational execution

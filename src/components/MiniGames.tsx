@@ -419,9 +419,9 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
       {/* Left Game Selector */}
       <div className="space-y-5 lg:col-span-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-4">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-4 shadow-sm space-y-4">
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-sky-700">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#E10906]">
               Conditional Games (4)
             </p>
             <div className="space-y-1.5">
@@ -435,8 +435,8 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                     onClick={() => startGame(g.id)}
                     className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left text-xs font-medium transition-all ${
                       active
-                        ? 'border-sky-400 bg-gradient-to-r from-[#0EA5E9]/10 to-[#8B5CF6]/10 font-semibold text-[#1E293B] shadow-xs'
-                        : 'border-slate-200 bg-[#F8FAFC] text-slate-600 hover:border-slate-300 hover:text-[#1E293B]'
+                        ? 'border-[#E10906] bg-[#E10906]/10 font-semibold text-[#100303] shadow-xs'
+                        : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] hover:border-[#E5DFDF] hover:text-[#100303]'
                     }`}
                   >
                     <span className="truncate">{g.title}</span>
@@ -451,8 +451,8 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
             </div>
           </div>
 
-          <div className="border-t border-slate-200 pt-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-violet-700">
+          <div className="border-t border-[#E5DFDF] pt-4">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#E10906]">
               Loops Games (4)
             </p>
             <div className="space-y-1.5">
@@ -466,8 +466,8 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                     onClick={() => startGame(g.id)}
                     className={`flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left text-xs font-medium transition-all ${
                       active
-                        ? 'border-violet-400 bg-gradient-to-r from-[#8B5CF6]/10 to-[#0EA5E9]/10 font-semibold text-[#1E293B] shadow-xs'
-                        : 'border-slate-200 bg-[#F8FAFC] text-slate-600 hover:border-slate-300 hover:text-[#1E293B]'
+                        ? 'border-[#E10906] bg-gradient-to-r from-[#8B5CF6]/10 to-[#E10906]/10 font-semibold text-[#100303] shadow-xs'
+                        : 'border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] hover:border-[#E5DFDF] hover:text-[#100303]'
                     }`}
                   >
                     <span className="truncate">{g.title}</span>
@@ -486,28 +486,28 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
 
       {/* Right Active Game Stage */}
       <div className="lg:col-span-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+        <div className="rounded-2xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E5DFDF] pb-4">
             <div>
-              <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                <Gamepad2 className="h-4 w-4 text-sky-600" aria-hidden="true" />
+              <div className="flex items-center gap-2 text-xs font-medium text-[#8A8585]">
+                <Gamepad2 className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
                 <span>{game.topic === 'conditionals' ? 'Topic 08 · Conditionals' : 'Topic 09 · Loops'}</span>
               </div>
-              <h3 className="mt-1 font-display text-xl font-bold text-[#1E293B]">{game.title}</h3>
-              <p className="mt-0.5 text-xs text-slate-600">{game.description}</p>
+              <h3 className="mt-1 font-display text-xl font-bold text-[#100303]">{game.title}</h3>
+              <p className="mt-0.5 text-xs text-[#8A8585]">{game.description}</p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs text-[#64748B] tabular-nums">
+              <span className="font-mono text-xs text-[#8A8585] tabular-nums">
                 Attempts: {gameAttempts[game.id] ?? 0}
               </span>
-              <span aria-hidden="true" className="text-slate-300">·</span>
-              <span className="font-mono text-xs font-semibold text-[#2563EB] tabular-nums">
+              <span aria-hidden="true" className="text-[#CFC8C8]">·</span>
+              <span className="font-mono text-xs font-semibold text-[#E10906] tabular-nums">
                 Score: {score} / {game.questions.length}
               </span>
               <button
                 type="button"
                 onClick={() => startGame(game.id)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-[#F8FAFC] px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-[#1E293B]"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] px-3 py-1.5 text-xs font-medium text-[#100303] transition-colors hover:bg-[#F1EEEE] hover:text-[#100303]"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Restart
@@ -520,10 +520,10 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 border border-amber-200">
                 <Trophy className="h-8 w-8 text-amber-500" aria-hidden="true" />
               </div>
-              <h4 className="font-display text-2xl font-bold text-[#1E293B]">
+              <h4 className="font-display text-2xl font-bold text-[#100303]">
                 Level Complete!
               </h4>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#8A8585]">
                 You scored{' '}
                 <strong className="font-mono text-emerald-700 tabular-nums">
                   {score} out of {game.questions.length}
@@ -534,7 +534,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                 <button
                   type="button"
                   onClick={() => startGame(game.id)}
-                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Play Again
@@ -543,8 +543,8 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
             </div>
           ) : (
             <div className="mt-5 space-y-5">
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <span className="font-mono font-semibold text-slate-700 tabular-nums">
+              <div className="flex items-center justify-between text-xs text-[#8A8585]">
+                <span className="font-mono font-semibold text-[#100303] tabular-nums">
                   Round {qIdx + 1} of {game.questions.length}
                 </span>
                 <button
@@ -563,7 +563,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                 </div>
               )}
 
-              <p className="text-base font-semibold text-[#1E293B]">{question.prompt}</p>
+              <p className="text-base font-semibold text-[#100303]">{question.prompt}</p>
 
               {question.code && (
                 <CodeBlock code={question.code} title="puzzle.py" showCopy={false} compact />
@@ -583,12 +583,12 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                           onChange={(e) => setSequenceInput(e.target.value)}
                           placeholder="?"
                           aria-label="Missing sequence number"
-                          className="h-12 w-20 rounded-xl border-2 border-sky-500 bg-[#F0F9FF] text-center font-mono text-lg font-bold text-[#1E293B] focus:outline-none focus:ring-2 focus:ring-violet-400/50"
+                          className="h-12 w-20 rounded-xl border-2 border-[#E10906] bg-[#FFF1F1] text-center font-mono text-lg font-bold text-[#100303] focus:outline-none focus:ring-2 focus:ring-violet-400/50"
                         />
                       ) : (
                         <div
                           key={idx}
-                          className="flex h-12 min-w-[54px] items-center justify-center rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 font-mono text-lg font-bold text-[#1E293B] tabular-nums"
+                          className="flex h-12 min-w-[54px] items-center justify-center rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3 font-mono text-lg font-bold text-[#100303] tabular-nums"
                         >
                           {val}
                         </div>
@@ -602,7 +602,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                     const isPicked = selectedOpt === idx;
                     const isAnswer = idx === question.correctOption;
                     let cls =
-                      'border-slate-200 bg-[#F8FAFC] text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]/60';
+                      'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]/60';
                     if (submitted) {
                       if (isAnswer) {
                         cls = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold';
@@ -611,7 +611,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                       }
                     } else if (isPicked) {
                       cls =
-                        'border-sky-500 bg-gradient-to-r from-[#0EA5E9]/12 to-[#8B5CF6]/12 text-[#1E293B] font-semibold ring-1 ring-sky-400/40';
+                        'border-[#E10906] bg-[#E10906]/12 text-[#100303] font-semibold ring-1 ring-sky-400/40';
                     }
 
                     return (
@@ -622,7 +622,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                         onClick={() => setSelectedOpt(idx)}
                         className={`flex min-h-[44px] items-center gap-3 rounded-xl border px-4 py-2.5 text-left font-mono text-xs sm:text-sm transition-all ${cls}`}
                       >
-                        <span className="font-bold text-slate-500">
+                        <span className="font-bold text-[#8A8585]">
                           {String.fromCharCode(65 + idx)}.
                         </span>
                         <span>{opt}</span>
@@ -653,7 +653,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                       </>
                     )}
                   </div>
-                  <p className="mt-1.5 text-slate-700">{question.explanation}</p>
+                  <p className="mt-1.5 text-[#100303]">{question.explanation}</p>
                 </div>
               )}
 
@@ -665,7 +665,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                     disabled={
                       isSequenceQuestion ? sequenceInput.trim() === '' : selectedOpt === null
                     }
-                    className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0"
+                    className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 disabled:hover:translate-y-0"
                   >
                     Submit Answer
                   </button>
@@ -673,7 +673,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                    className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
                     {qIdx + 1 >= game.questions.length ? 'Finish Game' : 'Next Round'}
                     <ArrowRight className="h-4 w-4" />

@@ -54,33 +54,33 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 pb-4">
+    <div className="rounded-3xl border border-[#E5DFDF] bg-white p-6 shadow-sm">
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#F1EEEE] pb-4">
         <div>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-[#64748B]">
-            <span className="inline-flex items-center gap-1.5 font-semibold text-[#8B5CF6]">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-[#8A8585]">
+            <span className="inline-flex items-center gap-1.5 font-semibold text-[#E10906]">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               Daily Python Quest
             </span>
             <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1 font-mono tabular-nums">
-              <Calendar className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
+              <Calendar className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
               {dateKey}
             </span>
             <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1 font-mono tabular-nums">
-              <Clock className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+              <Clock className="h-3.5 w-3.5 text-[#8A8585]" aria-hidden="true" />
               ~{quest.estimatedMinutes} min
             </span>
           </div>
-          <h3 className="mt-1.5 font-display text-lg font-bold text-[#1E293B] sm:text-xl">
+          <h3 className="mt-1.5 font-display text-lg font-bold text-[#100303] sm:text-xl">
             {quest.title}
           </h3>
-          <p className="mt-1 text-xs sm:text-sm text-[#64748B]">{quest.instructions}</p>
+          <p className="mt-1 text-xs sm:text-sm text-[#8A8585]">{quest.instructions}</p>
         </div>
 
         <div className="flex items-center gap-2 font-mono text-xs font-semibold">
-          <span className="text-[#2563EB]">+{quest.xpReward} XP</span>
+          <span className="text-[#E10906]">+{quest.xpReward} XP</span>
           {alreadyCompleted && (
             <span className="inline-flex items-center gap-1 text-emerald-700">
               <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
@@ -100,17 +100,17 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             {quest.options.map((opt, idx) => {
               const chosen = selected === idx;
               let cls =
-                'border-slate-200 bg-[#F8FAFC] text-[#1E293B] hover:border-sky-300 hover:bg-[#F0F9FF]';
+                'border-[#E5DFDF] bg-[#FBF5F9] text-[#100303] hover:border-[#E10906] hover:bg-[#FFF1F1]';
               if (submitted) {
                 if (idx === quest.correctIndex) {
                   cls = 'border-emerald-300 bg-emerald-50 text-emerald-900 font-semibold';
                 } else if (chosen) {
                   cls = 'border-rose-300 bg-rose-50 text-rose-900';
                 } else {
-                  cls = 'border-slate-200 bg-white text-slate-500 opacity-75';
+                  cls = 'border-[#E5DFDF] bg-white text-[#8A8585] opacity-75';
                 }
               } else if (chosen) {
-                cls = 'border-[#2563EB] bg-[#F0F9FF] text-[#1E293B] font-semibold';
+                cls = 'border-[#E10906] bg-[#FFF1F1] text-[#100303] font-semibold';
               }
 
               return (
@@ -142,7 +142,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
                 type="button"
                 onClick={handleSubmit}
                 disabled={selected === null}
-                className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 disabled:opacity-40"
+                className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-[#E10906] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 disabled:opacity-40"
               >
                 Check Answer
               </button>
@@ -152,7 +152,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
               <button
                 type="button"
                 onClick={handleRetry}
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] hover:border-sky-300"
+                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] hover:border-[#E10906]"
               >
                 Try Again
               </button>
@@ -161,7 +161,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             <button
               type="button"
               onClick={() => setShowHint((h) => !h)}
-              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2 text-xs font-medium text-[#64748B] hover:text-[#1E293B]"
+              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-[#E5DFDF] bg-[#FBF5F9] px-3.5 py-2 text-xs font-medium text-[#8A8585] hover:text-[#100303]"
             >
               <Lightbulb className="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
               {showHint ? 'Hide Hint' : 'Hint'}
@@ -193,7 +193,7 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
             </div>
           )}
 
-          <p className="text-[11px] text-[#64748B]">
+          <p className="text-[11px] text-[#8A8585]">
             Quest resets automatically each local calendar day and saves completion locally in your browser.
           </p>
         </div>

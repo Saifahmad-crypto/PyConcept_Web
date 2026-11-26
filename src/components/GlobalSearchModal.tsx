@@ -80,18 +80,18 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-slate-900/45 px-4 pt-16 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-[#100303]/60 px-4 pt-16 backdrop-blur-xs"
       role="dialog"
       aria-modal="true"
       aria-labelledby="global-search-label"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl"
+        className="w-full max-w-xl overflow-hidden rounded-2xl border border-[#E5DFDF] bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 border-b border-slate-200 px-5 py-3.5">
-          <Search className="h-4 w-4 shrink-0 text-[#2563EB]" aria-hidden="true" />
+        <div className="flex items-center gap-3 border-b border-[#E5DFDF] px-5 py-3.5">
+          <Search className="h-4 w-4 shrink-0 text-[#E10906]" aria-hidden="true" />
           <label id="global-search-label" htmlFor="global-search-input" className="sr-only">
             Search PyVerse topics, simulators, games, and cheat sheets
           </label>
@@ -102,13 +102,13 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Python topics, simulators, games, challenges..."
-            className="w-full text-sm text-[#1E293B] placeholder:text-slate-400 focus:outline-none"
+            className="w-full text-sm text-[#100303] placeholder:text-[#8A8585] focus:outline-none"
           />
           <button
             type="button"
             onClick={onClose}
             aria-label="Close search"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#E5DFDF] text-[#8A8585] hover:border-[#100303] hover:text-[#100303]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -116,30 +116,30 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
         <div className="max-h-96 overflow-y-auto p-3">
           {matches.length === 0 ? (
-            <p className="px-4 py-8 text-center text-sm text-[#64748B]">
+            <p className="px-4 py-8 text-center text-sm text-[#8A8585]">
               No matching PyVerse modules found for &quot;{query}&quot;. Try searching{' '}
-              <code className="font-mono text-[#2563EB]">range()</code>,{' '}
-              <code className="font-mono text-[#2563EB]">if</code>, or{' '}
-              <code className="font-mono text-[#2563EB]">flowchart</code>.
+              <code className="font-mono text-[#E10906]">range()</code>,{' '}
+              <code className="font-mono text-[#E10906]">if</code>, or{' '}
+              <code className="font-mono text-[#E10906]">flowchart</code>.
             </p>
           ) : (
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {matches.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => handleSelect(item)}
-                  className="flex w-full items-center justify-between gap-3 rounded-2xl border border-transparent px-4 py-3 text-left transition-colors hover:border-sky-200 hover:bg-[#F0F9FF]"
+                  className="flex w-full items-center justify-between gap-3 rounded-xl border border-transparent px-4 py-3 text-left transition-colors hover:border-[#E10906]/30 hover:bg-[#FBF5F9]"
                 >
                   <div className="min-w-0">
-                    <span className="font-mono text-[11px] font-semibold text-[#2563EB]">
+                    <span className="font-mono text-[11px] font-semibold text-[#E10906]">
                       {item.category}
                     </span>
-                    <p className="truncate font-display text-sm font-bold text-[#1E293B]">
+                    <p className="truncate font-display text-sm font-bold text-[#100303]">
                       {item.title}
                     </p>
                   </div>
-                  <ArrowRight className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#8A8585]" aria-hidden="true" />
                 </button>
               ))}
             </div>
