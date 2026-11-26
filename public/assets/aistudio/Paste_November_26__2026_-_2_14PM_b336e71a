@@ -1,0 +1,1679 @@
+# PYVERSE — THE ULTIMATE INTERACTIVE PYTHON LEARNING PLATFORM
+## Complete Product Design, Development, Functionality & Implementation Master Prompt
+
+Act as a world-class product designer, senior full-stack developer, educational technology architect, gamification specialist, interaction designer and Python programming educator.
+
+Your task is to transform my existing project into **PyVerse — a complete, premium, gamified and interactive Python learning ecosystem.**
+
+This is not a normal educational website.
+
+It should combine:
+- A modern premium educational SaaS platform.
+- A gamified adventure-based learning world.
+- An interactive programming laboratory.
+- A visual Python execution environment.
+- A collection of educational coding games.
+- An adaptive AI personal programming tutor.
+- A complete learning and progress management system.
+
+The final product should feel like a professionally developed EdTech application, not a basic college project or a collection of static pages.
+
+The platform must be visually impressive, intuitive, educationally effective, responsive and genuinely functional.
+
+---
+
+# PART 1 — EXISTING PROJECT INSPECTION
+
+Before writing or modifying code, thoroughly inspect the existing project.
+
+Understand:
+- Existing framework and technology stack.
+- Current folder structure.
+- Existing components.
+- Existing pages and routes.
+- Existing navigation.
+- Current design system.
+- Existing Python learning content.
+- Existing simulators.
+- Existing games and quizzes.
+- Existing AI Tutor implementation, if any.
+- Existing local storage and data management.
+- Existing working functionality.
+- Incomplete or broken features.
+
+IMPORTANT:
+
+1. Preserve existing working features.
+2. Do not unnecessarily replace the entire application.
+3. Do not delete existing content.
+4. Reuse good components where appropriate.
+5. Improve weak implementations instead of duplicating them.
+6. Maintain consistent architecture.
+7. Do not create duplicate pages or components.
+8. Do not replace functional features with static mockups.
+9. Do not claim that something works unless it actually works.
+
+First understand the application, then create an implementation plan and execute it.
+
+If the application already contains a feature described below, inspect and improve it instead of creating another version.
+
+# PART 2 — PRODUCT IDENTITY
+
+Product Name: PyVerse
+
+Tagline: Think. Code. Experiment.
+
+Core philosophy:
+
+"Don't just learn Python. Explore it, experiment with it, play with it and understand how it works."
+
+PyVerse should support a learning journey from complete beginner to advanced Python programming.
+
+Initially, the existing Conditional Statements and Loops content must be fully developed and polished. The architecture must support adding more Python topics later without redesigning the entire platform.
+
+Future topic support should include:
+- Python Basics
+- Variables and Data Types
+- Operators
+- Conditional Statements
+- Loops
+- Functions
+- Lists
+- Tuples
+- Sets
+- Dictionaries
+- Strings
+- File Handling
+- Exception Handling
+- Object-Oriented Programming
+- Modules and Packages
+- Additional advanced Python concepts
+
+Do not create empty or misleading lessons for topics that have not been implemented.
+
+# PART 3 — DESIGN SYSTEM AND VISUAL IDENTITY
+
+## 3.1 Overall visual direction
+
+Use a unique hybrid design direction:
+
+PREMIUM MODERN TECH + GAME-BASED LEARNING + INTERACTIVE LABORATORY.
+
+The website should be:
+- Modern.
+- Premium.
+- Bright.
+- Visually rich.
+- Clean.
+- Interactive.
+- Futuristic.
+- Educational.
+- Engaging without looking childish.
+
+Do not make it look like:
+- A traditional school website.
+- A basic documentation page.
+- A generic chatbot interface.
+- A generic admin dashboard.
+- A template full of repetitive cards.
+
+The design should create a sense of exploration and discovery.
+
+## 3.2 Typography
+
+Use a consistent professional typography system.
+
+Primary font: Plus Jakarta Sans.
+
+Use for:
+- Main headings.
+- Hero text.
+- Navigation.
+- Section titles.
+- Buttons.
+- Important labels.
+
+Secondary font: Inter.
+
+Use for:
+- Descriptions.
+- Explanations.
+- Dashboard information.
+- Instructions.
+- Supporting text.
+
+Code font: JetBrains Mono.
+
+Use for:
+- Python code.
+- Variables.
+- Output.
+- Console.
+- Line numbers.
+- Debugging information.
+
+Suggested desktop typography:
+- Hero headings: 40–52px.
+- Main section headings: 28–34px.
+- Subheadings: 20–24px.
+- Card titles: 18–22px.
+- Body: 14–16px.
+- Supporting labels: 12–13px.
+- Code: 14–15px.
+
+Use responsive typography on mobile.
+
+Avoid inconsistent fonts, excessively small text and overly decorative typography.
+
+## 3.3 Colour palette
+
+Primary:
+- Sky Blue: #38BDF8
+- Violet: #8B5CF6
+- Deep Blue: #2563EB
+
+Background:
+- Main: #F8FAFC
+- Secondary: #F0F9FF
+- Cards: #FFFFFF
+
+Text:
+- Primary: #1E293B
+- Secondary: #64748B
+
+Use gradients selectively.
+
+The default interface should be light-themed.
+
+Do not use excessive neon, heavy glow, excessive gradients or random colours.
+
+## 3.4 Visual components
+
+Create a unified component system for:
+- Buttons.
+- Navigation.
+- Cards.
+- Modals.
+- Tabs.
+- Tooltips.
+- Progress bars.
+- Achievement badges.
+- Code editors.
+- Output consoles.
+- Flowcharts.
+- Charts.
+- Interactive diagrams.
+- Simulator controls.
+- Notifications.
+- Loading states.
+- Empty states.
+
+Use consistent spacing, border radii, shadows and iconography.
+
+## 3.5 Animation system
+
+Use purposeful animations:
+- Smooth page transitions.
+- Hover interactions.
+- Level unlock animations.
+- XP gain feedback.
+- Achievement unlock animations.
+- Flowchart path animations.
+- Variable updates.
+- Loop iteration animations.
+- Simulator object movement.
+- Game completion feedback.
+
+Animations must communicate state or improve interaction.
+
+Respect reduced-motion accessibility settings.
+
+Avoid animations that make the interface slow or distracting.
+
+---
+
+# PART 4 — GLOBAL NAVIGATION AND APPLICATION STRUCTURE
+
+Create a responsive navigation system.
+
+Brand:
+PyVerse logo + wordmark.
+
+Primary navigation:
+1. Home
+2. Learning World
+3. Interactive Lab
+4. Game Zone
+5. Coding Studio
+6. AI Tutor
+7. Revision Hub
+
+Progress Dashboard should be accessible from the user profile or dashboard area.
+
+Use dropdowns or grouped navigation where appropriate.
+
+Every navigation item must open a real page or section.
+
+Do not create buttons that do nothing.
+
+Create a consistent footer with:
+- PyVerse branding.
+- Main navigation.
+- Learning resources.
+- About section.
+- Copyright information.
+
+Replace every occurrence of:
+- PYTHON LAB
+- Python Lab
+- PythonLab
+
+with PyVerse across the entire application.
+
+Update:
+- Header.
+- Footer.
+- Browser title.
+- Page headings.
+- Metadata.
+- Loading screens.
+- Empty states.
+- App icon and favicon where supported.
+- All visible hardcoded branding.
+
+Tagline: Think. Code. Experiment.
+
+---
+
+# PART 5 — HOMEPAGE
+
+Create a visually impressive homepage.
+
+The homepage must immediately communicate what PyVerse is.
+
+## Hero section
+
+Main heading:
+
+"Your Python Journey Starts Here."
+
+Supporting line:
+
+"Learn. Experiment. Play. Build."
+
+Primary actions:
+- Start Learning.
+- Explore Simulators.
+
+Use a custom visual composition combining:
+- Python code.
+- Animated programming symbols.
+- Flowchart elements.
+- Interactive diagrams.
+- Learning journey visuals.
+
+Do not use a generic robot illustration as the main visual.
+
+## Feature discovery section
+
+Show six major platform destinations:
+
+1. Learning World.
+2. Interactive Lab.
+3. Game Zone.
+4. Coding Studio.
+5. AI Personal Tutor.
+6. Revision Hub.
+
+Each should have:
+- Distinct icon or illustration.
+- Short description.
+- Clear action.
+- Consistent visual styling.
+
+## Learning journey preview
+
+Show:
+- Python Basics.
+- Conditional Statements.
+- Loops.
+
+Use connected levels, paths or a journey map rather than a plain list.
+
+## Additional homepage sections
+
+Include:
+- Featured Daily Quest.
+- Featured Simulator.
+- Featured Coding Challenge.
+- XP and achievement preview.
+- Learning progress preview.
+- Recently visited activity.
+
+Only show real user progress. For new users, show an onboarding state instead of fabricated data.
+
+Avoid lengthy homepage paragraphs.
+
+---
+
+# PART 6 — PYVERSE LEARNING WORLD
+
+This is the central gamified learning experience.
+
+Create a dedicated Learning World page.
+
+## 6.1 Python Adventure Map
+
+Design an attractive interactive map representing the learner's Python journey.
+
+Use connected nodes, paths, islands, stages or level regions.
+
+Each topic should be represented as a learning level.
+
+Initial learning levels:
+1. Python Basics.
+2. Conditional Statements.
+3. Loops.
+
+Future levels should be supported by the architecture.
+
+Every level should have:
+- Topic name.
+- Short description.
+- Difficulty.
+- Completion status.
+- XP reward.
+- Number of missions.
+- Unlock condition.
+- Start or Continue button.
+
+Use different states:
+- Completed.
+- Available.
+- In Progress.
+- Locked.
+
+Locked levels should show the actual requirement to unlock them.
+
+Clicking a level should open its dedicated learning page.
+
+## 6.2 Learning missions
+
+Each topic should contain missions.
+
+Example for Conditional Statements:
+- Understand if.
+- Understand if-else.
+- Explore elif.
+- Master nested if.
+- Practise comparison operators.
+- Practise logical operators.
+- Complete a real-life decision mission.
+
+Example for Loops:
+- Understand for loops.
+- Explore range().
+- Understand while loops.
+- Learn break.
+- Learn continue.
+- Explore nested loops.
+- Complete an iteration mission.
+
+Each mission should have:
+- Learning objective.
+- Short introduction.
+- Visual explanation.
+- Interactive example.
+- Practice activity.
+- Completion state.
+
+## 6.3 XP and experience system
+
+Implement a real XP system.
+
+Award XP for:
+- Completing lessons.
+- Completing simulators.
+- Solving challenges.
+- Completing quizzes.
+- Winning game missions.
+- Completing daily quests.
+
+Use configurable XP values.
+
+Do not award XP repeatedly for simply refreshing a page or repeatedly claiming the same completion reward.
+
+Store activity IDs and reward history to prevent duplicate rewards.
+
+Show:
+- Total XP.
+- Current level.
+- XP needed for next level.
+- Recent XP earned.
+- XP history.
+
+Create a visually appealing XP progress bar.
+
+## 6.4 Levels and achievements
+
+Create learner levels such as:
+- Beginner Explorer.
+- Python Adventurer.
+- Logic Builder.
+- Loop Master.
+- Code Detective.
+- Python Champion.
+
+These are illustrative progression names. Define transparent XP thresholds.
+
+Create achievement badges such as:
+- First Steps.
+- First Program.
+- Condition Master.
+- Loop Explorer.
+- Bug Hunter.
+- Simulator Expert.
+- Daily Quest Streak.
+- Escape Room Solver.
+- Python Sandbox Explorer.
+
+Each achievement should have:
+- Name.
+- Description.
+- Icon.
+- Unlock requirement.
+- Locked/unlocked state.
+- Unlock animation.
+
+Only unlock badges when their conditions are genuinely met.
+
+## 6.5 Learning streak
+
+Track:
+- Active learning days.
+- Current streak.
+- Longest streak.
+- Daily completion.
+
+Use local calendar dates correctly.
+
+Do not count page visits alone as meaningful learning activity.
+
+---
+
+# PART 7 — DAILY PYTHON QUEST
+
+Create a dedicated Daily Quest experience.
+
+Each day, provide a new small learning mission.
+
+Possible quest types:
+- Predict the output.
+- Find the error.
+- Complete the missing code.
+- Solve a condition.
+- Predict loop iterations.
+- Build a flowchart.
+- Complete a mini coding task.
+
+Requirements:
+- Daily quest date.
+- Difficulty.
+- Estimated completion time.
+- XP reward.
+- Instructions.
+- Interactive task.
+- Hint system.
+- Submission.
+- Correct/incorrect feedback.
+- Explanation.
+- Completion status.
+
+The quest should be determined by the current local calendar date.
+
+Use a stable daily quest ID so refreshing the page does not generate a new quest.
+
+Save the learner's completion state.
+
+Prevent repeated reward claims.
+
+For a local-only version, persist progress using localStorage.
+
+For a multi-user version, use server-side date and user records.
+
+Do not pretend a local browser clock is a secure global server clock.
+
+---
+
+# PART 8 — INTERACTIVE LAB
+
+Create a dedicated Interactive Lab hub.
+
+Organize it into:
+- Conditional Statement Lab.
+- Loop Lab.
+- Visual Learning Tools.
+- Execution Tools.
+
+Each activity should have its own dedicated workspace.
+
+## 8.1 Eight real-life simulators
+
+Create the following simulators.
+
+### A. CONDITIONAL STATEMENT SIMULATORS
+
+1. Traffic Signal Simulator
+
+Demonstrate:
+- Red = Stop.
+- Yellow = Wait.
+- Green = Go.
+
+Visual elements:
+- Traffic light.
+- Vehicle.
+- Pedestrian crossing.
+- Signal state.
+
+Python concepts:
+- if.
+- elif.
+- else.
+
+Let the learner change the signal and observe the execution path.
+
+2. ATM Decision Simulator
+
+Create a safe educational ATM demonstration.
+
+Demonstrate:
+- Demo PIN verification.
+- Sample balance.
+- Withdrawal amount validation.
+- Insufficient balance.
+- Successful demo transaction.
+
+Python concepts:
+- Nested if.
+- Comparison operators.
+- Logical operators.
+
+Use only fictional sample data.
+
+Never request real PINs, banking credentials or real financial information.
+
+3. Smart AC Controller
+
+Controls:
+- Temperature slider.
+- AC state.
+- Current temperature.
+
+Example logic:
+- Temperature above 28°C: AC ON.
+- Otherwise: AC OFF.
+
+Visual elements:
+- Thermometer.
+- Fan animation.
+- Temperature display.
+- AC state indicator.
+
+Python concepts:
+- if.
+- else.
+- Comparison operators.
+
+Test the exact boundary temperature of 28°C.
+
+4. Shopping Discount Calculator
+
+Allow learners to select products and quantities.
+
+Demonstration discount logic:
+- Amount >= ₹5000: 20% discount.
+- Amount >= ₹2000: 10% discount.
+- Otherwise: no discount.
+
+Show:
+- Product list.
+- Quantity.
+- Subtotal.
+- Applied discount.
+- Final amount.
+
+Python concepts:
+- if.
+- elif.
+- else.
+- Arithmetic operators.
+
+Test exact ₹2000 and ₹5000 boundaries.
+
+### B. LOOP SIMULATORS
+
+5. Elevator Floor Simulator
+
+Allow learners to choose:
+- Starting floor.
+- Destination floor.
+
+Show an animated elevator moving floor by floor.
+
+Python concepts:
+- for.
+- range().
+- Loop counters.
+
+Handle the case where start and destination floors are equal.
+
+6. Countdown Timer
+
+Create a visual countdown using a while loop.
+
+Controls:
+- Start.
+- Pause.
+- Next Step.
+- Reset.
+
+Show:
+- Current number.
+- Iteration.
+- Current state.
+- Completion.
+
+Handle a starting value of zero correctly.
+
+7. Parking Slot Scanner
+
+Create an animated parking lot.
+
+Show occupied and available slots.
+
+Python concepts:
+- for loop.
+- continue.
+- break.
+
+Demonstrate:
+- Scanning slots.
+- Skipping occupied slots.
+- Stopping at the first available slot.
+
+Include an all-slots-occupied case.
+
+8. ATM Cash Counter
+
+Create a fictional educational cash-counting example.
+
+Use sample denominations:
+- ₹100.
+- ₹200.
+- ₹500.
+
+Demonstrate counting and accumulation using loops.
+
+Do not connect to real banking or claim that money is being withdrawn.
+
+Include empty input handling.
+
+## 8.2 Standard simulator interface
+
+Every simulator must use a consistent high-quality interface.
+
+LEFT PANEL:
+- Real-life animated visual.
+- Interactive controls.
+- Live state.
+- Objects and visual feedback.
+
+RIGHT PANEL:
+- Python code.
+- Syntax highlighting.
+- Line numbers.
+- Current execution line highlighted.
+- Current variable values.
+- Condition evaluation.
+
+BOTTOM PANEL:
+- Live output.
+- Step-by-step explanation.
+- Execution history.
+- Progress indicator.
+
+Execution controls:
+- Play.
+- Pause.
+- Next Step.
+- Reset.
+- Speed slider.
+
+Every execution step must update:
+- Code line.
+- Variables.
+- Conditions.
+- Loop counter where applicable.
+- Simulation state.
+- Output.
+- Explanation.
+
+The animation and code must remain synchronized.
+
+Do not create unrelated animations that continue independently of the execution state.
+
+Use deterministic, testable educational execution logic.
+
+If these simulators use a limited educational execution engine rather than a full Python interpreter, clearly communicate that limitation.
+
+---
+
+# PART 9 — VISUAL MEMORY EXPLORER
+
+Create a dedicated Visual Memory Explorer.
+
+Purpose:
+
+Help beginners understand how variables and values are represented during program execution.
+
+Show visual memory boxes or diagrams.
+
+Example:
+
+x = 10
+name = "Alex"
+score = 95
+
+Represent:
+- Variable name.
+- Stored value.
+- Data type.
+- Assignment operation.
+
+When the learner changes the code, update the visual representation.
+
+Support:
+- Variable assignment.
+- Reassignment.
+- Basic numeric values.
+- Strings.
+- Boolean values.
+- Simple expressions.
+
+Show how values change step by step.
+
+Do not falsely teach that Python variables always occupy fixed physical memory boxes. Explain this as an educational visualization of names and object references, and introduce reference relationships appropriately.
+
+Add:
+- Step forward.
+- Step backward.
+- Reset.
+- Run.
+- Speed control.
+
+Provide a concise explanation beside the visualization.
+
+---
+
+# PART 10 — CODE EXECUTION VISUALIZER
+
+Create a powerful line-by-line Python execution visualizer.
+
+The learner should be able to:
+- Enter supported Python code.
+- Run code.
+- Pause execution.
+- Step forward.
+- Step backward where execution state can be safely restored.
+- Reset.
+- Change execution speed.
+
+Display:
+- Current code line.
+- Previous executed line.
+- Next line.
+- Variable state.
+- Condition results.
+- Loop iterations.
+- Output.
+- Execution trace.
+
+Provide a visual execution timeline.
+
+The visualizer must show how Python executes code, not simply display the final output.
+
+Use a real Python runtime or a clearly defined parser/interpreter for the supported subset.
+
+Never claim arbitrary Python support if only selected language features are implemented.
+
+For unsupported syntax, show a clear explanation.
+
+---
+
+# PART 11 — FLOWCHART BUILDER
+
+Create an interactive Flowchart Builder.
+
+Learners should be able to:
+- Add Start/End blocks.
+- Add Process blocks.
+- Add Input/Output blocks.
+- Add Decision blocks.
+- Connect nodes.
+- Edit block labels.
+- Delete blocks.
+- Rearrange blocks.
+- Run supported flowcharts.
+- Reset the workspace.
+
+Use familiar flowchart shapes.
+
+Decision nodes should have True/False branches.
+
+Create example templates:
+- Simple if.
+- if-else.
+- if-elif-else.
+- Nested if.
+- for loop.
+- while loop.
+
+Add a visual execution mode showing the active path.
+
+Where feasible, generate corresponding Python code from supported flowchart structures.
+
+Also provide the reverse learning activity: show Python code and ask the learner to construct its flowchart.
+
+Validate invalid or incomplete connections.
+
+Do not present a nonfunctional drawing canvas as a complete builder.
+
+---
+
+# PART 12 — BUG HUNTER LAB
+
+Create a dedicated debugging challenge environment.
+
+The learner receives intentionally incorrect Python code.
+
+Their task is to identify and fix the bug.
+
+Challenge categories:
+- Syntax errors.
+- Incorrect conditions.
+- Logical errors.
+- Loop mistakes.
+- Off-by-one errors.
+- Incorrect variable updates.
+- Incorrect output.
+
+Interface:
+- Code editor.
+- Bug description.
+- Run button.
+- Output console.
+- Hint button.
+- Submit fix.
+- Correctness feedback.
+
+Provide a progressive hint system:
+1. General hint.
+2. Point towards the relevant concept.
+3. Identify the problematic area.
+4. Explain the correction.
+
+Do not reveal the full answer immediately unless requested.
+
+Use automated tests for supported challenges.
+
+Show:
+- Tests passed.
+- Tests failed.
+- Explanation.
+- XP reward.
+- Completion state.
+
+Include difficulty levels:
+- Easy.
+- Medium.
+- Advanced.
+
+---
+
+# PART 13 — PYTHON GAME ZONE
+
+Create a dedicated Game Zone with a visually engaging game-selection interface.
+
+Every game must have real gameplay.
+
+## 13.1 Condition Detective
+
+Present a situation and ask the learner to select the correct conditional path.
+
+Show:
+- Scenario.
+- Variables.
+- Conditions.
+- Decision path.
+- Result.
+
+## 13.2 Guess the Output
+
+Show a Python snippet.
+
+Ask the learner to predict the output.
+
+Provide:
+- Multiple-choice or input-based answers.
+- Hint.
+- Correct answer.
+- Explanation.
+- Score.
+
+## 13.3 Decision Master
+
+Present multiple real-life decision scenarios.
+
+Learners construct the correct if/elif/else logic.
+
+## 13.4 Loop Race
+
+Learners predict iterations or complete a loop sequence.
+
+Show animated progress and correct iteration counts.
+
+## 13.5 Number Sequence Challenge
+
+Create challenges involving:
+- range().
+- Starting values.
+- Ending values.
+- Step sizes.
+- Pattern prediction.
+
+## 13.6 Output Predictor
+
+Display short Python programs.
+
+Learners predict the exact output.
+
+Handle whitespace and output formatting clearly.
+
+## 13.7 Loop Debugger
+
+Find and fix incorrect loops.
+
+## 13.8 Python Escape Room
+
+Create a multi-stage interactive puzzle experience.
+
+Theme:
+
+"The Python Code Vault"
+
+The learner must solve programming puzzles to unlock the next room.
+
+Possible rooms:
+- Room 1: Entry Gate — Python Basics.
+- Room 2: Decision Chamber — Conditional Statements.
+- Room 3: Loop Corridor — Loops.
+- Room 4: Memory Vault — Variables.
+- Room 5: Final Code Vault — Combined Challenge.
+
+Each room should contain:
+- A visual environment.
+- A mission.
+- Interactive puzzles.
+- Code-based challenges.
+- Hints.
+- Completion feedback.
+- Unlock conditions.
+
+The escape room must be playable.
+
+Do not make it merely a sequence of static question cards.
+
+Use meaningful visual progression and a clear final completion state.
+
+All game results should connect to the XP and progress system.
+
+---
+
+# PART 14 — PYTHON CODING STUDIO
+
+Create a proper Python Sandbox.
+
+Requirements:
+- Code editor.
+- Syntax highlighting.
+- Line numbers.
+- Run.
+- Stop where supported.
+- Reset.
+- Output console.
+- Error display.
+- Input support where practical.
+- Copy code.
+- Example programs.
+- Clear output.
+- Save local snippets where appropriate.
+
+Prefer a real browser-side Python runtime such as Pyodide if compatible with the existing project.
+
+Do not simulate arbitrary code execution using predefined outputs.
+
+Clearly communicate runtime limitations.
+
+Use safe execution isolation appropriate to the chosen runtime.
+
+Never execute arbitrary user code on the main application thread without suitable safeguards.
+
+Add coding challenge mode.
+
+Learners should be able to:
+- Read a problem.
+- Write code.
+- Run code.
+- Test examples.
+- Submit a solution.
+- Receive feedback.
+
+Use test cases for supported exercises.
+
+Do not claim code is correct simply because it produces one expected example output.
+
+---
+
+# PART 15 — ADAPTIVE AI PERSONAL TUTOR
+
+Create a dedicated AI Tutor named:
+
+**PyVerse AI Tutor**
+
+This must be a personal Python learning tutor, not a generic chatbot.
+
+Use Gemini through a properly configured secure backend or server-side function.
+
+Never expose private API keys in frontend source code.
+
+## 15.1 Adaptive teaching system
+
+The tutor should adapt to:
+- Learner's current topic.
+- Beginner/intermediate/advanced level.
+- Previous learning activity.
+- Mistakes.
+- Quiz results.
+- Areas of difficulty.
+
+Use only actual available learning data.
+
+If the tutor does not have enough information, ask a brief diagnostic question instead of pretending to know the learner's ability.
+
+## 15.2 Teaching modes
+
+Provide selectable modes:
+
+1. Explain Simply.
+2. Explain with Real-Life Examples.
+3. Explain Line by Line.
+4. Debug My Code.
+5. Give Me a Hint.
+6. Practice With Me.
+7. Test My Knowledge.
+8. Explain This Simulator.
+9. Review My Solution.
+
+## 15.3 Tutor behaviour
+
+The tutor should:
+- Use beginner-friendly language.
+- Break complex ideas into smaller steps.
+- Use short examples.
+- Explain why an answer is correct or incorrect.
+- Ask guiding questions when useful.
+- Increase difficulty gradually.
+- Avoid overwhelming the learner with lengthy explanations.
+- Offer complete solutions when the learner requests them.
+
+## 15.4 Context-aware assistance
+
+Connect the tutor to:
+- Learning pages.
+- Code Sandbox.
+- Simulators.
+- Games.
+- Challenges.
+- Progress data.
+
+Example:
+
+If a learner is using the Traffic Signal Simulator and does not understand elif, the tutor should be able to explain the relevant condition using that simulator's context.
+
+If the learner is debugging code, the tutor should receive the relevant code and error context when the learner explicitly shares or requests analysis of it.
+
+## 15.5 AI setup and failure states
+
+If API configuration is missing:
+- Show a clear setup state.
+- Do not display fake AI responses.
+- Explain that the service is not configured.
+
+Handle:
+- Network failures.
+- API errors.
+- Rate limits.
+- Empty responses.
+- Invalid input.
+
+Provide loading and retry states.
+
+---
+
+# PART 16 — REVISION HUB
+
+Create a complete revision section.
+
+## 16.1 Python Cheat Sheets
+
+Create visually organized quick-reference sheets for implemented topics.
+
+## 16.2 Flashcards
+
+Interactive flashcards with:
+- Front: Question or concept.
+- Back: Answer or explanation.
+- Reveal action.
+- Next/Previous.
+- Mark as understood.
+- Revision tracking.
+
+## 16.3 Revision Arena
+
+Create mixed-topic practice sessions.
+
+Include:
+- Output prediction.
+- Find the bug.
+- Complete the code.
+- Select the correct logic.
+- Explain the concept.
+
+## 16.4 Topic quizzes
+
+Create topic-wise quizzes.
+
+For the initial Conditional Statements and Loops content, provide a meaningful question bank.
+
+Include:
+- Question.
+- Multiple answer options.
+- Correct answer.
+- Explanation.
+- Score.
+- Accuracy.
+- Review incorrect answers.
+
+Do not show answers before submission unless the learner selects a hint or learning mode.
+
+## 16.5 Visual Notes
+
+Use:
+- Flowcharts.
+- Comparison diagrams.
+- Concept maps.
+- Small code examples.
+- Summary illustrations.
+
+Avoid long blocks of textbook text.
+
+---
+
+# PART 17 — PROGRESS DASHBOARD
+
+Create a dedicated Progress Dashboard.
+
+Display actual learner activity.
+
+Include:
+
+OVERVIEW:
+- Total XP.
+- Current level.
+- Completed topics.
+- Completed missions.
+- Total quiz accuracy.
+- Current streak.
+
+LEARNING ACTIVITY:
+- Weekly activity chart.
+- Daily learning history.
+- Recently completed activities.
+
+SKILL ANALYSIS:
+- Conditional Statements.
+- Loops.
+- Python Basics.
+- Future topic categories.
+
+Use real recorded data.
+
+Do not generate fake scores or achievements.
+
+Add:
+- Achievement gallery.
+- XP history.
+- Learning calendar.
+- Continue Learning.
+- Recommended Next Activity.
+
+Recommendations should be based on actual learner activity where available.
+
+For a new learner, display a helpful onboarding state.
+
+---
+
+# PART 18 — INTERCONNECTED LEARNING ECOSYSTEM
+
+This is one of the most important requirements.
+
+All major sections must work together.
+
+Examples:
+
+1. Completing a lesson updates Learning World progress.
+2. Completing a mission awards the configured XP once.
+3. Completing a Daily Quest updates the streak and achievement system.
+4. Completing a simulator updates the learner's activity history.
+5. Game completion updates XP and achievements.
+6. Quiz performance updates skill analysis.
+7. Weak quiz performance can recommend revision.
+8. The AI Tutor can use relevant learning context.
+9. Completing an Escape Room unlocks its corresponding achievement.
+10. The Progress Dashboard reflects all genuine completed activities.
+
+Create a centralized learning progress and reward system.
+
+Avoid separate, disconnected implementations of XP, achievements and progress.
+
+Define a consistent activity model and event structure.
+
+Example activity fields:
+- Activity ID.
+- Activity type.
+- Topic.
+- Completion status.
+- Score, where applicable.
+- XP awarded.
+- Completion timestamp.
+- Attempt count.
+
+Use unique activity IDs to prevent duplicate rewards.
+
+---
+
+# PART 19 — DATA MANAGEMENT AND PERSISTENCE
+
+For the initial single-user or demo version, use localStorage or an appropriate existing client-side persistence solution.
+
+Persist:
+- Learning progress.
+- Completed lessons.
+- XP.
+- Achievements.
+- Daily quest completion.
+- Streak information.
+- Quiz history.
+- Game completion.
+- Recent activities.
+- User preferences.
+
+Requirements:
+- Restore progress after refresh.
+- Handle missing data.
+- Handle invalid stored data.
+- Use a versioned data structure.
+- Provide a reset-progress option with confirmation.
+- Do not silently overwrite existing progress during updates.
+
+Keep data models organized so a future backend and multi-user system can be added.
+
+Do not claim that localStorage provides secure multi-user accounts or cloud synchronization.
+
+---
+
+# PART 20 — SEARCH, ACCESSIBILITY AND PERSONALIZATION
+
+## Global Search
+
+Create a search interface to find:
+- Python topics.
+- Lessons.
+- Simulators.
+- Games.
+- Challenges.
+- Cheat sheets.
+
+Show relevant results with direct navigation.
+
+## Accessibility
+
+Support:
+- Keyboard navigation.
+- Clear focus states.
+- Readable contrast.
+- Accessible labels.
+- Appropriate screen-reader semantics.
+- Reduced motion.
+- Responsive layouts.
+
+## Personalization
+
+Allow learners to customize:
+- Preferred learning mode.
+- Font size where practical.
+- Reduced motion.
+- Sound effects.
+- Theme preference if supported.
+
+Do not let personalization create inconsistent visual styling.
+
+---
+
+# PART 21 — TECHNICAL ARCHITECTURE
+
+Inspect the existing technology stack before choosing implementation details.
+
+Preserve the current framework unless there is a clear technical reason to change it.
+
+Use reusable components and clean separation of concerns.
+
+Suggested logical modules:
+
+1. Application Shell.
+2. Navigation.
+3. Learning World.
+4. Learning Content.
+5. Interactive Lab.
+6. Simulator Engine.
+7. Visualizer Engine.
+8. Flowchart Builder.
+9. Game Engine.
+10. Coding Studio.
+11. AI Tutor.
+12. Revision Hub.
+13. Progress System.
+14. XP and Achievement System.
+15. Data Persistence.
+16. Shared UI Components.
+
+## Important implementation principles
+
+- Separate UI from learning logic.
+- Separate simulator state from visual rendering.
+- Use a common execution-step model where appropriate.
+- Keep progress and XP calculations centralized.
+- Use reusable activity components.
+- Use deterministic simulation logic.
+- Avoid unnecessary dependencies.
+- Handle loading, error and empty states.
+- Avoid hardcoded fake output.
+- Keep the code maintainable.
+- Avoid duplicate logic.
+
+## Python execution
+
+Use a genuine Python execution runtime for the Sandbox where feasible.
+
+For educational visualizers and simulators, a limited execution engine may be appropriate, provided its supported syntax is clearly defined.
+
+Do not confuse:
+- A visual simulation.
+- A limited educational interpreter.
+- A full Python runtime.
+
+Represent these capabilities honestly.
+
+## Security
+
+- Never expose private API keys in client-side code.
+- Use server-side secrets for Gemini integration.
+- Validate inputs.
+- Do not trust client-side XP or scores in a future multi-user deployment.
+- Do not execute arbitrary code on the application server without isolation.
+- Do not request real banking credentials in educational simulators.
+
+---
+
+# PART 22 — RESPONSIVE DESIGN
+
+The entire platform must work on:
+- Desktop.
+- Laptop.
+- Tablet.
+- Mobile.
+
+Desktop:
+- Use the full visual layout.
+- Simulator panels can appear side by side.
+- Keep the code editor spacious.
+
+Tablet:
+- Use adaptive layouts.
+- Reorganize panels.
+
+Mobile:
+- Stack panels vertically.
+- Keep controls easy to tap.
+- Ensure code remains readable.
+- Use horizontal scrolling only where appropriate.
+- Avoid horizontal page overflow.
+
+Do not simply shrink the desktop design.
+
+---
+
+# PART 23 — IMPLEMENTATION STRATEGY
+
+This project is large. Do not attempt to fake the entire platform in one generation.
+
+Implement in controlled phases while keeping the architecture unified.
+
+PHASE 1 — FOUNDATION
+- Inspect existing project.
+- Global design system.
+- Typography.
+- Branding.
+- Navigation.
+- Homepage.
+- Responsive layout.
+
+PHASE 2 — LEARNING WORLD
+- Adventure Map.
+- Learning levels.
+- Missions.
+- XP system.
+- Achievements.
+- Streaks.
+- Daily Python Quest.
+- Progress persistence.
+
+PHASE 3 — VISUAL LEARNING LAB
+- Visual Memory Explorer.
+- Code Execution Visualizer.
+- Flowchart Builder.
+- Interactive diagrams.
+
+PHASE 4 — SIMULATOR LAB
+- Traffic Signal.
+- ATM Decision.
+- Smart AC.
+- Shopping Discount.
+- Elevator.
+- Countdown.
+- Parking Slot Scanner.
+- ATM Cash Counter.
+
+PHASE 5 — CODING STUDIO
+- Python Sandbox.
+- Code editor.
+- Runtime integration.
+- Output console.
+- Coding exercises.
+- Code testing.
+
+PHASE 6 — GAME ZONE
+- Condition Detective.
+- Guess the Output.
+- Decision Master.
+- Loop Race.
+- Number Sequence Challenge.
+- Output Predictor.
+- Loop Debugger.
+- Python Escape Room.
+- Bug Hunter Lab.
+
+PHASE 7 — AI TUTOR
+- Adaptive tutor.
+- Gemini integration.
+- Learning context.
+- Code review.
+- Hint system.
+- Practice generation.
+- Error handling.
+
+PHASE 8 — REVISION AND FINAL POLISH
+- Cheat sheets.
+- Flashcards.
+- Revision Arena.
+- Quizzes.
+- Search.
+- Accessibility.
+- Progress dashboard.
+- Final testing.
+
+After every phase:
+1. Run the application.
+2. Test the new features.
+3. Fix errors.
+4. Check responsive layouts.
+5. Verify existing features.
+6. Continue only after the phase is stable.
+
+If the environment cannot implement the complete project in one response, continue in smaller implementation batches. Maintain a clear list of completed and remaining tasks.
+
+Do not silently skip features.
+
+---
+
+# PART 24 — FINAL QUALITY ASSURANCE
+
+Test the complete application.
+
+## Navigation tests
+- Every menu item works.
+- Every page opens.
+- Back navigation works.
+- No broken routes.
+
+## Learning tests
+- Lessons load.
+- Activities work.
+- Completion state persists.
+- Locked levels behave correctly.
+
+## XP tests
+- Correct reward amounts.
+- No duplicate rewards.
+- Achievements unlock correctly.
+- Progress updates accurately.
+
+## Daily quest tests
+- Quest remains stable for the day.
+- Completion persists.
+- Rewards cannot be claimed repeatedly.
+- Date changes are handled correctly.
+
+## Simulator tests
+- Play.
+- Pause.
+- Next Step.
+- Reset.
+- Speed control.
+- Code-line synchronization.
+- Variable updates.
+- Output correctness.
+- Edge cases.
+
+## Game tests
+- Correct answers.
+- Incorrect answers.
+- Hints.
+- Score.
+- Completion.
+- Replay.
+- XP rewards.
+
+## Coding Studio tests
+- Supported code executes.
+- Errors are displayed correctly.
+- Output is accurate.
+- Unsupported syntax is communicated.
+
+## AI Tutor tests
+- API setup state.
+- Loading state.
+- Valid response.
+- Network failure.
+- Error recovery.
+- Context handling.
+
+## Progress tests
+- Refresh persistence.
+- Accurate activity history.
+- Accurate XP.
+- No fabricated progress.
+
+## Design tests
+- Typography consistency.
+- Desktop responsiveness.
+- Mobile responsiveness.
+- No overflow.
+- Readable code.
+- Clear hierarchy.
+- Consistent spacing.
+- No visual clutter.
+
+Fix all discovered errors before declaring a phase complete.
+
+---
+
+# PART 25 — FINAL PRODUCT EXPECTATION
+
+The finished PyVerse platform should make a learner feel:
+
+"I am not just reading Python lessons. I am exploring a world, solving missions, experimenting with code, discovering how programs work and improving my programming skills."
+
+The experience should be:
+- Beautiful enough to impress.
+- Clear enough for beginners.
+- Interactive enough to maintain engagement.
+- Technically honest.
+- Educationally useful.
+- Architecturally expandable.
+- Fully responsive.
+
+Do not sacrifice actual functionality for visual appearance.
+
+Do not sacrifice visual quality for excessive features.
+
+Do not create placeholder interactions.
+
+Do not fabricate AI responses, scores, user statistics or execution results.
+
+**Build PyVerse as one unified, interconnected Python learning ecosystem.**
+
+Start by inspecting the existing project. Report the current structure and proposed implementation phases briefly, then begin implementing Phase 1. Preserve all existing working functionality.
+
+Do not stop after producing a plan or a homepage mockup. Implement the actual application in the defined phases and verify every feature as it is completed.

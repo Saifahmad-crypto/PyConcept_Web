@@ -70,8 +70,11 @@ interface ChatTurnInput {
 interface LearnerContextInput {
   activeTopic?: string;
   difficulty?: string;
+  xp?: number;
   completedLessons?: string[];
+  completedMissions?: string[];
   completedChallenges?: string[];
+  completedBugHunts?: string[];
   conceptsUnderstood?: string[];
   conceptsToReview?: string[];
   quizScores?: Record<string, unknown>;
@@ -118,14 +121,25 @@ function buildContextPreamble(
     `[LEARNER CONTEXT]:`,
     `- Active Topic: ${learnerContext?.activeTopic || 'Python Basics'}`,
     `- Current Difficulty Level: ${learnerContext?.difficulty || 'Beginner'}`,
+    `- Learner XP: ${learnerContext?.xp ?? 0} XP`,
     `- Completed PyVerse Lessons (${learnerContext?.completedLessons?.length ?? 0}): ${
       learnerContext?.completedLessons?.length
         ? learnerContext.completedLessons.join(', ')
         : 'None yet'
     }`,
+    `- Completed Missions (${learnerContext?.completedMissions?.length ?? 0}): ${
+      learnerContext?.completedMissions?.length
+        ? learnerContext.completedMissions.join(', ')
+        : 'None yet'
+    }`,
     `- Completed Challenges (${learnerContext?.completedChallenges?.length ?? 0}): ${
       learnerContext?.completedChallenges?.length
         ? learnerContext.completedChallenges.join(', ')
+        : 'None yet'
+    }`,
+    `- Completed Bug Hunts (${learnerContext?.completedBugHunts?.length ?? 0}): ${
+      learnerContext?.completedBugHunts?.length
+        ? learnerContext.completedBugHunts.join(', ')
         : 'None yet'
     }`,
     `- Concepts Marked Understood: ${
@@ -272,7 +286,17 @@ async function startServer() {
       review: 'debug',
     };
     const normalizedInput = mode && modeAliases[mode] ? modeAliases[mode] : mode;
-    const validModes = new Set(['explain', 'example', 'debug', 'hint', 'practice', 'quiz']);
+    const validModes = new Set([
+      'explain',
+      'example',
+      'line_by_line',
+      'debug',
+      'hint',
+      'practice',
+      'quiz',
+      'simulator',
+      'review_solution',
+    ]);
     const safeMode = normalizedInput && validModes.has(normalizedInput) ? normalizedInput : 'explain';
     const trimmedHistory = messages.slice(-14).map((m) => ({
       role: m.role === 'assistant' ? 'model' : 'user',
@@ -291,12 +315,21 @@ async function startServer() {
     if (safeMode === 'debug') {
       modeDirective =
         '\n[MODE DIRECTIVE - DEBUG MY CODE]: Carefully explain what the student code does, list any syntax or logical bugs with line numbers, explain why they happen, give hints to fix them without rewriting everything unnecessarily, and only give the full corrected code if requested. Do NOT claim you executed the code unless output was given.';
+    } else if (safeMode === 'line_by_line') {
+      modeDirective =
+        '\n[MODE DIRECTIVE - EXPLAIN LINE BY LINE]: Walk through the Python code strictly line by line (Line 1, Line 2, ...), showing variable changes, condition evaluations (True/False), and why each line is indented or ordered that way.';
+    } else if (safeMode === 'simulator') {
+      modeDirective =
+        '\n[MODE DIRECTIVE - EXPLAIN THIS SIMULATOR]: Connect the simulator scenario (e.g. Traffic Signal, ATM, AC, Discount, Elevator, Countdown, Parking, Cash Counter) directly to the Python condition or loop step, explaining why the branch or iteration triggered.';
+    } else if (safeMode === 'review_solution') {
+      modeDirective =
+        '\n[MODE DIRECTIVE - REVIEW MY SOLUTION]: Praise what works correctly in the student solution, check edge cases (boundary values like >= vs >, off-by-one range bounds, readability), and suggest one clean improvement without overwhelming them.';
     } else if (safeMode === 'hint') {
       modeDirective =
         '\n[MODE DIRECTIVE - GIVE ME A HINT]: Give a gentle, progressive nudge or guiding question that helps the student figure out the next step themselves without immediately revealing the full answer or complete solution code.';
     } else if (safeMode === 'example') {
       modeDirective =
-        '\n[MODE DIRECTIVE - REAL-LIFE EXAMPLE]: Explain the concept using a relatable everyday analogy, map that analogy directly to a short beginner-friendly Python snippet, and finish with one brief check question.';
+        '\n[MODE DIRECTIVE - REAL-LIFE EXAMPLES]: Explain the concept using a relatable everyday analogy, map that analogy directly to a short beginner-friendly Python snippet, and finish with one brief check question.';
     } else if (safeMode === 'practice') {
       modeDirective =
         '\n[MODE DIRECTIVE - PRACTICE WITH ME]: If the student attempted a solution, evaluate their logic patiently, pinpoint any misconception, and give a guiding hint rather than immediately dumping the full solution unless they explicitly ask for the full solution.';

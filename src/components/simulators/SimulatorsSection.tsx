@@ -2,7 +2,11 @@ import React from 'react';
 import { SimulatorId, TutorSimulatorContext } from '../../types';
 import { SIMULATORS_CATALOG } from '../../simulators/simulatorsData';
 import { SimulatorsHub } from './SimulatorsHub';
-import { SimulatorRunContext, SimulatorTutorContext } from './SimulatorShell';
+import {
+  SimulatorRunContext,
+  SimulatorSpeedProvider,
+  SimulatorTutorContext,
+} from './SimulatorShell';
 import { TrafficSignalStage } from './stages/TrafficSignalStage';
 import { AtmDecisionStage } from './stages/AtmDecisionStage';
 import { SmartAcStage } from './stages/SmartAcStage';
@@ -78,10 +82,12 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
   };
 
   return (
-    <SimulatorRunContext.Provider value={onRecordSimulatorRun ?? null}>
-      <SimulatorTutorContext.Provider value={onAskTutor ?? null}>
-        {renderStage()}
-      </SimulatorTutorContext.Provider>
-    </SimulatorRunContext.Provider>
+    <SimulatorSpeedProvider>
+      <SimulatorRunContext.Provider value={onRecordSimulatorRun ?? null}>
+        <SimulatorTutorContext.Provider value={onAskTutor ?? null}>
+          {renderStage()}
+        </SimulatorTutorContext.Provider>
+      </SimulatorRunContext.Provider>
+    </SimulatorSpeedProvider>
   );
 };

@@ -3,7 +3,7 @@ import {
   ArrowRight,
   BookOpen,
   Cpu,
-  Terminal,
+  Code2,
   Sparkles,
   Gamepad2,
   Play,
@@ -14,22 +14,43 @@ import {
   Flame,
   CheckCircle2,
   Zap,
+  FlaskConical,
+  Compass,
+  Clock,
 } from 'lucide-react';
-import { GamesHubTabId, LearningProgress, SectionId, TopicId } from '../types';
+import {
+  GamesHubTabId,
+  LabTabId,
+  LearningProgress,
+  RevisionTabId,
+  SectionId,
+  TopicId,
+} from '../types';
 import {
   TOPIC_BASICS_LESSONS,
   TOPIC_08_LESSONS,
   TOPIC_09_LESSONS,
   CODING_CHALLENGES,
 } from '../data/curriculumData';
+import { SIMULATORS_CATALOG } from '../simulators/simulatorsData';
+import { getLearnerLevel } from '../data/ecosystemData';
 import { computeStreakDays } from '../hooks/useProgress';
+import { DailyQuestCard } from './DailyQuestCard';
 import { PyVerseLogo } from './PyVerseLogo';
 
 interface HomePageProps {
   progress: LearningProgress;
   onNavigate: (section: SectionId) => void;
   onOpenTopic: (topic: TopicId) => void;
+  onOpenLabTab: (tab: LabTabId) => void;
   onOpenGamesTab: (tab: GamesHubTabId) => void;
+  onOpenRevisionTab: (tab: RevisionTabId) => void;
+  onCompleteDailyQuest: (
+    questId: string,
+    title: string,
+    topic: TopicId,
+    xpReward: number
+  ) => void;
 }
 
 const FEATURED_PATH_STEPS = [
@@ -66,9 +87,11 @@ export const HomePage: React.FC<HomePageProps> = ({
   progress,
   onNavigate,
   onOpenTopic,
+  onOpenLabTab,
   onOpenGamesTab,
+  onOpenRevisionTab,
+  onCompleteDailyQuest,
 }) => {
-  // Interactive Hero Visual state
   const [heroScore, setHeroScore] = useState(84);
   const [heroStep, setHeroStep] = useState(0);
 
@@ -82,7 +105,6 @@ export const HomePage: React.FC<HomePageProps> = ({
   const heroPasses = heroScore >= 75;
   const heroBadgeCount = heroPasses ? 3 : 1;
 
-  // Real progress metrics
   const allLessons = [
     ...TOPIC_BASICS_LESSONS,
     ...TOPIC_08_LESSONS,
@@ -100,17 +122,26 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   const totalLessons = allLessons.length;
   const completedLessonsCount = progress.completedLessons.length;
-  const lessonsPercent = totalLessons > 0 ? Math.round((completedLessonsCount / totalLessons) * 100) : 0;
-  const challengesPercent = Math.round(
-    (progress.completedChallenges.length / CODING_CHALLENGES.length) * 100
-  );
-  const gamesCompletedCount = Object.values(progress.gameScores).filter((g) => g.completed).length;
   const streakDays = computeStreakDays(progress.activeDates);
+  const levelInfo = getLearnerLevel(progress.xp);
 
-  // Featured next challenge based on actual user progress
   const nextChallenge =
     CODING_CHALLENGES.find((ch) => !progress.completedChallenges.includes(ch.id)) ??
     CODING_CHALLENGES[0];
+
+  const featuredSimulator =
+    SIMULATORS_CATALOG.find((s) => !progress.visitedSimulators.includes(s.id)) ??
+    SIMULATORS_CATALOG[0];
+
+  const recentActivities = Object.values(progress.activities)
+    .sort((a, b) => b.timestamp - a.timestamp)
+    .slice(0, 4);
+
+  const isBrandNewLearner =
+    progress.xp === 0 &&
+    completedLessonsCount === 0 &&
+    progress.simulatorRuns === 0 &&
+    progress.sandboxRuns === 0;
 
   const getTopicProgress = (id: TopicId) => {
     if (id === 'basics') {
@@ -125,12 +156,11 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div className="bg-pyverse-mesh">
       {/* 1. HERO SECTION */}
-      <section className="mx-auto max-w-7xl px-4 pb-14 pt-8 sm:px-6 lg:px-8 lg:pb-20 lg:pt-14">
+      <section className="mx-auto max-w-7xl px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pb-16 lg:pt-12">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* Hero Copy & Primary CTAs */}
           <div className="flex flex-col justify-center lg:col-span-6">
             <p className="text-xs font-semibold tracking-wide text-[#2563EB]">
-              PyVerse · Interactive Python Learning Lab · Think. Code. Experiment.
+              PyVerse · Think. Code. Experiment.
             </p>
 
             <h1 className="mt-3 font-display text-4xl font-extrabold tracking-tight text-[#1E293B] text-balance sm:text-5xl lg:text-[3.25rem] lg:leading-[1.08]">
@@ -145,9 +175,9 @@ export const HomePage: React.FC<HomePageProps> = ({
             </p>
 
             <p className="mt-3 max-w-xl text-base leading-relaxed text-[#64748B]">
-              See Python code come alive through animated decision flowcharts, real-life
-              simulators, logic mini-games, a live coding sandbox, and an adaptive AI personal
-              tutor built for beginners.
+              Don&apos;t just read Python—explore it through interactive missions, visual memory
+              diagrams, 8 real-life simulators, coding games, a live studio, and an adaptive AI
+              tutor.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3.5">
@@ -162,7 +192,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               <button
                 type="button"
-                onClick={() => onNavigate('simulators')}
+                onClick={() => onOpenLabTab('simulators')}
                 className="inline-flex min-h-[46px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 font-display text-sm font-semibold text-[#1E293B] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-sky-300 hover:bg-[#F0F9FF] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]"
               >
                 <Play className="h-4 w-4 text-[#8B5CF6]" aria-hidden="true" />
@@ -170,10 +200,9 @@ export const HomePage: React.FC<HomePageProps> = ({
               </button>
             </div>
 
-            {/* Clean unboxed telemetry strip */}
-            <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-slate-200/80 pt-5 text-xs font-medium text-[#64748B]">
+            <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-slate-200/80 pt-5 text-xs font-medium text-[#64748B]">
               <span className="tabular-nums">
-                <strong className="font-semibold text-[#1E293B]">3</strong> Interactive Topics
+                <strong className="font-semibold text-[#1E293B]">17</strong> Guided Missions
               </span>
               <span aria-hidden="true" className="text-slate-300">
                 /
@@ -185,16 +214,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                 /
               </span>
               <span className="tabular-nums">
-                <strong className="font-semibold text-[#1E293B]">8</strong> Mini-Games &amp;{' '}
-                <strong className="font-semibold text-[#1E293B]">10</strong> Coding Challenges
+                <strong className="font-semibold text-[#1E293B]">Escape Room</strong> &amp;{' '}
+                <strong className="font-semibold text-[#1E293B]">Bug Hunter Lab</strong>
               </span>
             </div>
           </div>
 
-          {/* Custom Interactive Hero Lab Visual (Code + Animated Flowchart + Syntax Symbols) */}
+          {/* Custom Interactive Hero Lab Visual */}
           <div className="lg:col-span-6">
             <div className="relative overflow-hidden rounded-3xl border border-sky-200/80 bg-white p-5 shadow-xl shadow-sky-900/5 sm:p-6">
-              {/* Top Lab Bar + Floating Python Syntax Chips (interactive controls/tokens, not generic robot art) */}
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-rose-400" aria-hidden="true" />
@@ -217,7 +245,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
               </div>
 
-              {/* Interactive Slider Control */}
               <div className="mt-4 rounded-2xl border border-sky-100 bg-[#F0F9FF] px-4 py-3">
                 <div className="flex items-center justify-between gap-4">
                   <label
@@ -242,9 +269,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 />
               </div>
 
-              {/* Split Live Code + Animated SVG Flowchart */}
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-12">
-                {/* Left: Live Highlighted Python Snippet */}
                 <div className="rounded-2xl bg-[#0F172A] p-4 font-mono text-xs text-slate-300 sm:col-span-6">
                   <div
                     className={`rounded px-2 py-1 transition-colors ${
@@ -296,7 +321,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <span className="text-sky-300">print</span>(&quot;Try Again&quot;)
                   </div>
 
-                  {/* Live Output Strip */}
                   <div className="mt-3 border-t border-slate-800 pt-2.5 text-[11px]">
                     <div className="text-slate-400">Output:</div>
                     <div className="mt-1 font-semibold text-emerald-300">
@@ -305,7 +329,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
                 </div>
 
-                {/* Right: Animated SVG Logic Flowchart */}
                 <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-[#F8FAFC] p-3 sm:col-span-6">
                   <svg
                     viewBox="0 0 260 225"
@@ -322,7 +345,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       </linearGradient>
                     </defs>
 
-                    {/* Start pill */}
                     <rect
                       x="85"
                       y="8"
@@ -342,7 +364,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       score = {heroScore}
                     </text>
 
-                    {/* Arrow Start -> Diamond */}
                     <line
                       x1="130"
                       y1="34"
@@ -353,7 +374,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       className="animate-flow-dash"
                     />
 
-                    {/* Decision Diamond */}
                     <polygon
                       points="130,54 198,86 130,118 62,86"
                       fill="#FFFFFF"
@@ -369,7 +389,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       score &gt;= 75?
                     </text>
 
-                    {/* Left Branch (True) */}
                     <path
                       d="M 62 86 L 38 86 L 38 142"
                       fill="none"
@@ -388,7 +407,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       True
                     </text>
 
-                    {/* Right Branch (False) */}
                     <path
                       d="M 198 86 L 222 86 L 222 142"
                       fill="none"
@@ -407,7 +425,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       False
                     </text>
 
-                    {/* True Node: Loop x3 */}
                     <rect
                       x="8"
                       y="142"
@@ -437,7 +454,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       Runs {heroBadgeCount}× loop
                     </text>
 
-                    {/* False Node */}
                     <rect
                       x="148"
                       y="142"
@@ -467,7 +483,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                       &quot;Try Again&quot;
                     </text>
 
-                    {/* Merge to End */}
                     <path
                       d="M 60 186 L 60 205 L 130 205 M 200 186 L 200 205 L 130 205"
                       fill="none"
@@ -483,176 +498,114 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 2. FIVE VISUAL FEATURE SHOWCASE CARDS */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+      {/* 2. SIX PLATFORM DESTINATIONS */}
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
             <p className="text-xs font-semibold tracking-wide text-[#8B5CF6]">
-              Interactive Learning Ecosystem
+              Explore PyVerse
             </p>
             <h2 className="mt-1 font-display text-2xl font-extrabold text-[#1E293B] sm:text-3xl">
-              Five Labs Built Around Active Discovery
+              Six Connected Learning Destinations
             </h2>
           </div>
           <p className="max-w-md text-sm text-[#64748B]">
-            Every section replaces passive walls of text with diagrams, live controls, and
-            immediate execution feedback.
+            Every workspace connects to one shared XP, mission, and skill-tracking engine.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">
-          {/* Card 1: Learning World (3 cols) */}
-          <button
-            type="button"
-            onClick={() => onNavigate('learn')}
-            className="group flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-300 hover:shadow-lg hover:shadow-sky-500/10 lg:col-span-3"
-          >
-            <div>
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 to-blue-50 text-[#2563EB]">
-                  <BookOpen className="h-5 w-5" aria-hidden="true" />
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              title: 'Learning World',
+              tag: 'Adventure Map & Missions',
+              desc: 'Follow connected Python topics, complete hands-on missions, and earn XP.',
+              cta: 'Enter Learning World',
+              icon: Compass,
+              tone: 'bg-sky-50 text-[#2563EB]',
+              action: () => onNavigate('learn'),
+            },
+            {
+              title: 'Interactive Lab',
+              tag: '8 Simulators & Visualizers',
+              desc: 'Run real-life machines, Memory Explorer, Execution Tracer, and Flowchart Builder.',
+              cta: 'Open Interactive Lab',
+              icon: FlaskConical,
+              tone: 'bg-violet-50 text-[#8B5CF6]',
+              action: () => onNavigate('lab'),
+            },
+            {
+              title: 'Game Zone',
+              tag: '8 Games, Vault & Bug Lab',
+              desc: 'Play logic games, crack the 5-room Python Escape Vault, and squash code bugs.',
+              cta: 'Play Game Zone',
+              icon: Gamepad2,
+              tone: 'bg-emerald-50 text-emerald-700',
+              action: () => onNavigate('games'),
+            },
+            {
+              title: 'Coding Studio',
+              tag: 'Sandbox & Verified Challenges',
+              desc: 'Write Python with input() support, save snippets, and pass automated tests.',
+              cta: 'Launch Coding Studio',
+              icon: Code2,
+              tone: 'bg-slate-900 text-sky-400',
+              action: () => onNavigate('studio'),
+            },
+            {
+              title: 'AI Personal Tutor',
+              tag: '9 Adaptive Teaching Modes',
+              desc: 'Get beginner-friendly guidance, line-by-line explanations, and code reviews.',
+              cta: 'Ask AI Tutor',
+              icon: Sparkles,
+              tone: 'bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white',
+              action: () => onNavigate('tutor'),
+            },
+            {
+              title: 'Revision Hub',
+              tag: 'Cheat Sheets, Cards & Quizzes',
+              desc: 'Revise fast with interactive flashcards, mixed drills, visual notes, and quizzes.',
+              cta: 'Open Revision Hub',
+              icon: BookOpen,
+              tone: 'bg-amber-50 text-amber-700',
+              action: () => onOpenRevisionTab('cheat-sheets'),
+            },
+          ].map((dest) => {
+            const Icon = dest.icon;
+            return (
+              <button
+                key={dest.title}
+                type="button"
+                onClick={dest.action}
+                className="group flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-300 hover:shadow-lg"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <div
+                      className={`flex h-11 w-11 items-center justify-center rounded-2xl ${dest.tone}`}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </div>
+                    <span className="font-mono text-[11px] font-semibold text-[#64748B]">
+                      {dest.tag}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B]">
+                    {dest.title}
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-[#64748B]">{dest.desc}</p>
                 </div>
-                <span className="font-mono text-xs font-semibold text-sky-700">
-                  6-Stage Visual Flow
+                <span className="mt-5 inline-flex items-center gap-1.5 font-display text-xs font-semibold text-[#2563EB] group-hover:gap-2.5 transition-all">
+                  {dest.cta} <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </span>
-              </div>
-              <h3 className="mt-4 font-display text-xl font-bold text-[#1E293B]">
-                Learning World
-              </h3>
-              <p className="mt-1.5 text-sm text-[#64748B]">
-                Explore Python Basics, Conditionals, and Loops through interactive flowcharts,
-                balance scales, and iteration timelines.
-              </p>
-              {/* Custom Mini SVG Diagram */}
-              <div className="mt-4 flex items-center justify-between rounded-2xl border border-sky-100 bg-[#F0F9FF] px-4 py-3 font-mono text-xs text-[#1E293B]">
-                <span>1. Explore</span>
-                <span aria-hidden="true" className="text-sky-400">→</span>
-                <span>3. Visualize</span>
-                <span aria-hidden="true" className="text-sky-400">→</span>
-                <span>4. Experiment</span>
-                <span aria-hidden="true" className="text-sky-400">→</span>
-                <span className="font-semibold text-[#2563EB]">6. Quiz</span>
-              </div>
-            </div>
-            <span className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-[#2563EB] group-hover:gap-2.5 transition-all">
-              Open Learning World <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </button>
-
-          {/* Card 2: Interactive Simulators (3 cols) */}
-          <button
-            type="button"
-            onClick={() => onNavigate('simulators')}
-            className="group flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg hover:shadow-violet-500/10 lg:col-span-3"
-          >
-            <div>
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-purple-50 text-[#8B5CF6]">
-                  <Cpu className="h-5 w-5" aria-hidden="true" />
-                </div>
-                <span className="font-mono text-xs font-semibold text-[#8B5CF6] tabular-nums">
-                  8 Real-World Machines
-                </span>
-              </div>
-              <h3 className="mt-4 font-display text-xl font-bold text-[#1E293B]">
-                Interactive Simulators
-              </h3>
-              <p className="mt-1.5 text-sm text-[#64748B]">
-                Control traffic lights, ATMs, elevators, smart ACs, and parking scanners while
-                Python executes line-by-line beside them.
-              </p>
-              <div className="mt-4 grid grid-cols-4 gap-2 text-center font-mono text-[11px] font-semibold">
-                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] py-2 text-[#1E293B]">
-                  Traffic
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] py-2 text-[#1E293B]">
-                  ATM
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] py-2 text-[#1E293B]">
-                  Elevator
-                </div>
-                <div className="rounded-xl border border-slate-200 bg-[#F8FAFC] py-2 text-[#1E293B]">
-                  Scanner
-                </div>
-              </div>
-            </div>
-            <span className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-[#8B5CF6] group-hover:gap-2.5 transition-all">
-              Launch Simulators Hub <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </button>
-
-          {/* Card 3: Python Sandbox (2 cols) */}
-          <button
-            type="button"
-            onClick={() => onNavigate('playground')}
-            className="group flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-300 hover:shadow-lg lg:col-span-2"
-          >
-            <div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-sky-400">
-                <Terminal className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B]">
-                Python Sandbox
-              </h3>
-              <p className="mt-1.5 text-sm text-[#64748B]">
-                Write, highlight, and run Python snippets with <code className="font-mono text-[#2563EB]">input()</code> support and curated starter programs.
-              </p>
-            </div>
-            <span className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-[#2563EB] group-hover:gap-2 transition-all">
-              Open Sandbox <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </button>
-
-          {/* Card 4: AI Personal Tutor (2 cols) */}
-          <button
-            type="button"
-            onClick={() => onNavigate('tutor')}
-            className="group flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg lg:col-span-2"
-          >
-            <div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white">
-                <Sparkles className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B]">
-                AI Personal Tutor
-              </h3>
-              <p className="mt-1.5 text-sm text-[#64748B]">
-                Ask questions in 6 adaptive modes—explain simply, debug code, get hints, or
-                practise live problems.
-              </p>
-            </div>
-            <span className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-[#8B5CF6] group-hover:gap-2 transition-all">
-              Ask AI Tutor <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </button>
-
-          {/* Card 5: Games & Challenges (2 cols) */}
-          <button
-            type="button"
-            onClick={() => onNavigate('games')}
-            className="group flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg lg:col-span-2"
-          >
-            <div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
-                <Gamepad2 className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-[#1E293B]">
-                Games &amp; Challenges
-              </h3>
-              <p className="mt-1.5 text-sm text-[#64748B]">
-                Play 8 interactive logic games, solve 10 coding challenges, and master 20 quiz
-                questions.
-              </p>
-            </div>
-            <span className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-semibold text-emerald-700 group-hover:gap-2 transition-all">
-              Play &amp; Practise <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </span>
-          </button>
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      {/* 3. CONNECTED VISUAL LEARNING JOURNEY */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      {/* 3. CONNECTED LEARNING JOURNEY PREVIEW */}
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
           <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
             <div>
@@ -661,12 +614,16 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Your Connected Learning Journey
               </h2>
             </div>
-            <p className="text-sm text-[#64748B]">
-              Follow the path left to right—or jump straight into any topic.
-            </p>
+            <button
+              type="button"
+              onClick={() => onNavigate('learn')}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] hover:text-[#8B5CF6]"
+            >
+              View Full Adventure Map <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 items-center gap-4 lg:grid-cols-11">
+          <div className="mt-7 grid grid-cols-1 items-center gap-4 lg:grid-cols-11">
             {FEATURED_PATH_STEPS.map((step, index) => {
               const Icon = step.icon;
               const stat = getTopicProgress(step.id);
@@ -682,10 +639,10 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-xs font-bold text-[#64748B]">
-                          Step {step.number}
+                          Level {step.number}
                         </span>
                         <span className="font-mono text-xs font-semibold text-[#2563EB] tabular-nums">
-                          {stat.done}/{stat.total} lessons
+                          {stat.done}/{stat.total} sections
                         </span>
                       </div>
                       <div className="mt-3 flex items-center gap-3">
@@ -727,96 +684,171 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 4. PROGRESS PREVIEW + FEATURED CHALLENGE */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+      {/* 4. DAILY PYTHON QUEST + PROGRESS / XP / RECENT ACTIVITY */}
+      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* Progress Preview (7 cols) */}
-          <div className="rounded-3xl border border-sky-100 bg-gradient-to-br from-[#F0F9FF] via-white to-violet-50/50 p-6 shadow-sm sm:p-8 lg:col-span-7">
-            <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-              <div>
-                <p className="text-xs font-semibold text-[#2563EB]">Live Progress Snapshot</p>
-                <h2 className="mt-1 font-display text-xl font-bold text-[#1E293B] sm:text-2xl">
-                  Your Learning Activity
-                </h2>
+          <div className="lg:col-span-7">
+            <DailyQuestCard
+              completedDailyQuests={progress.completedDailyQuests}
+              onCompleteDailyQuest={onCompleteDailyQuest}
+              compact
+            />
+          </div>
+
+          <div className="flex flex-col justify-between rounded-3xl border border-sky-100 bg-gradient-to-br from-[#F0F9FF] via-white to-violet-50/50 p-6 shadow-sm lg:col-span-5">
+            <div>
+              <div className="flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-xs font-semibold text-[#2563EB]">XP &amp; Activity</p>
+                  <h2 className="mt-0.5 font-display text-xl font-bold text-[#1E293B]">
+                    {levelInfo.current.title}
+                  </h2>
+                </div>
+                <span className="font-mono text-sm font-extrabold text-[#2563EB] tabular-nums">
+                  {progress.xp} XP
+                </span>
               </div>
-              <button
-                type="button"
-                onClick={() => onNavigate('progress')}
-                className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 font-display text-xs font-semibold text-[#1E293B] shadow-sm transition-colors hover:border-sky-300 whitespace-nowrap self-start sm:self-auto"
-              >
-                Open Progress Dashboard
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-              </button>
+
+              <div className="mt-3">
+                <div className="flex justify-between text-[11px] font-mono text-[#64748B] tabular-nums">
+                  <span>Level {levelInfo.current.level}</span>
+                  <span>
+                    {levelInfo.next
+                      ? `${levelInfo.xpToNext} XP to ${levelInfo.next.title}`
+                      : 'Max Explorer Rank'}
+                  </span>
+                </div>
+                <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-slate-200/80">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] transition-all duration-300"
+                    style={{ width: `${levelInfo.progressPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-5 grid grid-cols-3 gap-3">
+                <div className="rounded-2xl border border-slate-200/80 bg-white p-3">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#64748B]">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-sky-500" aria-hidden="true" />
+                    Lessons
+                  </div>
+                  <p className="mt-1 font-mono text-lg font-bold text-[#1E293B] tabular-nums">
+                    {completedLessonsCount}/{totalLessons}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-slate-200/80 bg-white p-3">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#64748B]">
+                    <Trophy className="h-3.5 w-3.5 text-violet-500" aria-hidden="true" />
+                    Missions
+                  </div>
+                  <p className="mt-1 font-mono text-lg font-bold text-[#1E293B] tabular-nums">
+                    {progress.completedMissions.length}/17
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-slate-200/80 bg-white p-3">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#64748B]">
+                    <Flame className="h-3.5 w-3.5 text-amber-500" aria-hidden="true" />
+                    Streak
+                  </div>
+                  <p className="mt-1 font-mono text-lg font-bold text-[#1E293B] tabular-nums">
+                    {streakDays}d
+                  </p>
+                </div>
+              </div>
+
+              {/* Real Recently Visited Activity OR Onboarding Prompt */}
+              <div className="mt-5 rounded-2xl border border-slate-200/80 bg-white p-4">
+                <p className="flex items-center gap-1.5 text-xs font-bold text-[#1E293B]">
+                  <Clock className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
+                  {isBrandNewLearner ? 'New Explorer Onboarding' : 'Recent Recorded Activity'}
+                </p>
+
+                {isBrandNewLearner ? (
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#64748B]">
+                    No XP recorded yet—complete today&apos;s Daily Quest on the left or open Mission
+                    M1.1 in Learning World to earn your first XP and unlock your first badge.
+                  </p>
+                ) : (
+                  <ul className="mt-2 space-y-1.5 text-xs">
+                    {recentActivities.map((act) => (
+                      <li
+                        key={act.id}
+                        className="flex items-center justify-between gap-2 text-[#1E293B]"
+                      >
+                        <span className="truncate">{act.title}</span>
+                        <span className="shrink-0 font-mono font-semibold text-emerald-700 tabular-nums">
+                          +{act.xpAwarded} XP
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-4">
-                <div className="flex items-center gap-2 text-xs text-[#64748B]">
-                  <CheckCircle2 className="h-4 w-4 text-sky-500" aria-hidden="true" />
-                  <span>Lessons</span>
-                </div>
-                <p className="mt-2 font-display text-xl font-extrabold text-[#1E293B] tabular-nums">
-                  {completedLessonsCount}/{totalLessons}
-                </p>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-[#38BDF8]"
-                    style={{ width: `${lessonsPercent}%` }}
-                  />
-                </div>
-              </div>
+            <button
+              type="button"
+              onClick={() => onNavigate('progress')}
+              className="mt-5 inline-flex min-h-[42px] w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 font-display text-xs font-semibold text-[#1E293B] shadow-xs transition-colors hover:border-sky-300 hover:bg-[#F0F9FF]"
+            >
+              Open Progress Dashboard
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </section>
 
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-4">
-                <div className="flex items-center gap-2 text-xs text-[#64748B]">
-                  <Trophy className="h-4 w-4 text-violet-500" aria-hidden="true" />
-                  <span>Challenges</span>
-                </div>
-                <p className="mt-2 font-display text-xl font-extrabold text-[#1E293B] tabular-nums">
-                  {progress.completedChallenges.length}/{CODING_CHALLENGES.length}
-                </p>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-[#8B5CF6]"
-                    style={{ width: `${challengesPercent}%` }}
-                  />
-                </div>
+      {/* 5. FEATURED SIMULATOR + FEATURED CODING CHALLENGE */}
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          {/* Featured Simulator */}
+          <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-7 lg:col-span-6">
+            <div>
+              <div className="flex items-center justify-between gap-2 text-xs">
+                <span className="inline-flex items-center gap-1.5 font-semibold text-[#2563EB]">
+                  <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
+                  Featured Simulator
+                </span>
+                <span className="font-mono text-[#64748B]">
+                  {featuredSimulator.difficulty} · {featuredSimulator.category}
+                </span>
               </div>
-
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-4">
-                <div className="flex items-center gap-2 text-xs text-[#64748B]">
-                  <Gamepad2 className="h-4 w-4 text-emerald-600" aria-hidden="true" />
-                  <span>Mini-Games</span>
-                </div>
-                <p className="mt-2 font-display text-xl font-extrabold text-[#1E293B] tabular-nums">
-                  {gamesCompletedCount}/8
-                </p>
-                <p className="mt-1 text-[11px] text-[#64748B] tabular-nums">
-                  {progress.visitedSimulators.length}/8 sims tried
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-slate-200/80 bg-white p-4">
-                <div className="flex items-center gap-2 text-xs text-[#64748B]">
-                  <Flame className="h-4 w-4 text-amber-500" aria-hidden="true" />
-                  <span>Active Streak</span>
-                </div>
-                <p className="mt-2 font-display text-xl font-extrabold text-[#1E293B] tabular-nums">
-                  {streakDays} {streakDays === 1 ? 'day' : 'days'}
-                </p>
-                <p className="mt-1 text-[11px] text-[#64748B]">
-                  {streakDays === 0 ? 'Complete a task today' : 'Verified browser streak'}
-                </p>
-              </div>
+              <h3 className="mt-3 font-display text-xl font-bold text-[#1E293B]">
+                {featuredSimulator.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#64748B]">
+                {featuredSimulator.realLifeScenario}
+              </p>
+              <p className="mt-3 font-mono text-xs font-semibold text-[#8B5CF6]">
+                Concepts: {featuredSimulator.concepts.join(' · ')}
+              </p>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => onOpenLabTab('simulators')}
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#38BDF8] via-[#2563EB] to-[#8B5CF6] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm hover:opacity-95"
+              >
+                Launch Simulator
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={() => onOpenLabTab('flowchart-builder')}
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 font-display text-xs font-medium text-[#1E293B] hover:border-sky-300"
+              >
+                Try Flowchart Builder
+              </button>
             </div>
           </div>
 
-          {/* Featured Challenge Card (5 cols) */}
-          <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8 lg:col-span-5">
+          {/* Featured Challenge */}
+          <div className="flex flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-7 lg:col-span-6">
             <div>
               <div className="flex items-center justify-between gap-2 text-xs">
                 <span className="inline-flex items-center gap-1.5 font-semibold text-[#8B5CF6]">
                   <Zap className="h-3.5 w-3.5" aria-hidden="true" />
-                  Featured Next Challenge
+                  Featured Coding Challenge
                 </span>
                 <span className="font-mono text-[#64748B]">{nextChallenge.difficulty}</span>
               </div>
@@ -840,90 +872,98 @@ export const HomePage: React.FC<HomePageProps> = ({
               <button
                 type="button"
                 onClick={() => onOpenGamesTab('challenges')}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-4 py-2 font-display text-sm font-semibold text-white shadow-sm transition-all hover:opacity-95 whitespace-nowrap"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95 whitespace-nowrap"
               >
                 Solve Challenge
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
               <button
                 type="button"
-                onClick={() => onOpenGamesTab('mini-games')}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 font-display text-sm font-medium text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] whitespace-nowrap"
+                onClick={() => onOpenGamesTab('bug-hunter')}
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 font-display text-xs font-medium text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] whitespace-nowrap"
               >
-                Try Mini-Games
+                Open Bug Hunter Lab
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Clean Footer */}
+      {/* CONSISTENT FOOTER */}
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div className="space-y-1.5">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+            <div className="space-y-2 md:col-span-5">
               <PyVerseLogo size="md" />
               <p className="font-display text-sm font-semibold text-[#1E293B]">
                 Think. Code. Experiment.
               </p>
-              <p className="max-w-md text-xs text-[#64748B]">
-                Interactive Python learning world for Python Basics, Conditional Statements, and
-                Loops.
+              <p className="max-w-sm text-xs leading-relaxed text-[#64748B]">
+                PyVerse is an interactive Python learning ecosystem combining visual lessons,
+                simulators, debugging labs, coding challenges, and adaptive AI tutoring.
               </p>
             </div>
 
-            <nav
-              aria-label="Footer navigation"
-              className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-[#64748B]"
-            >
-              <button
-                type="button"
-                onClick={() => onNavigate('learn')}
-                className="hover:text-[#2563EB] transition-colors"
-              >
-                Learn
-              </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('simulators')}
-                className="hover:text-[#2563EB] transition-colors"
-              >
-                Simulators
-              </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('playground')}
-                className="hover:text-[#2563EB] transition-colors"
-              >
-                Python Sandbox
-              </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('tutor')}
-                className="hover:text-[#2563EB] transition-colors"
-              >
-                AI Tutor
-              </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('games')}
-                className="hover:text-[#2563EB] transition-colors"
-              >
-                Games &amp; Challenges
-              </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('progress')}
-                className="hover:text-[#2563EB] transition-colors"
-              >
-                Progress
-              </button>
-            </nav>
+            <div className="md:col-span-3">
+              <h3 className="font-display text-xs font-bold uppercase tracking-wider text-[#1E293B]">
+                Main Navigation
+              </h3>
+              <ul className="mt-3 space-y-1.5 text-xs text-[#64748B]">
+                <li>
+                  <button type="button" onClick={() => onNavigate('learn')} className="hover:text-[#2563EB]">
+                    Learning World
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => onNavigate('lab')} className="hover:text-[#2563EB]">
+                    Interactive Lab
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => onNavigate('games')} className="hover:text-[#2563EB]">
+                    Game Zone
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => onNavigate('studio')} className="hover:text-[#2563EB]">
+                    Coding Studio
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div className="md:col-span-4">
+              <h3 className="font-display text-xs font-bold uppercase tracking-wider text-[#1E293B]">
+                Learning Resources
+              </h3>
+              <ul className="mt-3 space-y-1.5 text-xs text-[#64748B]">
+                <li>
+                  <button type="button" onClick={() => onNavigate('tutor')} className="hover:text-[#2563EB]">
+                    PyVerse AI Personal Tutor
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => onOpenRevisionTab('cheat-sheets')} className="hover:text-[#2563EB]">
+                    Python Cheat Sheets &amp; Flashcards
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => onOpenRevisionTab('quizzes')} className="hover:text-[#2563EB]">
+                    Topic Quizzes
+                  </button>
+                </li>
+                <li>
+                  <button type="button" onClick={() => onNavigate('progress')} className="hover:text-[#2563EB]">
+                    Progress Dashboard
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          <div className="mt-6 flex flex-col justify-between gap-2 border-t border-slate-100 pt-5 text-xs text-[#64748B] sm:flex-row">
+          <div className="mt-8 flex flex-col justify-between gap-2 border-t border-slate-100 pt-5 text-xs text-[#64748B] sm:flex-row">
             <span>© {new Date().getFullYear()} PyVerse. Built for beginner Python learners.</span>
-            <span>Python Basics · Conditional Statements · Loops</span>
+            <span>Progress saved locally in your browser · Python Basics · Conditionals · Loops</span>
           </div>
         </div>
       </footer>

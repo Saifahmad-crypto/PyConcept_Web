@@ -21,9 +21,15 @@ import { PythonTraceStep, formatPyLiteral } from '../../utils/pythonEngine';
 import {
   AnimationSpeedController,
   SimulatorSpeedContext,
+  SimulatorSpeedProvider,
   scaleAnimationMs,
+  speedMsToFps,
   speedMsToMultiplier,
+  useSharedSimulatorSpeed,
+  useSimulatorSpeed,
 } from './AnimationSpeedController';
+
+export { SimulatorSpeedProvider, useSimulatorSpeed };
 
 export const SimulatorTutorContext = createContext<
   ((ctx: TutorSimulatorContext) => void) | null
@@ -39,14 +45,14 @@ export interface SimulatorShellProps {
   steps: PythonTraceStep[];
   stepIndex: number; // 0 = Ready before step 1; 1..steps.length = current step
   isPlaying: boolean;
-  speedMs: number;
+  speedMs?: number;
   onPlay: () => void;
   onPause: () => void;
   onNextStep: () => void;
   onPrevStep?: () => void;
   onJumpToStep?: (step: number) => void;
   onReset: () => void;
-  onChangeSpeed: (ms: number) => void;
+  onChangeSpeed?: (ms: number) => void;
   onBackToHub: () => void;
   initialVariables: Record<string, string | number | boolean | (string | number)[]>;
   initialExplanation: string;
@@ -137,7 +143,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
   steps,
   stepIndex,
   isPlaying,
-  speedMs,
+  speedMs: propSpeedMs,
   onPlay,
   onPause,
   onNextStep,
@@ -155,20 +161,64 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
     stepIndex > 0 && stepIndex <= totalSteps ? steps[stepIndex - 1] : null;
   const isFinished = totalSteps > 0 && stepIndex >= totalSteps;
 
+  const sharedSpeed = useSharedSimulatorSpeed();
+  const speedMs = propSpeedMs ?? sharedSpeed.speedMs;
+  const pauseOnBranches = sharedSpeed.pauseOnBranches;
+
+  const handleSpeedChange = useMemo(
+    () => (nextMs: number) => {
+      sharedSpeed.setSpeedMs(nextMs);
+      if (onChangeSpeed) {
+        onChangeSpeed(nextMs);
+      }
+    },
+    [sharedSpeed, onChangeSpeed]
+  );
+
   const [historyOpen, setHistoryOpen] = useState(true);
-  const [pauseOnBranches, setPauseOnBranches] = useState(true);
+  const [frameProgress, setFrameProgress] = useState(0);
   const recordedRunRef = useRef(false);
+  const frameProgressRef = useRef(0);
 
   const onAskTutor = useContext(SimulatorTutorContext);
   const onRecordRun = useContext(SimulatorRunContext);
 
+  const isDecisionStep =
+    activeStep?.kind === 'if' ||
+    activeStep?.kind === 'elif' ||
+    activeStep?.kind === 'else' ||
+    activeStep?.kind === 'for' ||
+    activeStep?.kind === 'while' ||
+    activeStep?.kind === 'break' ||
+    activeStep?.kind === 'continue';
+
+  const effectiveFrameMs =
+    pauseOnBranches && isDecisionStep ? Math.round(speedMs * 1.45) : speedMs;
+  const effectiveFps = speedMsToFps(effectiveFrameMs);
+
   const speedCtxValue = useMemo(
     () => ({
-      speedMs,
+      speedMs: effectiveFrameMs,
       multiplier: speedMsToMultiplier(speedMs),
-      scaleMs: (baseMs: number) => scaleAnimationMs(baseMs, speedMs),
+      fps: effectiveFps,
+      pauseOnBranches,
+      scaleMs: (baseMs: number) => scaleAnimationMs(baseMs, effectiveFrameMs),
+      setSpeedMs: handleSpeedChange,
+      setMultiplier: (nextMult: number) => {
+        sharedSpeed.setMultiplier(nextMult);
+        if (onChangeSpeed) {
+          onChangeSpeed(Math.round(800 / nextMult));
+        }
+      },
+      setFps: (nextFps: number) => {
+        sharedSpeed.setFps(nextFps);
+        if (onChangeSpeed && nextFps > 0) {
+          onChangeSpeed(Math.round(1000 / nextFps));
+        }
+      },
+      setPauseOnBranches: sharedSpeed.setPauseOnBranches,
     }),
-    [speedMs]
+    [effectiveFrameMs, effectiveFps, speedMs, pauseOnBranches, handleSpeedChange, sharedSpeed, onChangeSpeed]
   );
 
   useEffect(() => {
@@ -180,37 +230,68 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
     }
   }, [stepIndex, meta.id, onRecordRun]);
 
+  // Reset per-frame progress whenever the active step changes or playback stops
+  useEffect(() => {
+    frameProgressRef.current = 0;
+    setFrameProgress(0);
+  }, [stepIndex, isPlaying]);
+
+  // Dynamic requestAnimationFrame clock that scales frame duration in real time even mid-frame
   useEffect(() => {
     if (!isPlaying) return;
     if (stepIndex >= totalSteps) {
       onPause();
       return;
     }
-    const isDecisionStep =
-      activeStep?.kind === 'if' ||
-      activeStep?.kind === 'elif' ||
-      activeStep?.kind === 'else' ||
-      activeStep?.kind === 'for' ||
-      activeStep?.kind === 'while' ||
-      activeStep?.kind === 'break' ||
-      activeStep?.kind === 'continue';
-    const stepDelay =
-      pauseOnBranches && isDecisionStep ? Math.round(speedMs * 1.45) : speedMs;
 
-    const timer = window.setTimeout(() => {
-      onNextStep();
-    }, stepDelay);
-    return () => window.clearTimeout(timer);
-  }, [
-    isPlaying,
-    stepIndex,
-    totalSteps,
-    speedMs,
-    pauseOnBranches,
-    activeStep?.kind,
-    onNextStep,
-    onPause,
-  ]);
+    let rafId = 0;
+    let lastTs = performance.now();
+
+    const tick = (now: number) => {
+      const dt = Math.max(0, now - lastTs);
+      lastTs = now;
+      const nextProgress = frameProgressRef.current + dt / Math.max(80, effectiveFrameMs);
+
+      if (nextProgress >= 1) {
+        frameProgressRef.current = 0;
+        setFrameProgress(0);
+        onNextStep();
+        return;
+      }
+
+      frameProgressRef.current = nextProgress;
+      setFrameProgress(nextProgress);
+      rafId = window.requestAnimationFrame(tick);
+    };
+
+    rafId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(rafId);
+  }, [isPlaying, stepIndex, totalSteps, effectiveFrameMs, onNextStep, onPause]);
+
+  // Keyboard step controls (Space = Play/Pause, ArrowRight = Next, ArrowLeft = Prev)
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target?.isContentEditable) {
+        return;
+      }
+      if (e.key === 'ArrowRight' && stepIndex < totalSteps) {
+        e.preventDefault();
+        if (isPlaying) onPause();
+        onNextStep();
+      } else if (e.key === 'ArrowLeft' && onPrevStep && stepIndex > 0) {
+        e.preventDefault();
+        onPrevStep();
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        if (isPlaying) onPause();
+        else onPlay();
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [isPlaying, stepIndex, totalSteps, onPlay, onPause, onNextStep, onPrevStep]);
 
   const codeLines = code.split('\n');
   const currentVars = activeStep ? activeStep.variables : initialVariables;
@@ -288,7 +369,15 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
 
       {/* Main Split-Screen Environment */}
       <SimulatorSpeedContext.Provider value={speedCtxValue}>
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
+        <div
+          className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start"
+          style={
+            {
+              '--sim-frame-ms': `${effectiveFrameMs}ms`,
+              '--sim-speed-scale': String(effectiveFrameMs / 800),
+            } as React.CSSProperties
+          }
+        >
           {/* LEFT SIDE — REAL-LIFE SIMULATION */}
           <div className="lg:col-span-7">
             <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
@@ -379,6 +468,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 return (
                   <div
                     key={name}
+                    style={{ transitionDuration: `${speedCtxValue.scaleMs(240)}ms` }}
                     className={`flex items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs transition-colors ${
                       changed
                         ? 'border-sky-300 bg-[#F0F9FF]'
@@ -498,29 +588,43 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               </button>
             </div>
 
-            <div className="flex items-center gap-2.5">
-              <span className="font-mono text-xs font-semibold text-[#1E293B] tabular-nums">
-                Step {stepIndex} / {totalSteps}
-              </span>
-              <div className="h-2 w-28 overflow-hidden rounded-full bg-slate-100">
-                <div
-                  style={{
-                    width: `${progressPct}%`,
-                    transitionDuration: `${speedCtxValue.scaleMs(220)}ms`,
-                  }}
-                  className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] transition-all"
-                />
+            <div className="flex flex-col items-end gap-1.5">
+              <div className="flex items-center gap-2.5">
+                <span className="font-mono text-xs font-semibold text-[#1E293B] tabular-nums">
+                  Step {stepIndex} / {totalSteps}
+                </span>
+                <div className="h-2 w-28 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    style={{
+                      width: `${progressPct}%`,
+                      transitionDuration: `${speedCtxValue.scaleMs(220)}ms`,
+                    }}
+                    className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] transition-all"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-[11px] font-mono text-[#64748B] tabular-nums">
+                <span>
+                  {effectiveFps.toFixed(2)} FPS · {effectiveFrameMs}ms
+                  {pauseOnBranches && isDecisionStep ? ' (branch focus)' : ''}
+                </span>
+                <div className="h-1 w-16 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-sky-500"
+                    style={{ width: `${Math.round(frameProgress * 100)}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           <AnimationSpeedController
             speedMs={speedMs}
-            onChangeSpeedMs={onChangeSpeed}
+            onChangeSpeedMs={handleSpeedChange}
             totalSteps={totalSteps}
             currentStep={stepIndex}
             pauseOnBranches={pauseOnBranches}
-            onTogglePauseOnBranches={() => setPauseOnBranches((v) => !v)}
+            onTogglePauseOnBranches={sharedSpeed.togglePauseOnBranches}
           />
         </div>
 

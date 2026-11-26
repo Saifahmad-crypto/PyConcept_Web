@@ -10,14 +10,20 @@ import {
   Check,
   Keyboard,
   Cpu,
+  BookmarkPlus,
+  FolderOpen,
 } from 'lucide-react';
 import { PLAYGROUND_EXAMPLES } from '../data/curriculumData';
+import { SavedSnippet } from '../types';
 import { runPythonCode, PythonRunResult } from '../utils/pythonEngine';
 
 interface CodePlaygroundProps {
   externalCode?: string | null;
   onConsumeExternalCode?: () => void;
   onRecordSandboxRun?: () => void;
+  savedSnippets?: SavedSnippet[];
+  onSaveSnippet?: (title: string, code: string) => void;
+  onDeleteSnippet?: (id: string) => void;
 }
 
 const INPUT_DEMO_CODE = `# Interactive input() demo\nname = input("Enter your name: ")\nscore = int(input("Enter your score (0-100): "))\n\nif score >= 75:\n    print(f"Awesome job {name}! Honors unlocked.")\nelse:\n    print(f"Keep practicing, {name}!")`;
@@ -129,11 +135,16 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
   externalCode,
   onConsumeExternalCode,
   onRecordSandboxRun,
+  savedSnippets = [],
+  onSaveSnippet,
+  onDeleteSnippet,
 }) => {
   const [selectedExampleId, setSelectedExampleId] = useState<string>(PLAYGROUND_EXAMPLES[0].id);
   const [code, setCode] = useState<string>(() => externalCode || PLAYGROUND_EXAMPLES[0].code);
   const [stdinText, setStdinText] = useState<string>('Maya\n88');
   const [copied, setCopied] = useState(false);
+  const [snippetTitle, setSnippetTitle] = useState('');
+  const [snippetSavedFlash, setSnippetSavedFlash] = useState(false);
   const [runtimeMode, setRuntimeMode] = useState<'ast' | 'pyodide'>('ast');
   const [pyodideState, setPyodideState] = useState<'idle' | 'loading' | 'ready' | 'unavailable'>(
     'idle'
@@ -488,6 +499,81 @@ builtins.input = _pyverse_input
               className="mt-2 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 font-mono text-xs text-[#1E293B] focus:border-[#2563EB] focus:outline-none"
             />
           </div>
+
+          {/* Local Saved Snippets */}
+          {onSaveSnippet && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-2 font-display text-xs font-bold text-[#1E293B]">
+                  <FolderOpen className="h-4 w-4 text-[#8B5CF6]" aria-hidden="true" />
+                  Saved Local Snippets ({savedSnippets.length})
+                </span>
+                {snippetSavedFlash && (
+                  <span className="text-[11px] font-semibold text-emerald-700">
+                    Saved to this browser!
+                  </span>
+                )}
+              </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onSaveSnippet(snippetTitle || `Snippet ${savedSnippets.length + 1}`, code);
+                  setSnippetTitle('');
+                  setSnippetSavedFlash(true);
+                  setTimeout(() => setSnippetSavedFlash(false), 1800);
+                }}
+                className="flex flex-wrap gap-2"
+              >
+                <input
+                  type="text"
+                  value={snippetTitle}
+                  onChange={(e) => setSnippetTitle(e.target.value)}
+                  placeholder="Name this Python script..."
+                  aria-label="Snippet title"
+                  className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-xs text-[#1E293B] focus:border-[#2563EB] focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white hover:bg-slate-800 whitespace-nowrap"
+                >
+                  <BookmarkPlus className="h-3.5 w-3.5" aria-hidden="true" />
+                  Save Script
+                </button>
+              </form>
+
+              {savedSnippets.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {savedSnippets.map((snip) => (
+                    <div
+                      key={snip.id}
+                      className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-[#F8FAFC] pl-3 pr-1.5 py-1.5 text-xs"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCode(snip.code);
+                          setResult(runPythonCode(snip.code, stdinText.split('\n')));
+                        }}
+                        className="font-semibold text-[#1E293B] hover:text-[#2563EB]"
+                      >
+                        {snip.title}
+                      </button>
+                      {onDeleteSnippet && (
+                        <button
+                          type="button"
+                          onClick={() => onDeleteSnippet(snip.id)}
+                          aria-label={`Delete ${snip.title}`}
+                          className="rounded-lg p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                        >
+                          <Trash2 className="h-3 w-3" aria-hidden="true" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Output Console */}

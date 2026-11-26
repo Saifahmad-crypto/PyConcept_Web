@@ -4,6 +4,9 @@ import {ErrorBoundary} from './components/ErrorBoundary.tsx';
 import './index.css';
 
 if (typeof window !== 'undefined') {
+  const isExtensionOrigin = (text: string) =>
+    text.includes('chrome-extension://') || text.includes('moz-extension://');
+
   window.addEventListener(
     'error',
     (event) => {
@@ -12,13 +15,25 @@ if (typeof window !== 'undefined') {
         event.error && typeof event.error === 'object' && 'stack' in event.error
           ? String((event.error as {stack?: unknown}).stack || '')
           : '';
-      if (
-        source.startsWith('chrome-extension://') ||
-        source.startsWith('moz-extension://') ||
-        stack.includes('chrome-extension://') ||
-        stack.includes('moz-extension://')
-      ) {
+      if (isExtensionOrigin(source) || isExtensionOrigin(stack)) {
         event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    },
+    true
+  );
+
+  window.addEventListener(
+    'unhandledrejection',
+    (event) => {
+      const reason = event.reason;
+      const stack =
+        reason && typeof reason === 'object' && 'stack' in reason
+          ? String((reason as {stack?: unknown}).stack || '')
+          : String(reason || '');
+      if (isExtensionOrigin(stack)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
       }
     },
     true

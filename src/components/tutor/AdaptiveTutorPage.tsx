@@ -21,6 +21,8 @@ import {
   ArrowUpRight,
   Cpu,
   Check,
+  ListOrdered,
+  ShieldCheck,
 } from 'lucide-react';
 import {
   LearningProgress,
@@ -73,13 +75,19 @@ const MODES: Array<{ id: TutorMode; label: string; icon: React.ReactNode; desc: 
     id: 'explain',
     label: 'Explain Simply',
     icon: <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />,
-    desc: 'Step-by-step plain-language explanations with line-by-line Python code.',
+    desc: 'Step-by-step plain-language explanations tailored to your pace.',
   },
   {
     id: 'example',
-    label: 'Real-Life Example',
+    label: 'Real-Life Examples',
     icon: <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />,
     desc: 'Relatable everyday analogies mapped directly to short Python snippets.',
+  },
+  {
+    id: 'line_by_line',
+    label: 'Explain Line by Line',
+    icon: <ListOrdered className="h-3.5 w-3.5" aria-hidden="true" />,
+    desc: 'Trace what every single line does to variables and output in order.',
   },
   {
     id: 'debug',
@@ -104,6 +112,18 @@ const MODES: Array<{ id: TutorMode; label: string; icon: React.ReactNode; desc: 
     label: 'Test My Knowledge',
     icon: <CheckSquare className="h-3.5 w-3.5" aria-hidden="true" />,
     desc: 'Adaptive multiple-choice & code-output checks with instant feedback.',
+  },
+  {
+    id: 'simulator',
+    label: 'Explain This Simulator',
+    icon: <Cpu className="h-3.5 w-3.5" aria-hidden="true" />,
+    desc: 'Connect PyVerse real-life simulators directly to the underlying Python logic.',
+  },
+  {
+    id: 'review_solution',
+    label: 'Review My Solution',
+    icon: <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />,
+    desc: 'Paste working code for edge-case checks, clarity feedback, and next steps.',
   },
 ];
 
@@ -188,8 +208,11 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     () => ({
       activeTopic: progress.activeTutorTopic,
       difficulty: progress.tutorDifficulty,
+      xp: progress.xp,
       completedLessons: progress.completedLessons,
+      completedMissions: progress.completedMissions,
       completedChallenges: progress.completedChallenges,
+      completedBugHunts: progress.completedBugHunts,
       conceptsUnderstood: progress.conceptsUnderstood,
       conceptsToReview: progress.conceptsToReview,
       quizScores: progress.quizScores,
@@ -375,14 +398,14 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     const inferredTopic: TutorTopic =
       simCtx.category === 'loops' ? 'Loops' : 'Conditional Statements';
     onSetTopic(inferredTopic);
-    setMode('explain');
+    setMode('simulator');
     setAttachedSimContext(simCtx);
 
-    const newSid = createNewChat(inferredTopic, 'explain');
+    const newSid = createNewChat(inferredTopic, 'simulator');
     updateSessionMeta(newSid, {
       title: `${simCtx.simulatorTitle} Help`,
       topic: inferredTopic,
-      mode: 'explain',
+      mode: 'simulator',
     });
 
     const linePart = simCtx.currentLine
@@ -391,7 +414,7 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     const prompt = `I am using the ${simCtx.simulatorTitle} and I'm ${linePart}. Can you explain what Python is doing at this exact step, why the variables/condition have these values, and what happens next?`;
 
     window.setTimeout(() => {
-      void sendUserMessage(prompt, 'explain', newSid, simCtx);
+      void sendUserMessage(prompt, 'simulator', newSid, simCtx);
     }, 40);
   }, [
     pendingSimulatorContext,
@@ -736,16 +759,16 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
           </div>
           <div className="grid grid-cols-2 gap-2 text-[11px]">
             <div className="rounded-lg bg-white p-2 border border-slate-200/70">
+              <span className="text-slate-500">Total XP</span>
+              <p className="font-mono font-bold text-sky-700 tabular-nums">
+                {progress.xp} XP
+              </p>
+            </div>
+            <div className="rounded-lg bg-white p-2 border border-slate-200/70">
               <span className="text-slate-500">Lessons</span>
               <p className="font-mono font-bold text-[#1E293B] tabular-nums">
                 {progress.completedLessons.length} /{' '}
                 {TOPIC_BASICS_LESSONS.length + TOPIC_08_LESSONS.length + TOPIC_09_LESSONS.length}
-              </p>
-            </div>
-            <div className="rounded-lg bg-white p-2 border border-slate-200/70">
-              <span className="text-slate-500">Practice</span>
-              <p className="font-mono font-bold text-violet-700 tabular-nums">
-                {progress.practiceSuccesses} / {progress.practiceAttempts}
               </p>
             </div>
           </div>
@@ -1137,6 +1160,19 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                   </p>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                     {[
+                      ...(progress.xp === 0
+                        ? [
+                            {
+                              label: 'Assess my Python starting level',
+                              mode: 'quiz' as TutorMode,
+                              action: () =>
+                                void handleGenerateQuiz(
+                                  'simpler',
+                                  'Quick beginner diagnostic check on Python Basics'
+                                ),
+                            },
+                          ]
+                        : []),
                       {
                         label: 'What is Python?',
                         mode: 'explain' as TutorMode,
@@ -1152,12 +1188,12 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
                           ),
                       },
                       {
-                        label: 'Difference between if and elif',
-                        mode: 'explain' as TutorMode,
+                        label: 'Trace a for loop line by line',
+                        mode: 'line_by_line' as TutorMode,
                         action: () =>
                           void sendUserMessage(
-                            'I do not understand the difference between if and elif.',
-                            'explain'
+                            'Walk me line by line through:\nfor i in range(1, 4):\n    print(i * 2)',
+                            'line_by_line'
                           ),
                       },
                       {

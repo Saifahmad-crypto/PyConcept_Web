@@ -1,13 +1,15 @@
 export type SectionId =
   | 'home'
   | 'learn'
+  | 'lab'
+  | 'games'
+  | 'studio'
+  | 'tutor'
+  | 'revision'
+  | 'progress'
+  // Legacy aliases retained cleanly so all internal cross-links continue working seamlessly
   | 'simulators'
   | 'playground'
-  | 'tutor'
-  | 'games'
-  | 'progress'
-  // Legacy aliases retained cleanly so internal cross-links map smoothly to the Games & Challenges hub
-  | 'lab'
   | 'challenges'
   | 'quiz';
 
@@ -21,9 +23,34 @@ export type LearnStageId =
   | 'practise'
   | 'test';
 
-export type LabTabId = 'conditional-sim' | 'loop-viz' | 'games';
+export type LabTabId =
+  | 'simulators'
+  | 'conditionals-lab'
+  | 'loops-lab'
+  | 'memory-explorer'
+  | 'execution-visualizer'
+  | 'flowchart-builder'
+  // Legacy aliases
+  | 'conditional-sim'
+  | 'loop-viz'
+  | 'games';
 
-export type GamesHubTabId = 'mini-games' | 'challenges' | 'quizzes' | 'logic-lab';
+export type GamesHubTabId =
+  | 'mini-games'
+  | 'escape-room'
+  | 'bug-hunter'
+  | 'challenges'
+  | 'quizzes'
+  | 'logic-lab';
+
+export type RevisionTabId =
+  | 'cheat-sheets'
+  | 'flashcards'
+  | 'arena'
+  | 'quizzes'
+  | 'visual-notes';
+
+export type StudioTabId = 'sandbox' | 'challenges';
 
 export type SimulatorId =
   | 'traffic-signal'
@@ -54,6 +81,22 @@ export interface LessonDef {
   number: string;
   title: string;
   summary: string;
+}
+
+export interface MissionDef {
+  id: string;
+  topic: TopicId;
+  number: string;
+  title: string;
+  objective: string;
+  intro: string;
+  exampleCode: string;
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  xpReward: number;
+  linkedLessonId?: string;
 }
 
 export interface QuizQuestion {
@@ -106,10 +149,13 @@ export type TutorDifficulty = 'Beginner' | 'Guided' | 'Intermediate';
 export type TutorMode =
   | 'explain'
   | 'example'
+  | 'line_by_line'
   | 'debug'
   | 'hint'
   | 'practice'
-  | 'quiz';
+  | 'quiz'
+  | 'simulator'
+  | 'review_solution';
 
 export interface TutorPracticeCard {
   title: string;
@@ -177,9 +223,111 @@ export interface TutorChatSession {
   messages: TutorMessage[];
 }
 
+export type ActivityType =
+  | 'lesson'
+  | 'mission'
+  | 'simulator'
+  | 'challenge'
+  | 'quiz'
+  | 'game'
+  | 'daily-quest'
+  | 'bug-hunt'
+  | 'escape-room'
+  | 'sandbox';
+
+export interface ActivityRecord {
+  id: string; // Unique key e.g. "lesson:c-if", "daily:2026-11-26"
+  type: ActivityType;
+  title: string;
+  topic: TopicId | 'mixed';
+  completed: boolean;
+  score?: number;
+  maxScore?: number;
+  xpAwarded: number;
+  timestamp: number;
+  attempts: number;
+}
+
+export interface XPHistoryEntry {
+  id: string;
+  activityId: string;
+  label: string;
+  amount: number;
+  timestamp: number;
+}
+
+export interface SavedSnippet {
+  id: string;
+  title: string;
+  code: string;
+  updatedAt: number;
+}
+
+export interface UserPreferences {
+  preferredMode: 'guided' | 'explorer' | 'challenge';
+  fontSize: 'normal' | 'large';
+  reducedMotion: boolean;
+  soundEffects: boolean;
+}
+
+export interface DailyQuestDef {
+  id: string;
+  type: 'predict-output' | 'find-error' | 'missing-code' | 'condition-solve' | 'loop-iterations';
+  topic: TopicId;
+  difficulty: 'Easy' | 'Medium';
+  estimatedMinutes: number;
+  xpReward: number;
+  title: string;
+  instructions: string;
+  code: string;
+  options: string[];
+  correctIndex: number;
+  hint: string;
+  explanation: string;
+}
+
+export interface FlashcardDef {
+  id: string;
+  topic: TopicId;
+  front: string;
+  codeHint?: string;
+  back: string;
+  example: string;
+}
+
+export interface BugChallengeDef {
+  id: string;
+  topic: TopicId;
+  category:
+    | 'Syntax Error'
+    | 'Incorrect Condition'
+    | 'Off-by-One Loop'
+    | 'Variable Update'
+    | 'Wrong Output';
+  difficulty: 'Easy' | 'Medium' | 'Advanced';
+  title: string;
+  description: string;
+  buggyCode: string;
+  expectedOutput: string;
+  stdinLines?: string[];
+  hints: [string, string, string, string];
+  solutionCode: string;
+  xpReward: number;
+  verify: (output: string, code: string) => { passed: boolean; message: string };
+}
+
 export interface LearningProgress {
+  version: number;
+  xp: number;
+  xpHistory: XPHistoryEntry[];
+  activities: Record<string, ActivityRecord>;
   completedLessons: string[];
+  completedMissions: string[];
   completedChallenges: string[];
+  completedBugHunts: string[];
+  completedEscapeRooms: string[];
+  completedDailyQuests: string[];
+  understoodFlashcards: string[];
   quizScores: {
     conditionals: QuizScoreRecord | null;
     loops: QuizScoreRecord | null;
@@ -190,6 +338,7 @@ export interface LearningProgress {
   simulatorRuns: number;
   sandboxRuns: number;
   activeDates: string[];
+  longestStreak: number;
   activeTutorTopic: TutorTopic;
   tutorDifficulty: TutorDifficulty;
   conceptsUnderstood: string[];
@@ -197,4 +346,6 @@ export interface LearningProgress {
   practiceAttempts: number;
   practiceSuccesses: number;
   recentTopics: string[];
+  savedSnippets: SavedSnippet[];
+  preferences: UserPreferences;
 }

@@ -1,55 +1,24 @@
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { tracePythonCode, PythonTraceStep } from '../utils/pythonEngine';
 import {
-  BASE_STEP_MS,
-  multiplierToSpeedMs,
-  speedMsToMultiplier,
+  useSharedSimulatorSpeed,
 } from '../components/simulators/AnimationSpeedController';
-
-const SPEED_STORAGE_KEY = 'pyverse_sim_speed_ms';
-
-function loadSavedSpeedMs(): number {
-  try {
-    const raw = window.localStorage.getItem(SPEED_STORAGE_KEY);
-    if (raw) {
-      const parsed = Number(raw);
-      if (Number.isFinite(parsed) && parsed >= 200 && parsed <= 3200) {
-        return Math.round(parsed);
-      }
-    }
-  } catch {
-    // Ignore storage read issues
-  }
-  return BASE_STEP_MS;
-}
 
 export function useSimulatorRunner(code: string) {
   const trace = useMemo(() => tracePythonCode(code), [code]);
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [speedMs, setSpeedMsState] = useState<number>(loadSavedSpeedMs);
 
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(SPEED_STORAGE_KEY, String(speedMs));
-    } catch {
-      // Ignore storage write issues
-    }
-  }, [speedMs]);
-
-  const setSpeedMs = useCallback((ms: number) => {
-    const safe = Math.max(200, Math.min(3200, Math.round(ms)));
-    setSpeedMsState(safe);
-  }, []);
-
-  const speedMultiplier = speedMsToMultiplier(speedMs);
-
-  const setSpeedMultiplier = useCallback(
-    (mult: number) => {
-      setSpeedMs(multiplierToSpeedMs(mult));
-    },
-    [setSpeedMs]
-  );
+  const {
+    speedMs,
+    multiplier: speedMultiplier,
+    fps,
+    pauseOnBranches,
+    setSpeedMs,
+    setMultiplier: setSpeedMultiplier,
+    setFps,
+    setPauseOnBranches,
+  } = useSharedSimulatorSpeed();
 
   const steps: PythonTraceStep[] = trace.steps;
   const activeStep: PythonTraceStep | null =
@@ -100,8 +69,12 @@ export function useSimulatorRunner(code: string) {
     isPlaying,
     speedMs,
     speedMultiplier,
+    fps,
+    pauseOnBranches,
     setSpeedMs,
     setSpeedMultiplier,
+    setFps,
+    setPauseOnBranches,
     play,
     pause,
     nextStep,

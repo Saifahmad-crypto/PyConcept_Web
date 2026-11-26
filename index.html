@@ -3,6 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        var isExt = function (val) {
+          return typeof val === 'string' && (val.indexOf('chrome-extension://') !== -1 || val.indexOf('moz-extension://') !== -1);
+        };
+        window.addEventListener('error', function (e) {
+          var stack = e.error && e.error.stack ? String(e.error.stack) : '';
+          if (isExt(e.filename) || isExt(stack)) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        }, true);
+        window.addEventListener('unhandledrejection', function (e) {
+          var reason = e.reason;
+          var stack = reason && reason.stack ? String(reason.stack) : String(reason || '');
+          if (isExt(stack)) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          }
+        }, true);
+        try {
+          var desc = Object.getOwnPropertyDescriptor(window, 'fetch');
+          if (desc && desc.configurable && desc.get && !desc.set) {
+            Object.defineProperty(window, 'fetch', {
+              get: desc.get,
+              set: function () {},
+              enumerable: desc.enumerable,
+              configurable: true,
+            });
+          }
+        } catch (_) {}
+      })();
+    </script>
     <title>PyVerse — Think. Code. Experiment.</title>
     <meta name="description" content="PyVerse: Think. Code. Experiment. Master Python Conditional Statements and Loops through interactive visual simulations, flowcharts, mini-games, quizzes, and coding challenges." />
     <meta property="og:title" content="PyVerse — Think. Code. Experiment." />
