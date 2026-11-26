@@ -20,7 +20,10 @@ import {
   Copy,
   ChevronRight,
   Sparkles,
-  GripVertical
+  GripVertical,
+  ArrowDownCircle,
+  RefreshCw,
+  CornerDownRight
 } from 'lucide-react';
 import {
   LogicBlock,
@@ -35,6 +38,7 @@ import {
   encodeProjectToShareUrl,
   decodeProjectFromUrl
 } from '../../utils/projectStorage';
+import { parsePythonToBlocks } from '../../utils/pythonToBlocks';
 
 interface ExecutionStep {
   blockId: string;
@@ -44,6 +48,14 @@ interface ExecutionStep {
   variables: Record<string, any>;
   logOutput: string;
   simulationState: any;
+}
+
+interface DragPayload {
+  sourceType: 'palette' | 'block';
+  blockType?: LogicBlock['type'];
+  blockId?: string;
+  parentBlockId?: string;
+  branch?: 'children' | 'elseChildren';
 }
 
 export const CreateSystemStudio: React.FC = () => {
@@ -74,12 +86,17 @@ export const CreateSystemStudio: React.FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Drag-and-drop state
-  const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [dragPayload, setDragPayload] = useState<DragPayload | null>(null);
+  const [activeDropSlot, setActiveDropSlot] = useState<string | null>(null);
 
-  // Python manual editor state
+  // Python bidirectional manual editor state
   const [editableCode, setEditableCode] = useState<string>(project.pythonCode);
   const [syncStatus, setSyncStatus] = useState<'synced' | 'custom_code'>('synced');
+  const [autoSyncPython, setAutoSyncPython] = useState<boolean>(true);
+  const [pythonSyntaxNotice, setPythonSyntaxNotice] = useState<{ valid: boolean; message: string }>({
+    valid: true,
+    message: 'Python syntax synchronized with visual logic blocks.'
+  });
 
   // Load saved projects on mount
   useEffect(() => {
@@ -92,6 +109,10 @@ export const CreateSystemStudio: React.FC = () => {
       const generated = generatePythonFromProject(project);
       setProject(prev => ({ ...prev, pythonCode: generated }));
       setEditableCode(generated);
+      setPythonSyntaxNotice({
+        valid: true,
+        message: 'Python syntax synchronized with visual logic blocks.'
+      });
     }
   }, [project.blocks, project.inputs, syncStatus]);
 
@@ -192,46 +213,111 @@ export const CreateSystemStudio: React.FC = () => {
     });
   };
 
-  // Drag and Drop Logic Block Handling
-  const handleDragStart = (index: number) => {
-    setDraggedItemIndex(index);
+  // Bi-directional Python to Blocks Compiler
+  const applyPythonToBlocks = (codeText?: string) => {
+    const targetCode = codeText !== undefined ? codeText : editableCode;
+    const res = parsePythonToBlocks(targetCode, project.inputs);
+    if (res.success && res.blocks.length > 0) {
+      setProject(prev => ({
+        ...prev,
+        blocks: res.blocks,
+        inputs: res.inputs,
+        pythonCode: targetCode
+      }));
+      setPythonSyntaxNotice({
+        valid: true,
+        message: 'Successfully parsed Python into logic blocks & inputs!'
+      });
+      setSyncStatus('synced');
+      setSaveToast('Python parsed into visual blocks!');
+      setTimeout(() => setSaveToast(null), 3000);
+    } else {
+      setPythonSyntaxNotice({
+        valid: false,
+        message: res.error || 'Syntax could not be parsed into blocks.'
+      });
+    }
   };
 
-  const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    setDragOverIndex(index);
+  const handleCodeChange = (newCode: string) => {
+    setEditableCode(newCode);
+    setSyncStatus('custom_code');
+    setProject(prev => ({ ...prev, pythonCode: newCode }));
+
+    if (autoSyncPython) {
+      const res = parsePythonToBlocks(newCode, project.inputs);
+      if (res.success && res.blocks.length > 0) {
+        setProject(prev => ({
+          ...prev,
+          blocks: res.blocks,
+          inputs: res.inputs,
+          pythonCode: newCode
+        }));
+        setPythonSyntaxNotice({
+          valid: true,
+          message: 'Auto-sync active: visual blocks updated in real-time!'
+        });
+      } else {
+        setPythonSyntaxNotice({
+          valid: false,
+          message: res.error || 'Waiting for complete Python statement...'
+        });
+      }
+    }
   };
 
-  const handleDrop = (index: number) => {
-    if (draggedItemIndex === null || draggedItemIndex === index) {
-      setDraggedItemIndex(null);
-      setDragOverIndex(null);
-      return;
+  // Helper: recursively remove a block by id from any branch or root
+  const removeBlockRecursive = (blocks: LogicBlock[], id: string): { updated: LogicBlock[]; removed: LogicBlock | null } => {
+    let removed: LogicBlock | null = null;
+    const filtered: LogicBlock[] = [];
+
+    for (const b of blocks) {
+      if (b.id === id) {
+        removed = b;
+        continue;
+      }
+      const copy = { ...b };
+      if (copy.children && copy.children.length > 0) {
+        const res = removeBlockRecursive(copy.children, id);
+        if (res.removed) removed = res.removed;
+        copy.children = res.updated;
+      }
+      if (copy.elseChildren && copy.elseChildren.length > 0) {
+        const res = removeBlockRecursive(copy.elseChildren, id);
+        if (res.removed) removed = res.removed;
+        copy.elseChildren = res.updated;
+      }
+      filtered.push(copy);
     }
 
-    const reordered = [...project.blocks];
-    const [moved] = reordered.splice(draggedItemIndex, 1);
-    reordered.splice(index, 0, moved);
-
-    setProject(prev => ({ ...prev, blocks: reordered }));
-    setDraggedItemIndex(null);
-    setDragOverIndex(null);
+    return { updated: filtered, removed };
   };
 
-  // Block Manipulation
-  const handleAddBlock = (type: LogicBlock['type']) => {
-    const newBlock: LogicBlock = {
+  // Helper: create new block from type
+  const createNewBlock = (type: LogicBlock['type']): LogicBlock => {
+    return {
       id: 'b_' + Math.random().toString(36).substring(2, 7),
       type,
-      label: type === 'condition' ? 'If Custom Sensor Triggered' : type === 'action' ? 'Trigger Actuator' : type === 'loop' ? 'Iterate Cycle' : 'Step Logic',
-      variableName: project.inputs[0]?.id || 'sensorInput',
+      label:
+        type === 'condition'
+          ? 'If Custom Condition Met'
+          : type === 'action'
+          ? 'Execute System Action'
+          : type === 'loop'
+          ? 'Iterate Loop Cycle'
+          : 'Log Status Event',
+      variableName: project.inputs[0]?.id || 'sensorVal',
       operator: '==',
       conditionValue: 'True',
-      actionCode: 'system_active = True',
-      children: []
+      actionCode: type === 'action' ? 'system_active = True' : undefined,
+      children: type === 'condition' || type === 'loop' ? [] : undefined,
+      elseChildren: type === 'condition' ? [] : undefined
     };
+  };
 
-    // Insert before end block if exists
+  // Add block to root
+  const handleAddBlock = (type: LogicBlock['type']) => {
+    const newBlock = createNewBlock(type);
     const endIndex = project.blocks.findIndex(b => b.type === 'end');
     const updated = [...project.blocks];
     if (endIndex >= 0) {
@@ -243,10 +329,99 @@ export const CreateSystemStudio: React.FC = () => {
   };
 
   const handleDeleteBlock = (id: string) => {
-    setProject(prev => ({
-      ...prev,
-      blocks: prev.blocks.filter(b => b.id !== id)
-    }));
+    handleDeleteBlockRecursive(id);
+  };
+
+  // Drop at Root Index
+  const handleDropOnRoot = (targetIndex: number) => {
+    if (!dragPayload) return;
+    let blockToInsert: LogicBlock | null = null;
+    let updatedBlocks = [...project.blocks];
+
+    if (dragPayload.sourceType === 'palette') {
+      blockToInsert = createNewBlock(dragPayload.blockType || 'action');
+    } else if (dragPayload.blockId) {
+      const { updated, removed } = removeBlockRecursive(updatedBlocks, dragPayload.blockId);
+      updatedBlocks = updated;
+      blockToInsert = removed;
+    }
+
+    if (blockToInsert) {
+      const safeIdx = Math.max(0, Math.min(targetIndex, updatedBlocks.length));
+      updatedBlocks.splice(safeIdx, 0, blockToInsert);
+      setProject(prev => ({ ...prev, blocks: updatedBlocks }));
+    }
+
+    setDragPayload(null);
+    setActiveDropSlot(null);
+  };
+
+  // Drop inside a Nested Branch
+  const handleDropOnBranch = (parentId: string, branch: 'children' | 'elseChildren', targetIndex?: number) => {
+    if (!dragPayload) return;
+    if (dragPayload.blockId === parentId) return; // Prevent self-nesting
+
+    let blockToInsert: LogicBlock | null = null;
+    let updatedBlocks = [...project.blocks];
+
+    if (dragPayload.sourceType === 'palette') {
+      blockToInsert = createNewBlock(dragPayload.blockType || 'action');
+    } else if (dragPayload.blockId) {
+      const { updated, removed } = removeBlockRecursive(updatedBlocks, dragPayload.blockId);
+      updatedBlocks = updated;
+      blockToInsert = removed;
+    }
+
+    if (blockToInsert) {
+      const insertRecursive = (list: LogicBlock[]): LogicBlock[] => {
+        return list.map(b => {
+          if (b.id === parentId) {
+            const copy = { ...b };
+            if (branch === 'children') {
+              const ch = [...(copy.children || [])];
+              if (targetIndex !== undefined) ch.splice(targetIndex, 0, blockToInsert!);
+              else ch.push(blockToInsert!);
+              copy.children = ch;
+            } else {
+              const ech = [...(copy.elseChildren || [])];
+              if (targetIndex !== undefined) ech.splice(targetIndex, 0, blockToInsert!);
+              else ech.push(blockToInsert!);
+              copy.elseChildren = ech;
+            }
+            return copy;
+          }
+          const copy = { ...b };
+          if (copy.children) copy.children = insertRecursive(copy.children);
+          if (copy.elseChildren) copy.elseChildren = insertRecursive(copy.elseChildren);
+          return copy;
+        });
+      };
+
+      updatedBlocks = insertRecursive(updatedBlocks);
+      setProject(prev => ({ ...prev, blocks: updatedBlocks }));
+    }
+
+    setDragPayload(null);
+    setActiveDropSlot(null);
+  };
+
+  const handleAddChildToBranch = (parentId: string, branch: 'children' | 'elseChildren', type: LogicBlock['type']) => {
+    const newChild = createNewBlock(type);
+    const updated = project.blocks.map(b => {
+      if (b.id === parentId) {
+        const copy = { ...b };
+        if (branch === 'children') copy.children = [...(copy.children || []), newChild];
+        else copy.elseChildren = [...(copy.elseChildren || []), newChild];
+        return copy;
+      }
+      return b;
+    });
+    setProject(prev => ({ ...prev, blocks: updated }));
+  };
+
+  const handleDeleteBlockRecursive = (id: string) => {
+    const { updated } = removeBlockRecursive(project.blocks, id);
+    setProject(prev => ({ ...prev, blocks: updated }));
   };
 
   return (
@@ -683,109 +858,309 @@ export const CreateSystemStudio: React.FC = () => {
           {/* Primary View Workspace */}
           {activeTab === 'split' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Blocks Panel */}
+              {/* Blocks Panel with Nested Drag-and-Drop */}
               <div className="p-4 rounded-2xl bg-[#0e0404] border border-red-950/70 space-y-3">
                 <div className="flex items-center justify-between border-b border-red-950/50 pb-2">
                   <span className="text-xs font-bold text-stone-300 uppercase tracking-wider flex items-center gap-1.5">
                     <GripVertical className="w-3.5 h-3.5 text-red-400" />
-                    Drag & Drop Blocks
+                    Interactive Logic Blocks
                   </span>
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => handleAddBlock('condition')}
-                      className="px-2 py-1 bg-stone-900 hover:bg-stone-800 text-[10px] font-bold text-red-400 border border-stone-800 rounded"
-                    >
-                      + Condition
-                    </button>
-                    <button
-                      onClick={() => handleAddBlock('action')}
-                      className="px-2 py-1 bg-stone-900 hover:bg-stone-800 text-[10px] font-bold text-blue-400 border border-stone-800 rounded"
-                    >
-                      + Action
-                    </button>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-800/40">
+                    Nested Drag-and-Drop Active
+                  </span>
+                </div>
+
+                {/* Draggable Block Palette */}
+                <div className="p-2.5 bg-black/60 rounded-xl border border-stone-800/80 space-y-1.5">
+                  <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider block font-bold">
+                    Block Palette (Drag into any slot or branch):
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { type: 'condition', label: '+ If Condition', style: 'bg-amber-950/40 border-amber-700/60 text-amber-300' },
+                      { type: 'action', label: '+ Action Code', style: 'bg-blue-950/40 border-blue-700/60 text-blue-300' },
+                      { type: 'loop', label: '+ For Loop', style: 'bg-emerald-950/40 border-emerald-700/60 text-emerald-300' }
+                    ].map(item => (
+                      <div
+                        key={item.type}
+                        draggable
+                        onDragStart={() => setDragPayload({ sourceType: 'palette', blockType: item.type as any })}
+                        className={`px-2.5 py-1 rounded text-xs font-mono border cursor-grab hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center gap-1 select-none ${item.style}`}
+                      >
+                        <GripVertical className="w-3 h-3 text-stone-400" />
+                        {item.label}
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                {/* Block List with Nested Drop Targets */}
+                <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                   {project.blocks.map((block, idx) => (
-                    <div
-                      key={block.id}
-                      draggable={block.type !== 'start' && block.type !== 'end'}
-                      onDragStart={() => handleDragStart(idx)}
-                      onDragOver={e => handleDragOver(e, idx)}
-                      onDrop={() => handleDrop(idx)}
-                      className={`p-3 rounded-xl border transition-all ${
-                        currentStep?.blockId === block.id
-                          ? 'border-red-500 bg-red-950/30 shadow-lg shadow-red-950/50 ring-1 ring-red-500'
-                          : dragOverIndex === idx
-                          ? 'border-red-400 bg-red-950/40'
-                          : 'border-stone-800/80 bg-black/40 hover:border-stone-700'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <GripVertical className="w-3.5 h-3.5 text-stone-600 cursor-grab" />
-                          <span
-                            className={`text-[10px] font-mono px-1.5 py-0.5 rounded uppercase font-bold ${
-                              block.type === 'start' || block.type === 'end'
-                                ? 'bg-purple-950/70 text-purple-400 border border-purple-800/40'
-                                : block.type === 'condition'
-                                ? 'bg-amber-950/70 text-amber-400 border border-amber-800/40'
-                                : block.type === 'loop'
-                                ? 'bg-emerald-950/70 text-emerald-400 border border-emerald-800/40'
-                                : 'bg-blue-950/70 text-blue-400 border border-blue-800/40'
-                            }`}
-                          >
-                            {block.type}
-                          </span>
-                          <span className="text-xs font-semibold text-stone-200">{block.label}</span>
+                    <React.Fragment key={block.id}>
+                      {/* Top-Level Root Drop Indicator Slot */}
+                      {idx > 0 && block.type !== 'start' && (
+                        <div
+                          onDragOver={e => { e.preventDefault(); setActiveDropSlot(`root_${idx}`); }}
+                          onDragLeave={() => setActiveDropSlot(null)}
+                          onDrop={() => handleDropOnRoot(idx)}
+                          className={`rounded transition-all duration-200 ${
+                            activeDropSlot === `root_${idx}`
+                              ? 'bg-red-600/30 border border-red-500 py-2 flex items-center justify-center text-[10px] font-mono text-red-200'
+                              : 'h-1.5 hover:bg-red-950/30'
+                          }`}
+                        >
+                          {activeDropSlot === `root_${idx}` && '↳ Drop Block Between Steps'}
+                        </div>
+                      )}
+
+                      <div
+                        draggable={block.type !== 'start' && block.type !== 'end'}
+                        onDragStart={() => setDragPayload({ sourceType: 'block', blockId: block.id })}
+                        className={`p-3 rounded-xl border transition-all ${
+                          currentStep?.blockId === block.id
+                            ? 'border-red-500 bg-red-950/30 shadow-lg shadow-red-950/50 ring-1 ring-red-500'
+                            : 'border-stone-800/80 bg-black/40 hover:border-stone-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {block.type !== 'start' && block.type !== 'end' && (
+                              <GripVertical className="w-3.5 h-3.5 text-stone-600 cursor-grab" />
+                            )}
+                            <span
+                              className={`text-[10px] font-mono px-1.5 py-0.5 rounded uppercase font-bold ${
+                                block.type === 'start' || block.type === 'end'
+                                  ? 'bg-purple-950/70 text-purple-400 border border-purple-800/40'
+                                  : block.type === 'condition'
+                                  ? 'bg-amber-950/70 text-amber-400 border border-amber-800/40'
+                                  : block.type === 'loop'
+                                  ? 'bg-emerald-950/70 text-emerald-400 border border-emerald-800/40'
+                                  : 'bg-blue-950/70 text-blue-400 border border-blue-800/40'
+                              }`}
+                            >
+                              {block.type}
+                            </span>
+                            <span className="text-xs font-semibold text-stone-200">{block.label}</span>
+                          </div>
+
+                          {block.type !== 'start' && block.type !== 'end' && (
+                            <button
+                              onClick={() => handleDeleteBlockRecursive(block.id)}
+                              className="text-stone-600 hover:text-red-400 p-1"
+                              title="Delete Block"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          )}
                         </div>
 
-                        {block.type !== 'start' && block.type !== 'end' && (
-                          <button
-                            onClick={() => handleDeleteBlock(block.id)}
-                            className="text-stone-600 hover:text-red-400 p-1"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
+                        {block.actionCode && (
+                          <div className="mt-2 text-[11px] font-mono text-stone-400 bg-black/60 p-2 rounded border border-stone-900">
+                            {block.actionCode}
+                          </div>
+                        )}
+
+                        {/* Nested Condition Drop Containers */}
+                        {block.type === 'condition' && (
+                          <div className="mt-3 pl-3 border-l-2 border-stone-800 space-y-2.5">
+                            {/* If True Branch Drop Target */}
+                            <div
+                              onDragOver={e => { e.preventDefault(); e.stopPropagation(); setActiveDropSlot(`branch_${block.id}_children`); }}
+                              onDragLeave={() => setActiveDropSlot(null)}
+                              onDrop={e => { e.stopPropagation(); handleDropOnBranch(block.id, 'children'); }}
+                              className={`p-2.5 rounded-xl border transition-all ${
+                                activeDropSlot === `branch_${block.id}_children`
+                                  ? 'border-emerald-500 bg-emerald-950/70 ring-1 ring-emerald-500'
+                                  : 'border-emerald-950/60 bg-emerald-950/20'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between pb-1.5">
+                                <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                                  <CornerDownRight className="w-3 h-3" />
+                                  If True Branch:
+                                </span>
+                                <button
+                                  onClick={() => handleAddChildToBranch(block.id, 'children', 'action')}
+                                  className="text-[9px] font-mono text-emerald-300 bg-emerald-900/40 hover:bg-emerald-800 px-2 py-0.5 rounded border border-emerald-800/50"
+                                >
+                                  + Action
+                                </button>
+                              </div>
+
+                              {block.children && block.children.length > 0 ? (
+                                <div className="space-y-1.5">
+                                  {block.children.map(ch => (
+                                    <div
+                                      key={ch.id}
+                                      draggable
+                                      onDragStart={e => {
+                                        e.stopPropagation();
+                                        setDragPayload({ sourceType: 'block', blockId: ch.id, parentBlockId: block.id, branch: 'children' });
+                                      }}
+                                      className={`p-2 rounded-lg bg-black/80 border text-xs flex items-center justify-between cursor-grab transition-all ${
+                                        currentStep?.blockId === ch.id ? 'border-red-500 text-red-200' : 'border-stone-800 text-stone-200'
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-1.5">
+                                        <GripVertical className="w-3 h-3 text-stone-500" />
+                                        <span className="font-mono text-[10px] text-blue-400">{ch.type}:</span>
+                                        <span className="font-mono text-[11px] truncate">{ch.label}</span>
+                                      </div>
+                                      <button
+                                        onClick={() => handleDeleteBlockRecursive(ch.id)}
+                                        className="text-stone-500 hover:text-red-400 p-0.5"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="text-[10px] font-mono text-stone-500 italic py-1.5 text-center border border-dashed border-stone-800/80 rounded">
+                                  Drop actions here for True branch
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Else Branch Drop Target */}
+                            <div
+                              onDragOver={e => { e.preventDefault(); e.stopPropagation(); setActiveDropSlot(`branch_${block.id}_elseChildren`); }}
+                              onDragLeave={() => setActiveDropSlot(null)}
+                              onDrop={e => { e.stopPropagation(); handleDropOnBranch(block.id, 'elseChildren'); }}
+                              className={`p-2.5 rounded-xl border transition-all ${
+                                activeDropSlot === `branch_${block.id}_elseChildren`
+                                  ? 'border-amber-500 bg-amber-950/70 ring-1 ring-amber-500'
+                                  : 'border-red-950/60 bg-red-950/20'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between pb-1.5">
+                                <span className="text-[10px] font-mono text-red-400 font-bold flex items-center gap-1">
+                                  <CornerDownRight className="w-3 h-3" />
+                                  Else Branch:
+                                </span>
+                                <button
+                                  onClick={() => handleAddChildToBranch(block.id, 'elseChildren', 'action')}
+                                  className="text-[9px] font-mono text-red-300 bg-red-900/40 hover:bg-red-800 px-2 py-0.5 rounded border border-red-800/50"
+                                >
+                                  + Action
+                                </button>
+                              </div>
+
+                              {block.elseChildren && block.elseChildren.length > 0 ? (
+                                <div className="space-y-1.5">
+                                  {block.elseChildren.map(ech => (
+                                    <div
+                                      key={ech.id}
+                                      draggable
+                                      onDragStart={e => {
+                                        e.stopPropagation();
+                                        setDragPayload({ sourceType: 'block', blockId: ech.id, parentBlockId: block.id, branch: 'elseChildren' });
+                                      }}
+                                      className={`p-2 rounded-lg bg-black/80 border text-xs flex items-center justify-between cursor-grab transition-all ${
+                                        currentStep?.blockId === ech.id ? 'border-red-500 text-red-200' : 'border-stone-800 text-stone-200'
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-1.5">
+                                        <GripVertical className="w-3 h-3 text-stone-500" />
+                                        <span className="font-mono text-[10px] text-amber-400">{ech.type}:</span>
+                                        <span className="font-mono text-[11px] truncate">{ech.label}</span>
+                                      </div>
+                                      <button
+                                        onClick={() => handleDeleteBlockRecursive(ech.id)}
+                                        className="text-stone-500 hover:text-red-400 p-0.5"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="text-[10px] font-mono text-stone-500 italic py-1.5 text-center border border-dashed border-stone-800/80 rounded">
+                                  Drop actions here for Else branch
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Nested Loop Drop Container */}
+                        {block.type === 'loop' && (
+                          <div className="mt-3 pl-3 border-l-2 border-stone-800">
+                            <div
+                              onDragOver={e => { e.preventDefault(); e.stopPropagation(); setActiveDropSlot(`branch_${block.id}_children`); }}
+                              onDragLeave={() => setActiveDropSlot(null)}
+                              onDrop={e => { e.stopPropagation(); handleDropOnBranch(block.id, 'children'); }}
+                              className={`p-2.5 rounded-xl border transition-all ${
+                                activeDropSlot === `branch_${block.id}_children`
+                                  ? 'border-emerald-500 bg-emerald-950/70 ring-1 ring-emerald-500'
+                                  : 'border-emerald-950/60 bg-emerald-950/20'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between pb-1.5">
+                                <span className="text-[10px] font-mono text-emerald-400 font-bold flex items-center gap-1">
+                                  <CornerDownRight className="w-3 h-3" />
+                                  Loop Body (Cycles {block.iterations || 3}x):
+                                </span>
+                                <button
+                                  onClick={() => handleAddChildToBranch(block.id, 'children', 'action')}
+                                  className="text-[9px] font-mono text-emerald-300 bg-emerald-900/40 hover:bg-emerald-800 px-2 py-0.5 rounded border border-emerald-800/50"
+                                >
+                                  + Action
+                                </button>
+                              </div>
+
+                              {block.children && block.children.length > 0 ? (
+                                <div className="space-y-1.5">
+                                  {block.children.map(ch => (
+                                    <div
+                                      key={ch.id}
+                                      draggable
+                                      onDragStart={e => {
+                                        e.stopPropagation();
+                                        setDragPayload({ sourceType: 'block', blockId: ch.id, parentBlockId: block.id, branch: 'children' });
+                                      }}
+                                      className="p-2 rounded-lg bg-black/80 border border-stone-800 text-xs flex items-center justify-between cursor-grab"
+                                    >
+                                      <div className="flex items-center gap-1.5">
+                                        <GripVertical className="w-3 h-3 text-stone-500" />
+                                        <span className="font-mono text-[10px] text-blue-400">{ch.type}:</span>
+                                        <span className="font-mono text-[11px] truncate">{ch.label}</span>
+                                      </div>
+                                      <button
+                                        onClick={() => handleDeleteBlockRecursive(ch.id)}
+                                        className="text-stone-500 hover:text-red-400 p-0.5"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="text-[10px] font-mono text-stone-500 italic py-1.5 text-center border border-dashed border-stone-800/80 rounded">
+                                  Drop loop actions here
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         )}
                       </div>
-
-                      {block.actionCode && (
-                        <div className="mt-2 text-[11px] font-mono text-stone-400 bg-black/60 p-2 rounded border border-stone-900">
-                          {block.actionCode}
-                        </div>
-                      )}
-
-                      {/* Nested Children for Conditions / Loops */}
-                      {((block.children && block.children.length > 0) || (block.elseChildren && block.elseChildren.length > 0)) && (
-                        <div className="mt-2 pl-3 border-l-2 border-stone-800 space-y-1.5 pt-1">
-                          {block.children && block.children.length > 0 && (
-                            <div className="space-y-1">
-                              <span className="text-[9px] font-mono text-emerald-400 uppercase font-semibold">↳ If True:</span>
-                              {block.children.map(ch => (
-                                <div key={ch.id} className="p-1.5 bg-stone-950 rounded border border-stone-800 text-[11px] text-stone-300 font-mono flex items-center justify-between">
-                                  <span>{ch.label}</span>
-                                  <span className="text-[9px] text-blue-400">{ch.type}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          {block.elseChildren && block.elseChildren.length > 0 && (
-                            <div className="space-y-1 pt-1">
-                              <span className="text-[9px] font-mono text-red-400 uppercase font-semibold">↳ Else Branch:</span>
-                              {block.elseChildren.map(ech => (
-                                <div key={ech.id} className="p-1.5 bg-stone-950 rounded border border-stone-800 text-[11px] text-stone-300 font-mono flex items-center justify-between">
-                                  <span>{ech.label}</span>
-                                  <span className="text-[9px] text-amber-400">{ech.type}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    </React.Fragment>
                   ))}
+
+                  {/* Drop Indicator at end */}
+                  <div
+                    onDragOver={e => { e.preventDefault(); setActiveDropSlot(`root_end`); }}
+                    onDragLeave={() => setActiveDropSlot(null)}
+                    onDrop={() => handleDropOnRoot(project.blocks.length)}
+                    className={`rounded transition-all duration-200 ${
+                      activeDropSlot === `root_end`
+                        ? 'bg-red-600/30 border border-red-500 py-2 flex items-center justify-center text-[10px] font-mono text-red-200'
+                        : 'h-1.5 hover:bg-red-950/30'
+                    }`}
+                  >
+                    {activeDropSlot === `root_end` && '↳ Drop Block At End'}
+                  </div>
                 </div>
               </div>
 
@@ -821,51 +1196,98 @@ export const CreateSystemStudio: React.FC = () => {
             </div>
           )}
 
-          {/* Python Code View Mode */}
+          {/* Python Code View Mode with Two-Way Synchronization */}
           {activeTab === 'code' && (
             <div className="p-5 rounded-2xl bg-[#0e0404] border border-red-950/70 space-y-4">
-              <div className="flex items-center justify-between border-b border-red-950/50 pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-red-950/50 pb-3">
                 <div className="flex items-center gap-2">
                   <Code2 className="w-4 h-4 text-red-400" />
-                  <span className="text-xs font-bold text-stone-200 uppercase tracking-wider">
-                    Synchronized Python Source Code
-                  </span>
+                  <div>
+                    <span className="text-xs font-bold text-stone-200 uppercase tracking-wider block">
+                      Two-Way Synchronized Python Source Code
+                    </span>
+                    <span className="text-[10px] text-stone-400 font-mono">
+                      Edit Python to update Blocks, or edit Blocks to update Python
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
+
+                <div className="flex items-center flex-wrap gap-2">
+                  <label className="flex items-center gap-1.5 text-xs text-stone-300 font-mono cursor-pointer mr-1 bg-black/40 px-2 py-1 rounded border border-stone-800">
+                    <input
+                      type="checkbox"
+                      checked={autoSyncPython}
+                      onChange={e => setAutoSyncPython(e.target.checked)}
+                      className="accent-red-600 rounded cursor-pointer"
+                    />
+                    Auto-sync to Blocks
+                  </label>
+
+                  <button
+                    onClick={() => applyPythonToBlocks()}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg text-xs font-mono shadow-md shadow-red-950/50 transition-all active:scale-95"
+                    title="Parse current Python code and reconstruct visual blocks"
+                  >
+                    <ArrowDownCircle className="w-3.5 h-3.5" />
+                    Compile Python to Blocks
+                  </button>
+
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(editableCode);
                       setSaveToast('Python code copied to clipboard!');
                       setTimeout(() => setSaveToast(null), 3000);
                     }}
-                    className="flex items-center gap-1 px-2.5 py-1 bg-stone-900 hover:bg-stone-800 text-stone-300 rounded text-xs font-mono border border-stone-800"
+                    className="flex items-center gap-1 px-2.5 py-1.5 bg-stone-900 hover:bg-stone-800 text-stone-300 rounded-lg text-xs font-mono border border-stone-800"
                   >
                     <Copy className="w-3 h-3 text-stone-400" />
                     Copy Code
                   </button>
+
                   <button
                     onClick={() => {
                       setSyncStatus('synced');
                       const fresh = generatePythonFromProject(project);
                       setEditableCode(fresh);
                       setProject(prev => ({ ...prev, pythonCode: fresh }));
+                      setPythonSyntaxNotice({
+                        valid: true,
+                        message: 'Blocks generated fresh Python source code!'
+                      });
                     }}
-                    className="px-2.5 py-1 bg-red-950/60 hover:bg-red-900/60 text-red-300 rounded text-xs font-mono border border-red-800/50"
+                    className="px-2.5 py-1.5 bg-red-950/60 hover:bg-red-900/60 text-red-300 rounded-lg text-xs font-mono border border-red-800/50"
                   >
                     Regenerate from Blocks
                   </button>
                 </div>
               </div>
 
-              <div className="relative rounded-xl border border-stone-800/90 overflow-hidden">
+              {/* Real-time Bidirectional Syntax Notice */}
+              <div
+                className={`p-2.5 rounded-xl border flex items-center justify-between text-xs font-mono ${
+                  pythonSyntaxNotice.valid
+                    ? 'bg-emerald-950/30 border-emerald-800/50 text-emerald-300'
+                    : 'bg-red-950/30 border-red-800/50 text-red-300'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  {pythonSyntaxNotice.valid ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  )}
+                  <span>{pythonSyntaxNotice.message}</span>
+                </div>
+                <span className="text-[10px] text-stone-500 uppercase font-bold shrink-0">
+                  Bi-Directional AST
+                </span>
+              </div>
+
+              <div className="relative rounded-xl border border-stone-800/90 overflow-hidden shadow-inner">
                 <textarea
                   value={editableCode}
-                  onChange={e => {
-                    setEditableCode(e.target.value);
-                    setSyncStatus('custom_code');
-                    setProject(prev => ({ ...prev, pythonCode: e.target.value }));
-                  }}
-                  className="w-full h-96 p-4 bg-black/90 text-stone-100 font-mono text-xs leading-relaxed focus:outline-none resize-none"
+                  onChange={e => handleCodeChange(e.target.value)}
+                  className="w-full h-96 p-4 bg-black/95 text-stone-100 font-mono text-xs leading-relaxed focus:outline-none resize-none font-semibold"
                   spellCheck={false}
                 />
               </div>
