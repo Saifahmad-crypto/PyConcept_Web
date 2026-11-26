@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Play, RotateCcw, Trash2, AlertCircle, CheckCircle2, Info } from 'lucide-react';
 import { PLAYGROUND_EXAMPLES } from '../data/curriculumData';
 import { runPythonCode, PythonRunResult } from '../utils/pythonEngine';
 
-export const CodePlayground: React.FC = () => {
+interface CodePlaygroundProps {
+  externalCode?: string | null;
+  onConsumeExternalCode?: () => void;
+}
+
+export const CodePlayground: React.FC<CodePlaygroundProps> = ({
+  externalCode,
+  onConsumeExternalCode,
+}) => {
   const [selectedExampleId, setSelectedExampleId] = useState<string>(PLAYGROUND_EXAMPLES[0].id);
-  const [code, setCode] = useState<string>(PLAYGROUND_EXAMPLES[0].code);
+  const [code, setCode] = useState<string>(() => externalCode || PLAYGROUND_EXAMPLES[0].code);
   const [result, setResult] = useState<PythonRunResult | null>(() =>
-    runPythonCode(PLAYGROUND_EXAMPLES[0].code)
+    runPythonCode(externalCode || PLAYGROUND_EXAMPLES[0].code)
   );
+
+  useEffect(() => {
+    if (!externalCode) return;
+    setCode(externalCode);
+    setResult(runPythonCode(externalCode));
+    onConsumeExternalCode?.();
+  }, [externalCode, onConsumeExternalCode]);
 
   const selectedExample = PLAYGROUND_EXAMPLES.find((e) => e.id === selectedExampleId)!;
 

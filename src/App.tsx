@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'motion/react';
-import { LabTabId, SectionId, SimulatorId, TopicId } from './types';
+import {
+  LabTabId,
+  SectionId,
+  SimulatorId,
+  TopicId,
+  TutorSimulatorContext,
+} from './types';
 import { useProgress } from './hooks/useProgress';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
@@ -11,12 +17,16 @@ import { CodePlayground } from './components/CodePlayground';
 import { ChallengesSection } from './components/ChallengesSection';
 import { QuizSection } from './components/QuizSection';
 import { ProgressDashboard } from './components/ProgressDashboard';
+import { AdaptiveTutorPage } from './components/tutor/AdaptiveTutorPage';
 
 export default function App() {
   const [activeSection, setActiveSection] = useState<SectionId>('home');
   const [activeTopic, setActiveTopic] = useState<TopicId>('conditionals');
   const [activeLabTab, setActiveLabTab] = useState<LabTabId>('conditional-sim');
   const [selectedSimulator, setSelectedSimulator] = useState<SimulatorId | null>(null);
+  const [sandboxCode, setSandboxCode] = useState<string | null>(null);
+  const [pendingTutorSimContext, setPendingTutorSimContext] =
+    useState<TutorSimulatorContext | null>(null);
 
   const {
     progress,
@@ -24,26 +34,62 @@ export default function App() {
     markChallengeComplete,
     recordQuizResult,
     recordGameScore,
+    setTutorTopic,
+    setTutorDifficulty,
+    markConceptUnderstood,
+    markConceptToReview,
+    removeConceptTag,
+    recordPracticeAttempt,
     resetProgress,
   } = useProgress();
 
-  const navigateTo = (section: SectionId) => {
+  const navigateTo = useCallback((section: SectionId) => {
     setActiveSection(section);
     if (section === 'simulators') {
       setSelectedSimulator(null);
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
-  const openTopic = (topic: TopicId) => {
-    setActiveTopic(topic);
-    navigateTo('learn');
-  };
+  const openTopic = useCallback(
+    (topic: TopicId) => {
+      setActiveTopic(topic);
+      navigateTo('learn');
+    },
+    [navigateTo]
+  );
 
-  const openLabTab = (tab: LabTabId) => {
-    setActiveLabTab(tab);
-    navigateTo('lab');
-  };
+  const openLabTab = useCallback(
+    (tab: LabTabId) => {
+      setActiveLabTab(tab);
+      navigateTo('lab');
+    },
+    [navigateTo]
+  );
+
+  const handleOpenInPlayground = useCallback(
+    (code: string) => {
+      setSandboxCode(code);
+      navigateTo('playground');
+    },
+    [navigateTo]
+  );
+
+  const handleConsumeSandboxCode = useCallback(() => {
+    setSandboxCode(null);
+  }, []);
+
+  const handleAskTutorFromSimulator = useCallback(
+    (ctx: TutorSimulatorContext) => {
+      setPendingTutorSimContext(ctx);
+      navigateTo('tutor');
+    },
+    [navigateTo]
+  );
+
+  const handleConsumeSimulatorContext = useCallback(() => {
+    setPendingTutorSimContext(null);
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#1E293B]">
@@ -88,10 +134,34 @@ export default function App() {
             <SimulatorsSection
               selectedSimulator={selectedSimulator}
               onSelectSimulator={setSelectedSimulator}
+              onAskTutor={handleAskTutorFromSimulator}
             />
           )}
 
-          {activeSection === 'playground' && <CodePlayground />}
+          {activeSection === 'tutor' && (
+            <AdaptiveTutorPage
+              progress={progress}
+              onSetTopic={setTutorTopic}
+              onSetDifficulty={setTutorDifficulty}
+              onMarkUnderstood={markConceptUnderstood}
+              onMarkToReview={markConceptToReview}
+              onRemoveConcept={removeConceptTag}
+              onRecordPracticeAttempt={recordPracticeAttempt}
+              onResetProgress={resetProgress}
+              onNavigate={navigateTo}
+              onOpenTopic={openTopic}
+              onOpenInPlayground={handleOpenInPlayground}
+              pendingSimulatorContext={pendingTutorSimContext}
+              onConsumeSimulatorContext={handleConsumeSimulatorContext}
+            />
+          )}
+
+          {activeSection === 'playground' && (
+            <CodePlayground
+              externalCode={sandboxCode}
+              onConsumeExternalCode={handleConsumeSandboxCode}
+            />
+          )}
 
           {activeSection === 'challenges' && (
             <ChallengesSection

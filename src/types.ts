@@ -3,6 +3,7 @@ export type SectionId =
   | 'learn'
   | 'lab'
   | 'simulators'
+  | 'tutor'
   | 'playground'
   | 'challenges'
   | 'quiz'
@@ -88,6 +89,76 @@ export interface GameScoreRecord {
   completed: boolean;
 }
 
+export type TutorTopic = 'Python Basics' | 'Conditional Statements' | 'Loops';
+export type TutorDifficulty = 'Beginner' | 'Guided' | 'Intermediate';
+export type TutorMode = 'learn' | 'doubt' | 'review' | 'practice' | 'quiz';
+
+export interface TutorPracticeCard {
+  title: string;
+  concept: string;
+  difficulty: string;
+  problemStatement: string;
+  expectedOutput: string;
+  starterCode: string;
+  hint1: string;
+  hint2: string;
+  hint3: string;
+  solutionCode: string;
+  solutionExplanation: string;
+  hintsRevealed: number; // 0..3
+  solutionRevealed: boolean;
+}
+
+export interface TutorQuizCard {
+  question: string;
+  codeSnippet?: string;
+  options: string[];
+  correctIndex: number;
+  concept: string;
+  difficulty: string;
+  explanation: string;
+  recommendedPractice: string;
+  selectedIndex?: number;
+  submitted?: boolean;
+}
+
+export interface TutorSimulatorContext {
+  simulatorId: SimulatorId;
+  simulatorTitle: string;
+  category: string;
+  concepts: string[];
+  code: string;
+  currentLine?: number;
+  activeCodeLine?: string;
+  variables?: Record<string, unknown>;
+  conditionExpr?: string;
+  conditionResult?: boolean;
+  outputLines?: string[];
+  explanation?: string;
+}
+
+export interface TutorMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+  mode?: TutorMode;
+  practiceCard?: TutorPracticeCard;
+  quizCard?: TutorQuizCard;
+  simulatorContext?: TutorSimulatorContext | null;
+  feedbackGiven?: 'helpful' | 'confused' | 'harder' | null;
+  isError?: boolean;
+}
+
+export interface TutorChatSession {
+  id: string;
+  title: string;
+  topic: TutorTopic;
+  mode: TutorMode;
+  updatedAt: number;
+  messages: TutorMessage[];
+}
+
 export interface LearningProgress {
   completedLessons: string[];
   completedChallenges: string[];
@@ -96,4 +167,11 @@ export interface LearningProgress {
     loops: QuizScoreRecord | null;
   };
   gameScores: Record<string, GameScoreRecord>;
+  activeTutorTopic: TutorTopic;
+  tutorDifficulty: TutorDifficulty;
+  conceptsUnderstood: string[];
+  conceptsToReview: string[];
+  practiceAttempts: number;
+  practiceSuccesses: number;
+  recentTopics: string[];
 }

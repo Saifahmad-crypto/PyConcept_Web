@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, createContext } from 'react';
 import {
   ArrowLeft,
   Play,
@@ -12,9 +12,14 @@ import {
   Gauge,
   BookOpen,
   Info,
+  Sparkles,
 } from 'lucide-react';
-import { SimulatorMeta } from '../../types';
+import { SimulatorMeta, TutorSimulatorContext } from '../../types';
 import { PythonTraceStep, formatPyLiteral } from '../../utils/pythonEngine';
+
+export const SimulatorTutorContext = createContext<
+  ((ctx: TutorSimulatorContext) => void) | null
+>(null);
 
 export interface SimulatorShellProps {
   meta: SimulatorMeta;
@@ -152,10 +157,29 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
     return () => window.clearTimeout(timer);
   }, [isPlaying, stepIndex, totalSteps, speedMs, onNextStep, onPause]);
 
+  const onAskTutor = useContext(SimulatorTutorContext);
   const codeLines = code.split('\n');
   const currentVars = activeStep ? activeStep.variables : initialVariables;
   const currentOutput = activeStep ? activeStep.outputLines : [];
   const progressPct = totalSteps > 0 ? Math.round((stepIndex / totalSteps) * 100) : 0;
+
+  const handleAskTutorAboutStep = () => {
+    if (!onAskTutor) return;
+    onAskTutor({
+      simulatorId: meta.id,
+      simulatorTitle: meta.title,
+      category: meta.category,
+      concepts: meta.concepts,
+      code,
+      currentLine: activeStep?.line,
+      activeCodeLine: activeStep ? codeLines[activeStep.line - 1]?.trim() : undefined,
+      variables: currentVars,
+      conditionExpr: activeStep?.conditionExpr,
+      conditionResult: activeStep?.conditionResult,
+      outputLines: currentOutput,
+      explanation: activeStep ? activeStep.explanation : initialExplanation,
+    });
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -447,6 +471,21 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               <p className="mt-2 text-xs font-semibold text-emerald-700">
                 Simulation finished cleanly. Adjust inputs or press Reset / Replay to experiment again.
               </p>
+            )}
+            {onAskTutor && (
+              <div className="mt-4 border-t border-slate-100 pt-3 flex items-center justify-between gap-3">
+                <span className="text-[11px] text-slate-500">
+                  Want a deeper breakdown of this step?
+                </span>
+                <button
+                  type="button"
+                  onClick={handleAskTutorAboutStep}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-sky-200 bg-gradient-to-r from-[#F0F9FF] to-violet-50 px-3 py-1.5 text-xs font-semibold text-sky-800 transition-colors hover:border-violet-300 hover:text-violet-800 whitespace-nowrap"
+                >
+                  <Sparkles className="h-3.5 w-3.5 text-violet-600" aria-hidden="true" />
+                  Ask AI Tutor about this step
+                </button>
+              </div>
             )}
           </div>
 

@@ -13,6 +13,7 @@ const NAV_ITEMS: Array<{ id: SectionId; label: string }> = [
   { id: 'learn', label: 'Learn' },
   { id: 'lab', label: 'Interactive Lab' },
   { id: 'simulators', label: 'Interactive Simulators' },
+  { id: 'tutor', label: 'AI Tutor' },
   { id: 'playground', label: 'Playground' },
   { id: 'challenges', label: 'Challenges' },
   { id: 'quiz', label: 'Quiz' },
@@ -41,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
         </button>
 
         {/* Zone 2: Clean single-line navigation links */}
-        <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-5">
+        <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-3.5 2xl:gap-5">
           {NAV_ITEMS.map((item) => {
             const isActive = activeSection === item.id;
             return (
@@ -49,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
                 key={item.id}
                 type="button"
                 onClick={() => handleNav(item.id)}
-                className={`relative py-1.5 text-[13px] font-medium transition-colors whitespace-nowrap shrink-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
+                className={`relative py-1.5 text-[12.5px] 2xl:text-[13px] font-medium transition-colors whitespace-nowrap shrink-0 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
                   isActive
                     ? 'font-semibold text-[#1E293B]'
                     : 'text-slate-500 hover:text-[#1E293B]'
@@ -96,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
           aria-label="Mobile navigation"
           className="border-t border-slate-200/80 bg-[#F8FAFC] px-4 py-3 xl:hidden"
         >
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (

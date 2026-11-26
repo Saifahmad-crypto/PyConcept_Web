@@ -566,6 +566,9 @@ export const HomePage: React.FC<HomePageProps> = ({
               <button type="button" onClick={() => onNavigate('simulators')} className="hover:text-sky-700 transition-colors">
                 Interactive Simulators
               </button>
+              <button type="button" onClick={() => onNavigate('tutor')} className="hover:text-sky-700 transition-colors">
+                AI Tutor
+              </button>
               <button type="button" onClick={() => onNavigate('playground')} className="hover:text-sky-700 transition-colors">
                 Playground
               </button>
