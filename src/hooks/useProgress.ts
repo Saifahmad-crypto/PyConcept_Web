@@ -715,6 +715,15 @@ export function useProgress() {
     }
   }, []);
 
+  const importProgress = useCallback((raw: unknown): boolean => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+      return false;
+    }
+    const normalized = normalizeProgress(raw as Partial<LearningProgress>);
+    setProgress(normalized);
+    return true;
+  }, []);
+
   return {
     progress,
     toggleLesson,
@@ -739,5 +748,6 @@ export function useProgress() {
     removeConceptTag,
     recordPracticeAttempt,
     resetProgress,
+    importProgress,
   };
 }

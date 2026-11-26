@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, lazy, Suspense } from 'react';
 import { motion, MotionConfig } from 'motion/react';
 import {
   GamesHubTabId,
@@ -11,19 +11,23 @@ import {
   TutorSimulatorContext,
 } from './types';
 import { useProgress } from './hooks/useProgress';
+import { useHashRoute } from './hooks/useHashRoute';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './components/HomePage';
 import { LearningWorldPage } from './components/LearningWorldPage';
 import { InteractiveLabPage } from './components/lab/InteractiveLabPage';
 import { GameZonePage } from './components/games/GameZonePage';
 import { CodingStudioPage } from './components/studio/CodingStudioPage';
-import { AdaptiveTutorPage } from './components/tutor/AdaptiveTutorPage';
 import { RevisionHubPage } from './components/revision/RevisionHubPage';
 import { ProgressDashboard } from './components/ProgressDashboard';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
 
+const AdaptiveTutorPage = lazy(() =>
+  import('./components/tutor/AdaptiveTutorPage').then((m) => ({ default: m.AdaptiveTutorPage }))
+);
+
 export default function App() {
-  const [activeSection, setActiveSection] = useState<SectionId>('home');
+  const [activeSection, setHashSection] = useHashRoute();
   const [activeTopic, setActiveTopic] = useState<TopicId>('basics');
   const [activeLabTab, setActiveLabTab] = useState<LabTabId>('simulators');
   const [activeGamesTab, setActiveGamesTab] = useState<GamesHubTabId>('mini-games');
@@ -59,6 +63,7 @@ export default function App() {
     removeConceptTag,
     recordPracticeAttempt,
     resetProgress,
+    importProgress,
   } = useProgress();
 
   // Global keyboard shortcut Ctrl+K / Cmd+K for PyVerse Search
@@ -77,22 +82,22 @@ export default function App() {
     if (section === 'simulators') {
       setActiveLabTab('simulators');
       setSelectedSimulator(null);
-      setActiveSection('lab');
+      setHashSection('lab');
     } else if (section === 'playground') {
       setActiveStudioTab('sandbox');
-      setActiveSection('studio');
+      setHashSection('studio');
     } else if (section === 'challenges') {
       setActiveStudioTab('challenges');
-      setActiveSection('studio');
+      setHashSection('studio');
     } else if (section === 'quiz') {
       setActiveRevisionTab('quizzes');
-      setActiveSection('revision');
+      setHashSection('revision');
     } else {
-      setActiveSection(section);
+      setHashSection(section);
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
+  }, [setHashSection]);
 
   const openTopic = useCallback(
     (topic: TopicId) => {
@@ -265,21 +270,29 @@ export default function App() {
             )}
 
             {activeSection === 'tutor' && (
-              <AdaptiveTutorPage
-                progress={progress}
-                onSetTopic={setTutorTopic}
-                onSetDifficulty={setTutorDifficulty}
-                onMarkUnderstood={markConceptUnderstood}
-                onMarkToReview={markConceptToReview}
-                onRemoveConcept={removeConceptTag}
-                onRecordPracticeAttempt={recordPracticeAttempt}
-                onResetProgress={resetProgress}
-                onNavigate={navigateTo}
-                onOpenTopic={openTopic}
-                onOpenInPlayground={handleOpenInPlayground}
-                pendingSimulatorContext={pendingTutorSimContext}
-                onConsumeSimulatorContext={handleConsumeSimulatorContext}
-              />
+              <Suspense
+                fallback={
+                  <div className="mx-auto max-w-7xl px-4 py-12 text-center font-mono text-xs text-[#8A8585]">
+                    Loading PyVerse AI Tutor...
+                  </div>
+                }
+              >
+                <AdaptiveTutorPage
+                  progress={progress}
+                  onSetTopic={setTutorTopic}
+                  onSetDifficulty={setTutorDifficulty}
+                  onMarkUnderstood={markConceptUnderstood}
+                  onMarkToReview={markConceptToReview}
+                  onRemoveConcept={removeConceptTag}
+                  onRecordPracticeAttempt={recordPracticeAttempt}
+                  onResetProgress={resetProgress}
+                  onNavigate={navigateTo}
+                  onOpenTopic={openTopic}
+                  onOpenInPlayground={handleOpenInPlayground}
+                  pendingSimulatorContext={pendingTutorSimContext}
+                  onConsumeSimulatorContext={handleConsumeSimulatorContext}
+                />
+              </Suspense>
             )}
 
             {activeSection === 'revision' && (
@@ -299,6 +312,7 @@ export default function App() {
                 progress={progress}
                 onToggleLesson={toggleLesson}
                 onResetProgress={resetProgress}
+                onImportProgress={importProgress}
                 onNavigate={navigateTo}
                 onOpenTopic={openTopic}
                 onOpenGamesTab={openGamesTab}

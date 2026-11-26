@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
   CheckCircle2,
   Circle,
   RotateCcw,
+  Download,
+  Upload,
   BookOpen,
   Award,
   Code2,
@@ -44,6 +46,7 @@ interface ProgressDashboardProps {
   progress: LearningProgress;
   onToggleLesson: (lessonId: string) => void;
   onResetProgress: () => void;
+  onImportProgress?: (raw: unknown) => boolean;
   onNavigate: (section: SectionId) => void;
   onOpenTopic: (topic: TopicId) => void;
   onOpenGamesTab: (tab: GamesHubTabId) => void;
@@ -54,12 +57,51 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   progress,
   onToggleLesson,
   onResetProgress,
+  onImportProgress,
   onNavigate,
   onOpenTopic,
   onOpenGamesTab,
   onOpenRevisionTab,
 }) => {
   const [confirmReset, setConfirmReset] = useState(false);
+  const [ioNotice, setIoNotice] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleExportJson = () => {
+    try {
+      const payload = JSON.stringify(progress, null, 2);
+      const blob = new Blob([payload], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `pyverse-progress-${getLocalDateKey()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setIoNotice({ type: 'ok', text: 'Progress exported as JSON.' });
+    } catch {
+      setIoNotice({ type: 'err', text: 'Could not export progress JSON.' });
+    }
+  };
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !onImportProgress) return;
+    try {
+      const text = await file.text();
+      const parsed: unknown = JSON.parse(text);
+      const ok = onImportProgress(parsed);
+      setIoNotice(
+        ok
+          ? { type: 'ok', text: 'Progress imported successfully.' }
+          : { type: 'err', text: 'Invalid PyVerse progress JSON file.' }
+      );
+    } catch {
+      setIoNotice({ type: 'err', text: 'Could not parse JSON file.' });
+    }
+  };
 
   const basicsLessonsDone = TOPIC_BASICS_LESSONS.filter((l) =>
     progress.completedLessons.includes(l.id)
@@ -254,8 +296,38 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           </p>
         </div>
 
-        {/* Inline Two-Step Reset Confirmation */}
-        <div className="flex items-center gap-2">
+        {/* Export / Import JSON & Inline Two-Step Reset Confirmation */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={handleExportJson}
+            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] shadow-xs transition-colors hover:border-[#100303] hover:bg-[#FBF5F9]"
+          >
+            <Download className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
+            Export JSON
+          </button>
+
+          {onImportProgress && (
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/json,.json"
+                onChange={handleImportFile}
+                className="hidden"
+                aria-label="Import progress JSON file"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-[#E5DFDF] bg-white px-3.5 py-2 text-xs font-semibold text-[#100303] shadow-xs transition-colors hover:border-[#100303] hover:bg-[#FBF5F9]"
+              >
+                <Upload className="h-3.5 w-3.5 text-[#E10906]" aria-hidden="true" />
+                Import JSON
+              </button>
+            </>
+          )}
+
           {confirmReset ? (
             <div className="flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2">
               <span className="text-xs font-medium text-rose-900">Reset all saved progress?</span>
@@ -289,6 +361,25 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           )}
         </div>
       </div>
+
+      {ioNotice && (
+        <div
+          className={`flex items-center justify-between rounded-xl border px-4 py-2.5 text-xs font-medium ${
+            ioNotice.type === 'ok'
+              ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
+              : 'border-rose-200 bg-rose-50 text-rose-900'
+          }`}
+        >
+          <span>{ioNotice.text}</span>
+          <button
+            type="button"
+            onClick={() => setIoNotice(null)}
+            className="font-semibold underline"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {/* XP, Level & Streak Hero Summary */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">

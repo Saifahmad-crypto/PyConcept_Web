@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import {
   ArrowRight,
   Award,
@@ -35,7 +35,10 @@ import {
 import { computeStreakDays } from '../hooks/useProgress';
 import { CodeBlock } from './CodeBlock';
 import { DailyQuestCard } from './DailyQuestCard';
-import { LearnSection } from './LearnSection';
+
+const LearnSection = lazy(() =>
+  import('./LearnSection').then((m) => ({ default: m.LearnSection }))
+);
 
 interface LearningWorldPageProps {
   activeTopic: TopicId;
@@ -610,15 +613,23 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
 
       {/* TAB 3: FULL 6-STAGE VISUAL LESSONS (PRESERVED) */}
       {worldTab === 'lessons' && (
-        <LearnSection
-          activeTopic={activeTopic}
-          onChangeTopic={onChangeTopic}
-          completedLessons={progress.completedLessons}
-          onToggleLesson={onToggleLesson}
-          onNavigate={onNavigate}
-          onOpenGamesTab={onOpenGamesTab}
-          onOpenInSandbox={onOpenInSandbox}
-        />
+        <Suspense
+          fallback={
+            <div className="mx-auto max-w-7xl px-4 py-12 text-center font-mono text-xs text-[#8A8585]">
+              Loading Visual Lessons...
+            </div>
+          }
+        >
+          <LearnSection
+            activeTopic={activeTopic}
+            onChangeTopic={onChangeTopic}
+            completedLessons={progress.completedLessons}
+            onToggleLesson={onToggleLesson}
+            onNavigate={onNavigate}
+            onOpenGamesTab={onOpenGamesTab}
+            onOpenInSandbox={onOpenInSandbox}
+          />
+        </Suspense>
       )}
 
       {/* TAB 4: DAILY PYTHON QUEST */}

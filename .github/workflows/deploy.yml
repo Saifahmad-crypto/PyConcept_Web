@@ -33,6 +33,7 @@ jobs:
       - name: Build for GitHub Pages
         env:
           GITHUB_PAGES: 'true'
+          VITE_TUTOR_PROXY_URL: ${{ vars.VITE_TUTOR_PROXY_URL }}
         run: npm run build
 
       - name: Upload artifact

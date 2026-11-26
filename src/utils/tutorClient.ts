@@ -1,23 +1,22 @@
-import { GoogleGenAI, ThinkingLevel, Type } from '@google/genai';
-import {
-  TutorMode,
-  TutorPracticeCard,
-  TutorQuizCard,
-  TutorSimulatorContext,
-} from '../types';
+// ─── Proxy URL helpers ────────────────────────────────────────────────────────
+const rawProxyBase = (import.meta.env.VITE_TUTOR_PROXY_URL as string | undefined) || '';
+const TUTOR_PROXY_BASE = rawProxyBase.trim().replace(/\/+$/, '');
 
-const BROWSER_KEY_STORAGE = 'pyverse_browser_gemini_key';
+export function buildTutorApiUrl(path: string): string {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return TUTOR_PROXY_BASE ? `${TUTOR_PROXY_BASE}${normalizedPath}` : normalizedPath;
+}
 
-export const FALLBACK_GEMINI_MODELS = [
-  'gemini-3.1-flash-lite',
-  'gemini-2.5-flash-lite',
-  'gemini-3.8-flash',
-  'gemini-flash-latest',
-] as const;
+export function hasConfiguredProxyUrl(): boolean {
+  return Boolean(TUTOR_PROXY_BASE);
+}
+
+// ─── Browser API Key (localStorage) ──────────────────────────────────────────
+const BROWSER_KEY_STORAGE = 'pyverse_gemini_api_key';
 
 export function getStoredBrowserApiKey(): string {
   try {
-    return (localStorage.getItem(BROWSER_KEY_STORAGE) || '').trim();
+    return localStorage.getItem(BROWSER_KEY_STORAGE) ?? '';
   } catch {
     return '';
   }
@@ -25,243 +24,222 @@ export function getStoredBrowserApiKey(): string {
 
 export function setStoredBrowserApiKey(key: string): void {
   try {
-    const clean = key.trim();
-    if (clean) {
-      localStorage.setItem(BROWSER_KEY_STORAGE, clean);
+    if (key.trim()) {
+      localStorage.setItem(BROWSER_KEY_STORAGE, key.trim());
     } else {
       localStorage.removeItem(BROWSER_KEY_STORAGE);
     }
   } catch {
-    // ignore storage errors
+    // ignore
   }
 }
 
-const TUTOR_SYSTEM_INSTRUCTION = `You are PyVerse AI Tutor, an adaptive Python programming teacher.
-Your mission is to help students genuinely understand Python rather than simply giving them answers.
-Teach from the learner's current knowledge level. Assume beginner knowledge unless the supplied learning context indicates otherwise.
-Use simple language, small examples and relatable analogies.
-When explaining code, describe what each important line does and why it is needed.
-Use hints and guiding questions before revealing complete solutions in practice mode.
-Never fabricate code execution results, test results, learning progress or simulator states.
-Stay focused on Python education. Keep responses concise, structured, and easy to scan.`;
+// ─── Direct Gemini API (browser fallback when no proxy) ───────────────────────
+// Uses the public Gemini REST API — no backend required.
+const GEMINI_MODELS = [
+  'gemini-2.0-flash',
+  'gemini-2.0-flash-lite',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
+];
 
-export interface DirectLearnerContext {
-  activeTopic?: string;
-  difficulty?: string;
-  xp?: number;
-  completedLessons?: string[];
-  completedMissions?: string[];
-  completedChallenges?: string[];
-  completedBugHunts?: string[];
-  conceptsUnderstood?: string[];
-  conceptsToReview?: string[];
-  practiceAttempts?: number;
-  practiceSuccesses?: number;
+const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+type GeminiRole = 'user' | 'model';
+interface GeminiContent { role: GeminiRole; parts: Array<{ text: string }> }
+
+function buildSystemPrompt(topic: string, difficulty: string): string {
+  return `You are PyVerse AI Tutor — a friendly, adaptive Python tutor. Current topic: ${topic}. Learner level: ${difficulty}. Keep answers concise, use simple language, include short Python code examples where helpful. Format code in markdown fenced blocks.`;
 }
 
-function buildDirectContext(
-  mode: string,
-  learnerContext?: DirectLearnerContext,
-  simulatorContext?: TutorSimulatorContext | null
-): string {
-  const lines = [
-    `[PYVERSE LEARNER CONTEXT]:`,
-    `- Active Topic: ${learnerContext?.activeTopic || 'Conditional Statements'}`,
-    `- Current Difficulty: ${learnerContext?.difficulty || 'Beginner'}`,
-    `- Mode: ${mode}`,
-    `- XP: ${learnerContext?.xp ?? 0}`,
-    `- Completed Lessons (${learnerContext?.completedLessons?.length ?? 0}): ${
-      learnerContext?.completedLessons?.join(', ') || 'None yet'
-    }`,
-    `- Concepts Understood: ${learnerContext?.conceptsUnderstood?.join(', ') || 'None yet'}`,
-    `- Concepts To Review: ${learnerContext?.conceptsToReview?.join(', ') || 'None yet'}`,
+/** Convert chat history [{role, content}] → Gemini contents array */
+function toGeminiContents(
+  messages: Array<{ role: string; content: string }>,
+  systemPrompt: string
+): GeminiContent[] {
+  const contents: GeminiContent[] = [
+    { role: 'user', parts: [{ text: systemPrompt }] },
+    { role: 'model', parts: [{ text: 'Understood! I am ready to help you learn Python.' }] },
   ];
-
-  if (simulatorContext) {
-    lines.push(
-      `[ATTACHED PYVERSE SIMULATOR CONTEXT]:`,
-      `- Simulator: ${simulatorContext.simulatorTitle} (${simulatorContext.category})`,
-      `- Current Line: ${simulatorContext.currentLine ?? 'Initial state'}`,
-      `- Active Code Line: ${simulatorContext.activeCodeLine ?? 'N/A'}`,
-      `- Variables: ${JSON.stringify(simulatorContext.variables ?? {})}`,
-      `- Console Output: ${JSON.stringify(simulatorContext.outputLines ?? [])}`,
-      `- Code:\n\`\`\`python\n${simulatorContext.code}\n\`\`\``
-    );
+  for (const m of messages) {
+    contents.push({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    });
   }
-  return lines.join('\n');
+  return contents;
 }
 
-async function runWithModelFallback<T>(
-  fn: (model: string) => Promise<T>
-): Promise<T> {
-  let lastErr: unknown;
-  for (const model of FALLBACK_GEMINI_MODELS) {
-    try {
-      return await fn(model);
-    } catch (err) {
-      lastErr = err;
-      const msg = err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase();
-      const retryable =
-        msg.includes('503') ||
-        msg.includes('unavailable') ||
-        msg.includes('not_found') ||
-        msg.includes('404');
-      if (!retryable) {
-        throw err;
+async function tryGeminiStream(
+  apiKey: string,
+  model: string,
+  contents: GeminiContent[],
+  signal: AbortSignal,
+  onChunk: (text: string) => void
+): Promise<boolean> {
+  const url = `${GEMINI_API_BASE}/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    signal,
+    body: JSON.stringify({ contents }),
+  });
+
+  if (!res.ok) return false;
+  if (!res.body) return false;
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() ?? '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const payload = line.slice(6).trim();
+      if (payload === '[DONE]') continue;
+      try {
+        const json = JSON.parse(payload) as {
+          candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+        };
+        const text = json.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) onChunk(text);
+      } catch {
+        // ignore parse errors
       }
     }
   }
-  throw lastErr;
+  return true;
 }
 
-export async function directStreamTutorReply(params: {
+export async function directStreamTutorReply({
+  apiKey,
+  messages,
+  topic,
+  difficulty,
+  signal,
+  onChunk,
+}: {
   apiKey: string;
-  messages: Array<{ role: 'user' | 'assistant'; content: string }>;
-  mode: TutorMode;
-  learnerContext: DirectLearnerContext;
-  simulatorContext: TutorSimulatorContext | null;
+  messages: Array<{ role: string; content: string }>;
+  topic: string;
+  difficulty: string;
   signal: AbortSignal;
   onChunk: (text: string) => void;
 }): Promise<void> {
-  const ai = new GoogleGenAI({ apiKey: params.apiKey });
-  const trimmed = params.messages.slice(-14).map((m) => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: String(m.content || '').slice(0, 8000) }],
-  }));
+  const systemPrompt = buildSystemPrompt(topic, difficulty);
+  const contents = toGeminiContents(messages, systemPrompt);
 
-  const lastIdx = trimmed.length - 1;
-  const ctx = buildDirectContext(params.mode, params.learnerContext, params.simulatorContext);
-  trimmed[lastIdx] = {
-    role: 'user',
-    parts: [
-      {
-        text: `${ctx}\n\n[STUDENT MESSAGE]:\n${trimmed[lastIdx].parts[0].text}`,
-      },
-    ],
-  };
-
-  await runWithModelFallback(async (model) => {
-    const stream = await ai.models.generateContentStream({
-      model,
-      contents: trimmed,
-      config: {
-        systemInstruction: TUTOR_SYSTEM_INSTRUCTION,
-        thinkingConfig: {
-          thinkingLevel:
-            params.mode === 'debug' ? ThinkingLevel.MEDIUM : ThinkingLevel.LOW,
-        },
-        abortSignal: params.signal,
-      },
-    });
-
-    for await (const chunk of stream) {
-      if (chunk.text) {
-        params.onChunk(chunk.text);
-      }
+  for (const model of GEMINI_MODELS) {
+    try {
+      const ok = await tryGeminiStream(apiKey, model, contents, signal, onChunk);
+      if (ok) return;
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') throw err;
+      // try next model
     }
-  });
+  }
+  throw new Error('All Gemini models failed. Check your API key and try again.');
 }
 
-export async function directGeneratePractice(params: {
+export async function directGeneratePractice({
+  apiKey,
+  topic,
+  difficulty,
+}: {
   apiKey: string;
-  learnerContext: DirectLearnerContext;
-  focusRequest?: string;
-  difficultyAdjustment?: 'simpler' | 'same' | 'harder';
-}): Promise<Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>> {
-  const ai = new GoogleGenAI({ apiKey: params.apiKey });
-  const prompt = `${buildDirectContext('practice', params.learnerContext, null)}
-Difficulty adjustment: ${params.difficultyAdjustment || 'same'}.
-Focus: ${params.focusRequest || params.learnerContext.activeTopic || 'Python'}.
-Generate 1 beginner-friendly Python practice task with 3 progressive hints and a solution.`;
+  topic: string;
+  difficulty: string;
+}): Promise<{
+  title: string;
+  instructions: string;
+  hints: string[];
+  solution: string;
+  concept: string;
+}> {
+  const prompt = `Generate a Python practice question for topic "${topic}" at "${difficulty}" level.
+Return ONLY valid JSON (no markdown) with this exact shape:
+{
+  "title": "short task title",
+  "instructions": "what the learner must write",
+  "hints": ["hint 1", "hint 2", "hint 3"],
+  "solution": "complete Python solution code",
+  "concept": "the main Python concept being practiced"
+}`;
 
-  return runWithModelFallback(async (model) => {
-    const response = await ai.models.generateContent({
-      model,
-      contents: prompt,
-      config: {
-        systemInstruction: TUTOR_SYSTEM_INSTRUCTION,
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            title: { type: Type.STRING },
-            concept: { type: Type.STRING },
-            difficulty: { type: Type.STRING },
-            problemStatement: { type: Type.STRING },
-            expectedOutput: { type: Type.STRING },
-            starterCode: { type: Type.STRING },
-            hint1: { type: Type.STRING },
-            hint2: { type: Type.STRING },
-            hint3: { type: Type.STRING },
-            solutionCode: { type: Type.STRING },
-            solutionExplanation: { type: Type.STRING },
-          },
-          required: [
-            'title',
-            'concept',
-            'difficulty',
-            'problemStatement',
-            'expectedOutput',
-            'starterCode',
-            'hint1',
-            'hint2',
-            'hint3',
-            'solutionCode',
-            'solutionExplanation',
-          ],
-        },
-      },
-    });
-    return JSON.parse(response.text || '{}') as Omit<
-      TutorPracticeCard,
-      'hintsRevealed' | 'solutionRevealed'
-    >;
-  });
+  for (const model of GEMINI_MODELS) {
+    const url = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json' },
+        }),
+      });
+      if (!res.ok) continue;
+      const data = (await res.json()) as {
+        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+      };
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+      return JSON.parse(text.trim()) as ReturnType<typeof directGeneratePractice> extends Promise<infer T> ? T : never;
+    } catch {
+      // try next model
+    }
+  }
+  throw new Error('Could not generate practice question. Check your API key.');
 }
 
-export async function directGenerateQuiz(params: {
+export async function directGenerateQuiz({
+  apiKey,
+  topic,
+  difficulty,
+}: {
   apiKey: string;
-  learnerContext: DirectLearnerContext;
-  focusRequest?: string;
-  difficultyAdjustment?: 'simpler' | 'same' | 'harder';
-}): Promise<TutorQuizCard> {
-  const ai = new GoogleGenAI({ apiKey: params.apiKey });
-  const prompt = `${buildDirectContext('quiz', params.learnerContext, null)}
-Difficulty adjustment: ${params.difficultyAdjustment || 'same'}.
-Focus: ${params.focusRequest || params.learnerContext.activeTopic || 'Python'}.
-Generate 1 concise 4-option multiple-choice Python question.`;
+  topic: string;
+  difficulty: string;
+}): Promise<{
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  concept: string;
+}> {
+  const prompt = `Generate a multiple-choice Python quiz question for topic "${topic}" at "${difficulty}" level.
+Return ONLY valid JSON (no markdown) with this exact shape:
+{
+  "question": "the question text",
+  "options": ["option A", "option B", "option C", "option D"],
+  "correctIndex": 0,
+  "explanation": "why that answer is correct",
+  "concept": "the Python concept being tested"
+}`;
 
-  return runWithModelFallback(async (model) => {
-    const response = await ai.models.generateContent({
-      model,
-      contents: prompt,
-      config: {
-        systemInstruction: TUTOR_SYSTEM_INSTRUCTION,
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            question: { type: Type.STRING },
-            codeSnippet: { type: Type.STRING },
-            options: { type: Type.ARRAY, items: { type: Type.STRING } },
-            correctIndex: { type: Type.INTEGER },
-            concept: { type: Type.STRING },
-            difficulty: { type: Type.STRING },
-            explanation: { type: Type.STRING },
-            recommendedPractice: { type: Type.STRING },
-          },
-          required: [
-            'question',
-            'options',
-            'correctIndex',
-            'concept',
-            'difficulty',
-            'explanation',
-            'recommendedPractice',
-          ],
-        },
-      },
-    });
-    return JSON.parse(response.text || '{}') as TutorQuizCard;
-  });
+  for (const model of GEMINI_MODELS) {
+    const url = `${GEMINI_API_BASE}/${model}:generateContent?key=${apiKey}`;
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json' },
+        }),
+      });
+      if (!res.ok) continue;
+      const data = (await res.json()) as {
+        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+      };
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+      return JSON.parse(text.trim()) as ReturnType<typeof directGenerateQuiz> extends Promise<infer T> ? T : never;
+    } catch {
+      // try next model
+    }
+  }
+  throw new Error('Could not generate quiz question. Check your API key.');
 }
