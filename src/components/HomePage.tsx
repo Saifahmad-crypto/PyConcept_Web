@@ -997,12 +997,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <Instagram className="h-4 w-4" aria-hidden="true" />
                   </a>
                   <a
-                    href="https://linkedin.com/in/saif4hmad"
+                    href="https://www.linkedin.com/in/saif-ahmad-tech"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
                     aria-label="LinkedIn Profile"
-                    title="LinkedIn"
+                    title="LinkedIn: saif-ahmad-tech"
                   >
                     <Linkedin className="h-4 w-4" aria-hidden="true" />
                   </a>
