@@ -3,6 +3,7 @@ import { Timer, OctagonX, CheckCircle2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -69,6 +70,8 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onPlay={runner.play}
       onPause={runner.pause}
       onNextStep={runner.nextStep}
+      onPrevStep={runner.prevStep}
+      onJumpToStep={runner.jumpToStep}
       onReset={runner.reset}
       onChangeSpeed={runner.setSpeedMs}
       onBackToHub={onBackToHub}
@@ -145,7 +148,9 @@ export const CountdownTimerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   strokeLinecap="round"
                   strokeDasharray={circumference}
                   strokeDashoffset={strokeDashoffset}
-                  style={{ transition: 'stroke-dashoffset 0.35s ease' }}
+                  style={{
+                    transition: `stroke-dashoffset ${scaleAnimationMs(360, runner.speedMs)}ms ease`,
+                  }}
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">

@@ -3,6 +3,7 @@ import { Banknote, CheckCircle2, AlertCircle, Layers } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -83,6 +84,8 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onPlay={runner.play}
       onPause={runner.pause}
       onNextStep={runner.nextStep}
+      onPrevStep={runner.prevStep}
+      onJumpToStep={runner.jumpToStep}
       onReset={runner.reset}
       onChangeSpeed={runner.setSpeedMs}
       onBackToHub={onBackToHub}
@@ -229,6 +232,7 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
             <div className="flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-3.5 text-center">
               <span className="text-xs font-semibold text-slate-600">Optical Counter</span>
               <div
+                style={{ transitionDuration: `${scaleAnimationMs(260, runner.speedMs)}ms` }}
                 className={`mt-2 flex h-12 w-24 items-center justify-center rounded-xl border-2 font-mono text-sm font-extrabold transition-all ${
                   runner.activeStep?.kind === 'assign' &&
                   runner.activeStep.codeLine.includes('total = total')

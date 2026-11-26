@@ -3,6 +3,7 @@ import { ShoppingCart, Plus, Minus, Tag, Receipt } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -104,6 +105,14 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
       onNextStep={() => {
         setReactiveMode(false);
         runner.nextStep();
+      }}
+      onPrevStep={() => {
+        setReactiveMode(false);
+        runner.prevStep();
+      }}
+      onJumpToStep={(s) => {
+        setReactiveMode(false);
+        runner.jumpToStep(s);
       }}
       onReset={() => {
         setReactiveMode(false);
@@ -228,8 +237,11 @@ export const ShoppingDiscountStage: React.FC<Props> = ({ meta, onBackToHub }) =>
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-slate-200">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] transition-all duration-300"
-                    style={{ width: `${tierProgress}%` }}
+                    className="h-full rounded-full bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] transition-all"
+                    style={{
+                      width: `${tierProgress}%`,
+                      transitionDuration: `${scaleAnimationMs(300, runner.speedMs)}ms`,
+                    }}
                   />
                 </div>
               </div>

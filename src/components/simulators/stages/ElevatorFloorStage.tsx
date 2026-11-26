@@ -3,6 +3,7 @@ import { ArrowUp, ArrowDown, Minus, Building2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -58,6 +59,8 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onPlay={runner.play}
       onPause={runner.pause}
       onNextStep={runner.nextStep}
+      onPrevStep={runner.prevStep}
+      onJumpToStep={runner.jumpToStep}
       onReset={runner.reset}
       onChangeSpeed={runner.setSpeedMs}
       onBackToHub={onBackToHub}
@@ -126,7 +129,8 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 return (
                   <div
                     key={f}
-                    className={`flex h-9 items-center justify-between rounded-lg border px-3 transition-all duration-300 ${
+                    style={{ transitionDuration: `${scaleAnimationMs(300, runner.speedMs)}ms` }}
+                    className={`flex h-9 items-center justify-between rounded-lg border px-3 transition-all ${
                       isCabinHere
                         ? 'border-sky-400 bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] text-white shadow-sm'
                         : isDest

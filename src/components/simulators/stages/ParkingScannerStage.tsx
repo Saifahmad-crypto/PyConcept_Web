@@ -3,6 +3,7 @@ import { Car, CheckCircle2, Ban, Search } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -110,6 +111,8 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onPlay={runner.play}
       onPause={runner.pause}
       onNextStep={runner.nextStep}
+      onPrevStep={runner.prevStep}
+      onJumpToStep={runner.jumpToStep}
       onReset={runner.reset}
       onChangeSpeed={runner.setSpeedMs}
       onBackToHub={onBackToHub}
@@ -224,6 +227,7 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   key={idx}
                   type="button"
                   onClick={() => toggleSlot(idx)}
+                  style={{ transitionDuration: `${scaleAnimationMs(240, runner.speedMs)}ms` }}
                   className={`relative flex min-h-[112px] flex-col items-center justify-between rounded-xl border-2 p-3 text-center transition-all ${
                     isWinner
                       ? 'border-emerald-400 bg-emerald-500/20 shadow-md shadow-emerald-500/20'

@@ -3,6 +3,7 @@ import { OctagonAlert, Clock, Navigation } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -67,6 +68,8 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onPlay={runner.play}
       onPause={runner.pause}
       onNextStep={runner.nextStep}
+      onPrevStep={runner.prevStep}
+      onJumpToStep={runner.jumpToStep}
       onReset={runner.reset}
       onChangeSpeed={runner.setSpeedMs}
       onBackToHub={onBackToHub}
@@ -178,7 +181,7 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 transform: isPedestrianCrossing
                   ? 'translate(327px, 130px)'
                   : 'translate(327px, 38px)',
-                transition: 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: `transform ${scaleAnimationMs(650, runner.speedMs)}ms cubic-bezier(0.16, 1, 0.3, 1)`,
               }}
             >
               <circle cx="0" cy="-10" r="8" fill="#0EA5E9" stroke="#FFFFFF" strokeWidth="2" />
@@ -204,8 +207,8 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   ? 'translateX(198px)'
                   : 'translateX(185px)',
                 transition: isCarsMoving
-                  ? 'transform 1.2s linear'
-                  : 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+                  ? `transform ${scaleAnimationMs(1200, runner.speedMs)}ms linear`
+                  : `transform ${scaleAnimationMs(650, runner.speedMs)}ms cubic-bezier(0.16, 1, 0.3, 1)`,
               }}
             >
               <rect x="10" y="88" width="74" height="34" rx="8" fill="#0EA5E9" />
@@ -230,8 +233,8 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   ? 'translateX(135px)'
                   : 'translateX(120px)',
                 transition: isCarsMoving
-                  ? 'transform 1.35s linear'
-                  : 'transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+                  ? `transform ${scaleAnimationMs(1350, runner.speedMs)}ms linear`
+                  : `transform ${scaleAnimationMs(650, runner.speedMs)}ms cubic-bezier(0.16, 1, 0.3, 1)`,
               }}
             >
               <rect x="10" y="160" width="78" height="34" rx="8" fill="#8B5CF6" />

@@ -1,15 +1,15 @@
-import React, { useEffect, useContext, createContext, useRef, useState } from 'react';
+import React, { useEffect, useContext, createContext, useRef, useState, useMemo } from 'react';
 import {
   ArrowLeft,
   Play,
   Pause,
+  SkipBack,
   SkipForward,
   RotateCcw,
   Terminal,
   Cpu,
   CheckCircle2,
   XCircle,
-  Gauge,
   BookOpen,
   Info,
   Sparkles,
@@ -18,6 +18,12 @@ import {
 } from 'lucide-react';
 import { SimulatorId, SimulatorMeta, TutorSimulatorContext } from '../../types';
 import { PythonTraceStep, formatPyLiteral } from '../../utils/pythonEngine';
+import {
+  AnimationSpeedController,
+  SimulatorSpeedContext,
+  scaleAnimationMs,
+  speedMsToMultiplier,
+} from './AnimationSpeedController';
 
 export const SimulatorTutorContext = createContext<
   ((ctx: TutorSimulatorContext) => void) | null
@@ -37,6 +43,8 @@ export interface SimulatorShellProps {
   onPlay: () => void;
   onPause: () => void;
   onNextStep: () => void;
+  onPrevStep?: () => void;
+  onJumpToStep?: (step: number) => void;
   onReset: () => void;
   onChangeSpeed: (ms: number) => void;
   onBackToHub: () => void;
@@ -44,13 +52,6 @@ export interface SimulatorShellProps {
   initialExplanation: string;
   children: React.ReactNode;
 }
-
-const SPEED_OPTIONS = [
-  { label: '0.5x', ms: 1350 },
-  { label: '1x', ms: 800 },
-  { label: '2x', ms: 400 },
-  { label: '4x', ms: 180 },
-];
 
 const PY_KEYWORDS = new Set([
   'if',
@@ -140,6 +141,8 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
   onPlay,
   onPause,
   onNextStep,
+  onPrevStep,
+  onJumpToStep,
   onReset,
   onChangeSpeed,
   onBackToHub,
@@ -153,10 +156,20 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
   const isFinished = totalSteps > 0 && stepIndex >= totalSteps;
 
   const [historyOpen, setHistoryOpen] = useState(true);
+  const [pauseOnBranches, setPauseOnBranches] = useState(true);
   const recordedRunRef = useRef(false);
 
   const onAskTutor = useContext(SimulatorTutorContext);
   const onRecordRun = useContext(SimulatorRunContext);
+
+  const speedCtxValue = useMemo(
+    () => ({
+      speedMs,
+      multiplier: speedMsToMultiplier(speedMs),
+      scaleMs: (baseMs: number) => scaleAnimationMs(baseMs, speedMs),
+    }),
+    [speedMs]
+  );
 
   useEffect(() => {
     if (stepIndex === 0) {
@@ -173,11 +186,31 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
       onPause();
       return;
     }
+    const isDecisionStep =
+      activeStep?.kind === 'if' ||
+      activeStep?.kind === 'elif' ||
+      activeStep?.kind === 'else' ||
+      activeStep?.kind === 'for' ||
+      activeStep?.kind === 'while' ||
+      activeStep?.kind === 'break' ||
+      activeStep?.kind === 'continue';
+    const stepDelay =
+      pauseOnBranches && isDecisionStep ? Math.round(speedMs * 1.45) : speedMs;
+
     const timer = window.setTimeout(() => {
       onNextStep();
-    }, speedMs);
+    }, stepDelay);
     return () => window.clearTimeout(timer);
-  }, [isPlaying, stepIndex, totalSteps, speedMs, onNextStep, onPause]);
+  }, [
+    isPlaying,
+    stepIndex,
+    totalSteps,
+    speedMs,
+    pauseOnBranches,
+    activeStep?.kind,
+    onNextStep,
+    onPause,
+  ]);
 
   const codeLines = code.split('\n');
   const currentVars = activeStep ? activeStep.variables : initialVariables;
@@ -254,44 +287,46 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
       </div>
 
       {/* Main Split-Screen Environment */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
-        {/* LEFT SIDE — REAL-LIFE SIMULATION */}
-        <div className="lg:col-span-7">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
-            {children}
-          </div>
-        </div>
-
-        {/* RIGHT SIDE — PYTHON CODE & VARIABLE INSPECTOR */}
-        <div className="lg:col-span-5 space-y-4">
-          {/* Code Execution Viewer */}
-          <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-lg shadow-slate-900/5">
-            <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs">
-              <span className="font-mono font-medium text-slate-200">
-                {meta.id.replace(/-/g, '_')}.py
-              </span>
-              <span className="font-mono text-sky-300 tabular-nums">
-                {activeStep
-                  ? `Line ${activeStep.line} · ${activeStep.statusLabel}`
-                  : isFinished
-                  ? 'Execution Complete'
-                  : 'Ready to Run'}
-              </span>
+      <SimulatorSpeedContext.Provider value={speedCtxValue}>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-start">
+          {/* LEFT SIDE — REAL-LIFE SIMULATION */}
+          <div className="lg:col-span-7">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+              {children}
             </div>
+          </div>
 
-            <div className="overflow-x-auto py-3 font-mono text-xs sm:text-[13px] leading-6">
-              {codeLines.map((lineText, idx) => {
-                const lineNum = idx + 1;
-                const isActive = activeStep?.line === lineNum;
-                return (
-                  <div
-                    key={lineNum}
-                    className={`flex items-center px-3 transition-colors duration-150 ${
-                      isActive
-                        ? 'bg-gradient-to-r from-[#38BDF8]/25 via-[#2563EB]/20 to-[#8B5CF6]/20'
-                        : 'hover:bg-slate-800/40'
-                    }`}
-                  >
+          {/* RIGHT SIDE — PYTHON CODE & VARIABLE INSPECTOR */}
+          <div className="lg:col-span-5 space-y-4">
+            {/* Code Execution Viewer */}
+            <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-[#0F172A] shadow-lg shadow-slate-900/5">
+              <div className="flex items-center justify-between border-b border-slate-800 bg-[#1E293B] px-4 py-2.5 text-xs">
+                <span className="font-mono font-medium text-slate-200">
+                  {meta.id.replace(/-/g, '_')}.py
+                </span>
+                <span className="font-mono text-sky-300 tabular-nums">
+                  {activeStep
+                    ? `Line ${activeStep.line} · ${activeStep.statusLabel}`
+                    : isFinished
+                    ? 'Execution Complete'
+                    : 'Ready to Run'}
+                </span>
+              </div>
+
+              <div className="overflow-x-auto py-3 font-mono text-xs sm:text-[13px] leading-6">
+                {codeLines.map((lineText, idx) => {
+                  const lineNum = idx + 1;
+                  const isActive = activeStep?.line === lineNum;
+                  return (
+                    <div
+                      key={lineNum}
+                      style={{ transitionDuration: `${speedCtxValue.scaleMs(160)}ms` }}
+                      className={`flex items-center px-3 transition-colors ${
+                        isActive
+                          ? 'bg-gradient-to-r from-[#38BDF8]/25 via-[#2563EB]/20 to-[#8B5CF6]/20'
+                          : 'hover:bg-slate-800/40'
+                      }`}
+                    >
                     <span className="w-5 shrink-0 select-none text-center text-[10px] font-bold text-sky-400">
                       {isActive ? '▶' : ''}
                     </span>
@@ -400,13 +435,14 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           </div>
         </div>
       </div>
+      </SimulatorSpeedContext.Provider>
 
       {/* BOTTOM SECTION — CONTROLS, EXPLANATION, CONSOLE & EXECUTION HISTORY */}
       <div className="mt-6 space-y-5">
         {/* Execution Controls Bar */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-2.5">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
               {!isPlaying ? (
                 <button
                   type="button"
@@ -427,6 +463,18 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 </button>
               )}
 
+              {onPrevStep && (
+                <button
+                  type="button"
+                  onClick={onPrevStep}
+                  disabled={stepIndex <= 0}
+                  className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-3.5 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] disabled:opacity-40 whitespace-nowrap"
+                >
+                  <SkipBack className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
+                  Prev
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={() => {
@@ -434,7 +482,7 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                   onNextStep();
                 }}
                 disabled={isFinished}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] disabled:opacity-40 whitespace-nowrap"
+                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-sky-300 hover:bg-[#F0F9FF] disabled:opacity-40 whitespace-nowrap"
               >
                 <SkipForward className="h-3.5 w-3.5 text-[#2563EB]" aria-hidden="true" />
                 Next Step
@@ -443,61 +491,37 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
               <button
                 type="button"
                 onClick={onReset}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-[#64748B] transition-colors hover:bg-slate-50 hover:text-[#1E293B] whitespace-nowrap"
+                className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-[#64748B] transition-colors hover:bg-slate-50 hover:text-[#1E293B] whitespace-nowrap"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset
               </button>
             </div>
 
-            {/* Speed Slider + Presets & Step Progress */}
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <Gauge className="h-4 w-4 text-[#64748B]" aria-hidden="true" />
-                <label htmlFor="sim-speed-slider" className="text-xs font-medium text-[#64748B]">
-                  Speed
-                </label>
-                <input
-                  id="sim-speed-slider"
-                  type="range"
-                  min={150}
-                  max={1450}
-                  step={50}
-                  value={1600 - speedMs}
-                  onChange={(e) => onChangeSpeed(1600 - Number(e.target.value))}
-                  className="w-24 accent-[#2563EB] cursor-pointer"
+            <div className="flex items-center gap-2.5">
+              <span className="font-mono text-xs font-semibold text-[#1E293B] tabular-nums">
+                Step {stepIndex} / {totalSteps}
+              </span>
+              <div className="h-2 w-28 overflow-hidden rounded-full bg-slate-100">
+                <div
+                  style={{
+                    width: `${progressPct}%`,
+                    transitionDuration: `${speedCtxValue.scaleMs(220)}ms`,
+                  }}
+                  className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] transition-all"
                 />
-                <div className="inline-flex rounded-xl border border-slate-200 bg-[#F8FAFC] p-0.5">
-                  {SPEED_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.ms}
-                      type="button"
-                      onClick={() => onChangeSpeed(opt.ms)}
-                      className={`rounded-lg px-2 py-1 text-[11px] font-semibold transition-all whitespace-nowrap ${
-                        speedMs === opt.ms
-                          ? 'bg-gradient-to-r from-[#2563EB] to-[#8B5CF6] text-white shadow-xs'
-                          : 'text-[#64748B] hover:text-[#1E293B]'
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <span className="font-mono text-xs font-semibold text-[#1E293B] tabular-nums">
-                  Step {stepIndex} / {totalSteps}
-                </span>
-                <div className="h-2 w-24 overflow-hidden rounded-full bg-slate-100">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#38BDF8] to-[#8B5CF6] transition-all duration-200"
-                    style={{ width: `${progressPct}%` }}
-                  />
-                </div>
               </div>
             </div>
           </div>
+
+          <AnimationSpeedController
+            speedMs={speedMs}
+            onChangeSpeedMs={onChangeSpeed}
+            totalSteps={totalSteps}
+            currentStep={stepIndex}
+            pauseOnBranches={pauseOnBranches}
+            onTogglePauseOnBranches={() => setPauseOnBranches((v) => !v)}
+          />
         </div>
 
         {/* Step-by-Step Explanation + Live Output Console */}
@@ -596,15 +620,8 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                 <div className="max-h-44 space-y-1.5 overflow-y-auto pr-1">
                   {executedHistory.map((step, idx) => {
                     const isCurrent = idx === executedHistory.length - 1;
-                    return (
-                      <div
-                        key={idx}
-                        className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs ${
-                          isCurrent
-                            ? 'border-sky-300 bg-[#F0F9FF]'
-                            : 'border-slate-100 bg-[#F8FAFC]'
-                        }`}
-                      >
+                    const rowContent = (
+                      <>
                         <div className="flex items-center gap-2.5 min-w-0">
                           <span className="font-mono text-[11px] font-bold text-[#2563EB] tabular-nums">
                             #{idx + 1} · L{step.line}
@@ -614,6 +631,36 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
                         <span className="font-mono text-[11px] font-semibold text-[#64748B] shrink-0">
                           {step.statusLabel}
                         </span>
+                      </>
+                    );
+
+                    if (onJumpToStep) {
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => onJumpToStep(idx + 1)}
+                          className={`flex w-full flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-xs transition-colors ${
+                            isCurrent
+                              ? 'border-sky-300 bg-[#F0F9FF]'
+                              : 'border-slate-100 bg-[#F8FAFC] hover:border-sky-200'
+                          }`}
+                        >
+                          {rowContent}
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-2 text-xs ${
+                          isCurrent
+                            ? 'border-sky-300 bg-[#F0F9FF]'
+                            : 'border-slate-100 bg-[#F8FAFC]'
+                        }`}
+                      >
+                        {rowContent}
                       </div>
                     );
                   })}

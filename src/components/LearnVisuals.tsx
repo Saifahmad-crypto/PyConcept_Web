@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Play, RotateCcw, Pause, Box } from 'lucide-react';
+import {
+  AnimationSpeedController,
+  BASE_STEP_MS,
+  scaleAnimationMs,
+} from './simulators/AnimationSpeedController';
 
 /**
  * 1. Interactive Variable Memory Box & Type Inspector (Topic: Python Basics)
@@ -205,6 +210,7 @@ export const LoopTimelineStepper: React.FC = () => {
   const [maxN, setMaxN] = useState(5);
   const [stepIndex, setStepIndex] = useState(0); // 0 .. maxN
   const [playing, setPlaying] = useState(false);
+  const [speedMs, setSpeedMs] = useState(BASE_STEP_MS);
 
   useEffect(() => {
     if (!playing) return;
@@ -216,9 +222,9 @@ export const LoopTimelineStepper: React.FC = () => {
         }
         return prev + 1;
       });
-    }, 850);
+    }, speedMs);
     return () => clearInterval(timer);
-  }, [playing, maxN]);
+  }, [playing, maxN, speedMs]);
 
   const iterations = Array.from({ length: maxN }, (_, idx) => idx + 1);
   const runningTotal = iterations
@@ -316,6 +322,12 @@ export const LoopTimelineStepper: React.FC = () => {
         </div>
 
         <div className="flex flex-col justify-center gap-3 md:col-span-8">
+          <AnimationSpeedController
+            speedMs={speedMs}
+            onChangeSpeedMs={setSpeedMs}
+            compact
+          />
+
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
             {iterations.map((n, idx) => {
               const active = idx + 1 === stepIndex;
@@ -324,6 +336,7 @@ export const LoopTimelineStepper: React.FC = () => {
               return (
                 <div
                   key={n}
+                  style={{ transitionDuration: `${scaleAnimationMs(240, speedMs)}ms` }}
                   className={`rounded-xl border p-2.5 text-center font-mono transition-all ${
                     active
                       ? 'border-violet-500 bg-gradient-to-br from-[#2563EB] to-[#8B5CF6] text-white shadow-md scale-[1.03]'

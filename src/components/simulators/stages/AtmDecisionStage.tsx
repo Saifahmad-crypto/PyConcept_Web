@@ -3,6 +3,7 @@ import { CreditCard, ShieldCheck, ShieldAlert, Banknote, Lock } from 'lucide-rea
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -76,6 +77,8 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onPlay={runner.play}
       onPause={runner.pause}
       onNextStep={runner.nextStep}
+      onPrevStep={runner.prevStep}
+      onJumpToStep={runner.jumpToStep}
       onReset={runner.reset}
       onChangeSpeed={runner.setSpeedMs}
       onBackToHub={onBackToHub}
@@ -209,7 +212,8 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   </div>
                   <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-200">
                     <div
-                      className={`h-full transition-all duration-500 ${
+                      style={{ transitionDuration: `${scaleAnimationMs(450, runner.speedMs)}ms` }}
+                      className={`h-full transition-all ${
                         atmPhase === 'wrong-pin'
                           ? 'w-1/4 bg-rose-500'
                           : runner.stepIndex > 0

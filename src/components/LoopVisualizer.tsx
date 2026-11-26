@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Play, Pause, SkipForward, RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 import { FlowchartSVG } from './FlowchartSVG';
+import {
+  AnimationSpeedController,
+  BASE_STEP_MS,
+  scaleAnimationMs,
+} from './simulators/AnimationSpeedController';
 
 type LoopMode = 'for' | 'while';
 
@@ -24,7 +29,8 @@ export const LoopVisualizer: React.FC = () => {
   const [stepVal, setStepVal] = useState<number>(1);
   const [stepIdx, setStepIdx] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [speedMs, setSpeedMs] = useState<number>(850);
+  const [speedMs, setSpeedMs] = useState<number>(BASE_STEP_MS);
+  const [pauseOnBranches, setPauseOnBranches] = useState<boolean>(true);
 
   const { code, steps, sequenceValues, warning } = useMemo(() => {
     const safeStep = stepVal === 0 ? 1 : stepVal;
@@ -189,11 +195,13 @@ export const LoopVisualizer: React.FC = () => {
       setIsPlaying(false);
       return;
     }
+    const isConditionStep = currentStep?.flowNode === 'check' || currentStep?.flowNode === 'end';
+    const delay = pauseOnBranches && isConditionStep ? Math.round(speedMs * 1.45) : speedMs;
     const timer = setTimeout(() => {
       setStepIdx((prev) => Math.min(prev + 1, steps.length - 1));
-    }, speedMs);
+    }, delay);
     return () => clearTimeout(timer);
-  }, [isPlaying, stepIdx, steps.length, speedMs]);
+  }, [isPlaying, stepIdx, steps.length, speedMs, pauseOnBranches, currentStep?.flowNode]);
 
   const resetSim = () => {
     setIsPlaying(false);
@@ -242,7 +250,7 @@ export const LoopVisualizer: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 md:col-span-5">
+          <div className="grid grid-cols-3 gap-3 md:col-span-9">
             <label className="text-xs font-semibold text-slate-600">
               Start
               <input
@@ -280,26 +288,20 @@ export const LoopVisualizer: React.FC = () => {
               />
             </label>
           </div>
-
-          <div className="md:col-span-4">
-            <div className="flex items-center justify-between text-xs text-slate-600">
-              <label htmlFor="loop-speed" className="font-semibold">Animation Speed</label>
-              <span className="font-mono font-medium text-slate-700 tabular-nums">{speedMs} ms</span>
-            </div>
-            <input
-              id="loop-speed"
-              type="range"
-              min={250}
-              max={1600}
-              step={150}
-              value={speedMs}
-              onChange={(e) => setSpeedMs(Number(e.target.value))}
-              className="mt-2 w-full accent-violet-500 cursor-pointer"
-            />
-          </div>
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4">
+        <div className="mt-4">
+          <AnimationSpeedController
+            speedMs={speedMs}
+            onChangeSpeedMs={setSpeedMs}
+            totalSteps={Math.max(0, steps.length - 1)}
+            currentStep={stepIdx}
+            pauseOnBranches={pauseOnBranches}
+            onTogglePauseOnBranches={() => setPauseOnBranches((v) => !v)}
+          />
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4">
           <button
             type="button"
             onClick={() => {
@@ -310,6 +312,19 @@ export const LoopVisualizer: React.FC = () => {
           >
             {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             {isPlaying ? 'Pause' : 'Play'}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setIsPlaying(false);
+              setStepIdx((prev) => Math.max(0, prev - 1));
+            }}
+            disabled={stepIdx <= 0}
+            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-[#1E293B] transition-colors hover:border-violet-300 hover:bg-violet-50/40 disabled:opacity-40 whitespace-nowrap"
+          >
+            <SkipBack className="h-4 w-4 text-violet-600" />
+            Prev
           </button>
 
           <button
@@ -405,26 +420,27 @@ export const LoopVisualizer: React.FC = () => {
                 const isActive = currentStep.iteration === iterNum && currentStep.conditionResult;
                 const isCompleted = iterNum <= accumulatedOutputs.length;
                 return (
-                  <div
-                    key={`${val}-${idx}`}
-                    className={`flex h-11 min-w-[48px] flex-col items-center justify-center rounded-xl border px-2.5 font-mono transition-all duration-200 ${
-                      isActive
-                        ? 'border-violet-400 bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white shadow-sm scale-105'
-                        : isCompleted
-                        ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                        : 'border-slate-200 bg-[#F8FAFC] text-slate-400'
-                    }`}
-                  >
-                    <span className="text-sm font-bold tabular-nums">{val}</span>
-                    <span className={`text-[9px] ${isActive ? 'text-white/90' : 'text-slate-400'}`}>
-                      #{iterNum}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+                    <div
+                      key={`${val}-${idx}`}
+                      style={{ transitionDuration: `${scaleAnimationMs(200, speedMs)}ms` }}
+                      className={`flex h-11 min-w-[48px] flex-col items-center justify-center rounded-xl border px-2.5 font-mono transition-all ${
+                        isActive
+                          ? 'border-violet-400 bg-gradient-to-br from-[#38BDF8] to-[#8B5CF6] text-white shadow-sm scale-105'
+                          : isCompleted
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                          : 'border-slate-200 bg-[#F8FAFC] text-slate-400'
+                      }`}
+                    >
+                      <span className="text-sm font-bold tabular-nums">{val}</span>
+                      <span className={`text-[9px] ${isActive ? 'text-white/90' : 'text-slate-400'}`}>
+                        #{iterNum}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
 
         {/* Graphical Visualization: Loop Iteration Bars & Counter Progression Chart */}
         {sequenceValues.length > 0 && (
@@ -447,14 +463,17 @@ export const LoopVisualizer: React.FC = () => {
                   <div key={idx} className="flex min-w-[34px] flex-1 flex-col items-center justify-end h-full">
                     <span className="mb-1 font-mono text-[10px] font-semibold text-slate-700 tabular-nums">{val}</span>
                     <div
-                      className={`w-full max-w-[36px] rounded-t-lg transition-all duration-200 ${
+                      className={`w-full max-w-[36px] rounded-t-lg transition-all ${
                         isCurrent
                           ? 'bg-gradient-to-t from-[#0EA5E9] to-[#8B5CF6]'
                           : isDone
                           ? 'bg-sky-400'
                           : 'bg-slate-200'
                       }`}
-                      style={{ height: `${heightPct}%` }}
+                      style={{
+                        height: `${heightPct}%`,
+                        transitionDuration: `${scaleAnimationMs(220, speedMs)}ms`,
+                      }}
                     />
                     <span className="mt-1 font-mono text-[10px] text-slate-500 tabular-nums">i{iterNum}</span>
                   </div>

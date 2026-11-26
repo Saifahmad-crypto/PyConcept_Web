@@ -3,6 +3,7 @@ import { Fan, Snowflake, Thermometer, Power } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+import { scaleAnimationMs } from '../AnimationSpeedController';
 
 interface Props {
   meta: SimulatorMeta;
@@ -69,6 +70,14 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         setReactiveMode(false);
         runner.nextStep();
       }}
+      onPrevStep={() => {
+        setReactiveMode(false);
+        runner.prevStep();
+      }}
+      onJumpToStep={(s) => {
+        setReactiveMode(false);
+        runner.jumpToStep(s);
+      }}
       onReset={() => {
         setReactiveMode(false);
         runner.reset();
@@ -126,7 +135,11 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                   >
                     <Fan
                       className={`h-5 w-5 ${acRunning ? 'animate-spin' : ''}`}
-                      style={acRunning ? { animationDuration: '1.1s' } : undefined}
+                      style={
+                        acRunning
+                          ? { animationDuration: `${scaleAnimationMs(1100, runner.speedMs)}ms` }
+                          : undefined
+                      }
                       aria-hidden="true"
                     />
                   </div>
@@ -223,12 +236,15 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
                 title="28°C Threshold"
               />
               <div
-                className={`w-full rounded-full transition-all duration-300 ${
+                className={`w-full rounded-full transition-all ${
                   temperature > 28
                     ? 'bg-gradient-to-t from-amber-500 to-rose-500'
                     : 'bg-gradient-to-t from-[#0EA5E9] to-[#38BDF8]'
                 }`}
-                style={{ height: `${Math.max(10, thermometerPct)}%` }}
+                style={{
+                  height: `${Math.max(10, thermometerPct)}%`,
+                  transitionDuration: `${scaleAnimationMs(300, runner.speedMs)}ms`,
+                }}
               />
             </div>
 
