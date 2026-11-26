@@ -3,6 +3,7 @@ import { SimulatorId, TutorSimulatorContext } from '../../types';
 import { SIMULATORS_CATALOG } from '../../simulators/simulatorsData';
 import { SimulatorsHub } from './SimulatorsHub';
 import {
+  SimulatorChallengeContext,
   SimulatorRunContext,
   SimulatorSpeedProvider,
   SimulatorTutorContext,
@@ -22,6 +23,8 @@ interface SimulatorsSectionProps {
   visitedSimulators?: string[];
   onRecordSimulatorRun?: (id: SimulatorId) => void;
   onAskTutor?: (ctx: TutorSimulatorContext) => void;
+  completedChallenges?: string[];
+  onOpenChallenge?: (challengeId: string) => void;
 }
 
 export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
@@ -30,6 +33,8 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
   visitedSimulators = [],
   onRecordSimulatorRun,
   onAskTutor,
+  completedChallenges = [],
+  onOpenChallenge,
 }) => {
   const handleSelect = (id: SimulatorId) => {
     onSelectSimulator(id);
@@ -85,7 +90,15 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
     <SimulatorSpeedProvider>
       <SimulatorRunContext.Provider value={onRecordSimulatorRun ?? null}>
         <SimulatorTutorContext.Provider value={onAskTutor ?? null}>
-          {renderStage()}
+          <SimulatorChallengeContext.Provider
+            value={
+              onOpenChallenge
+                ? { completedChallenges, onOpenChallenge }
+                : null
+            }
+          >
+            {renderStage()}
+          </SimulatorChallengeContext.Provider>
         </SimulatorTutorContext.Provider>
       </SimulatorRunContext.Provider>
     </SimulatorSpeedProvider>

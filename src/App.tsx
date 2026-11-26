@@ -31,6 +31,7 @@ export default function App() {
   const [activeRevisionTab, setActiveRevisionTab] = useState<RevisionTabId>('cheat-sheets');
   const [selectedSimulator, setSelectedSimulator] = useState<SimulatorId | null>(null);
   const [sandboxCode, setSandboxCode] = useState<string | null>(null);
+  const [selectedChallengeId, setSelectedChallengeId] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [pendingTutorSimContext, setPendingTutorSimContext] =
     useState<TutorSimulatorContext | null>(null);
@@ -141,6 +142,19 @@ export default function App() {
     setSandboxCode(null);
   }, []);
 
+  const handleOpenChallenge = useCallback(
+    (challengeId: string) => {
+      setSelectedChallengeId(challengeId);
+      setActiveStudioTab('challenges');
+      navigateTo('studio');
+    },
+    [navigateTo]
+  );
+
+  const handleConsumeChallengeId = useCallback(() => {
+    setSelectedChallengeId(null);
+  }, []);
+
   const handleAskTutorFromSimulator = useCallback(
     (ctx: TutorSimulatorContext) => {
       setPendingTutorSimContext(ctx);
@@ -209,6 +223,8 @@ export default function App() {
               onRecordSimulatorRun={recordSimulatorRun}
               onAskTutor={handleAskTutorFromSimulator}
               onOpenInStudio={handleOpenInPlayground}
+              completedChallenges={progress.completedChallenges}
+              onOpenChallenge={handleOpenChallenge}
             />
           )}
 
@@ -242,6 +258,8 @@ export default function App() {
               onDeleteSnippet={deleteSnippet}
               completedChallenges={progress.completedChallenges}
               onCompleteChallenge={markChallengeComplete}
+              externalChallengeId={selectedChallengeId}
+              onConsumeExternalChallenge={handleConsumeChallengeId}
             />
           )}
 

@@ -30,6 +30,8 @@ interface InteractiveLabPageProps {
   onRecordSimulatorRun: (id: SimulatorId) => void;
   onAskTutor: (ctx: TutorSimulatorContext) => void;
   onOpenInStudio: (code: string) => void;
+  completedChallenges?: string[];
+  onOpenChallenge?: (challengeId: string) => void;
 }
 
 const LAB_TABS: Array<{
@@ -54,6 +56,8 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
   onRecordSimulatorRun,
   onAskTutor,
   onOpenInStudio,
+  completedChallenges = [],
+  onOpenChallenge,
 }) => {
   const normalizedTab: Exclude<LabTabId, 'conditional-sim' | 'loop-viz' | 'games'> =
     activeTab === 'conditional-sim'
@@ -136,6 +140,8 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
           visitedSimulators={visitedSimulators}
           onRecordSimulatorRun={onRecordSimulatorRun}
           onAskTutor={onAskTutor}
+          completedChallenges={completedChallenges}
+          onOpenChallenge={onOpenChallenge}
         />
       )}
 
@@ -165,7 +171,10 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
             </div>
           </div>
 
-          <ConditionalSimulator />
+          <ConditionalSimulator
+            completedChallenges={completedChallenges}
+            onOpenChallenge={onOpenChallenge}
+          />
         </div>
       )}
 
@@ -195,7 +204,10 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
             </div>
           </div>
 
-          <LoopVisualizer />
+          <LoopVisualizer
+            completedChallenges={completedChallenges}
+            onOpenChallenge={onOpenChallenge}
+          />
         </div>
       )}
 

@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Play, Pause, SkipForward, RotateCcw, CheckCircle2, XCircle, Terminal } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 import { FlowchartSVG, FlowchartType } from './FlowchartSVG';
+import { ExerciseSuggestionModal } from './simulators/ExerciseSuggestionModal';
 
 type SimExampleId = 'if-basic' | 'if-else' | 'if-elif-else' | 'nested-if';
 
@@ -29,13 +30,23 @@ const EXAMPLES: Array<{
   { id: 'nested-if', label: 'Nested if (Entry Gate)', flowchart: 'nested-if', inputLabel: 'age', defaultVal: 21, hasSecondary: true },
 ];
 
-export const ConditionalSimulator: React.FC = () => {
+interface ConditionalSimulatorProps {
+  completedChallenges?: string[];
+  onOpenChallenge?: (challengeId: string) => void;
+}
+
+export const ConditionalSimulator: React.FC<ConditionalSimulatorProps> = ({
+  completedChallenges = [],
+  onOpenChallenge,
+}) => {
   const [exampleId, setExampleId] = useState<SimExampleId>('if-elif-else');
   const [inputValue, setInputValue] = useState<number>(85);
   const [hasId, setHasId] = useState<boolean>(true);
   const [stepIdx, setStepIdx] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [speedMs, setSpeedMs] = useState<number>(950);
+  const [suggestionOpen, setSuggestionOpen] = useState<boolean>(false);
+  const shownSuggestionRef = useRef<boolean>(false);
 
   const activeExample = EXAMPLES.find((e) => e.id === exampleId)!;
 
@@ -345,6 +356,19 @@ export const ConditionalSimulator: React.FC = () => {
     .filter((line): line is string => Boolean(line));
 
   useEffect(() => {
+    if (stepIdx === 0) {
+      shownSuggestionRef.current = false;
+      setSuggestionOpen(false);
+    } else if (stepIdx >= steps.length - 1 && !shownSuggestionRef.current && onOpenChallenge) {
+      shownSuggestionRef.current = true;
+      const timer = window.setTimeout(() => {
+        setSuggestionOpen(true);
+      }, 350);
+      return () => window.clearTimeout(timer);
+    }
+  }, [stepIdx, steps.length, onOpenChallenge]);
+
+  useEffect(() => {
     if (!isPlaying) return;
     if (stepIdx >= steps.length - 1) {
       setIsPlaying(false);
@@ -579,6 +603,21 @@ export const ConditionalSimulator: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {onOpenChallenge && (
+        <ExerciseSuggestionModal
+          isOpen={suggestionOpen}
+          simulationTitle={activeExample.label}
+          patternKey={exampleId}
+          completedChallenges={completedChallenges}
+          onClose={() => setSuggestionOpen(false)}
+          onReplay={() => {
+            setStepIdx(0);
+            setIsPlaying(true);
+          }}
+          onStartChallenge={onOpenChallenge}
+        />
+      )}
     </div>
   );
 };

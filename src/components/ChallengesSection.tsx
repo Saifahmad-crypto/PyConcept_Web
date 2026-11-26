@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CheckCircle2,
   Play,
@@ -15,6 +15,8 @@ import { CodeBlock } from './CodeBlock';
 interface ChallengesSectionProps {
   completedChallenges: string[];
   onCompleteChallenge: (id: string) => void;
+  externalChallengeId?: string | null;
+  onConsumeExternalChallenge?: () => void;
 }
 
 type ChallengeTopic = Exclude<TopicId, 'basics'>;
@@ -22,6 +24,8 @@ type ChallengeTopic = Exclude<TopicId, 'basics'>;
 export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   completedChallenges,
   onCompleteChallenge,
+  externalChallengeId,
+  onConsumeExternalChallenge,
 }) => {
   const [topicFilter, setTopicFilter] = useState<ChallengeTopic>('conditionals');
   const filteredChallenges = CODING_CHALLENGES.filter((c) => c.topic === topicFilter);
@@ -44,6 +48,19 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   } | null>(null);
   const [showHint, setShowHint] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
+
+  useEffect(() => {
+    if (!externalChallengeId) return;
+    const found = CODING_CHALLENGES.find((c) => c.id === externalChallengeId);
+    if (found) {
+      setTopicFilter(found.topic);
+      setActiveId(found.id);
+      setFeedback(null);
+      setShowHint(false);
+      setShowSolution(false);
+    }
+    onConsumeExternalChallenge?.();
+  }, [externalChallengeId, onConsumeExternalChallenge]);
 
   const selectChallenge = (id: string) => {
     setActiveId(id);

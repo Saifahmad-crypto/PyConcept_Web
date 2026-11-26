@@ -29,6 +29,8 @@ import {
   useSimulatorSpeed,
 } from './AnimationSpeedController';
 
+import { ExerciseSuggestionModal } from './ExerciseSuggestionModal';
+
 export { SimulatorSpeedProvider, useSimulatorSpeed };
 
 export const SimulatorTutorContext = createContext<
@@ -38,6 +40,11 @@ export const SimulatorTutorContext = createContext<
 export const SimulatorRunContext = createContext<
   ((id: SimulatorId) => void) | null
 >(null);
+
+export const SimulatorChallengeContext = createContext<{
+  completedChallenges: string[];
+  onOpenChallenge: (challengeId: string) => void;
+} | null>(null);
 
 export interface SimulatorShellProps {
   meta: SimulatorMeta;
@@ -177,11 +184,14 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
 
   const [historyOpen, setHistoryOpen] = useState(true);
   const [frameProgress, setFrameProgress] = useState(0);
+  const [suggestionOpen, setSuggestionOpen] = useState(false);
   const recordedRunRef = useRef(false);
+  const shownSuggestionForRunRef = useRef(false);
   const frameProgressRef = useRef(0);
 
   const onAskTutor = useContext(SimulatorTutorContext);
   const onRecordRun = useContext(SimulatorRunContext);
+  const challengeCtx = useContext(SimulatorChallengeContext);
 
   const isDecisionStep =
     activeStep?.kind === 'if' ||
@@ -224,11 +234,26 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
   useEffect(() => {
     if (stepIndex === 0) {
       recordedRunRef.current = false;
+      shownSuggestionForRunRef.current = false;
+      setSuggestionOpen(false);
     } else if (stepIndex >= 1 && !recordedRunRef.current && onRecordRun) {
       recordedRunRef.current = true;
       onRecordRun(meta.id);
     }
   }, [stepIndex, meta.id, onRecordRun]);
+
+  // Open Exercise Suggestion modal cleanly once per simulation completion
+  useEffect(() => {
+    if (!isFinished) return;
+    if (shownSuggestionForRunRef.current) return;
+    if (!challengeCtx?.onOpenChallenge) return;
+
+    shownSuggestionForRunRef.current = true;
+    const timer = window.setTimeout(() => {
+      setSuggestionOpen(true);
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [isFinished, challengeCtx]);
 
   // Reset per-frame progress whenever the active step changes or playback stops
   useEffect(() => {
@@ -774,6 +799,21 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           )}
         </div>
       </div>
+
+      {challengeCtx?.onOpenChallenge && (
+        <ExerciseSuggestionModal
+          isOpen={suggestionOpen}
+          simulationTitle={meta.title}
+          patternKey={meta.id}
+          completedChallenges={challengeCtx.completedChallenges}
+          onClose={() => setSuggestionOpen(false)}
+          onReplay={() => {
+            onReset();
+            window.setTimeout(() => onPlay(), 40);
+          }}
+          onStartChallenge={challengeCtx.onOpenChallenge}
+        />
+      )}
     </div>
   );
 };

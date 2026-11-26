@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Play, Pause, SkipBack, SkipForward, RotateCcw, CheckCircle2, XCircle } from 'lucide-react';
 import { CodeBlock } from './CodeBlock';
 import { FlowchartSVG } from './FlowchartSVG';
@@ -7,6 +7,7 @@ import {
   BASE_STEP_MS,
   scaleAnimationMs,
 } from './simulators/AnimationSpeedController';
+import { ExerciseSuggestionModal } from './simulators/ExerciseSuggestionModal';
 
 type LoopMode = 'for' | 'while';
 
@@ -22,7 +23,15 @@ interface LoopStep {
   note: string;
 }
 
-export const LoopVisualizer: React.FC = () => {
+interface LoopVisualizerProps {
+  completedChallenges?: string[];
+  onOpenChallenge?: (challengeId: string) => void;
+}
+
+export const LoopVisualizer: React.FC<LoopVisualizerProps> = ({
+  completedChallenges = [],
+  onOpenChallenge,
+}) => {
   const [loopType, setLoopType] = useState<LoopMode>('for');
   const [startVal, setStartVal] = useState<number>(1);
   const [stopVal, setStopVal] = useState<number>(6);
@@ -31,6 +40,8 @@ export const LoopVisualizer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [speedMs, setSpeedMs] = useState<number>(BASE_STEP_MS);
   const [pauseOnBranches, setPauseOnBranches] = useState<boolean>(true);
+  const [suggestionOpen, setSuggestionOpen] = useState<boolean>(false);
+  const shownSuggestionRef = useRef<boolean>(false);
 
   const { code, steps, sequenceValues, warning } = useMemo(() => {
     const safeStep = stepVal === 0 ? 1 : stepVal;
@@ -188,6 +199,19 @@ export const LoopVisualizer: React.FC = () => {
   const historyRows = steps
     .slice(0, stepIdx + 1)
     .filter((s) => s.outputEmitted !== undefined);
+
+  useEffect(() => {
+    if (stepIdx === 0) {
+      shownSuggestionRef.current = false;
+      setSuggestionOpen(false);
+    } else if (stepIdx >= steps.length - 1 && !shownSuggestionRef.current && onOpenChallenge) {
+      shownSuggestionRef.current = true;
+      const timer = window.setTimeout(() => {
+        setSuggestionOpen(true);
+      }, 350);
+      return () => window.clearTimeout(timer);
+    }
+  }, [stepIdx, steps.length, onOpenChallenge]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -537,6 +561,21 @@ export const LoopVisualizer: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {onOpenChallenge && (
+        <ExerciseSuggestionModal
+          isOpen={suggestionOpen}
+          simulationTitle={loopType === 'for' ? 'for Loop Visualizer' : 'while Loop Visualizer'}
+          patternKey={loopType}
+          completedChallenges={completedChallenges}
+          onClose={() => setSuggestionOpen(false)}
+          onReplay={() => {
+            setStepIdx(0);
+            setIsPlaying(true);
+          }}
+          onStartChallenge={onOpenChallenge}
+        />
+      )}
     </div>
   );
 };
