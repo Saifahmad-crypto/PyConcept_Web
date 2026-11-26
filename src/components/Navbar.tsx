@@ -16,6 +16,7 @@ import {
   Github,
   Instagram,
   Linkedin,
+  Twitter,
 } from 'lucide-react';
 import { SectionId, UserPreferences } from '../types';
 import { getLearnerLevel } from '../data/ecosystemData';
@@ -167,6 +168,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="LinkedIn: saif-ahmad-tech"
             >
               <Linkedin className="h-4 w-4" aria-hidden="true" />
+            </a>
+            <a
+              href="https://x.com/Saif4hmad"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-[#FBF5F9] text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+              aria-label="Twitter / X"
+              title="X (Twitter): @Saif4hmad"
+            >
+              <Twitter className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
 
@@ -372,6 +383,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="LinkedIn: saif-ahmad-tech"
               >
                 <Linkedin className="h-4 w-4" aria-hidden="true" />
+              </a>
+              <a
+                href="https://x.com/Saif4hmad"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] bg-white text-[#8A8585] transition-colors hover:border-[#100303] hover:text-[#100303]"
+                aria-label="Twitter / X Profile"
+                title="X (Twitter): @Saif4hmad"
+              >
+                <Twitter className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
             <button
