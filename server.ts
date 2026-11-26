@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
-const DEFAULT_MODEL = 'gemini-4-hydrogen';
+const DEFAULT_MODEL = 'gemini-3.1-flash-lite';
 
 function getConfiguredModel(): string {
   const raw = (process.env.GEMINI_MODEL || '').trim();
