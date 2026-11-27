@@ -96,6 +96,30 @@ const PATTERN_TO_CHALLENGE: Record<
     patternSummary:
       'Initialize total = 0 before the loop and accumulate values across every pass.',
   },
+  'fizzbuzz': {
+    challengeId: 'ch-l4',
+    patternName: 'FizzBuzz Modulo with for loop',
+    patternSummary:
+      'Combine for loop range iteration with % 3, % 5, and % 15 conditions.',
+  },
+  'number-guessing': {
+    challengeId: 'ch-l3',
+    patternName: 'Binary Search while True + break',
+    patternSummary:
+      'Master while True loops with condition termination and dynamic range window updates.',
+  },
+  'pattern-printer': {
+    challengeId: 'ch-l1',
+    patternName: 'Nested Loops (for i in ... for j in ...)',
+    patternSummary:
+      'Construct multi-dimensional coordinate grids and shape hierarchies using inner loops.',
+  },
+  'multiplication-table': {
+    challengeId: 'ch-l1',
+    patternName: 'Range Multiplier Sequence',
+    patternSummary:
+      'Generate step arithmetic sequences row-by-row using for loop and range bounds.',
+  },
   'if-basic': {
     challengeId: 'ch-c2',
     patternName: 'Single Condition & Modulo',

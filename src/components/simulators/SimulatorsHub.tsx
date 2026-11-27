@@ -15,6 +15,10 @@ import {
   GraduationCap,
   Calendar,
   Zap,
+  Sparkles,
+  Target,
+  Layers,
+  Calculator,
 } from 'lucide-react';
 import { SimulatorCategory, SimulatorId, SimulatorMeta } from '../../types';
 import { SIMULATORS_CATALOG } from '../../simulators/simulatorsData';
@@ -38,6 +42,10 @@ const SIMULATOR_ICONS: Record<SimulatorId, React.ReactNode> = {
   'countdown-timer': <Timer className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'parking-scanner': <CarFront className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'atm-cash-counter': <Banknote className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'fizzbuzz': <Sparkles className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'number-guessing': <Target className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'pattern-printer': <Layers className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'multiplication-table': <Calculator className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
 };
 
 export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({

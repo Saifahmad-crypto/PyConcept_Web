@@ -65,7 +65,11 @@ export type SimulatorId =
   | 'elevator-floor'
   | 'countdown-timer'
   | 'parking-scanner'
-  | 'atm-cash-counter';
+  | 'atm-cash-counter'
+  | 'fizzbuzz'
+  | 'number-guessing'
+  | 'pattern-printer'
+  | 'multiplication-table';
 
 export type SimulatorCategory = 'conditionals' | 'loops';
 

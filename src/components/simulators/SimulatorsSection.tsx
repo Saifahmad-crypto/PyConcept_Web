@@ -19,6 +19,10 @@ import { ElevatorFloorStage } from './stages/ElevatorFloorStage';
 import { CountdownTimerStage } from './stages/CountdownTimerStage';
 import { ParkingScannerStage } from './stages/ParkingScannerStage';
 import { CashCounterStage } from './stages/CashCounterStage';
+import { FizzBuzzStage } from './stages/FizzBuzzStage';
+import { NumberGuessingStage } from './stages/NumberGuessingStage';
+import { PatternPrinterStage } from './stages/PatternPrinterStage';
+import { MultiplicationTableStage } from './stages/MultiplicationTableStage';
 
 interface SimulatorsSectionProps {
   selectedSimulator: SimulatorId | null;
@@ -92,6 +96,14 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
         return <ParkingScannerStage meta={meta} onBackToHub={handleBack} />;
       case 'atm-cash-counter':
         return <CashCounterStage meta={meta} onBackToHub={handleBack} />;
+      case 'fizzbuzz':
+        return <FizzBuzzStage meta={meta} onBackToHub={handleBack} />;
+      case 'number-guessing':
+        return <NumberGuessingStage meta={meta} onBackToHub={handleBack} />;
+      case 'pattern-printer':
+        return <PatternPrinterStage meta={meta} onBackToHub={handleBack} />;
+      case 'multiplication-table':
+        return <MultiplicationTableStage meta={meta} onBackToHub={handleBack} />;
     }
   };
 

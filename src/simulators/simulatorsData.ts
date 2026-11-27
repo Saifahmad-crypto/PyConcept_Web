@@ -136,4 +136,52 @@ export const SIMULATORS_CATALOG: SimulatorMeta[] = [
       'Currency counters increment note counts and running totals until all notes finish or a limit hits.',
     concepts: ['while loop', 'for loop', 'Accumulation', 'Conditional termination'],
   },
+  {
+    id: 'fizzbuzz',
+    number: '12',
+    title: 'FizzBuzz Simulator',
+    category: 'loops',
+    difficulty: 'Beginner',
+    shortDescription:
+      'Run the classic interview challenge up to N using for loop, modulo (%) arithmetic, and elif.',
+    realLifeScenario:
+      'Batch processors tag items based on recurring numerical periodic intervals (3, 5, or both 15).',
+    concepts: ['for loop', 'range(1, n+1)', 'Modulo (%)', 'if-elif-else inside loop'],
+  },
+  {
+    id: 'number-guessing',
+    number: '13',
+    title: 'Number Guessing (Binary Search)',
+    category: 'loops',
+    difficulty: 'Intermediate',
+    shortDescription:
+      'Watch an AI agent or while True loop narrow down a secret number between 1 and 100 with break.',
+    realLifeScenario:
+      'Database index lookups and binary search algorithms halve the search space every attempt until target is found.',
+    concepts: ['while True loop', 'break statement', 'Dynamic bounds (low/high)', 'Iteration counter'],
+  },
+  {
+    id: 'pattern-printer',
+    number: '14',
+    title: 'Pattern Printer (Nested Loops)',
+    category: 'loops',
+    difficulty: 'Intermediate',
+    shortDescription:
+      'Generate star triangles and pyramids using nested loops (for i... for j...) with Python string multiplier toggle.',
+    realLifeScenario:
+      'Raster graphic engines and terminal formatters draw 2D pixel grids row-by-row and column-by-column.',
+    concepts: ['Nested loops', 'Outer loop (rows)', 'Inner loop (cols)', 'String repetition vs nested loops'],
+  },
+  {
+    id: 'multiplication-table',
+    number: '15',
+    title: 'Multiplication Table Generator',
+    category: 'loops',
+    difficulty: 'Beginner',
+    shortDescription:
+      'Generate mathematical tables row-by-row with for loop and range(1, 11) with live formula breakdown.',
+    realLifeScenario:
+      'Financial systems compute amortization schedules and recurring step multipliers through fixed range iterations.',
+    concepts: ['for loop', 'range() bounds', 'Multiplication arithmetic', 'Formatted strings'],
+  },
 ];
