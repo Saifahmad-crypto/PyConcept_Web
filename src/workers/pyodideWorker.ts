@@ -2,8 +2,6 @@
 // Runs with timeout guards, supports standard output streaming and cooperative input prompt handling.
 
 /* eslint-disable no-restricted-globals */
-declare const importScripts: (...args: string[]) => void;
-
 let pyodide: any = null;
 let isInitializing = false;
 
@@ -22,13 +20,8 @@ async function initPyodide() {
   self.postMessage({ type: 'STATUS', status: 'loading', message: 'Downloading CPython 3.12 WebAssembly environment...' });
 
   try {
-    importScripts(`${PYODIDE_BASE_URL}pyodide.js`);
-    const loadPyodideFn = (self as any).loadPyodide;
-    if (!loadPyodideFn) throw new Error('loadPyodide function is not defined');
-
-    pyodide = await loadPyodideFn({
-      indexURL: PYODIDE_BASE_URL,
-    });
+    const { loadPyodide } = await import(/* @vite-ignore */ `${PYODIDE_BASE_URL}pyodide.mjs`);
+    pyodide = await loadPyodide({ indexURL: PYODIDE_BASE_URL });
 
     self.postMessage({ type: 'STATUS', status: 'ready', message: 'CPython 3.12 Engine ready' });
     isInitializing = false;
