@@ -106,7 +106,7 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-1.5">
+          <div className="flex flex-nowrap overflow-x-auto pb-1 sm:pb-0 sm:flex-wrap gap-1.5 rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-1.5">
             {LAB_TABS.map((tab) => {
               const Icon = tab.icon;
               const active = normalizedTab === tab.id;

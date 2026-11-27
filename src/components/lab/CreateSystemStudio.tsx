@@ -1465,7 +1465,7 @@ function compileExecutionTimeline(project: PyVerseProject): ExecutionStep[] {
       } else if (b.type === 'condition') {
         // Evaluate condition against vars
         const varVal = vars[b.variableName || ''];
-        let targetVal = b.conditionValue;
+        let targetVal: any = b.conditionValue;
         if (targetVal === 'True') targetVal = true;
         if (targetVal === 'False') targetVal = false;
         if (typeof varVal === 'number' && typeof targetVal === 'string') {
@@ -1475,10 +1475,10 @@ function compileExecutionTimeline(project: PyVerseProject): ExecutionStep[] {
         let isMatch = false;
         if (b.operator === '==') isMatch = varVal === targetVal;
         else if (b.operator === '!=') isMatch = varVal !== targetVal;
-        else if (b.operator === '>') isMatch = varVal > targetVal;
-        else if (b.operator === '<') isMatch = varVal < targetVal;
-        else if (b.operator === '>=') isMatch = varVal >= targetVal;
-        else if (b.operator === '<=') isMatch = varVal <= targetVal;
+        else if (b.operator === '>') isMatch = varVal > (targetVal ?? 0);
+        else if (b.operator === '<') isMatch = varVal < (targetVal ?? 0);
+        else if (b.operator === '>=') isMatch = varVal >= (targetVal ?? 0);
+        else if (b.operator === '<=') isMatch = varVal <= (targetVal ?? 0);
 
         steps.push({
           blockId: b.id,

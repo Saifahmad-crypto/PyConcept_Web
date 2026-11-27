@@ -13,21 +13,32 @@ import {
 import { useProgress } from './hooks/useProgress';
 import { useHashRoute } from './hooks/useHashRoute';
 import { Navbar } from './components/Navbar';
-import { LandingPage } from './components/LandingPage';
-import { HomePage } from './components/HomePage';
-import { LearningWorldPage } from './components/LearningWorldPage';
-import { InteractiveLabPage } from './components/lab/InteractiveLabPage';
-import { GameZonePage } from './components/games/GameZonePage';
-import { CodingStudioPage } from './components/studio/CodingStudioPage';
-import { RevisionHubPage } from './components/revision/RevisionHubPage';
-import { ProgressDashboard } from './components/ProgressDashboard';
 import { GlobalSearchModal } from './components/GlobalSearchModal';
-import { CertificateVerificationModal } from './components/CertificateVerificationModal';
 import { parseVerificationFromUrl } from './utils/certificateSecurity';
 
+const LandingPage = lazy(() => import('./components/LandingPage').then((m) => ({ default: m.LandingPage })));
+const HomePage = lazy(() => import('./components/HomePage').then((m) => ({ default: m.HomePage })));
+const LearningWorldPage = lazy(() => import('./components/LearningWorldPage').then((m) => ({ default: m.LearningWorldPage })));
+const InteractiveLabPage = lazy(() => import('./components/lab/InteractiveLabPage').then((m) => ({ default: m.InteractiveLabPage })));
+const GameZonePage = lazy(() => import('./components/games/GameZonePage').then((m) => ({ default: m.GameZonePage })));
+const CodingStudioPage = lazy(() => import('./components/studio/CodingStudioPage').then((m) => ({ default: m.CodingStudioPage })));
+const RevisionHubPage = lazy(() => import('./components/revision/RevisionHubPage').then((m) => ({ default: m.RevisionHubPage })));
+const ProgressDashboard = lazy(() => import('./components/ProgressDashboard').then((m) => ({ default: m.ProgressDashboard })));
+const CertificateVerificationModal = lazy(() => import('./components/CertificateVerificationModal').then((m) => ({ default: m.CertificateVerificationModal })));
 const AdaptiveTutorPage = lazy(() =>
   import('./components/tutor/AdaptiveTutorPage').then((m) => ({ default: m.AdaptiveTutorPage }))
 );
+
+function PageFallback() {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E10906] border-t-transparent" />
+        <span className="font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">Loading PyVerse...</span>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [activeSection, setHashSection] = useHashRoute();
@@ -227,156 +238,158 @@ export default function App() {
         )}
 
         <main className="flex-1 bg-[#FBF5F9] dark:bg-[#0f0303]">
-          <motion.div
-            key={`${activeSection}-${activeLabTab}-${selectedSimulator ?? 'hub'}`}
-            initial={reducedMotion ? false : { opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reducedMotion ? 0 : 0.2, ease: 'easeOut' }}
-          >
-            {activeSection === 'landing' && (
-              <LandingPage
-                onEnterApp={() => navigateTo('home')}
-                onOpenSection={(sec) => {
-                  if (sec === 'lab') {
-                    openLabTab('create-system');
-                  } else {
-                    navigateTo(sec);
-                  }
-                }}
-              />
-            )}
+          <Suspense fallback={<PageFallback />}>
+            <motion.div
+              key={`${activeSection}-${activeLabTab}-${selectedSimulator ?? 'hub'}`}
+              initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.2, ease: 'easeOut' }}
+            >
+              {activeSection === 'landing' && (
+                <LandingPage
+                  onEnterApp={() => navigateTo('home')}
+                  onOpenSection={(sec) => {
+                    if (sec === 'lab') {
+                      openLabTab('create-system');
+                    } else {
+                      navigateTo(sec);
+                    }
+                  }}
+                />
+              )}
 
-            {activeSection === 'home' && (
-              <HomePage
-                progress={progress}
-                onNavigate={navigateTo}
-                onOpenTopic={openTopic}
-                onOpenLabTab={openLabTab}
-                onOpenGamesTab={openGamesTab}
-                onOpenRevisionTab={openRevisionTab}
-                onCompleteDailyQuest={completeDailyQuest}
-              />
-            )}
-
-            {activeSection === 'learn' && (
-              <LearningWorldPage
-                activeTopic={activeTopic}
-                onChangeTopic={setActiveTopic}
-                progress={progress}
-                onToggleLesson={toggleLesson}
-                onCompleteMission={completeMission}
-                onCompleteDailyQuest={completeDailyQuest}
-                onNavigate={navigateTo}
-                onOpenGamesTab={openGamesTab}
-                onOpenInSandbox={handleOpenInPlayground}
-                onToggleBookmark={toggleBookmark}
-                onSaveLessonNote={saveLessonNote}
-                onDeleteLessonNote={deleteLessonNote}
-              />
-            )}
-
-            {activeSection === 'lab' && (
-              <InteractiveLabPage
-                activeTab={activeLabTab}
-                onChangeTab={setActiveLabTab}
-                selectedSimulator={selectedSimulator}
-                onSelectSimulator={setSelectedSimulator}
-                visitedSimulators={progress.visitedSimulators}
-                onRecordSimulatorRun={recordSimulatorRun}
-                onAskTutor={handleAskTutorFromSimulator}
-                onOpenInStudio={handleOpenInPlayground}
-                completedChallenges={progress.completedChallenges}
-                onOpenChallenge={handleOpenChallenge}
-              />
-            )}
-
-            {activeSection === 'games' && (
-              <GameZonePage
-                activeTab={activeGamesTab}
-                onChangeTab={setActiveGamesTab}
-                gameScores={progress.gameScores}
-                gameAttempts={progress.gameAttempts}
-                onRecordGameScore={recordGameScore}
-                completedEscapeRooms={progress.completedEscapeRooms}
-                onCompleteEscapeRoom={completeEscapeRoom}
-                completedBugHunts={progress.completedBugHunts}
-                onCompleteBugHunt={completeBugHunt}
-                completedChallenges={progress.completedChallenges}
-                onCompleteChallenge={markChallengeComplete}
-                quizScores={progress.quizScores}
-                onRecordQuizResult={recordQuizResult}
-              />
-            )}
-
-            {activeSection === 'studio' && (
-              <CodingStudioPage
-                activeTab={activeStudioTab}
-                onChangeTab={setActiveStudioTab}
-                externalCode={sandboxCode}
-                onConsumeExternalCode={handleConsumeSandboxCode}
-                onRecordSandboxRun={recordSandboxRun}
-                savedSnippets={progress.savedSnippets}
-                onSaveSnippet={saveSnippet}
-                onDeleteSnippet={deleteSnippet}
-                completedChallenges={progress.completedChallenges}
-                onCompleteChallenge={markChallengeComplete}
-                externalChallengeId={selectedChallengeId}
-                onConsumeExternalChallenge={handleConsumeChallengeId}
-                onOpenTutorWithCode={handleOpenTutorWithCode}
-              />
-            )}
-
-            {activeSection === 'tutor' && (
-              <Suspense
-                fallback={
-                  <div className="mx-auto max-w-7xl px-4 py-12 text-center font-mono text-xs text-[#8A8585]">
-                    Loading PyVerse AI Tutor...
-                  </div>
-                }
-              >
-                <AdaptiveTutorPage
+              {activeSection === 'home' && (
+                <HomePage
                   progress={progress}
-                  onSetTopic={setTutorTopic}
-                  onSetDifficulty={setTutorDifficulty}
-                  onMarkUnderstood={markConceptUnderstood}
-                  onMarkToReview={markConceptToReview}
-                  onRemoveConcept={removeConceptTag}
-                  onRecordPracticeAttempt={recordPracticeAttempt}
-                  onResetProgress={resetProgress}
                   onNavigate={navigateTo}
                   onOpenTopic={openTopic}
-                  onOpenInPlayground={handleOpenInPlayground}
-                  pendingSimulatorContext={pendingTutorSimContext}
-                  onConsumeSimulatorContext={handleConsumeSimulatorContext}
+                  onOpenLabTab={openLabTab}
+                  onOpenGamesTab={openGamesTab}
+                  onOpenRevisionTab={openRevisionTab}
+                  onCompleteDailyQuest={completeDailyQuest}
                 />
-              </Suspense>
-            )}
+              )}
 
-            {activeSection === 'revision' && (
-              <RevisionHubPage
-                activeTab={activeRevisionTab}
-                onChangeTab={setActiveRevisionTab}
-                understoodFlashcards={progress.understoodFlashcards}
-                onToggleFlashcardUnderstood={toggleFlashcardUnderstood}
-                quizScores={progress.quizScores}
-                onRecordQuizResult={recordQuizResult}
-                onOpenInStudio={handleOpenInPlayground}
-              />
-            )}
+              {activeSection === 'learn' && (
+                <LearningWorldPage
+                  activeTopic={activeTopic}
+                  onChangeTopic={setActiveTopic}
+                  progress={progress}
+                  onToggleLesson={toggleLesson}
+                  onCompleteMission={completeMission}
+                  onCompleteDailyQuest={completeDailyQuest}
+                  onNavigate={navigateTo}
+                  onOpenGamesTab={openGamesTab}
+                  onOpenInSandbox={handleOpenInPlayground}
+                  onToggleBookmark={toggleBookmark}
+                  onSaveLessonNote={saveLessonNote}
+                  onDeleteLessonNote={deleteLessonNote}
+                />
+              )}
 
-            {activeSection === 'progress' && (
-              <ProgressDashboard
-                progress={progress}
-                onToggleLesson={toggleLesson}
-                onResetProgress={resetProgress}
-                onImportProgress={importProgress}
-                onNavigate={navigateTo}
-                onOpenTopic={openTopic}
-                onOpenGamesTab={openGamesTab}
-                onOpenRevisionTab={openRevisionTab}
-              />
-            )}
-          </motion.div>
+              {activeSection === 'lab' && (
+                <InteractiveLabPage
+                  activeTab={activeLabTab}
+                  onChangeTab={setActiveLabTab}
+                  selectedSimulator={selectedSimulator}
+                  onSelectSimulator={setSelectedSimulator}
+                  visitedSimulators={progress.visitedSimulators}
+                  onRecordSimulatorRun={recordSimulatorRun}
+                  onAskTutor={handleAskTutorFromSimulator}
+                  onOpenInStudio={handleOpenInPlayground}
+                  completedChallenges={progress.completedChallenges}
+                  onOpenChallenge={handleOpenChallenge}
+                />
+              )}
+
+              {activeSection === 'games' && (
+                <GameZonePage
+                  activeTab={activeGamesTab}
+                  onChangeTab={setActiveGamesTab}
+                  gameScores={progress.gameScores}
+                  gameAttempts={progress.gameAttempts}
+                  onRecordGameScore={recordGameScore}
+                  completedEscapeRooms={progress.completedEscapeRooms}
+                  onCompleteEscapeRoom={completeEscapeRoom}
+                  completedBugHunts={progress.completedBugHunts}
+                  onCompleteBugHunt={completeBugHunt}
+                  completedChallenges={progress.completedChallenges}
+                  onCompleteChallenge={markChallengeComplete}
+                  quizScores={progress.quizScores}
+                  onRecordQuizResult={recordQuizResult}
+                />
+              )}
+
+              {activeSection === 'studio' && (
+                <CodingStudioPage
+                  activeTab={activeStudioTab}
+                  onChangeTab={setActiveStudioTab}
+                  externalCode={sandboxCode}
+                  onConsumeExternalCode={handleConsumeSandboxCode}
+                  onRecordSandboxRun={recordSandboxRun}
+                  savedSnippets={progress.savedSnippets}
+                  onSaveSnippet={saveSnippet}
+                  onDeleteSnippet={deleteSnippet}
+                  completedChallenges={progress.completedChallenges}
+                  onCompleteChallenge={markChallengeComplete}
+                  externalChallengeId={selectedChallengeId}
+                  onConsumeExternalChallenge={handleConsumeChallengeId}
+                  onOpenTutorWithCode={handleOpenTutorWithCode}
+                />
+              )}
+
+              {activeSection === 'tutor' && (
+                <Suspense
+                  fallback={
+                    <div className="mx-auto max-w-7xl px-4 py-12 text-center font-mono text-xs text-[#8A8585]">
+                      Loading PyVerse AI Tutor...
+                    </div>
+                  }
+                >
+                  <AdaptiveTutorPage
+                    progress={progress}
+                    onSetTopic={setTutorTopic}
+                    onSetDifficulty={setTutorDifficulty}
+                    onMarkUnderstood={markConceptUnderstood}
+                    onMarkToReview={markConceptToReview}
+                    onRemoveConcept={removeConceptTag}
+                    onRecordPracticeAttempt={recordPracticeAttempt}
+                    onResetProgress={resetProgress}
+                    onNavigate={navigateTo}
+                    onOpenTopic={openTopic}
+                    onOpenInPlayground={handleOpenInPlayground}
+                    pendingSimulatorContext={pendingTutorSimContext}
+                    onConsumeSimulatorContext={handleConsumeSimulatorContext}
+                  />
+                </Suspense>
+              )}
+
+              {activeSection === 'revision' && (
+                <RevisionHubPage
+                  activeTab={activeRevisionTab}
+                  onChangeTab={setActiveRevisionTab}
+                  understoodFlashcards={progress.understoodFlashcards}
+                  onToggleFlashcardUnderstood={toggleFlashcardUnderstood}
+                  quizScores={progress.quizScores}
+                  onRecordQuizResult={recordQuizResult}
+                  onOpenInStudio={handleOpenInPlayground}
+                />
+              )}
+
+              {activeSection === 'progress' && (
+                <ProgressDashboard
+                  progress={progress}
+                  onToggleLesson={toggleLesson}
+                  onResetProgress={resetProgress}
+                  onImportProgress={importProgress}
+                  onNavigate={navigateTo}
+                  onOpenTopic={openTopic}
+                  onOpenGamesTab={openGamesTab}
+                  onOpenRevisionTab={openRevisionTab}
+                />
+              )}
+            </motion.div>
+          </Suspense>
         </main>
 
         <GlobalSearchModal
@@ -390,18 +403,20 @@ export default function App() {
         />
 
         {verifyModalOpen && (
-          <CertificateVerificationModal
-            onClose={() => {
-              setVerifyModalOpen(false);
-              if (window.location.hash.includes('verify')) {
-                window.location.hash = '#/';
-              }
-            }}
-            onNavigateHome={() => {
-              setVerifyModalOpen(false);
-              navigateTo('home');
-            }}
-          />
+          <Suspense fallback={null}>
+            <CertificateVerificationModal
+              onClose={() => {
+                setVerifyModalOpen(false);
+                if (window.location.hash.includes('verify')) {
+                  window.location.hash = '#/';
+                }
+              }}
+              onNavigateHome={() => {
+                setVerifyModalOpen(false);
+                navigateTo('home');
+              }}
+            />
+          </Suspense>
         )}
       </div>
     </MotionConfig>

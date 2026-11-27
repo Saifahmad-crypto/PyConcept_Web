@@ -28,12 +28,12 @@ export async function downloadCanvasAsA4LandscapePdf(
     const pageHeight = 595.28;
 
     // 2. Assemble PDF Objects
-    const parts: (string | Uint8Array)[] = [];
+    const parts: BlobPart[] = [];
     const offsets: number[] = [];
     let currentOffset = 0;
 
     function addPart(content: string | Uint8Array) {
-      parts.push(content);
+      parts.push(content as BlobPart);
       currentOffset += typeof content === 'string' ? new TextEncoder().encode(content).length : content.length;
     }
 

@@ -116,7 +116,7 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.strokeStyle = '#3A1D1D';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    if ('roundRect' in ctx) ctx.roundRect(0, 0, 42, 42, 10);
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(0, 0, 42, 42, 10);
     else ctx.rect(0, 0, 42, 42);
     ctx.fill();
     ctx.stroke();
@@ -166,7 +166,7 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.strokeStyle = '#E10906';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    if ('roundRect' in ctx) ctx.roundRect(pillX, pillY, pillW, 36, 18);
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(pillX, pillY, pillW, 36, 18);
     else ctx.rect(pillX, pillY, pillW, 36);
     ctx.fill();
     ctx.stroke();
@@ -204,7 +204,7 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.strokeStyle = '#3A1D1D';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    if ('roundRect' in ctx) ctx.roundRect(scoreBoxX, scoreBoxY, scoreBoxW, scoreBoxH, 20);
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(scoreBoxX, scoreBoxY, scoreBoxW, scoreBoxH, 20);
     else ctx.rect(scoreBoxX, scoreBoxY, scoreBoxW, scoreBoxH);
     ctx.fill();
     ctx.stroke();

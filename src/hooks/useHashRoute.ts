@@ -48,6 +48,7 @@ export function useHashRoute(): [SectionId, (section: SectionId) => void] {
     const handleHashChange = () => {
       const next = parseHashToSection(window.location.hash);
       setSection(next);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.addEventListener('hashchange', handleHashChange);
