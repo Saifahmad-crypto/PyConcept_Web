@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { OctagonAlert, Clock, Navigation } from 'lucide-react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
+import { OctagonAlert, Clock, Navigation, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
 import { scaleAnimationMs } from '../AnimationSpeedController';
+
+const TrafficSignal3D = lazy(() => import('./TrafficSignal3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -75,6 +77,51 @@ export const TrafficSignalStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onBackToHub={onBackToHub}
       initialVariables={{ signal, action: 'IDLE' }}
       initialExplanation='Select a traffic light color or press Play / Next Step to see how Python evaluates if-elif-else top to bottom.'
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Interactive Intersection &amp; Traffic Light
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Vehicles respond dynamically to signal state (Red = Stop, Yellow = Slow, Green = Speed).
+              </p>
+            </div>
+            <div className="inline-flex rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#1a0808] p-1 gap-1">
+              {(['red', 'yellow', 'green'] as SignalColor[]).map((sig) => (
+                <button
+                  key={sig}
+                  type="button"
+                  onClick={() => handleSelectSignal(sig)}
+                  className={`rounded-lg px-3 py-1 text-xs font-semibold uppercase transition-all ${
+                    signal === sig
+                      ? sig === 'red'
+                        ? 'bg-rose-600 text-white shadow-xs'
+                        : sig === 'yellow'
+                        ? 'bg-amber-500 text-white shadow-xs'
+                        : 'bg-emerald-600 text-white shadow-xs'
+                      : 'text-slate-600 dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
+                  }`}
+                >
+                  {sig}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Suspense
+            fallback={
+              <div className="flex h-[380px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#100303] text-slate-300">
+                <Loader2 className="h-8 w-8 animate-spin text-[#E10906]" />
+                <span className="text-xs font-medium">Loading 3D Traffic Intersection...</span>
+              </div>
+            }
+          >
+            <TrafficSignal3D signal={currentSignalVar} action={currentAction} />
+          </Suspense>
+        </div>
+      }
     >
       <div className="space-y-5">
         {/* Input Controls */}

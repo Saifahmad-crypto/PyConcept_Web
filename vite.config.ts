@@ -57,7 +57,7 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
-          globIgnores: ['**/vendor-three*.js', '**/ElevatorFloor3D*.js', '**/*three*.js'],
+          globIgnores: ['**/vendor-three*.js', '**/*3D*.js', '**/*three*.js'],
           navigateFallback: `${base}index.html`,
           navigateFallbackDenylist: [/^\/api\//, /generativelanguage\.googleapis\.com/],
           runtimeCaching: [
@@ -66,12 +66,12 @@ export default defineConfig(({ mode }) => {
               urlPattern: ({ url }) =>
                 url.pathname.includes('three') ||
                 url.pathname.includes('vendor-three') ||
-                url.pathname.includes('ElevatorFloor3D'),
+                url.pathname.includes('3D'),
               handler: 'CacheFirst',
               options: {
                 cacheName: 'pyverse-3d-runtime-cache',
                 expiration: {
-                  maxEntries: 10,
+                  maxEntries: 20,
                   maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
                 },
               },

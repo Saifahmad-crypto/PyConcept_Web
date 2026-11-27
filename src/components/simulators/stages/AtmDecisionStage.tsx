@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { CreditCard, ShieldCheck, ShieldAlert, Banknote, Lock } from 'lucide-react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
+import { CreditCard, ShieldCheck, ShieldAlert, Banknote, Lock, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
 import { scaleAnimationMs } from '../AnimationSpeedController';
+
+const AtmDecision3D = lazy(() => import('./AtmDecision3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -89,6 +91,49 @@ export const AtmDecisionStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         amount: safeAmount,
       }}
       initialExplanation='Enter a demo PIN (correct sample PIN: 1234), demo balance, and withdrawal amount, then press Play or Next Step to trace nested if-else checks.'
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Interactive ATM Machine
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Real-time 3D ATM cabinet. Evaluates PIN verification and dispenses currency notes.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`rounded-lg border px-2.5 py-1 text-xs font-mono font-bold ${
+                atmPhase === 'approved'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300'
+                  : atmPhase === 'wrong-pin'
+                  ? 'bg-red-50 text-red-700 border-red-300 dark:bg-red-950/40 dark:text-red-300'
+                  : 'bg-sky-50 text-sky-700 border-sky-300 dark:bg-sky-950/40 dark:text-sky-300'
+              }`}>
+                Phase: {atmPhase.toUpperCase()}
+              </span>
+            </div>
+          </div>
+
+          <Suspense
+            fallback={
+              <div className="flex h-[380px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#100303] text-slate-300">
+                <Loader2 className="h-8 w-8 animate-spin text-[#E10906]" />
+                <span className="text-xs font-medium">Loading 3D ATM Scene...</span>
+              </div>
+            }
+          >
+            <AtmDecision3D
+              phase={atmPhase}
+              enteredPin={enteredPin}
+              balance={currentBalance}
+              amount={safeAmount}
+              isApproved={atmPhase === 'approved'}
+              isWrongPin={atmPhase === 'wrong-pin'}
+            />
+          </Suspense>
+        </div>
+      }
     >
       <div className="space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2">

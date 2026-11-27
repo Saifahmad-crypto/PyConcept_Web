@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { Banknote, CheckCircle2, AlertCircle, Layers } from 'lucide-react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
+import { Banknote, CheckCircle2, AlertCircle, Layers, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
 import { scaleAnimationMs } from '../AnimationSpeedController';
+
+const CashCounter3D = lazy(() => import('./CashCounter3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -97,6 +99,46 @@ export const CashCounterStage: React.FC<Props> = ({ meta, onBackToHub }) => {
         total: 0,
       }}
       initialExplanation='Pick a note denomination, quantity, and optional target amount, then press Play to watch the loop feed notes one by one and accumulate the total.'
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Interactive Cash Counter
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Physical stacks shift from uncounted to counted pile note-by-note with sensor scan.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300">
+                Total: ₹{total}
+              </span>
+              <span className="rounded-lg bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 px-2.5 py-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-300">
+                Counted: {counted} / {safeNotes}
+              </span>
+            </div>
+          </div>
+
+          <Suspense
+            fallback={
+              <div className="flex h-[380px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#100303] text-slate-300">
+                <Loader2 className="h-8 w-8 animate-spin text-[#E10906]" />
+                <span className="text-xs font-medium">Loading 3D Cash Counter Scene...</span>
+              </div>
+            }
+          >
+            <CashCounter3D
+              denomination={denomination}
+              counted={counted}
+              totalNotes={safeNotes}
+              totalAmount={total}
+              targetAmount={safeTarget}
+              isDone={isDone}
+            />
+          </Suspense>
+        </div>
+      }
     >
       <div className="space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">

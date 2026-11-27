@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
-import { Car, CheckCircle2, Ban, Search } from 'lucide-react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
+import { Car, CheckCircle2, Ban, Search, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
 import { scaleAnimationMs } from '../AnimationSpeedController';
+
+const ParkingScanner3D = lazy(() => import('./ParkingScanner3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -118,6 +120,66 @@ export const ParkingScannerStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onBackToHub={onBackToHub}
       initialVariables={{ slots, found_slot: -1 }}
       initialExplanation='Click any parking bay to toggle Occupied/Available, choose for or while mode, and press Play to watch continue skip full bays and break stop at the first free bay.'
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Interactive Parking Lot
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Top-down drone scanner tracks active bay iteration. Free slot halts via break.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="rounded-lg bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 px-2.5 py-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-300">
+                Scanning: {activeScanIndex >= 0 ? `Slot ${activeScanIndex + 1}` : 'Idle'}
+              </span>
+              <span className="rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300">
+                Found: {foundSlot > 0 ? `Slot ${foundSlot}` : 'None'}
+              </span>
+            </div>
+          </div>
+
+          <Suspense
+            fallback={
+              <div className="flex h-[380px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#100303] text-slate-300">
+                <Loader2 className="h-8 w-8 animate-spin text-[#E10906]" />
+                <span className="text-xs font-medium">Loading 3D Parking Scene...</span>
+              </div>
+            }
+          >
+            <ParkingScanner3D
+              slots={slots}
+              activeScanIndex={activeScanIndex}
+              foundSlot={foundSlot}
+            />
+          </Suspense>
+
+          {/* Quick Slot Toggle Bar under 3D */}
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-slate-50 dark:bg-[#120404] p-3">
+            <span className="block text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585] mb-2">
+              Toggle Bays (Click to switch Occupied / Available):
+            </span>
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+              {slots.map((st, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => toggleSlot(i)}
+                  className={`rounded-lg py-1.5 px-1 text-center font-mono text-[10px] font-bold border transition-all ${
+                    st === 'Occupied'
+                      ? 'border-red-300 bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800'
+                      : 'border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
+                  }`}
+                >
+                  S{i + 1}: {st === 'Occupied' ? '🚗 Full' : '🟢 Free'}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      }
     >
       <div className="space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">

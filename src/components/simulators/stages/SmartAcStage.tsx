@@ -1,9 +1,11 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { Fan, Snowflake, Thermometer, Power } from 'lucide-react';
+import React, { useState, useMemo, useEffect, Suspense, lazy } from 'react';
+import { Fan, Snowflake, Thermometer, Power, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
 import { scaleAnimationMs } from '../AnimationSpeedController';
+
+const SmartAc3D = lazy(() => import('./SmartAc3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -86,6 +88,65 @@ export const SmartAcStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onBackToHub={onBackToHub}
       initialVariables={{ temperature, threshold: 28 }}
       initialExplanation='Move the room temperature slider or press Reset + Play to watch Python evaluate whether temperature > 28.'
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Smart Climate Room
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Wall-mounted AC activates cool air stream &amp; status indicator when temperature &gt; 28°C.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`rounded-lg border px-2.5 py-1 text-xs font-mono font-bold ${
+                acRunning
+                  ? 'bg-sky-50 text-sky-700 border-sky-300 dark:bg-sky-950/40 dark:text-sky-300'
+                  : 'bg-slate-100 text-slate-600 border-slate-300 dark:bg-slate-900/60 dark:text-slate-400'
+              }`}>
+                AC: {currentAcStatus}
+              </span>
+              <span className="rounded-lg bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 px-2.5 py-1 text-xs font-mono font-bold text-red-700 dark:text-red-300">
+                Temp: {temperature}°C
+              </span>
+            </div>
+          </div>
+
+          <Suspense
+            fallback={
+              <div className="flex h-[380px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#100303] text-slate-300">
+                <Loader2 className="h-8 w-8 animate-spin text-[#E10906]" />
+                <span className="text-xs font-medium">Loading 3D Smart Room Scene...</span>
+              </div>
+            }
+          >
+            <SmartAc3D
+              temperature={temperature}
+              threshold={28}
+              acStatus={currentAcStatus}
+            />
+          </Suspense>
+
+          {/* Quick Slider under 3D Scene */}
+          <div className="rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-slate-50 dark:bg-[#120404] p-3 text-xs">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585]">
+                Adjust Room Temperature (Threshold: 28°C):
+              </span>
+              <span className="font-mono font-bold text-[#E10906]">{temperature}°C</span>
+            </div>
+            <input
+              type="range"
+              min="16"
+              max="40"
+              value={temperature}
+              onChange={(e) => handleSliderChange(Number(e.target.value))}
+              className="w-full accent-[#E10906] cursor-pointer"
+            />
+          </div>
+        </div>
+      }
     >
       <div className="space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
