@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </button>
 
         {/* Zone 2: Primary Single-Line Navigation */}
-        <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-0.5">
+        <nav aria-label="Primary navigation" className="hidden xl:flex items-center gap-0.5 2xl:gap-1">
           {NAV_ITEM_IDS.map((item) => {
             const Icon = item.icon;
             const isActive = item.matchSections
@@ -129,7 +129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 type="button"
                 onClick={() => handleNav(item.id)}
-                className={`relative inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] ${
+                className={`relative inline-flex items-center gap-1.5 rounded-lg px-2 2xl:px-2.5 py-1.5 text-xs 2xl:text-[13px] font-medium transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] ${
                   isActive
                     ? 'bg-[#FFF1F1] dark:bg-[#2a0808] font-semibold text-[#100303] dark:text-[#f0eaea]'
                     : 'text-[#8A8585] dark:text-[#9a8585] hover:bg-[#F1EEEE] dark:hover:bg-[#1a0808] hover:text-[#100303] dark:hover:text-[#f0eaea]'
@@ -144,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {isActive && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-x-2.5 -bottom-[11px] h-[2px] bg-[#E10906]"
+                    className="absolute inset-x-2 -bottom-[11px] h-[2px] bg-[#E10906]"
                   />
                 )}
               </button>
@@ -153,22 +153,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Zone 3: Actions */}
-        <div className="relative flex items-center gap-2 shrink-0">
-          {/* Social links — desktop */}
-          <div className="hidden lg:flex items-center gap-1 border-r border-[#E5DFDF] dark:border-[#3a1a1a] pr-2">
-            {SOCIAL_LINKS.map(({ href, Icon, label, title }) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                className={socialBtn} aria-label={label} title={title}>
-                <Icon className="h-4 w-4" aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-
+        <div className="relative flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Search */}
           <button
             type="button"
             onClick={onOpenSearch}
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-medium text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] shrink-0"
             aria-label="Search PyVerse (Ctrl+K)"
             title="Search PyVerse (Ctrl+K)"
           >
@@ -185,7 +175,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={toggleDark}
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             title={isDark ? 'Light mode' : 'Dark mode'}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] shrink-0"
           >
             {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
           </button>
@@ -196,7 +186,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={toggleLanguage}
             aria-label="Toggle language EN / Hinglish"
             title={isHinglish ? 'Switch to English' : 'हिंग्लिश में बदलें'}
-            className="inline-flex h-9 items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-semibold transition-colors hover:border-[#E10906] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+            className="inline-flex h-9 items-center gap-1 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-semibold transition-colors hover:border-[#E10906] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] shrink-0 whitespace-nowrap"
           >
             <span className={!isHinglish ? 'text-[#E10906] font-bold' : 'text-[#8A8585] dark:text-[#9a8585]'}>EN</span>
             <span className="text-[#8A8585] dark:text-[#9a8585]">/</span>
@@ -210,7 +200,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-expanded={prefsOpen}
             aria-label="Learning preferences and accessibility"
             title="Learning preferences & accessibility"
-            className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] ${
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] shrink-0 ${
               prefsOpen
                 ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#E10906]'
                 : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
@@ -219,25 +209,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
           </button>
 
-          {/* XP Pill */}
+          {/* XP Pill — visible only on 2xl screens (1536px+) to guarantee 0 overflow on 1280-1500px desktop */}
           <button
             type="button"
             onClick={() => handleNav('progress')}
-            className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+            className="hidden 2xl:inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] px-2.5 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-colors hover:border-[#100303] dark:hover:border-[#9a8585] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
             aria-label="View Progress & XP"
           >
             <span className="h-2 w-2 rounded-full bg-[#E10906]" aria-hidden="true" />
             <span className="font-mono tabular-nums">{xp} XP</span>
-            <span className="hidden md:inline text-[11px] font-medium text-[#8A8585] dark:text-[#9a8585]">
+            <span className="text-[11px] font-medium text-[#8A8585] dark:text-[#9a8585]">
               · L{levelInfo.current.level}
             </span>
           </button>
 
-          {/* Start Learning CTA */}
+          {/* Start Learning CTA — always fully visible, never cut */}
           <button
             type="button"
             onClick={() => handleNav('learn')}
-            className="hidden md:inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#E10906] px-3.5 text-xs font-semibold text-white transition-colors hover:bg-[#C40705] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#100303]"
+            className="hidden sm:inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#E10906] px-3.5 text-xs font-semibold text-white transition-colors hover:bg-[#C40705] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#100303]"
           >
             <span>{t(lang, 'nav.startLearning')}</span>
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
