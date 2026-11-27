@@ -1,8 +1,10 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { Award, GraduationCap, CheckCircle2, TrendingUp, Sparkles, BookOpen } from 'lucide-react';
+import React, { useState, useMemo, useEffect, Suspense, lazy } from 'react';
+import { Award, GraduationCap, CheckCircle2, TrendingUp, Sparkles, BookOpen, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+
+const GradeCalculator3D = lazy(() => import('./GradeCalculator3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -147,6 +149,35 @@ export const GradeCalculatorStage: React.FC<Props> = ({ meta, onBackToHub }) => 
       onBackToHub={onBackToHub}
       initialVariables={{ marks, grade: currentGrade, status: currentStatus }}
       initialExplanation="Marks slider adjust karo aur dekho kaise Python ka if-elif-else ladder top-to-bottom pehli matching condition execute karta hai."
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Student Object Panel &amp; Hydraulic Grade Stamp
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Real-time 3D student memory cards, hydraulic stamping press, and glowing pointer arcs.
+              </p>
+            </div>
+          </div>
+          <Suspense
+            fallback={
+              <div className="flex h-[430px] items-center justify-center rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-[#0c040e] text-slate-400">
+                <Loader2 className="h-6 w-6 animate-spin text-[#E10906]" />
+                <span className="ml-2 text-xs font-mono">Loading 3D Object Environment...</span>
+              </div>
+            }
+          >
+            <GradeCalculator3D
+              marks={marks}
+              grade={currentGrade}
+              statusText={currentStatus}
+              onSelectMarks={handleSliderChange}
+            />
+          </Suspense>
+        </div>
+      }
     >
       <div className="space-y-6">
         {/* Preset Buttons & Slider Header */}

@@ -1,8 +1,10 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { Sparkles, Hash, ArrowRight, Play, CheckCircle2 } from 'lucide-react';
+import React, { useState, useMemo, useEffect, Suspense, lazy } from 'react';
+import { Sparkles, Hash, ArrowRight, Play, CheckCircle2, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
+
+const FizzBuzz3D = lazy(() => import('./FizzBuzz3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -113,6 +115,35 @@ export const FizzBuzzStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onBackToHub={onBackToHub}
       initialVariables={{ n: maxN, i: 1, val: '1' }}
       initialExplanation="N choose karo (1-30). Python for loop 1 se n tak iterate karta hai aur har number pe % 3 aur % 5 check karta hai."
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Token Panel &amp; Hydraulic Modulo Stamp
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Real-time 3D number tokens, hydraulic stamping press, and glowing pointer arcs.
+              </p>
+            </div>
+          </div>
+          <Suspense
+            fallback={
+              <div className="flex h-[430px] items-center justify-center rounded-2xl border border-slate-200 dark:border-[#3a1a1a] bg-[#0c040e] text-slate-400">
+                <Loader2 className="h-6 w-6 animate-spin text-[#E10906]" />
+                <span className="ml-2 text-xs font-mono">Loading 3D Token Environment...</span>
+              </div>
+            }
+          >
+            <FizzBuzz3D
+              maxN={maxN}
+              currentI={currentI}
+              currentVal={currentVal}
+              onSelectN={handleSliderChange}
+            />
+          </Suspense>
+        </div>
+      }
     >
       <div className="space-y-6">
         {/* Header & Controls */}
