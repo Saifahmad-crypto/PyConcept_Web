@@ -1,7 +1,13 @@
 import {createRoot} from 'react-dom/client';
+import { registerSW } from 'virtual:pwa-register';
 import App from './App.tsx';
 import {ErrorBoundary} from './components/ErrorBoundary.tsx';
 import './index.css';
+
+// PWA auto-update service worker registration
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  registerSW({ immediate: true });
+}
 
 if (typeof window !== 'undefined') {
   const isExtensionOrigin = (text: string) =>
