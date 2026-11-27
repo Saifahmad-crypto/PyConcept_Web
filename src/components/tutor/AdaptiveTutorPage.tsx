@@ -47,6 +47,10 @@ import { TutorMessageContent } from './TutorMessageContent';
 import { PracticeQuestionCard, QuizQuestionCard } from './TutorInteractiveCards';
 import {
   buildTutorApiUrl,
+  hasConfiguredProxyUrl,
+  directStreamTutorReply,
+  directGeneratePractice,
+  directGenerateQuiz,
 } from '../../utils/tutorClient';
 
 interface AdaptiveTutorPageProps {
@@ -260,52 +264,67 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
       let accumulated = '';
 
       try {
-        const response = await fetch(buildTutorApiUrl('/api/tutor/stream'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            messages: historyMessages.map((m) => ({ role: m.role, content: m.content })),
-            mode: activeMode,
-            learnerContext: buildLearnerContextPayload(),
-            simulatorContext: simCtx,
-          }),
-        });
+        if (hasConfiguredProxyUrl()) {
+          const response = await fetch(buildTutorApiUrl('/api/tutor/stream'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+            body: JSON.stringify({
+              messages: historyMessages.map((m) => ({ role: m.role, content: m.content })),
+              mode: activeMode,
+              learnerContext: buildLearnerContextPayload(),
+              simulatorContext: simCtx,
+            }),
+          });
 
-        if (!response.ok) {
-          let errMsg = 'Unable to reach PyVerse AI Tutor.';
-          try {
-            const errJson = (await response.json()) as { message?: string };
-            if (errJson.message) errMsg = errJson.message;
-          } catch { /* ignore */ }
-          throw new Error(errMsg);
-        }
+          if (!response.ok) {
+            let errMsg = 'Unable to reach PyVerse AI Tutor.';
+            try {
+              const errJson = (await response.json()) as { message?: string };
+              if (errJson.message) errMsg = errJson.message;
+            } catch { /* ignore */ }
+            throw new Error(errMsg);
+          }
 
-        if (!response.body) throw new Error('Streaming response body unavailable.');
+          if (!response.body) throw new Error('Streaming response body unavailable.');
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const events = buffer.split('\n\n');
-          buffer = events.pop() ?? '';
-          for (const evt of events) {
-            const line = evt.split('\n').find((l) => l.startsWith('data: '));
-            if (!line) continue;
-            const payload = JSON.parse(line.slice(6)) as {
-              type: 'chunk' | 'done' | 'error'; text?: string; message?: string;
-            };
-            if (payload.type === 'chunk' && payload.text) {
-              accumulated += payload.text;
-              updateMessage(targetSessionId, assistantMsgId, (prev) => ({ ...prev, content: accumulated }));
-            } else if (payload.type === 'error') {
-              throw new Error(payload.message || 'AI Tutor encountered an error.');
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const events = buffer.split('\n\n');
+            buffer = events.pop() ?? '';
+            for (const evt of events) {
+              const line = evt.split('\n').find((l) => l.startsWith('data: '));
+              if (!line) continue;
+              const payload = JSON.parse(line.slice(6)) as {
+                type: 'chunk' | 'done' | 'error'; text?: string; message?: string;
+              };
+              if (payload.type === 'chunk' && payload.text) {
+                accumulated += payload.text;
+                updateMessage(targetSessionId, assistantMsgId, (prev) => ({ ...prev, content: accumulated }));
+              } else if (payload.type === 'error') {
+                throw new Error(payload.message || 'AI Tutor encountered an error.');
+              }
             }
           }
+        } else {
+          // Direct Gemini API streaming (runs directly in browser with inbuilt key on GitHub Pages)
+          await directStreamTutorReply({
+            messages: historyMessages.map((m) => ({ role: m.role, content: m.content })),
+            topic: progress.activeTutorTopic,
+            difficulty: progress.tutorDifficulty,
+            mode: activeMode,
+            signal: controller.signal,
+            onChunk: (text) => {
+              accumulated += text;
+              updateMessage(targetSessionId, assistantMsgId, (prev) => ({ ...prev, content: accumulated }));
+            },
+          });
         }
 
         if (!accumulated.trim()) {
@@ -441,14 +460,35 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     appendMessage(activeSession.id, userMsg);
 
     try {
-      const res = await fetch(buildTutorApiUrl('/api/tutor/practice'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ learnerContext: buildLearnerContextPayload(), focusRequest, difficultyAdjustment }),
-      });
-      const data = (await res.json()) as { question?: Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>; message?: string };
-      if (!res.ok || !data.question) throw new Error(data.message || 'Could not generate a practice question.');
-      const practiceData = data.question;
+      let practiceData: Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>;
+      if (hasConfiguredProxyUrl()) {
+        const res = await fetch(buildTutorApiUrl('/api/tutor/practice'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ learnerContext: buildLearnerContextPayload(), focusRequest, difficultyAdjustment }),
+        });
+        const data = (await res.json()) as { question?: Omit<TutorPracticeCard, 'hintsRevealed' | 'solutionRevealed'>; message?: string };
+        if (!res.ok || !data.question) throw new Error(data.message || 'Could not generate a practice question.');
+        practiceData = data.question;
+      } else {
+        const result = await directGeneratePractice({
+          topic: progress.activeTutorTopic,
+          difficulty: progress.tutorDifficulty,
+        });
+        practiceData = {
+          title: result.title,
+          concept: result.concept,
+          difficulty: result.difficulty || progress.tutorDifficulty,
+          problemStatement: result.problemStatement,
+          expectedOutput: result.expectedOutput,
+          starterCode: result.starterCode,
+          hint1: result.hint1,
+          hint2: result.hint2,
+          hint3: result.hint3,
+          solutionCode: result.solutionCode,
+          solutionExplanation: result.solutionExplanation,
+        };
+      }
 
       const aiMsg: TutorMessage = {
         id: makeId('ai'),
@@ -490,14 +530,33 @@ export const AdaptiveTutorPage: React.FC<AdaptiveTutorPageProps> = ({
     appendMessage(activeSession.id, userMsg);
 
     try {
-      const res = await fetch(buildTutorApiUrl('/api/tutor/quiz'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ learnerContext: buildLearnerContextPayload(), focusRequest, difficultyAdjustment }),
-      });
-      const data = (await res.json()) as { quiz?: TutorQuizCard; message?: string };
-      if (!res.ok || !data.quiz) throw new Error(data.message || 'Could not generate a quiz question.');
-      const quizData: TutorQuizCard = { ...data.quiz, submitted: false };
+      let quizData: TutorQuizCard;
+      if (hasConfiguredProxyUrl()) {
+        const res = await fetch(buildTutorApiUrl('/api/tutor/quiz'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ learnerContext: buildLearnerContextPayload(), focusRequest, difficultyAdjustment }),
+        });
+        const data = (await res.json()) as { quiz?: TutorQuizCard; message?: string };
+        if (!res.ok || !data.quiz) throw new Error(data.message || 'Could not generate a quiz question.');
+        quizData = { ...data.quiz, submitted: false };
+      } else {
+        const result = await directGenerateQuiz({
+          topic: progress.activeTutorTopic,
+          difficulty: progress.tutorDifficulty,
+        });
+        quizData = {
+          question: result.question,
+          codeSnippet: result.codeSnippet || undefined,
+          options: result.options,
+          correctIndex: result.correctIndex,
+          concept: result.concept,
+          difficulty: result.difficulty || progress.tutorDifficulty,
+          explanation: result.explanation,
+          recommendedPractice: result.recommendedPractice || `Review ${result.concept}`,
+          submitted: false,
+        };
+      }
 
       const aiMsg: TutorMessage = {
         id: makeId('ai'),
