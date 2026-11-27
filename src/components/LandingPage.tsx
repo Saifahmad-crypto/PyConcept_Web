@@ -108,10 +108,10 @@ assert target_cipher == "SOLVED"`
   ];
 
   const SOCIAL_LINKS = [
-    { href: 'https://github.com/Saifahmad-crypto', Icon: Github, label: 'GitHub' },
+    { href: 'https://x.com/Saif4hmad', Icon: Twitter, label: 'X (Twitter)' },
+    { href: 'https://github.com/saifahmad-crypto', Icon: Github, label: 'GitHub' },
     { href: 'https://www.instagram.com/saif_4hmad', Icon: Instagram, label: 'Instagram' },
     { href: 'https://www.linkedin.com/in/saif-ahmad-tech', Icon: Linkedin, label: 'LinkedIn' },
-    { href: 'https://x.com/Saif4hmad', Icon: Twitter, label: 'Twitter / X' },
   ];
 
   return (
@@ -351,6 +351,56 @@ assert target_cipher == "SOLVED"`
             Free forever • Open-source • No account required to start
           </p>
         </motion.div>
+      </section>
+
+      {/* About the Creator Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-stone-200 dark:border-red-950/40">
+        <div className="p-6 sm:p-10 rounded-3xl bg-white/70 dark:bg-[#120404]/80 backdrop-blur-md border border-stone-200 dark:border-red-950/60 shadow-xl">
+          <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
+            <div className="relative group shrink-0">
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 to-purple-600 opacity-60 blur-sm group-hover:opacity-90 transition-opacity" />
+              <img
+                src="creator.jpg"
+                alt="Saif Ahmad - Creator of PyVerse"
+                className="relative h-28 w-28 sm:h-36 sm:w-36 rounded-2xl object-cover shadow-lg border border-white/20"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = '/PyConcept_Web/creator.jpg';
+                }}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-red-500/20 bg-red-500/10 px-3 py-0.5 font-mono text-[11px] font-semibold text-red-500">
+                <Sparkles className="w-3.5 h-3.5" />
+                About the Creator
+              </div>
+
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-stone-900 dark:text-white">
+                Saif Ahmad
+              </h3>
+
+              <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed max-w-xl">
+                Creator of PyVerse. Built to make programming visual, tactile, and unforgettable—transforming abstract syntax into interactive models, simulators, and debugging adventures.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-1">
+                {SOCIAL_LINKS.map(item => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/60 text-stone-700 dark:text-stone-300 hover:border-red-500 hover:text-red-500 text-xs font-semibold transition-all shadow-xs"
+                    title={item.label}
+                  >
+                    <item.Icon className="w-3.5 h-3.5 text-red-500" />
+                    <span>{item.label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Minimal Landing Footer */}

@@ -73,10 +73,10 @@ const NAV_ITEM_IDS: Array<{
 ];
 
 const SOCIAL_LINKS = [
-  { href: 'https://github.com/Saifahmad-crypto', Icon: Github, label: 'GitHub', title: 'GitHub: Saifahmad-crypto' },
+  { href: 'https://x.com/Saif4hmad', Icon: Twitter, label: 'X', title: 'X: @Saif4hmad' },
+  { href: 'https://github.com/saifahmad-crypto', Icon: Github, label: 'GitHub', title: 'GitHub: saifahmad-crypto' },
   { href: 'https://www.instagram.com/saif_4hmad', Icon: Instagram, label: 'Instagram', title: 'Instagram: @saif_4hmad' },
   { href: 'https://www.linkedin.com/in/saif-ahmad-tech', Icon: Linkedin, label: 'LinkedIn', title: 'LinkedIn: saif-ahmad-tech' },
-  { href: 'https://x.com/Saif4hmad', Icon: Twitter, label: 'Twitter / X', title: 'X (Twitter): @Saif4hmad' },
 ];
 
 export const Navbar: React.FC<NavbarProps> = ({

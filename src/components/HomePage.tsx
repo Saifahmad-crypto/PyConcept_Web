@@ -936,6 +936,93 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
+      {/* 8.5 ABOUT THE CREATOR */}
+      <section className="border-t border-[#E5DFDF] dark:border-[#2C1616] bg-white dark:bg-[#120404] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-gradient-to-br from-[#FBF5F9] via-white to-red-50/20 dark:from-[#190909] dark:via-[#140404] dark:to-[#090101] p-8 sm:p-12 shadow-xl shadow-red-950/5 relative overflow-hidden">
+            <div className="absolute -right-20 -top-20 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-12 items-center relative z-10">
+              <div className="md:col-span-4 flex justify-center md:justify-start">
+                <div className="relative group">
+                  <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-[#E10906] to-purple-600 opacity-70 blur-md group-hover:opacity-100 transition-opacity" />
+                  <img
+                    src="creator.jpg"
+                    alt="Saif Ahmad - Creator of PyVerse"
+                    className="relative h-44 w-44 sm:h-52 sm:w-52 rounded-2xl object-cover shadow-2xl border-2 border-white dark:border-[#2a1212]"
+                    onError={(e) => {
+                      // Fallback if image path differs
+                      (e.currentTarget as HTMLImageElement).src = '/PyConcept_Web/creator.jpg';
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4 md:col-span-8 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1 font-mono text-xs font-semibold text-[#E10906]">
+                  <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                  About the Creator
+                </div>
+
+                <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea]">
+                  Hi, I'm <span className="text-[#E10906]">Saif Ahmad</span> 👋
+                </h2>
+
+                <p className="text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585] max-w-2xl">
+                  Creator &amp; Architect of <strong>PyVerse</strong>. I built PyVerse to reimagine how Python conditionals and loops are learned—bridging the gap between static theory and real-world algorithmic intuition through interactive visual simulations, 3D stages, and synchronized execution trace engines.
+                </p>
+
+                {/* Social Links with Icons */}
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+                  <a
+                    href="https://x.com/Saif4hmad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-all hover:border-[#E10906] hover:text-[#E10906] shadow-xs hover:shadow-md"
+                    title="Follow on X: @Saif4hmad"
+                  >
+                    <Twitter className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                    <span>X (Twitter)</span>
+                  </a>
+
+                  <a
+                    href="https://github.com/saifahmad-crypto"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-all hover:border-[#E10906] hover:text-[#E10906] shadow-xs hover:shadow-md"
+                    title="GitHub: saifahmad-crypto"
+                  >
+                    <Github className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                    <span>GitHub</span>
+                  </a>
+
+                  <a
+                    href="https://www.instagram.com/saif_4hmad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-all hover:border-[#E10906] hover:text-[#E10906] shadow-xs hover:shadow-md"
+                    title="Instagram: @saif_4hmad"
+                  >
+                    <Instagram className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                    <span>Instagram</span>
+                  </a>
+
+                  <a
+                    href="https://www.linkedin.com/in/saif-ahmad-tech"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] transition-all hover:border-[#E10906] hover:text-[#E10906] shadow-xs hover:shadow-md"
+                    title="LinkedIn: saif-ahmad-tech"
+                  >
+                    <Linkedin className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 9. FINAL CTA + EDITORIAL FOOTER */}
       <section className="bg-[#100303] text-[#FBF5F9]">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -981,12 +1068,22 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </p>
                 <div className="flex items-center gap-2.5 pt-2">
                   <a
-                    href="https://github.com/Saifahmad-crypto"
+                    href="https://x.com/Saif4hmad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
+                    aria-label="X Profile"
+                    title="X: @Saif4hmad"
+                  >
+                    <Twitter className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                  <a
+                    href="https://github.com/saifahmad-crypto"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
                     aria-label="GitHub Profile"
-                    title="GitHub: Saifahmad-crypto"
+                    title="GitHub: saifahmad-crypto"
                   >
                     <Github className="h-4 w-4" aria-hidden="true" />
                   </a>
@@ -1009,16 +1106,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                     title="LinkedIn: saif-ahmad-tech"
                   >
                     <Linkedin className="h-4 w-4" aria-hidden="true" />
-                  </a>
-                  <a
-                    href="https://x.com/Saif4hmad"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[#2C1616] bg-[#190909] text-[#8A8585] dark:text-[#9a8585] transition-colors hover:border-[#E10906] hover:bg-[#E10906] hover:text-white"
-                    aria-label="Twitter / X Profile"
-                    title="X (Twitter): @Saif4hmad"
-                  >
-                    <Twitter className="h-4 w-4" aria-hidden="true" />
                   </a>
                 </div>
               </div>
