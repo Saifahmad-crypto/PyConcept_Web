@@ -154,10 +154,10 @@ export const GradeCalculatorStage: React.FC<Props> = ({ meta, onBackToHub }) => 
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
-                3D Student Object Panel &amp; Hydraulic Grade Stamp
+                3D Laser Evaluation Chamber &amp; Student Memory Objects
               </h2>
               <p className="text-xs text-slate-500 dark:text-[#9a8585]">
-                Real-time 3D student memory cards, hydraulic stamping press, and glowing pointer arcs.
+                Interactive 3D student cards (Saif, Aayan, Imran, Sumaira), holographic laser scanner, and pointer arcs.
               </p>
             </div>
           </div>

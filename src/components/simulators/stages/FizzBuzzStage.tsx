@@ -120,10 +120,10 @@ export const FizzBuzzStage: React.FC<Props> = ({ meta, onBackToHub }) => {
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
-                3D Token Panel &amp; Hydraulic Modulo Stamp
+                3D Cyber Token Sequencer &amp; Modulo Laser Processor
               </h2>
               <p className="text-xs text-slate-500 dark:text-[#9a8585]">
-                Real-time 3D number tokens, hydraulic stamping press, and glowing pointer arcs.
+                Interactive 3D numerical tokens, quantum laser classifier, and pointer memory trace.
               </p>
             </div>
           </div>
