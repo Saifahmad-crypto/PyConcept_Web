@@ -13,10 +13,13 @@ import {
   BookmarkPlus,
   FolderOpen,
   Sparkles,
+  Square,
+  Loader2,
 } from 'lucide-react';
 import { PLAYGROUND_EXAMPLES } from '../data/curriculumData';
 import { SavedSnippet } from '../types';
 import { runPythonCode, PythonRunResult } from '../utils/pythonEngine';
+import { pyodideService, PyodideProgressStatus } from '../workers/pyodideRunner';
 import { CodeExplainerModal } from './studio/CodeExplainerModal';
 
 interface CodePlaygroundProps {
@@ -150,12 +153,19 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
   const [explainerOpen, setExplainerOpen] = useState(false);
   const [snippetTitle, setSnippetTitle] = useState('');
   const [snippetSavedFlash, setSnippetSavedFlash] = useState(false);
-  const [runtimeMode, setRuntimeMode] = useState<'ast' | 'pyodide'>('ast');
-  const [pyodideState, setPyodideState] = useState<'idle' | 'loading' | 'ready' | 'unavailable'>(
-    'idle'
-  );
-  const pyodideRef = useRef<PyodideRuntime | null>(null);
+  const [runtimeMode, setRuntimeMode] = useState<'fast' | 'real'>('fast');
+  const [pyodideState, setPyodideState] = useState<PyodideProgressStatus>('idle');
+  const [pyodideMsg, setPyodideMsg] = useState<string>('');
+  const [isRunning, setIsRunning] = useState(false);
   const preRef = useRef<HTMLPreElement | null>(null);
+
+  useEffect(() => {
+    const unsub = pyodideService.subscribeStatus((st, msg) => {
+      setPyodideState(st);
+      setPyodideMsg(msg);
+    });
+    return unsub;
+  }, []);
 
   const [result, setResult] = useState<PythonRunResult | null>(() =>
     runPythonCode(externalCode || PLAYGROUND_EXAMPLES[0].code, ['Maya', '88'])
@@ -171,39 +181,10 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
   const selectedExample = PLAYGROUND_EXAMPLES.find((e) => e.id === selectedExampleId);
   const usesInput = /\binput\s*\(/.test(code);
 
-  const loadPyodideEngine = async () => {
-    if (pyodideRef.current) {
-      setRuntimeMode('pyodide');
-      setPyodideState('ready');
-      return;
-    }
-    setPyodideState('loading');
-    try {
-      const existingScript = document.getElementById('pyodide-cdn-script') as HTMLScriptElement | null;
-      if (!existingScript) {
-        await new Promise<void>((resolve, reject) => {
-          const script = document.createElement('script');
-          script.id = 'pyodide-cdn-script';
-          script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';
-          script.async = true;
-          script.onload = () => resolve();
-          script.onerror = () => reject(new Error('Pyodide CDN failed to load'));
-          document.head.appendChild(script);
-        });
-      }
-      const win = window as unknown as {
-        loadPyodide?: (cfg: { indexURL: string }) => Promise<PyodideRuntime>;
-      };
-      if (!win.loadPyodide) throw new Error('Pyodide loader unavailable');
-      const instance = await win.loadPyodide({
-        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/',
-      });
-      pyodideRef.current = instance;
-      setPyodideState('ready');
-      setRuntimeMode('pyodide');
-    } catch {
-      setPyodideState('unavailable');
-      setRuntimeMode('ast');
+  const handleSelectEngine = (mode: 'fast' | 'real') => {
+    setRuntimeMode(mode);
+    if (mode === 'real') {
+      pyodideService.init();
     }
   };
 
@@ -223,52 +204,55 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
 
   const handleRun = async () => {
     onRecordSandboxRun?.();
-    const stdinLines = stdinText.split('\n');
+    const stdinLines = stdinText.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
 
-    if (runtimeMode === 'pyodide' && pyodideRef.current) {
+    if (runtimeMode === 'real') {
+      setIsRunning(true);
       try {
-        const outLines: string[] = [];
-        pyodideRef.current.setStdout({
-          batched: (msg: string) => outLines.push(msg),
-        });
-        const escapedInputs = JSON.stringify(stdinLines);
-        const preamble = `
-import builtins
-_pyverse_inputs = iter(${escapedInputs})
-def _pyverse_input(prompt=""):
-    try:
-        val = next(_pyverse_inputs)
-    except StopIteration:
-        val = ""
-    if prompt or val:
-        print(f"{prompt}{val}")
-    return val
-builtins.input = _pyverse_input
-`;
-        await pyodideRef.current.runPythonAsync(preamble + '\n' + code);
-        setResult({
-          success: true,
-          output: outLines.join('\n'),
-          stepsExecuted: code.split('\n').length,
-        });
-        return;
-      } catch (err) {
+        const res = await pyodideService.runCode(code, stdinLines, 10000);
+        setIsRunning(false);
+        if (res.success) {
+          setResult({
+            success: true,
+            output: res.output,
+            stepsExecuted: code.split('\n').length,
+          });
+        } else {
+          setResult({
+            success: false,
+            output: res.output,
+            stepsExecuted: 0,
+            error: {
+              type: res.error?.type || 'PythonError',
+              line: 1,
+              message: res.error?.message || 'Execution error occurred.',
+              hint: res.error?.hint || 'Check your Python syntax or loop bounds.',
+            },
+          });
+        }
+      } catch (err: any) {
+        setIsRunning(false);
         setResult({
           success: false,
           output: '',
           stepsExecuted: 0,
           error: {
-            type: 'PythonError',
+            type: 'WorkerExecutionError',
             line: 1,
-            message: err instanceof Error ? err.message : 'CPython execution error',
-            hint: 'Check your Python syntax, indentation, or input() types.',
+            message: err?.message || 'Worker execution failed.',
+            hint: 'Click Run again to retry.',
           },
         });
-        return;
       }
+      return;
     }
 
-    setResult(runPythonCode(code, stdinLines));
+    setResult(runPythonCode(code, stdinText.split('\n')));
+  };
+
+  const handleStop = () => {
+    pyodideService.stop();
+    setIsRunning(false);
   };
 
   const handleReset = () => {
@@ -325,45 +309,51 @@ builtins.input = _pyverse_input
           </p>
         </div>
 
-        {/* Honest Engine Selector */}
+        {/* Engine Selector: Fast (basic) / Real Python */}
         <div className="flex flex-col items-start gap-2 lg:items-end">
           <div className="inline-flex items-center gap-1 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-1 shadow-xs">
             <button
               type="button"
-              onClick={() => setRuntimeMode('ast')}
+              onClick={() => handleSelectEngine('fast')}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
-                runtimeMode === 'ast'
-                  ? 'bg-[#E10906] text-white'
+                runtimeMode === 'fast'
+                  ? 'bg-[#E10906] text-white shadow-xs'
                   : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
               }`}
             >
               <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
-              Built-in Educational Engine
+              Fast (Basic Engine)
             </button>
             <button
               type="button"
-              onClick={loadPyodideEngine}
-              disabled={pyodideState === 'loading'}
+              onClick={() => handleSelectEngine('real')}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all whitespace-nowrap ${
-                runtimeMode === 'pyodide'
-                  ? 'bg-[#E10906] text-white'
+                runtimeMode === 'real'
+                  ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
                   : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
               }`}
             >
-              {pyodideState === 'loading'
-                ? 'Loading CPython...'
-                : pyodideState === 'ready'
-                ? 'CPython WASM (Pyodide)'
-                : 'Enable CPython (Pyodide)'}
+              {pyodideState === 'loading' && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              <span>Real Python (Pyodide)</span>
             </button>
           </div>
           <p className="flex items-center gap-1.5 text-[11px] text-[#8A8585] dark:text-[#9a8585]">
             <Info className="h-3.5 w-3.5 text-[#E10906] shrink-0" aria-hidden="true" />
-            {pyodideState === 'unavailable'
-              ? 'Pyodide CDN unreachable here — using built-in AST engine reliably.'
-              : runtimeMode === 'pyodide'
-              ? 'Running CPython 3.12 WebAssembly inside your browser.'
-              : 'Instant beginner AST Python engine with infinite-loop & indentation guards.'}
+            {runtimeMode === 'real' ? (
+              pyodideState === 'loading' ? (
+                <span className="text-amber-500 font-medium animate-pulse">
+                  {pyodideMsg || 'Downloading & initializing CPython in Web Worker...'}
+                </span>
+              ) : pyodideState === 'ready' ? (
+                <span>Running CPython 3.12 Web Worker · 10s timeout guard active</span>
+              ) : pyodideState === 'error' ? (
+                <span className="text-rose-500">{pyodideMsg}</span>
+              ) : (
+                <span>Click Run to start full Python 3.12 execution</span>
+              )
+            ) : (
+              <span>Instant beginner AST engine with infinite-loop &amp; indentation guards.</span>
+            )}
           </p>
         </div>
       </div>
@@ -395,14 +385,25 @@ builtins.input = _pyverse_input
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={handleRun}
-            className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-[#E10906] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
-          >
-            <Play className="h-3.5 w-3.5" aria-hidden="true" />
-            Run Code
-          </button>
+          {isRunning ? (
+            <button
+              type="button"
+              onClick={handleStop}
+              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-rose-600 px-5 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:bg-rose-700 whitespace-nowrap animate-pulse"
+            >
+              <Square className="h-3.5 w-3.5 fill-current" aria-hidden="true" />
+              Stop Execution
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleRun}
+              className="inline-flex min-h-[40px] items-center gap-2 rounded-xl bg-[#E10906] px-4 py-2 font-display text-xs font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md whitespace-nowrap"
+            >
+              <Play className="h-3.5 w-3.5" aria-hidden="true" />
+              Run Code
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setExplainerOpen(true)}

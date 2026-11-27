@@ -57,10 +57,25 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
-          globIgnores: ['**/vendor-three*.js', '**/*3D*.js', '**/*three*.js'],
+          globIgnores: ['**/vendor-three*.js', '**/*3D*.js', '**/*three*.js', '**/pyodide*'],
           navigateFallback: `${base}index.html`,
           navigateFallbackDenylist: [/^\/api\//, /generativelanguage\.googleapis\.com/],
           runtimeCaching: [
+            {
+              // Runtime cache Pyodide CDN assets (WASM, Python stdlib zip, package metadata)
+              urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/pyodide\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'pyverse-pyodide-runtime-cache',
+                expiration: {
+                  maxEntries: 25,
+                  maxAgeSeconds: 60 * 60 * 24 * 60, // 60 days
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
             {
               // Runtime cache 3D chunks on demand when user opens 3D mode
               urlPattern: ({ url }) =>
