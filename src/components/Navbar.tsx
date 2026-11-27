@@ -109,9 +109,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 1: PyVerse Brand Logo */}
         <button
           type="button"
-          onClick={() => handleNav('home')}
+          onClick={() => handleNav('landing')}
           className="rounded-lg shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
-          aria-label="PyVerse Explore Home"
+          aria-label="PyVerse Landing Page"
+          title="PyVerse Landing Page"
         >
           <PyVerseLogo size="md" />
         </button>

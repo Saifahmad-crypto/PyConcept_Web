@@ -1,4 +1,5 @@
 export type SectionId =
+  | 'landing'
   | 'home'
   | 'learn'
   | 'lab'

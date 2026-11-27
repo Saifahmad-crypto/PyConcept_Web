@@ -13,6 +13,7 @@ import {
 import { useProgress } from './hooks/useProgress';
 import { useHashRoute } from './hooks/useHashRoute';
 import { Navbar } from './components/Navbar';
+import { LandingPage } from './components/LandingPage';
 import { HomePage } from './components/HomePage';
 import { LearningWorldPage } from './components/LearningWorldPage';
 import { InteractiveLabPage } from './components/lab/InteractiveLabPage';
@@ -214,14 +215,16 @@ export default function App() {
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'user'}>
       <div className="flex min-h-screen flex-col bg-[#FBF5F9] dark:bg-[#0f0303] text-[#100303] dark:text-[#f0eaea]">
-        <Navbar
-          activeSection={activeSection}
-          xp={progress.xp}
-          preferences={progress.preferences}
-          onUpdatePreferences={updatePreferences}
-          onOpenSearch={() => setSearchOpen(true)}
-          onNavigate={navigateTo}
-        />
+        {activeSection !== 'landing' && (
+          <Navbar
+            activeSection={activeSection}
+            xp={progress.xp}
+            preferences={progress.preferences}
+            onUpdatePreferences={updatePreferences}
+            onOpenSearch={() => setSearchOpen(true)}
+            onNavigate={navigateTo}
+          />
+        )}
 
         <main className="flex-1 bg-[#FBF5F9] dark:bg-[#0f0303]">
           <motion.div
@@ -230,6 +233,19 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.2, ease: 'easeOut' }}
           >
+            {activeSection === 'landing' && (
+              <LandingPage
+                onEnterApp={() => navigateTo('home')}
+                onOpenSection={(sec) => {
+                  if (sec === 'lab') {
+                    openLabTab('create-system');
+                  } else {
+                    navigateTo(sec);
+                  }
+                }}
+              />
+            )}
+
             {activeSection === 'home' && (
               <HomePage
                 progress={progress}

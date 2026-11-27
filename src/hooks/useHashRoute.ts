@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { SectionId } from '../types';
 
 const VALID_SECTIONS = new Set<SectionId>([
+  'landing',
   'home',
   'learn',
   'lab',
@@ -25,21 +26,22 @@ function normalizeSection(raw: SectionId): SectionId {
 
 export function parseHashToSection(hash: string): SectionId {
   const cleaned = hash.replace(/^#\/?/, '').split(/[/?#]/)[0].trim().toLowerCase() as SectionId;
-  if (!cleaned) return 'home';
+  if (!cleaned || cleaned === 'landing') return 'landing';
   if (VALID_SECTIONS.has(cleaned)) {
     return normalizeSection(cleaned);
   }
-  return 'home';
+  return 'landing';
 }
 
 export function sectionToHash(section: SectionId): string {
   const normalized = normalizeSection(section);
-  return normalized === 'home' ? '#/' : `#/${normalized}`;
+  if (normalized === 'landing') return '#/';
+  return `#/${normalized}`;
 }
 
 export function useHashRoute(): [SectionId, (section: SectionId) => void] {
   const [section, setSection] = useState<SectionId>(() =>
-    typeof window !== 'undefined' ? parseHashToSection(window.location.hash) : 'home'
+    typeof window !== 'undefined' ? parseHashToSection(window.location.hash) : 'landing'
   );
 
   useEffect(() => {
