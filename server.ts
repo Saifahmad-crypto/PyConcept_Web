@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
-const DEFAULT_MODEL = 'gemini-3.1-flash-lite';
+const DEFAULT_MODEL = 'gemini-3.8-flash';
 
 function getConfiguredModel(): string {
   const raw = (process.env.GEMINI_MODEL || '').trim();
@@ -228,7 +228,7 @@ function mapGeminiError(err: unknown): { status: number; message: string; code: 
 async function withModelFallback<T>(fn: (model: string) => Promise<T>): Promise<T> {
   const primary = getConfiguredModel();
   const candidates = Array.from(
-    new Set([primary, 'gemini-3.1-flash-lite', 'gemini-2.5-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'])
+    new Set([primary, 'gemini-3.8-flash', 'gemini-3.1-flash-lite', 'gemini-flash-latest'])
   );
   let lastErr: unknown;
   for (const model of candidates) {
@@ -242,7 +242,8 @@ async function withModelFallback<T>(fn: (model: string) => Promise<T>): Promise<
         msg.includes('503') ||
         msg.includes('unavailable') ||
         msg.includes('not_found') ||
-        msg.includes('404');
+        msg.includes('404') ||
+        msg.includes('no longer available');
       if (!isTransient) {
         throw err;
       }
