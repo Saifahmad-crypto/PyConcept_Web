@@ -50,11 +50,47 @@ export const SIMULATORS_CATALOG: SimulatorMeta[] = [
       'Online checkouts apply tiered percentage discounts from highest spend threshold to lowest.',
     concepts: ['if-elif-else', 'Comparison operators', 'Arithmetic operators'],
   },
+  {
+    id: 'grade-calculator',
+    number: '05',
+    title: 'Grade Calculator',
+    category: 'conditionals',
+    difficulty: 'Beginner',
+    shortDescription:
+      'Slide student marks from 0 to 100 and trace sequential if-elif-else grading branches.',
+    realLifeScenario:
+      'Academic evaluation systems check marks against descending thresholds to assign final grades.',
+    concepts: ['if-elif-else', 'Comparison operators', 'Descending threshold chain'],
+  },
+  {
+    id: 'leap-year',
+    number: '06',
+    title: 'Leap Year Checker',
+    category: 'conditionals',
+    difficulty: 'Intermediate',
+    shortDescription:
+      'Test years like 2024, 1900, and 2000 to master compound logical operators (and, or, not).',
+    realLifeScenario:
+      'Calendar systems evaluate astronomical leap rules with divisible by 4, century exclusions, and 400 overrides.',
+    concepts: ['Compound booleans', 'and operator', 'or operator', 'Modulo arithmetic (%)'],
+  },
+  {
+    id: 'electricity-bill',
+    number: '07',
+    title: 'Electricity Bill Calculator',
+    category: 'conditionals',
+    difficulty: 'Applied',
+    shortDescription:
+      'Input energy units consumed (kWh) and calculate progressive tariff slab-wise charges via elif.',
+    realLifeScenario:
+      'Power utilities apply progressive tiered pricing so low electricity usage remains affordable.',
+    concepts: ['if-elif-else', 'Tiered pricing slabs', 'Cumulative math'],
+  },
 
   // Category B: Loop Simulators (4)
   {
     id: 'elevator-floor',
-    number: '05',
+    number: '08',
     title: 'Elevator Floor Simulator',
     category: 'loops',
     difficulty: 'Beginner',
@@ -66,7 +102,7 @@ export const SIMULATORS_CATALOG: SimulatorMeta[] = [
   },
   {
     id: 'countdown-timer',
-    number: '06',
+    number: '09',
     title: 'Countdown Timer',
     category: 'loops',
     difficulty: 'Beginner',
@@ -78,7 +114,7 @@ export const SIMULATORS_CATALOG: SimulatorMeta[] = [
   },
   {
     id: 'parking-scanner',
-    number: '07',
+    number: '10',
     title: 'Parking Slot Scanner',
     category: 'loops',
     difficulty: 'Intermediate',
@@ -90,7 +126,7 @@ export const SIMULATORS_CATALOG: SimulatorMeta[] = [
   },
   {
     id: 'atm-cash-counter',
-    number: '08',
+    number: '11',
     title: 'ATM Cash Counter',
     category: 'loops',
     difficulty: 'Applied',

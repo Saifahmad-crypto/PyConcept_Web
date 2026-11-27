@@ -48,6 +48,24 @@ const PATTERN_TO_CHALLENGE: Record<
     patternSummary:
       'Build a descending threshold ladder—just like tiered checkout discounts.',
   },
+  'grade-calculator': {
+    challengeId: 'ch-c4',
+    patternName: 'Grade if-elif-else Ladder',
+    patternSummary:
+      'Order grade thresholds from highest (90+) to lowest so only the top matching grade triggers.',
+  },
+  'leap-year': {
+    challengeId: 'ch-c5',
+    patternName: 'Compound Boolean (and, or, not)',
+    patternSummary:
+      'Combine multiple logical conditions together to master complex real-world calendar decisions.',
+  },
+  'electricity-bill': {
+    challengeId: 'ch-c1',
+    patternName: 'Slab-wise Progressive elif Ladder',
+    patternSummary:
+      'Calculate tariff energy charges step-by-step with progressive tiered elif brackets.',
+  },
   'atm-decision': {
     challengeId: 'ch-c5',
     patternName: 'Nested & Logical (and) Conditions',

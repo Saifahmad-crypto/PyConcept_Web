@@ -12,6 +12,9 @@ import { TrafficSignalStage } from './stages/TrafficSignalStage';
 import { AtmDecisionStage } from './stages/AtmDecisionStage';
 import { SmartAcStage } from './stages/SmartAcStage';
 import { ShoppingDiscountStage } from './stages/ShoppingDiscountStage';
+import { GradeCalculatorStage } from './stages/GradeCalculatorStage';
+import { LeapYearStage } from './stages/LeapYearStage';
+import { ElectricityBillStage } from './stages/ElectricityBillStage';
 import { ElevatorFloorStage } from './stages/ElevatorFloorStage';
 import { CountdownTimerStage } from './stages/CountdownTimerStage';
 import { ParkingScannerStage } from './stages/ParkingScannerStage';
@@ -75,6 +78,12 @@ export const SimulatorsSection: React.FC<SimulatorsSectionProps> = ({
         return <SmartAcStage meta={meta} onBackToHub={handleBack} />;
       case 'shopping-discount':
         return <ShoppingDiscountStage meta={meta} onBackToHub={handleBack} />;
+      case 'grade-calculator':
+        return <GradeCalculatorStage meta={meta} onBackToHub={handleBack} />;
+      case 'leap-year':
+        return <LeapYearStage meta={meta} onBackToHub={handleBack} />;
+      case 'electricity-bill':
+        return <ElectricityBillStage meta={meta} onBackToHub={handleBack} />;
       case 'elevator-floor':
         return <ElevatorFloorStage meta={meta} onBackToHub={handleBack} />;
       case 'countdown-timer':

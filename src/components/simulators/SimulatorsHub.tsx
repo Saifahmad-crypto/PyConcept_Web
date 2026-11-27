@@ -12,6 +12,9 @@ import {
   Search,
   GitBranch,
   Repeat,
+  GraduationCap,
+  Calendar,
+  Zap,
 } from 'lucide-react';
 import { SimulatorCategory, SimulatorId, SimulatorMeta } from '../../types';
 import { SIMULATORS_CATALOG } from '../../simulators/simulatorsData';
@@ -28,6 +31,9 @@ const SIMULATOR_ICONS: Record<SimulatorId, React.ReactNode> = {
   'atm-decision': <Landmark className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'smart-ac': <ThermometerSnowflake className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'shopping-discount': <ShoppingBag className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'grade-calculator': <GraduationCap className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'leap-year': <Calendar className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
+  'electricity-bill': <Zap className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'elevator-floor': <Building2 className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'countdown-timer': <Timer className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,
   'parking-scanner': <CarFront className="h-6 w-6 text-[#E10906]" aria-hidden="true" />,

@@ -584,7 +584,10 @@ export function useProgress() {
           simulatorId === 'traffic-signal' ||
           simulatorId === 'atm-decision' ||
           simulatorId === 'smart-ac' ||
-          simulatorId === 'shopping-discount'
+          simulatorId === 'shopping-discount' ||
+          simulatorId === 'grade-calculator' ||
+          simulatorId === 'leap-year' ||
+          simulatorId === 'electricity-bill'
             ? 'conditionals'
             : 'loops',
         xpReward: XP_REWARDS.simulator,
