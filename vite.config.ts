@@ -57,9 +57,25 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2,json}'],
+          globIgnores: ['**/vendor-three*.js', '**/ElevatorFloor3D*.js', '**/*three*.js'],
           navigateFallback: `${base}index.html`,
           navigateFallbackDenylist: [/^\/api\//, /generativelanguage\.googleapis\.com/],
           runtimeCaching: [
+            {
+              // Runtime cache 3D chunks on demand when user opens 3D mode
+              urlPattern: ({ url }) =>
+                url.pathname.includes('three') ||
+                url.pathname.includes('vendor-three') ||
+                url.pathname.includes('ElevatorFloor3D'),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'pyverse-3d-runtime-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+                },
+              },
+            },
             {
               // Do NOT cache AI Tutor API or Google Generative Language endpoints
               urlPattern: ({ url }) =>
@@ -119,6 +135,9 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              if (id.includes('three') || id.includes('@react-three')) {
+                return 'vendor-three';
+              }
               if (id.includes('react') || id.includes('react-dom')) {
                 return 'vendor-react';
               }

@@ -15,6 +15,8 @@ import {
   Sparkles,
   History,
   ChevronDown,
+  Box,
+  Layers,
 } from 'lucide-react';
 import { SimulatorId, SimulatorMeta, TutorSimulatorContext } from '../../types';
 import { PythonTraceStep, formatPyLiteral } from '../../utils/pythonEngine';
@@ -63,6 +65,7 @@ export interface SimulatorShellProps {
   onBackToHub: () => void;
   initialVariables: Record<string, string | number | boolean | (string | number)[]>;
   initialExplanation: string;
+  scene3D?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -161,12 +164,32 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
   onBackToHub,
   initialVariables,
   initialExplanation,
+  scene3D,
   children,
 }) => {
   const totalSteps = steps.length;
   const activeStep: PythonTraceStep | null =
     stepIndex > 0 && stepIndex <= totalSteps ? steps[stepIndex - 1] : null;
   const isFinished = totalSteps > 0 && stepIndex >= totalSteps;
+
+  const [viewMode, setViewMode] = useState<'2d' | '3d'>(() => {
+    try {
+      const saved = localStorage.getItem('pyverse_sim_view_mode');
+      if (saved === '3d') return '3d';
+    } catch {
+      // ignore localStorage error
+    }
+    return '2d';
+  });
+
+  const handleToggleViewMode = (mode: '2d' | '3d') => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem('pyverse_sim_view_mode', mode);
+    } catch {
+      // ignore
+    }
+  };
 
   const sharedSpeed = useSharedSimulatorSpeed();
   const speedMs = propSpeedMs ?? sharedSpeed.speedMs;
@@ -406,7 +429,63 @@ export const SimulatorShell: React.FC<SimulatorShellProps> = ({
           {/* LEFT SIDE — REAL-LIFE SIMULATION */}
           <div className="lg:col-span-7">
             <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-5 sm:p-6 shadow-sm">
-              {children}
+              {/* 2D / 3D Mode Switcher Header */}
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#F1EEEE] dark:border-[#2a1212] pb-3">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-[#100303] dark:text-[#f0eaea]">
+                  {viewMode === '3d' && scene3D ? (
+                    <Box className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                  ) : (
+                    <Layers className="h-4 w-4 text-[#E10906]" aria-hidden="true" />
+                  )}
+                  <span>Perspective Mode</span>
+                </div>
+
+                <div className="inline-flex items-center rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#F8FAFC] dark:bg-[#120404] p-0.5">
+                  <button
+                    type="button"
+                    onClick={() => handleToggleViewMode('2d')}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
+                      viewMode === '2d' || !scene3D
+                        ? 'bg-white dark:bg-[#250909] text-[#E10906] shadow-xs'
+                        : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
+                    }`}
+                  >
+                    <Layers className="h-3.5 w-3.5" aria-hidden="true" />
+                    2D View
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={!scene3D}
+                    onClick={() => scene3D && handleToggleViewMode('3d')}
+                    title={scene3D ? 'Switch to interactive 3D view' : '3D coming soon for this simulator'}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
+                      viewMode === '3d' && scene3D
+                        ? 'bg-gradient-to-r from-[#E10906] to-[#8B5CF6] text-white shadow-xs'
+                        : scene3D
+                        ? 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
+                        : 'cursor-not-allowed text-[#B5AFAF] dark:text-[#554040] opacity-60'
+                    }`}
+                  >
+                    <Box className="h-3.5 w-3.5" aria-hidden="true" />
+                    3D View
+                    {!scene3D && (
+                      <span className="ml-1 rounded-md bg-slate-200/80 dark:bg-[#351515] px-1.5 py-0.2 text-[9px] font-bold text-[#8A8585] dark:text-[#b09e9e]">
+                        Coming Soon
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* View Rendering: 3D scene or Standard 2D children */}
+              {viewMode === '3d' && scene3D ? (
+                <div className="space-y-4">
+                  {scene3D}
+                </div>
+              ) : (
+                children
+              )}
             </div>
           </div>
 

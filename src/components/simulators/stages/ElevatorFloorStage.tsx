@@ -1,9 +1,12 @@
-import React, { useState, useMemo } from 'react';
-import { ArrowUp, ArrowDown, Minus, Building2 } from 'lucide-react';
+import React, { useState, useMemo, Suspense, lazy } from 'react';
+import { ArrowUp, ArrowDown, Minus, Building2, Loader2 } from 'lucide-react';
 import { SimulatorMeta } from '../../../types';
 import { useSimulatorRunner } from '../../../simulators/useSimulatorRunner';
 import { SimulatorShell } from '../SimulatorShell';
 import { scaleAnimationMs } from '../AnimationSpeedController';
+
+// Lazy-load 3D canvas so Three.js bundle is only fetched when 3D mode is accessed
+const ElevatorFloor3D = lazy(() => import('./ElevatorFloor3D'));
 
 interface Props {
   meta: SimulatorMeta;
@@ -66,6 +69,88 @@ export const ElevatorFloorStage: React.FC<Props> = ({ meta, onBackToHub }) => {
       onBackToHub={onBackToHub}
       initialVariables={{ start: startFloor, destination: targetFloor, step: computedStep }}
       initialExplanation='Choose starting and destination floors, then press Play or Next Step to watch range() step the elevator one floor per iteration.'
+      scene3D={
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+                3D Interactive Elevator Tower
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-[#9a8585]">
+                Real-time 3D simulation synchronized with loop execution. Drag to rotate, scroll to zoom.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="rounded-lg bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 px-2.5 py-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-300">
+                Floor: {currentFloor}
+              </span>
+              <span className="rounded-lg bg-violet-50 dark:bg-violet-950/60 border border-violet-200 dark:border-violet-800 px-2.5 py-1 text-xs font-mono font-bold text-violet-700 dark:text-violet-300">
+                Target: {targetFloor}
+              </span>
+            </div>
+          </div>
+
+          <Suspense
+            fallback={
+              <div className="flex h-[380px] w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-[#100303] text-slate-300">
+                <Loader2 className="h-8 w-8 animate-spin text-[#E10906]" />
+                <span className="text-xs font-medium">Loading 3D Engine &amp; Elevator Scene...</span>
+              </div>
+            }
+          >
+            <ElevatorFloor3D
+              currentFloor={currentFloor}
+              startFloor={startFloor}
+              targetFloor={targetFloor}
+              activePass={activePass}
+              isMoving={runner.isPlaying}
+            />
+          </Suspense>
+
+          {/* Interactive controls replicated below 3D canvas so users can experiment directly */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-xl border border-slate-200 dark:border-[#3a1a1a] bg-slate-50 dark:bg-[#120404] p-3 text-xs">
+            <div>
+              <label htmlFor="elev-start-3d" className="block text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585]">
+                Start Floor: <span className="font-mono text-[#100303] dark:text-[#f0eaea]">{startFloor}</span>
+              </label>
+              <select
+                id="elev-start-3d"
+                value={startFloor}
+                onChange={(e) =>
+                  handleResettingChange(() => setStartFloor(Number(e.target.value)))
+                }
+                className="mt-1 w-full rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-2.5 py-1.5 font-mono text-xs font-semibold text-[#100303] dark:text-[#f0eaea]"
+              >
+                {FLOORS.slice().reverse().map((f) => (
+                  <option key={f} value={f}>
+                    Floor {f}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="elev-dest-3d" className="block text-[11px] font-semibold text-[#8A8585] dark:text-[#9a8585]">
+                Target Floor: <span className="font-mono text-[#100303] dark:text-[#f0eaea]">{targetFloor}</span>
+              </label>
+              <select
+                id="elev-dest-3d"
+                value={targetFloor}
+                onChange={(e) =>
+                  handleResettingChange(() => setTargetFloor(Number(e.target.value)))
+                }
+                className="mt-1 w-full rounded-lg border border-slate-200 dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] px-2.5 py-1.5 font-mono text-xs font-semibold text-[#100303] dark:text-[#f0eaea]"
+              >
+                {FLOORS.slice().reverse().map((f) => (
+                  <option key={f} value={f}>
+                    Floor {f}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      }
     >
       <div className="space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
