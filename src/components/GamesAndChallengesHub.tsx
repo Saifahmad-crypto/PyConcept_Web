@@ -21,10 +21,11 @@ interface GamesAndChallengesHubProps {
   completedChallenges: string[];
   onCompleteChallenge: (id: string) => void;
   quizScores: {
+    basics?: QuizScoreRecord | null;
     conditionals: QuizScoreRecord | null;
     loops: QuizScoreRecord | null;
   };
-  onRecordQuizResult: (topic: 'conditionals' | 'loops', score: number, total: number) => void;
+  onRecordQuizResult: (topic: 'basics' | 'conditionals' | 'loops', score: number, total: number) => void;
 }
 
 const HUB_TABS: Array<{

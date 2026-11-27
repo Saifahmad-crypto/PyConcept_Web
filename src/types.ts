@@ -116,14 +116,19 @@ export interface MissionDef {
   linkedLessonId?: string;
 }
 
+export type QuizDifficulty = 'Easy' | 'Medium' | 'Hard';
+export type QuizKind = 'output' | 'concept' | 'error' | 'fill';
+
 export interface QuizQuestion {
   id: string;
-  topic: Exclude<TopicId, 'basics'> | TopicId;
+  topic: TopicId;
   question: string;
   code?: string;
   options: string[];
   correctIndex: number;
   explanation: string;
+  difficulty?: QuizDifficulty;
+  kind?: QuizKind;
 }
 
 export interface CodingChallenge {
@@ -137,6 +142,7 @@ export interface CodingChallenge {
   starterCode: string;
   hint: string;
   solutionCode: string;
+  explanation?: string;
   validateOutput: (output: string, code: string) => { passed: boolean; message: string };
 }
 
@@ -346,6 +352,7 @@ export interface LearningProgress {
   completedDailyQuests: string[];
   understoodFlashcards: string[];
   quizScores: {
+    basics?: QuizScoreRecord | null;
     conditionals: QuizScoreRecord | null;
     loops: QuizScoreRecord | null;
   };

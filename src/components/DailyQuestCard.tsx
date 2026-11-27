@@ -6,10 +6,11 @@ import {
   Lightbulb,
   Sparkles,
   XCircle,
+  Flame,
 } from 'lucide-react';
 import { TopicId } from '../types';
 import { getDailyQuestForDate } from '../data/ecosystemData';
-import { getLocalDateKey } from '../hooks/useProgress';
+import { getLocalDateKey, computeStreakDays } from '../hooks/useProgress';
 import { CodeBlock } from './CodeBlock';
 
 interface DailyQuestCardProps {
@@ -31,6 +32,19 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
   const dateKey = getLocalDateKey();
   const quest = getDailyQuestForDate(dateKey);
   const alreadyCompleted = completedDailyQuests.includes(quest.id);
+
+  const streakDays = React.useMemo(() => {
+    try {
+      const stored = localStorage.getItem('pyverse_learning_progress_v1');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.activeDates) {
+          return computeStreakDays(parsed.activeDates);
+        }
+      }
+    } catch {}
+    return 0;
+  }, []);
 
   const [selected, setSelected] = useState<number | null>(
     alreadyCompleted ? quest.correctIndex : null
@@ -80,6 +94,10 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
         </div>
 
         <div className="flex items-center gap-2 font-mono text-xs font-semibold">
+          <span className="inline-flex items-center gap-1 rounded-lg bg-amber-500/10 px-2.5 py-1 text-amber-600 dark:text-amber-400">
+            <Flame className="h-3.5 w-3.5 fill-current" />
+            {streakDays} Day Streak
+          </span>
           <span className="text-[#E10906]">+{quest.xpReward} XP</span>
           {alreadyCompleted && (
             <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300">

@@ -37,7 +37,7 @@ const STUDENTS: StudentData[] = [
     rollNo: '#101',
     semester: '5th',
     session: '2025-26',
-    heapAddr: '0x7ffd181',
+    heapAddr: '0x7fff40a',
     baseMarks: 94,
     bannerColor: '#E10906', // PyVerse Red
     glowColor: '#FF4D4D',
@@ -51,7 +51,7 @@ const STUDENTS: StudentData[] = [
     rollNo: '#102',
     semester: '3rd',
     session: '2025-26',
-    heapAddr: '0x7ffd184',
+    heapAddr: '0x7fff41c',
     baseMarks: 84,
     bannerColor: '#0284c7', // Cyber Sky
     glowColor: '#38bdf8',
@@ -65,7 +65,7 @@ const STUDENTS: StudentData[] = [
     rollNo: '#103',
     semester: '3rd',
     session: '2025-26',
-    heapAddr: '0x7ffd189',
+    heapAddr: '0x7fff42e',
     baseMarks: 74,
     bannerColor: '#9333ea', // Cyber Purple
     glowColor: '#c084fc',
@@ -79,7 +79,7 @@ const STUDENTS: StudentData[] = [
     rollNo: '#104',
     semester: '5th',
     session: '2024-25',
-    heapAddr: '0x7ffd192',
+    heapAddr: '0x7fff43a',
     baseMarks: 88,
     bannerColor: '#d946ef', // Neon Magenta
     glowColor: '#f472b6',
@@ -235,7 +235,7 @@ function StackPedestal({
 
         {showMemory && (
           <Text position={[-0.55, 0.03, 0.24]} fontSize={0.065} color="#facc15" anchorX="left" anchorY="middle">
-            eval_ptr: 0x7ffd181
+            eval_ptr: 0x7fff40a
           </Text>
         )}
       </group>

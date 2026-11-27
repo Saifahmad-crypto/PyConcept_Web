@@ -97,6 +97,7 @@ const DEFAULT_PROGRESS: LearningProgress = {
   completedDailyQuests: [],
   understoodFlashcards: [],
   quizScores: {
+    basics: null,
     conditionals: null,
     loops: null,
   },
@@ -265,6 +266,7 @@ function migrateLegacyProgress(parsed: Partial<LearningProgress>): LearningProgr
       ? parsed.understoodFlashcards
       : [],
     quizScores: {
+      basics: parsed.quizScores?.basics ?? null,
       conditionals: parsed.quizScores?.conditionals ?? null,
       loops: parsed.quizScores?.loops ?? null,
     },
@@ -508,7 +510,7 @@ export function useProgress() {
   }, []);
 
   const recordQuizResult = useCallback(
-    (topic: 'conditionals' | 'loops', score: number, total: number) => {
+    (topic: 'basics' | 'conditionals' | 'loops', score: number, total: number) => {
       setProgress((prev) => {
         const existing = prev.quizScores[topic];
         const passedThreshold = score >= Math.ceil(total * 0.6);

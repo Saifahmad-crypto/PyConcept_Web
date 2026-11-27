@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   CheckCircle2,
   Play,
@@ -6,10 +6,15 @@ import {
   Lightbulb,
   Eye,
   AlertCircle,
+  Sparkles,
+  Flame,
+  Calendar,
+  Code2,
 } from 'lucide-react';
 import { CODING_CHALLENGES } from '../data/curriculumData';
 import { TopicId } from '../types';
 import { runPythonCode } from '../utils/pythonEngine';
+import { getLocalDateKey, computeStreakDays } from '../hooks/useProgress';
 import { CodeBlock } from './CodeBlock';
 
 interface ChallengesSectionProps {
@@ -32,6 +37,30 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   const [activeId, setActiveId] = useState<string>(CODING_CHALLENGES[0].id);
   const activeChallenge =
     CODING_CHALLENGES.find((c) => c.id === activeId) || filteredChallenges[0];
+
+  // Daily Challenge rotation from pool based on date
+  const todayKey = getLocalDateKey();
+  const dailyChallenge = useMemo(() => {
+    let hash = 0;
+    for (let i = 0; i < todayKey.length; i++) {
+      hash = (hash * 31 + todayKey.charCodeAt(i)) >>> 0;
+    }
+    return CODING_CHALLENGES[hash % CODING_CHALLENGES.length];
+  }, [todayKey]);
+
+  // Read streak from localStorage
+  const currentStreak = useMemo(() => {
+    try {
+      const stored = localStorage.getItem('pyverse_learning_progress_v1');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.activeDates) {
+          return computeStreakDays(parsed.activeDates);
+        }
+      }
+    } catch {}
+    return 0;
+  }, []);
 
   const [codeMap, setCodeMap] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
@@ -115,18 +144,27 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
     }
   };
 
+  const conditionalsCount = CODING_CHALLENGES.filter((c) => c.topic === 'conditionals').length;
+  const loopsCount = CODING_CHALLENGES.filter((c) => c.topic === 'loops').length;
+  const isDailyCompleted = completedChallenges.includes(dailyChallenge.id);
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       {/* Header */}
-      <div className="mb-8 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-6 md:flex-row md:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 border-b border-[#E5DFDF] dark:border-[#3a1a1a] pb-6 md:flex-row md:items-end">
         <div>
-          <p className="text-xs font-semibold text-[#E10906]">PyVerse Practice Challenges</p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-[#E10906]">PyVerse Engineering Lab</span>
+            <span className="rounded-full bg-[#E10906]/10 px-2 py-0.5 text-[10px] font-mono font-bold text-[#E10906]">
+              {CODING_CHALLENGES.length} Lab Challenges
+            </span>
+          </div>
           <h1 className="mt-1 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
-            Beginner Coding Challenges
+            Engineering Coding Challenges
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
-            Write real Python solutions for 10 structured problems (5 Conditional Statements, 5 Loops)
-            and verify your output instantly.
+            Write real Python solutions for 60 structured lab problems ({conditionalsCount} Conditionals, {loopsCount} Loops)
+            with comprehensive multi-case verification.
           </p>
         </div>
 
@@ -140,7 +178,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
             }`}
           >
-            Topic 08 · Conditionals (5)
+            Topic 08 · Conditionals ({conditionalsCount})
           </button>
           <button
             type="button"
@@ -151,79 +189,166 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 : 'text-[#8A8585] dark:text-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
             }`}
           >
-            Topic 09 · Loops (5)
+            Topic 09 · Loops ({loopsCount})
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        {/* Challenge List */}
-        <div className="space-y-2.5 lg:col-span-4">
-          {filteredChallenges.map((ch, idx) => {
-            const isSelected = ch.id === activeChallenge.id;
-            const isSolved = completedChallenges.includes(ch.id);
-            return (
+      {/* Daily Challenge Highlight Banner */}
+      <div className="mb-8 overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 text-amber-500">
+              <Flame className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 font-semibold">
+                <span className="flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Today&apos;s Featured Lab Challenge · {todayKey}
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1 font-mono text-emerald-600 dark:text-emerald-400">
+                  <Flame className="h-3.5 w-3.5 fill-current" />
+                  {currentStreak} Day Streak
+                </span>
+              </div>
+              <h3 className="font-display text-base sm:text-lg font-bold text-[#100303] dark:text-[#f0eaea]">
+                {dailyChallenge.title}
+              </h3>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {isDailyCompleted ? (
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <CheckCircle2 className="h-4 w-4" />
+                Completed Today
+              </span>
+            ) : (
               <button
-                key={ch.id}
                 type="button"
-                onClick={() => selectChallenge(ch.id)}
-                className={`flex w-full items-center justify-between gap-3 rounded-xl border p-4 text-left transition-all ${
-                  isSelected
-                    ? 'border-[#E10906] bg-[#E10906]/10 shadow-sm'
-                    : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] hover:border-[#E5DFDF] shadow-xs'
-                }`}
+                onClick={() => {
+                  setTopicFilter(dailyChallenge.topic);
+                  selectChallenge(dailyChallenge.id);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#E10906] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-[#c40805]"
               >
-                <div>
-                  <span className="font-mono text-[11px] font-medium text-[#8A8585] dark:text-[#9a8585]">
-                    Challenge 0{idx + 1} · {ch.difficulty}
-                  </span>
-                  <h3 className="mt-0.5 font-display text-sm font-semibold text-[#100303] dark:text-[#f0eaea]">
-                    {ch.title}
-                  </h3>
-                </div>
-                {isSolved && (
-                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-label="Solved" />
-                )}
+                <Code2 className="h-4 w-4" />
+                Solve Today&apos;s Challenge
               </button>
-            );
-          })}
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        {/* Left Column: Challenges List */}
+        <div className="space-y-3 lg:col-span-5">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="font-display text-base font-bold text-[#100303] dark:text-[#f0eaea]">
+              {topicFilter === 'conditionals' ? 'Conditionals Lab' : 'Loops Lab'} Problems
+            </h2>
+            <span className="font-mono text-xs text-[#8A8585] dark:text-[#9a8585]">
+              {filteredChallenges.filter((c) => completedChallenges.includes(c.id)).length} /{' '}
+              {filteredChallenges.length} Solved
+            </span>
+          </div>
+
+          <div className="space-y-2 max-h-[680px] overflow-y-auto pr-1">
+            {filteredChallenges.map((challenge, idx) => {
+              const isActive = challenge.id === activeChallenge.id;
+              const isCompleted = completedChallenges.includes(challenge.id);
+
+              return (
+                <button
+                  key={challenge.id}
+                  type="button"
+                  onClick={() => selectChallenge(challenge.id)}
+                  className={`flex w-full items-start justify-between gap-3 rounded-xl border p-3.5 text-left transition-all ${
+                    isActive
+                      ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#100303] dark:text-[#f0eaea] shadow-sm'
+                      : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906] hover:bg-[#FFF1F1] dark:hover:bg-[#220a0a]'
+                  }`}
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs font-bold text-[#8A8585] dark:text-[#9a8585]">
+                        #{idx + 1}
+                      </span>
+                      <span className="font-display text-sm font-semibold">{challenge.title}</span>
+                    </div>
+                    <p className="line-clamp-1 text-xs text-[#8A8585] dark:text-[#9a8585]">
+                      {challenge.description}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                        challenge.difficulty === 'Beginner'
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                          : challenge.difficulty === 'Guided'
+                          ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                          : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                      }`}
+                    >
+                      {challenge.difficulty}
+                    </span>
+                    {isCompleted && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                        <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
+                        Done
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Active Challenge Workspace */}
-        <div className="space-y-5 lg:col-span-8">
-          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <span className="font-mono text-xs font-semibold text-[#E10906]">
-                  {activeChallenge.topic === 'conditionals' ? 'Topic 08' : 'Topic 09'} ·{' '}
-                  {activeChallenge.difficulty}
+        {/* Right Column: Active Challenge Workspace */}
+        <div className="lg:col-span-7">
+          <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-6 shadow-sm space-y-6">
+            {/* Header info */}
+            <div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-[#E10906]">Challenge Workspace</span>
+                <span
+                  className={`rounded px-2 py-0.5 text-xs font-bold ${
+                    activeChallenge.difficulty === 'Beginner'
+                      ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                      : activeChallenge.difficulty === 'Guided'
+                      ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                      : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                  }`}
+                >
+                  {activeChallenge.difficulty} Level
                 </span>
-                <h2 className="mt-0.5 font-display text-2xl font-bold text-[#100303] dark:text-[#f0eaea]">
-                  {activeChallenge.title}
-                </h2>
               </div>
-              {completedChallenges.includes(activeChallenge.id) && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
-                  <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-                  Completed
-                </span>
-              )}
+              <h2 className="mt-1 font-display text-xl font-bold text-[#100303] dark:text-[#f0eaea]">
+                {activeChallenge.title}
+              </h2>
+              <p className="mt-2 text-xs sm:text-sm text-[#8A8585] dark:text-[#9a8585] leading-relaxed">
+                {activeChallenge.description}
+              </p>
             </div>
 
-            <p className="text-sm leading-relaxed text-[#8A8585] dark:text-[#9a8585]">{activeChallenge.description}</p>
-
+            {/* Requirements & Sample Output */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-4">
-                <p className="text-xs font-semibold text-[#100303] dark:text-[#f0eaea]">Requirements</p>
-                <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-[#8A8585] dark:text-[#9a8585]">
+              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-3 text-xs space-y-1.5">
+                <span className="font-semibold text-[#100303] dark:text-[#f0eaea]">Requirements:</span>
+                <ul className="list-inside list-disc space-y-1 text-[#8A8585] dark:text-[#9a8585]">
                   {activeChallenge.requirements.map((req, i) => (
                     <li key={i}>{req}</li>
                   ))}
                 </ul>
               </div>
-              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] p-4">
-                <p className="text-xs font-semibold text-[#CFC8C8]">Expected Sample Output</p>
-                <pre className="mt-2 whitespace-pre-wrap font-mono text-xs text-emerald-300">
+              <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-3 text-xs space-y-1.5">
+                <span className="font-semibold text-[#100303] dark:text-[#f0eaea]">Expected Sample Output:</span>
+                <pre className="font-mono text-emerald-600 dark:text-emerald-400 bg-black/5 dark:bg-white/5 p-2 rounded-lg whitespace-pre-wrap">
                   {activeChallenge.sampleOutput}
                 </pre>
               </div>
@@ -260,7 +385,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 }
                 onKeyDown={handleKeyDown}
                 spellCheck={false}
-                rows={8}
+                rows={9}
                 className="w-full resize-y bg-transparent p-4 font-mono text-sm leading-6 text-[#FBF5F9] focus:outline-none"
               />
             </div>
@@ -285,7 +410,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 className="inline-flex min-h-[42px] items-center gap-2 rounded-xl bg-[#E10906] px-5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
               >
                 <Play className="h-4 w-4" aria-hidden="true" />
-                Run &amp; Verify
+                Run &amp; Verify (5+ Test Cases)
               </button>
               <button
                 type="button"
@@ -296,13 +421,14 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                   }));
                   setFeedback(null);
                 }}
-                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#F1EEEE] dark:hover:bg-[#221010] dark:bg-[#221010] hover:text-[#100303] dark:hover:text-[#f0eaea]"
+                className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2 text-xs font-medium text-[#100303] dark:text-[#f0eaea] transition-colors hover:bg-[#F1EEEE] dark:hover:bg-[#221010]"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 Reset Code
               </button>
             </div>
 
+            {/* Test Results & Feedback */}
             {feedback && (
               <div
                 className={`rounded-xl border p-4 text-xs sm:text-sm ${
@@ -327,9 +453,20 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
                 <p className="mt-1.5 text-[#100303] dark:text-[#f0eaea]">{feedback.message}</p>
                 {feedback.output && (
                   <pre className="mt-2.5 rounded-xl bg-[#100303] p-3 font-mono text-xs text-emerald-300">
-                    Your Output:{'\n'}
+                    Sample Output:{'\n'}
                     {feedback.output}
                   </pre>
+                )}
+
+                {/* Phase 3 Feature: Show Explanation on Solve! */}
+                {feedback.passed && activeChallenge.explanation && (
+                  <div className="mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs text-emerald-900 dark:text-emerald-200">
+                    <div className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-300">
+                      <Sparkles className="h-4 w-4 text-emerald-500" />
+                      Concept Insight / Why This Works:
+                    </div>
+                    <p className="mt-1 leading-relaxed font-sans">{activeChallenge.explanation}</p>
+                  </div>
                 )}
               </div>
             )}
