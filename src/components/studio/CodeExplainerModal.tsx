@@ -21,7 +21,6 @@ import {
   CodeLineStep,
   ExplainerSummary,
 } from '../../utils/codeExplainer';
-import { getStoredBrowserApiKey } from '../../utils/tutorClient';
 
 interface CodeExplainerModalProps {
   code: string;
@@ -133,16 +132,9 @@ export const CodeExplainerModal: React.FC<CodeExplainerModalProps> = ({
   };
 
   const handleFetchAi = async () => {
-    const apiKey = getStoredBrowserApiKey();
-    if (!apiKey) {
-      alert(
-        'To use direct Gemini AI explanations, please add your Gemini API key in AI Tutor settings or use the built-in deterministic educational engine!'
-      );
-      return;
-    }
     setAiLoading(true);
     try {
-      const aiResults = await fetchAiLineByLineExplanation({ code, apiKey });
+      const aiResults = await fetchAiLineByLineExplanation({ code });
       if (aiResults.length > 0) {
         setAnalysis((prev) => {
           const map = new Map(aiResults.map((r) => [r.lineNumber, r]));

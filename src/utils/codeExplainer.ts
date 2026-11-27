@@ -376,52 +376,34 @@ export function analyzePythonCodeStepByStep(code: string): ExplainerSummary {
   };
 }
 
+import { buildTutorApiUrl } from './tutorClient';
+
 /**
- * Optional Gemini AI powered line-by-line explanation call if user
- * has an API key configured. Returns enhanced explanations or falls back.
+ * AI-powered line-by-line explanation call via the centralized backend proxy.
+ * Returns enhanced explanations or empty array to keep deterministic explanations.
  */
 export async function fetchAiLineByLineExplanation({
   code,
-  apiKey,
 }: {
   code: string;
-  apiKey: string;
 }): Promise<Array<{ lineNumber: number; title: string; explanation: string }>> {
-  if (!apiKey.trim()) return [];
-
-  const prompt = `Analyze this Python snippet line-by-line for a beginner student.
-Code:
-\`\`\`python
-${code}
-\`\`\`
-
-Return a JSON array of objects with exact keys:
-[
-  {
-    "lineNumber": 1,
-    "title": "short step title",
-    "explanation": "clear, friendly beginner explanation of what Python does on this line and what variables or outputs change"
-  }
-]
-Return ONLY valid JSON array with no extra markdown text.`;
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { responseMimeType: 'application/json' },
-    }),
-  });
-
-  if (!res.ok) return [];
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) return [];
+  if (!code.trim()) return [];
 
   try {
-    return JSON.parse(text);
+    const res = await fetch(buildTutorApiUrl('/api/tutor/explain-code'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code }),
+    });
+
+    if (!res.ok) return [];
+    const data = (await res.json()) as {
+      steps?: Array<{ lineNumber: number; title: string; explanation: string }>;
+    };
+    if (Array.isArray(data.steps)) {
+      return data.steps;
+    }
+    return [];
   } catch {
     return [];
   }

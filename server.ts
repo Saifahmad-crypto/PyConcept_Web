@@ -574,6 +574,72 @@ Include 4 concise options, 0-based correctIndex (0..3), concept name tested, and
     }
   });
 
+  // AI-enhanced line-by-line code explanation endpoint
+  app.post('/api/tutor/explain-code', async (req: Request, res: Response) => {
+    const ai = getGeminiClient();
+    if (!ai) {
+      res.status(503).json({
+        code: 'API_KEY_MISSING',
+        message: 'GEMINI_API_KEY is not configured on the server.',
+      });
+      return;
+    }
+
+    const { code } = req.body as { code?: string };
+    if (!code || typeof code !== 'string') {
+      res.status(400).json({ error: 'Code string is required.' });
+      return;
+    }
+
+    const prompt = `Analyze this Python snippet line-by-line for a beginner student.
+Code:
+\`\`\`python
+${code.slice(0, 4000)}
+\`\`\`
+
+Return a JSON array of objects with exact keys:
+[
+  {
+    "lineNumber": 1,
+    "title": "short step title",
+    "explanation": "clear, friendly beginner explanation of what Python does on this line and what variables or outputs change"
+  }
+]`;
+
+    try {
+      const response = await withModelFallback((model) =>
+        ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            systemInstruction:
+              'You are PyVerse AI Code Explainer. Explain Python code line-by-line for learners simply and concisely.',
+            responseSchema: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  lineNumber: { type: Type.INTEGER },
+                  title: { type: Type.STRING },
+                  explanation: { type: Type.STRING },
+                },
+                required: ['lineNumber', 'title', 'explanation'],
+              },
+            },
+          },
+        })
+      );
+
+      const text = (response.text ?? '[]').trim();
+      const parsed = JSON.parse(text);
+      res.json({ steps: parsed });
+    } catch (err) {
+      const mapped = mapGeminiError(err);
+      res.status(mapped.status).json({ code: mapped.code, message: mapped.message });
+    }
+  });
+
   if (process.env.NODE_ENV !== 'production') {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
