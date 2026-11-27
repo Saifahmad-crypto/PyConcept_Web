@@ -146,7 +146,13 @@ assert target_cipher == "SOLVED"`
             <button
               type="button"
               onClick={onEnterApp}
-              className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#E10906] hover:bg-[#c00805] text-white text-xs sm:text-sm font-bold shadow-lg shadow-red-600/20 hover:shadow-red-600/30 active:scale-95 transition-all"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onEnterApp();
+                }
+              }}
+              className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#E10906] hover:bg-[#c00805] text-white text-xs sm:text-sm font-bold shadow-lg shadow-red-600/20 hover:shadow-red-600/30 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[#090101]"
             >
               <span>Enter PyVerse</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -188,7 +194,13 @@ assert target_cipher == "SOLVED"`
             <button
               type="button"
               onClick={onEnterApp}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#E10906] hover:bg-[#c00805] text-white font-display text-base font-bold shadow-xl shadow-red-600/25 hover:shadow-red-600/40 active:scale-98 transition-all group"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onEnterApp();
+                }
+              }}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#E10906] hover:bg-[#c00805] text-white font-display text-base font-bold shadow-xl shadow-red-600/25 hover:shadow-red-600/40 active:scale-98 transition-all group focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[#090101]"
             >
               <span>Enter PyVerse</span>
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -322,7 +334,13 @@ assert target_cipher == "SOLVED"`
             <button
               type="button"
               onClick={onEnterApp}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#E10906] hover:bg-[#c00805] text-white font-display text-base font-bold shadow-xl shadow-red-600/30 hover:shadow-red-600/40 active:scale-98 transition-all group"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onEnterApp();
+                }
+              }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#E10906] hover:bg-[#c00805] text-white font-display text-base font-bold shadow-xl shadow-red-600/30 hover:shadow-red-600/40 active:scale-98 transition-all group focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-[#090101]"
             >
               <span>Enter PyVerse Now</span>
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
