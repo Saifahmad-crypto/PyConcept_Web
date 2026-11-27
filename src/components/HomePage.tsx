@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../data/translations';
@@ -44,7 +44,9 @@ import {
   CODING_CHALLENGES,
 } from '../data/curriculumData';
 import { SIMULATORS_CATALOG } from '../simulators/simulatorsData';
-import { getLearnerLevel } from '../data/ecosystemData';
+import { getLearnerLevel, LEARNING_MISSIONS } from '../data/ecosystemData';
+import { GAMES } from './MiniGames';
+import { VAULT_ROOMS } from './games/PythonEscapeRoom';
 import { computeStreakDays } from '../hooks/useProgress';
 import { runPythonCode } from '../utils/pythonEngine';
 import { DailyQuestCard } from './DailyQuestCard';
@@ -107,7 +109,7 @@ const GAME_PREVIEWS = [
   { name: 'Number Sequence Challenge', tag: 'Loops', tab: 'mini-games' as GamesHubTabId },
   { name: 'Output Predictor', tag: 'Loops', tab: 'mini-games' as GamesHubTabId },
   { name: 'Loop Debugger', tag: 'Debugging', tab: 'mini-games' as GamesHubTabId },
-  { name: 'Python Escape Room', tag: '5-Room Vault', tab: 'escape-room' as GamesHubTabId },
+  { name: 'Python Escape Room', tag: `${VAULT_ROOMS.length}-Room Vault`, tab: 'escape-room' as GamesHubTabId },
 ];
 
 const PLAYGROUND_SNIPPETS = [
@@ -182,6 +184,15 @@ export const HomePage: React.FC<HomePageProps> = ({
     CODING_CHALLENGES.find((ch) => !progress.completedChallenges.includes(ch.id)) ??
     CODING_CHALLENGES[0];
 
+  const conditionalSimsCount = useMemo(
+    () => SIMULATORS_CATALOG.filter((s) => s.category === 'conditionals').length,
+    []
+  );
+  const loopSimsCount = useMemo(
+    () => SIMULATORS_CATALOG.filter((s) => s.category === 'loops').length,
+    []
+  );
+
   const filteredSims = SIMULATORS_CATALOG.filter((s) => s.category === simFilter);
 
   const handleSelectSnippet = (idx: number) => {
@@ -252,15 +263,15 @@ export const HomePage: React.FC<HomePageProps> = ({
 
               <div className="mt-10 grid grid-cols-3 gap-4 border-t border-[#2C1616] pt-6">
                 <div>
-                  <p className="font-mono text-xl font-bold text-white tabular-nums">8</p>
+                  <p className="font-mono text-xl font-bold text-white tabular-nums">{SIMULATORS_CATALOG.length}</p>
                   <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{t(lang, 'home.hero.stat1')}</p>
                 </div>
                 <div>
-                  <p className="font-mono text-xl font-bold text-white tabular-nums">17</p>
+                  <p className="font-mono text-xl font-bold text-white tabular-nums">{LEARNING_MISSIONS.length}</p>
                   <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{t(lang, 'home.hero.stat2')}</p>
                 </div>
                 <div>
-                  <p className="font-mono text-xl font-bold text-[#E10906] tabular-nums">8+</p>
+                  <p className="font-mono text-xl font-bold text-[#E10906] tabular-nums">{GAMES.length}+</p>
                   <p className="mt-0.5 text-xs text-[#8A8585] dark:text-[#9a8585]">{t(lang, 'home.hero.stat3')}</p>
                 </div>
               </div>
@@ -461,7 +472,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       Missions
                     </div>
                     <p className="mt-1 font-mono text-lg font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
-                      {progress.completedMissions.length}/17
+                      {progress.completedMissions.length}/{LEARNING_MISSIONS.length}
                     </p>
                   </div>
                   <div className="rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-3">
@@ -642,7 +653,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 {t(lang, 'home.sims.eyebrow')}
               </p>
               <h2 className="mt-2 font-display text-3xl font-extrabold text-[#100303] dark:text-[#f0eaea] sm:text-4xl">
-                Eight real-life Python machines.
+                {SIMULATORS_CATALOG.length} real-life Python machines.
               </h2>
               <p className="mt-2 max-w-xl text-sm text-[#8A8585] dark:text-[#9a8585]">
                 Every simulator synchronizes animated visuals with active code lines, live
@@ -653,8 +664,8 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="inline-flex rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-1">
               {(
                 [
-                  { id: 'conditionals', label: 'Conditionals (4)' },
-                  { id: 'loops', label: 'Loops (4)' },
+                  { id: 'conditionals', label: `Conditionals (${conditionalSimsCount})` },
+                  { id: 'loops', label: `Loops (${loopSimsCount})` },
                 ] as const
               ).map((t) => (
                 <button

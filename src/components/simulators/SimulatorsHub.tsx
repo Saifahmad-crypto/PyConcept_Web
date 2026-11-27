@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   ArrowRight,
   TrafficCone,
@@ -67,6 +67,15 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
   );
   const loopSims = SIMULATORS_CATALOG.filter(
     (s) => s.category === 'loops' && matchesQuery(s)
+  );
+
+  const totalConditionalsCount = useMemo(
+    () => SIMULATORS_CATALOG.filter((s) => s.category === 'conditionals').length,
+    []
+  );
+  const totalLoopsCount = useMemo(
+    () => SIMULATORS_CATALOG.filter((s) => s.category === 'loops').length,
+    []
   );
 
   const showConditionals = (filter === 'all' || filter === 'conditionals') && conditionalSims.length > 0;
@@ -143,7 +152,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
           Learn Python Through Real Life
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#8A8585] dark:text-[#9a8585]">
-          Explore 8 hands-on real-world systems powered by step-by-step Python execution. Adjust live
+          Explore {SIMULATORS_CATALOG.length} hands-on real-world systems powered by step-by-step Python execution. Adjust live
           inputs, watch variables update in real time, and see how every line drives the simulation.
         </p>
 
@@ -152,9 +161,9 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
           <div className="inline-flex flex-wrap rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] p-1 gap-1">
             {(
               [
-                { id: 'all', label: 'All Simulators (8)' },
-                { id: 'conditionals', label: 'Conditional Statements (4)' },
-                { id: 'loops', label: 'Loops (4)' },
+                { id: 'all', label: `All Simulators (${SIMULATORS_CATALOG.length})` },
+                { id: 'conditionals', label: `Conditional Statements (${totalConditionalsCount})` },
+                { id: 'loops', label: `Loops (${totalLoopsCount})` },
               ] as Array<{ id: FilterOption; label: string }>
             ).map((tab) => (
               <button
@@ -206,7 +215,7 @@ export const SimulatorsHub: React.FC<SimulatorsHubProps> = ({
             }}
             className="mt-4 inline-flex items-center rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#0f0303] px-4 py-2 text-xs font-semibold text-[#100303] dark:text-[#f0eaea] hover:border-[#E10906]"
           >
-            Show All 8 Simulators
+            Show All {SIMULATORS_CATALOG.length} Simulators
           </button>
         </div>
       )}

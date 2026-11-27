@@ -39,7 +39,7 @@ interface GameDef {
   questions: GameQuestion[];
 }
 
-const GAMES: GameDef[] = [
+export const GAMES: GameDef[] = [
   // CONDITIONAL GAMES (4)
   {
     id: 'cond-detective',
@@ -425,7 +425,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
         <div className="rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-white dark:bg-[#1a0808] p-4 shadow-sm space-y-4">
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#E10906]">
-              Conditional Games (4)
+              Conditional Games ({condGames.length})
             </p>
             <div className="space-y-1.5">
               {condGames.map((g) => {
@@ -456,7 +456,7 @@ export const MiniGames: React.FC<MiniGamesProps> = ({
 
           <div className="border-t border-[#E5DFDF] dark:border-[#3a1a1a] pt-4">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#E10906]">
-              Loops Games (4)
+              Loops Games ({loopGames.length})
             </p>
             <div className="space-y-1.5">
               {loopGames.map((g) => {

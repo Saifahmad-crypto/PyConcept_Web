@@ -5,11 +5,12 @@ import {
   GameScoreRecord,
   QuizScoreRecord,
 } from '../types';
-import { MiniGames } from './MiniGames';
+import { MiniGames, GAMES } from './MiniGames';
 import { ChallengesSection } from './ChallengesSection';
 import { QuizSection } from './QuizSection';
 import { ConditionalSimulator } from './ConditionalSimulator';
 import { LoopVisualizer } from './LoopVisualizer';
+import { CODING_CHALLENGES } from '../data/curriculumData';
 
 interface GamesAndChallengesHubProps {
   activeTab: GamesHubTabId;
@@ -31,9 +32,9 @@ const HUB_TABS: Array<{
   label: string;
   icon: React.ComponentType<{ className?: string }>;
 }> = [
-  { id: 'mini-games', label: 'Mini-Games (8)', icon: Gamepad2 },
-  { id: 'challenges', label: 'Coding Challenges (10)', icon: Code2 },
-  { id: 'quizzes', label: 'Topic Quizzes (20)', icon: HelpCircle },
+  { id: 'mini-games', label: `Mini-Games (${GAMES.length})`, icon: Gamepad2 },
+  { id: 'challenges', label: `Coding Challenges (${CODING_CHALLENGES.length})`, icon: Code2 },
+  { id: 'quizzes', label: 'Topic Quizzes', icon: HelpCircle },
   { id: 'logic-lab', label: 'Visual Logic Lab', icon: Cpu },
 ];
 
@@ -61,8 +62,8 @@ export const GamesAndChallengesHub: React.FC<GamesAndChallengesHubProps> = ({
               Games, Challenges &amp; Quizzes
             </h1>
             <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
-              Train Python instincts through 8 logic mini-games, 10 verified coding challenges, 20
-              quiz questions, and step-by-step visual labs.
+              Train Python instincts through {GAMES.length} logic mini-games, {CODING_CHALLENGES.length} verified coding challenges, topic
+              quizzes, and step-by-step visual labs.
             </p>
           </div>
 

@@ -261,7 +261,7 @@ export const LearningWorldPage: React.FC<LearningWorldPageProps> = ({
             {(
               [
                 { id: 'map', label: 'Adventure Map', icon: Compass },
-                { id: 'missions', label: `Missions (${progress.completedMissions.length}/17)`, icon: Trophy },
+                { id: 'missions', label: `Missions (${progress.completedMissions.length}/${LEARNING_MISSIONS.length})`, icon: Trophy },
                 { id: 'lessons', label: 'Visual Lessons (6 Stages)', icon: Sparkles },
                 { id: 'daily-quest', label: 'Daily Python Quest', icon: Flame },
               ] as const

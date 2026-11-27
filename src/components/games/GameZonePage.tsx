@@ -6,12 +6,12 @@ import {
   QuizScoreRecord,
   TopicId,
 } from '../../types';
-import { MiniGames } from '../MiniGames';
+import { MiniGames, GAMES } from '../MiniGames';
 import { ChallengesSection } from '../ChallengesSection';
 import { QuizSection } from '../QuizSection';
 import { ConditionalSimulator } from '../ConditionalSimulator';
 import { LoopVisualizer } from '../LoopVisualizer';
-import { PythonEscapeRoom } from './PythonEscapeRoom';
+import { PythonEscapeRoom, VAULT_ROOMS } from './PythonEscapeRoom';
 import { BugHunterLab } from './BugHunterLab';
 
 interface GameZonePageProps {
@@ -43,8 +43,8 @@ const GAME_ZONE_TABS: Array<{
   label: string;
   icon: React.ComponentType<{ className?: string }>;
 }> = [
-  { id: 'mini-games', label: 'Mini-Games (8)', icon: Gamepad2 },
-  { id: 'escape-room', label: 'Python Escape Room', icon: KeyRound },
+  { id: 'mini-games', label: `Mini-Games (${GAMES.length})`, icon: Gamepad2 },
+  { id: 'escape-room', label: `Python Escape Room (${VAULT_ROOMS.length} Rooms)`, icon: KeyRound },
   { id: 'bug-hunter', label: 'Bug Hunter Lab', icon: Bug },
   { id: 'challenges', label: 'Coding Challenges', icon: Code2 },
   { id: 'quizzes', label: 'Topic Quizzes', icon: HelpCircle },
@@ -79,7 +79,7 @@ export const GameZonePage: React.FC<GameZonePageProps> = ({
                 Learn Through Play &amp; Debugging
               </h1>
               <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
-                Master Python logic across 8 mini-games, the 5-room Python Code Vault escape mission, Bug Hunter Lab debugging challenges, coding tasks, and topic quizzes.
+                Master Python logic across {GAMES.length} mini-games, the {VAULT_ROOMS.length}-room Python Code Vault escape mission, Bug Hunter Lab debugging challenges, coding tasks, and topic quizzes.
               </p>
             </div>
           </div>

@@ -42,6 +42,8 @@ import {
   LEARNING_MISSIONS,
   getLearnerLevel,
 } from '../data/ecosystemData';
+import { GAMES } from './MiniGames';
+import { VAULT_ROOMS } from './games/PythonEscapeRoom';
 import { computeStreakDays, getLocalDateKey } from '../hooks/useProgress';
 import { CertificateModal } from './CertificateModal';
 
@@ -508,7 +510,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             Vault Rooms
           </div>
           <p className="mt-2 font-mono text-xl font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
-            {progress.completedEscapeRooms.filter((r) => r.startsWith('room-')).length}/5
+            {progress.completedEscapeRooms.filter((r) => r.startsWith('room-')).length}/{VAULT_ROOMS.length}
           </p>
         </div>
 
@@ -518,7 +520,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
             Mini-Games
           </div>
           <p className="mt-2 font-mono text-xl font-bold text-[#100303] dark:text-[#f0eaea] tabular-nums">
-            {gamesCompleted}/8
+            {gamesCompleted}/{GAMES.length}
           </p>
         </div>
 

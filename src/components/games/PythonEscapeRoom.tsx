@@ -39,7 +39,7 @@ interface EscapeRoomDef {
   verifyCode?: (output: string, code: string) => { passed: boolean; message: string };
 }
 
-const VAULT_ROOMS: EscapeRoomDef[] = [
+export const VAULT_ROOMS: EscapeRoomDef[] = [
   {
     id: 'room-1-gate',
     number: 'Room 01',

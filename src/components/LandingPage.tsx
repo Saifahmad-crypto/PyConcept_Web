@@ -26,6 +26,10 @@ import {
 import { PyVerseLogo } from './PyVerseLogo';
 import { useDarkMode } from '../hooks/useDarkMode';
 
+import { SIMULATORS_CATALOG } from '../simulators/simulatorsData';
+import { GAMES } from './MiniGames';
+import { VAULT_ROOMS } from './games/PythonEscapeRoom';
+
 interface LandingPageProps {
   onEnterApp: () => void;
   onOpenSection: (section: 'learn' | 'lab' | 'games' | 'studio') => void;
@@ -64,7 +68,7 @@ print(f"Logged in: {user_id}")`
       icon: Cpu,
       tag: '02 • REAL-TIME LAB',
       accent: 'border-red-500/30 text-red-400 bg-red-950/20',
-      badge: '8 Live Simulators',
+      badge: `${SIMULATORS_CATALOG.length} Live Simulators`,
       actionLabel: 'Launch Simulators',
       onClick: () => onOpenSection('lab'),
       previewSnippet: `# ATM Decision Stage
@@ -94,7 +98,7 @@ for cycle in range(1, 5):
       title: 'Play',
       tagline: 'Gamified Challenges & Code Vaults',
       description:
-        'Test your problem-solving in the 5-room Python Code Vault Escape Room, debug real bugs in the Bug Hunter Lab, and complete daily quests for XP rewards.',
+        `Test your problem-solving in the ${VAULT_ROOMS.length}-room Python Code Vault Escape Room, debug real bugs in the Bug Hunter Lab, and complete daily quests for XP rewards.`,
       icon: Gamepad2,
       tag: '04 • GAME ZONE',
       accent: 'border-purple-500/30 text-purple-400 bg-purple-950/20',

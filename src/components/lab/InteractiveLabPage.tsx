@@ -42,7 +42,7 @@ const LAB_TABS: Array<{
   icon: React.ComponentType<{ className?: string }>;
 }> = [
   { id: 'create-system', label: 'Create Mode Studio', icon: Layers },
-  { id: 'simulators', label: 'All Simulators (8)', icon: Cpu },
+  { id: 'simulators', label: `All Simulators (${SIMULATORS_CATALOG.length})`, icon: Cpu },
   { id: 'conditionals-lab', label: 'Conditional Lab', icon: GitBranch },
   { id: 'loops-lab', label: 'Loop Lab', icon: Repeat },
   { id: 'memory-explorer', label: 'Memory Explorer', icon: Box },
@@ -94,7 +94,7 @@ export const InteractiveLabPage: React.FC<InteractiveLabPageProps> = ({
                 Interactive Lab
               </h1>
               <p className="mt-1.5 max-w-2xl text-sm text-[#8A8585] dark:text-[#9a8585]">
-                Run 8 real-life Python simulators, inspect live variable memory, trace line-by-line execution, and design flowcharts that compile to Python.
+                Run {SIMULATORS_CATALOG.length} real-life Python simulators, inspect live variable memory, trace line-by-line execution, and design flowcharts that compile to Python.
               </p>
             </div>
 
