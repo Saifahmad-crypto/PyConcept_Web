@@ -24,6 +24,7 @@ import {
   Bot,
   WifiOff,
   Languages,
+  ChevronDown,
 } from 'lucide-react';
 import { PyVerseLogo } from './PyVerseLogo';
 import { useDarkMode } from '../hooks/useDarkMode';
@@ -98,6 +99,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   const { isDark, toggle: toggleDark } = useDarkMode();
   const { lang, isHinglish, toggleLanguage } = useLanguage();
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
+
+  const FAQS = [
+    { q: t(lang, 'landing.faq.q1'), a: t(lang, 'landing.faq.a1') },
+    { q: t(lang, 'landing.faq.q2'), a: t(lang, 'landing.faq.a2') },
+    { q: t(lang, 'landing.faq.q3'), a: t(lang, 'landing.faq.a3') },
+    { q: t(lang, 'landing.faq.q4'), a: t(lang, 'landing.faq.a4') },
+    { q: t(lang, 'landing.faq.q5'), a: t(lang, 'landing.faq.a5') },
+  ];
 
   const STATS = [
     {
@@ -588,6 +598,49 @@ assert target_cipher == "SOLVED"`,
             {t(lang, 'landing.cta.foot')}
           </p>
         </motion.div>
+      </section>
+
+      {/* Compact FAQ Section */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto border-t border-stone-200 dark:border-red-950/40">
+        <div className="text-center space-y-2 mb-8">
+          <p className="text-xs font-mono font-bold text-red-600 uppercase tracking-widest">
+            {t(lang, 'landing.faq.eyebrow')}
+          </p>
+          <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-stone-950 dark:text-stone-100">
+            {t(lang, 'landing.faq.title')}
+          </h2>
+        </div>
+
+        <div className="space-y-3">
+          {FAQS.map((item, idx) => {
+            const isOpen = openFaqIdx === idx;
+            return (
+              <div
+                key={idx}
+                className="rounded-2xl border border-stone-200 dark:border-stone-800/80 bg-white/80 dark:bg-[#100303] overflow-hidden transition-colors hover:border-red-500/40"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
+                  aria-expanded={isOpen}
+                  className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left font-display text-sm sm:text-base font-bold text-stone-900 dark:text-stone-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906]"
+                >
+                  <span>{item.q}</span>
+                  <ChevronDown
+                    className={`w-4 h-4 shrink-0 text-[#E10906] transition-transform duration-200 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="px-5 pb-4 text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed border-t border-stone-100 dark:border-stone-900/60 pt-3">
+                    {item.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* About the Creator Section */}

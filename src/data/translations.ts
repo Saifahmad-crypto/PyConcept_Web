@@ -158,6 +158,20 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'landing.cta.foot': 'Free forever • Open-source • No account required to start',
     'landing.creator.badge': 'About the Creator',
     'landing.creator.bio': 'Creator of PyVerse. Built to make programming visual, tactile, and unforgettable—transforming abstract syntax into interactive models, simulators, and debugging adventures.',
+
+    // Landing FAQ
+    'landing.faq.eyebrow': 'FAQ',
+    'landing.faq.title': 'Frequently Asked Questions',
+    'landing.faq.q1': 'What is PyVerse?',
+    'landing.faq.a1': 'PyVerse is an interactive visual Python learning platform that turns code into live simulations, 3D labs, flowcharts, quizzes, and debugging challenges.',
+    'landing.faq.q2': 'Is PyVerse free to use?',
+    'landing.faq.a2': 'Yes, PyVerse is completely free and open source, with no account or subscription required to start learning.',
+    'landing.faq.q3': 'Do I need to install Python on my device?',
+    'landing.faq.a3': 'No installation is needed. PyVerse runs Python directly in your browser using an instant execution engine and in-browser Python runtime.',
+    'landing.faq.q4': 'Which Python topics are covered in PyVerse?',
+    'landing.faq.a4': 'PyVerse focuses on core Python fundamentals—Basics (variables, types, operators), Conditional Statements (if/elif/else), and Loops (for, while, range, break/continue)—alongside lab-style coding problems.',
+    'landing.faq.q5': 'Does PyVerse work offline?',
+    'landing.faq.a5': 'Yes! Once loaded, PyVerse works offline as a Progressive Web App (PWA), allowing you to run simulators, quizzes, and coding challenges without internet.',
   },
 
   hinglish: {
@@ -317,6 +331,20 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'landing.cta.foot': 'Hamesha Free • Open-source • Account ki zaroorat nahi',
     'landing.creator.badge': 'Creator Ke Baare Mein',
     'landing.creator.bio': 'PyVerse ke creator. Programming ko visual aur yaadgar banane ke liye banaya gaya — jahan syntax live models, simulators aur debugging adventures ban jata hai.',
+
+    // Landing FAQ
+    'landing.faq.eyebrow': 'FAQ',
+    'landing.faq.title': 'Aksar Poochhe Jaane Wale Sawaal',
+    'landing.faq.q1': 'PyVerse kya hai?',
+    'landing.faq.a1': 'PyVerse ek interactive visual Python learning platform hai jo code ko live simulations, 3D labs, flowcharts, quizzes aur debugging challenges mein badalta hai.',
+    'landing.faq.q2': 'Kya PyVerse bilkul free hai?',
+    'landing.faq.a2': 'Haan, PyVerse poori tarah free aur open source hai — shuru karne ke liye kisi account ya subscription ki zaroorat nahi hai.',
+    'landing.faq.q3': 'Kya mujhe apne device par Python install karna padega?',
+    'landing.faq.a3': 'Bilkul nahi. PyVerse aapke browser mein hi instant execution engine aur in-browser Python runtime ke saath chalta hai.',
+    'landing.faq.q4': 'PyVerse mein kaun se Python topics cover hote hain?',
+    'landing.faq.a4': 'PyVerse mein Python ke core topics—Basics (variables, types, operators), Conditional Statements (if/elif/else) aur Loops (for, while, range, break/continue)—lab-style problems ke saath cover hote hain.',
+    'landing.faq.q5': 'Kya PyVerse bina internet ke offline chalta hai?',
+    'landing.faq.a5': 'Haan! Ek baar load hone ke baad PyVerse PWA ke roop mein offline kaam karta hai, jisse aap simulators, quizzes aur coding challenges bina internet ke chala sakte hain.',
   },
 };
 
