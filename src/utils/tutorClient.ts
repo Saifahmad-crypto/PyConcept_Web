@@ -1,5 +1,7 @@
 // ─── Proxy URL helpers ────────────────────────────────────────────────────────
-const rawProxyBase = (import.meta.env.VITE_TUTOR_PROXY_URL as string | undefined) || '';
+const DEFAULT_PROXY_BASE = 'https://pyverse-tutor-proxy.saif4hmad.workers.dev';
+const rawProxyBase =
+  (import.meta.env.VITE_TUTOR_PROXY_URL as string | undefined) || DEFAULT_PROXY_BASE;
 const TUTOR_PROXY_BASE = rawProxyBase.trim().replace(/\/+$/, '');
 
 export function buildTutorApiUrl(path: string): string {

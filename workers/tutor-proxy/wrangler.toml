@@ -4,6 +4,6 @@ compatibility_date = "2025-03-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://saifahmad-crypto.github.io"
-GEMINI_MODEL = "gemini-3.1-flash-lite"
+GEMINI_MODEL = "gemini-2.0-flash"
 RATE_LIMIT_MAX = "20"
 RATE_LIMIT_WINDOW_MS = "60000"

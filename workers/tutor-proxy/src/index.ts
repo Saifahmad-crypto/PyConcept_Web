@@ -7,9 +7,9 @@ export interface Env {
 }
 
 const FALLBACK_MODELS = [
-  'gemini-3.1-flash-lite',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
   'gemini-2.5-flash-lite',
-  'gemini-3.8-flash',
   'gemini-flash-latest',
 ];
 
@@ -78,12 +78,13 @@ async function callGeminiWithFallback(
   payload: unknown
 ): Promise<globalThis.Response> {
   const models = getCandidateModels(env);
+  const apiKey = (env.GEMINI_API_KEY || '').trim();
   let lastRes: globalThis.Response | null = null;
 
   for (const model of models) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
       model
-    )}:${endpointSuffix}?key=${encodeURIComponent(env.GEMINI_API_KEY)}`;
+    )}:${endpointSuffix}?key=${encodeURIComponent(apiKey)}`;
 
     const res = await fetch(url, {
       method: 'POST',
@@ -106,36 +107,37 @@ async function callGeminiWithFallback(
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders(request, env) });
-    }
+    try {
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: corsHeaders(request, env) });
+      }
 
-    const url = new URL(request.url);
-    const path = url.pathname;
+      const url = new URL(request.url);
+      const path = url.pathname;
 
-    if (path === '/api/tutor/health' && request.method === 'GET') {
-      return jsonResponse(
-        {
-          configured: Boolean(env.GEMINI_API_KEY),
-          model: env.GEMINI_MODEL || FALLBACK_MODELS[0],
-        },
-        200,
-        request,
-        env
-      );
-    }
+      if (path === '/api/tutor/health' && request.method === 'GET') {
+        return jsonResponse(
+          {
+            configured: Boolean(env.GEMINI_API_KEY),
+            model: env.GEMINI_MODEL || FALLBACK_MODELS[0],
+          },
+          200,
+          request,
+          env
+        );
+      }
 
-    if (!env.GEMINI_API_KEY) {
-      return jsonResponse(
-        {
-          code: 'API_KEY_MISSING',
-          message: 'GEMINI_API_KEY secret is not configured on the Cloudflare Worker.',
-        },
-        503,
-        request,
-        env
-      );
-    }
+      if (!env.GEMINI_API_KEY) {
+        return jsonResponse(
+          {
+            code: 'API_KEY_MISSING',
+            message: 'GEMINI_API_KEY secret is not configured on the Cloudflare Worker.',
+          },
+          503,
+          request,
+          env
+        );
+      }
 
     const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
     const maxReq = Number(env.RATE_LIMIT_MAX || '20');
@@ -275,6 +277,10 @@ export default {
       );
     }
 
-    return jsonResponse({ message: 'Not found' }, 404, request, env);
+      return jsonResponse({ message: 'Not found' }, 404, request, env);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return jsonResponse({ code: 'INTERNAL_ERROR', message: msg }, 500, request, env);
+    }
   },
 };
