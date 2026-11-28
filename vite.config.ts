@@ -92,10 +92,12 @@ export default defineConfig(({ mode }) => {
               },
             },
             {
-              // Do NOT cache AI Tutor API or Google Generative Language endpoints
+              // Do NOT cache AI Tutor API, Google Generative Language, or GoatCounter analytics
               urlPattern: ({ url }) =>
                 url.pathname.startsWith('/api/') ||
-                url.hostname.includes('googleapis.com'),
+                url.hostname.includes('googleapis.com') ||
+                url.hostname.includes('goatcounter.com') ||
+                url.hostname.includes('zgo.at'),
               handler: 'NetworkOnly',
             },
             {

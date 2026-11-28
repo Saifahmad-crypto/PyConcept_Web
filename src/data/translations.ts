@@ -172,6 +172,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'landing.faq.a4': 'PyVerse focuses on core Python fundamentals—Basics (variables, types, operators), Conditional Statements (if/elif/else), and Loops (for, while, range, break/continue)—alongside lab-style coding problems.',
     'landing.faq.q5': 'Does PyVerse work offline?',
     'landing.faq.a5': 'Yes! Once loaded, PyVerse works offline as a Progressive Web App (PWA), allowing you to run simulators, quizzes, and coding challenges without internet.',
+    'footer.feedback': 'Feedback',
   },
 
   hinglish: {
@@ -345,6 +346,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'landing.faq.a4': 'PyVerse mein Python ke core topics—Basics (variables, types, operators), Conditional Statements (if/elif/else) aur Loops (for, while, range, break/continue)—lab-style problems ke saath cover hote hain.',
     'landing.faq.q5': 'Kya PyVerse bina internet ke offline chalta hai?',
     'landing.faq.a5': 'Haan! Ek baar load hone ke baad PyVerse PWA ke roop mein offline kaam karta hai, jisse aap simulators, quizzes aur coding challenges bina internet ke chala sakte hain.',
+    'footer.feedback': 'फ़ीडबैक / Feedback',
   },
 };
 

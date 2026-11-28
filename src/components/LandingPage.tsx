@@ -716,7 +716,16 @@ assert target_cipher == "SOLVED"`,
             ))}
           </div>
 
-          <div>
+          <div className="flex items-center gap-4">
+            <a
+              href="FEEDBACK_FORM_URL"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-red-500 transition-colors font-semibold underline-offset-4 hover:underline"
+            >
+              {t(lang, 'footer.feedback')}
+            </a>
+            <span aria-hidden="true" className="text-stone-300 dark:text-stone-700">|</span>
             <span>&copy; {new Date().getFullYear()} PyVerse. Crafted by Saif Ahmad.</span>
           </div>
         </div>

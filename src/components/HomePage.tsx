@@ -1210,9 +1210,20 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
             </div>
 
-            <div className="mt-10 flex flex-col justify-between gap-2 border-t border-[#2C1616] pt-6 text-xs text-[#8A8585] dark:text-[#9a8585] sm:flex-row">
+            <div className="mt-10 flex flex-col justify-between gap-2 border-t border-[#2C1616] pt-6 text-xs text-[#8A8585] dark:text-[#9a8585] sm:flex-row sm:items-center">
               <span>© {new Date().getFullYear()} PyVerse. Interactive Python Learning Universe.</span>
-              <span>Local browser progress · Python Basics · Conditionals · Loops</span>
+              <div className="flex flex-wrap items-center gap-3">
+                <span>Local browser progress · Python Basics · Conditionals · Loops</span>
+                <span aria-hidden="true" className="text-[#4a2626]">|</span>
+                <a
+                  href="FEEDBACK_FORM_URL"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-[#f0eaea] hover:text-[#E10906] transition-colors underline-offset-4 hover:underline"
+                >
+                  {t(lang, 'footer.feedback')}
+                </a>
+              </div>
             </div>
           </footer>
         </div>
