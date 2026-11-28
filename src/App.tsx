@@ -255,6 +255,8 @@ export default function App() {
                       navigateTo(sec);
                     }
                   }}
+                  onOpenGamesTab={openGamesTab}
+                  onOpenRevisionTab={openRevisionTab}
                 />
               )}
 
