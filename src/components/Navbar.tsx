@@ -19,7 +19,10 @@ import {
   Twitter,
   Sun,
   Moon,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
+import { sounds } from '../utils/soundEffects';
 import { SectionId, UserPreferences } from '../types';
 import { getLearnerLevel } from '../data/ecosystemData';
 import { PyVerseLogo } from './PyVerseLogo';
@@ -180,6 +183,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             {isDark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
           </button>
 
+          {/* Sound effects toggle */}
+          <button
+            type="button"
+            onClick={() => {
+              const next = !preferences.soundEffects;
+              onUpdatePreferences({ soundEffects: next });
+              if (next) sounds.playCorrect();
+            }}
+            aria-label={preferences.soundEffects ? 'Sound effects enabled. Click to mute.' : 'Sound effects muted. Click to enable.'}
+            title={preferences.soundEffects ? 'Sound: On' : 'Sound: Muted'}
+            className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E10906] shrink-0 ${
+              preferences.soundEffects
+                ? 'border-[#E10906] bg-[#FFF1F1] dark:bg-[#2a0808] text-[#E10906]'
+                : 'border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] text-[#8A8585] dark:text-[#9a8585] hover:border-[#100303] dark:hover:border-[#9a8585] hover:text-[#100303] dark:hover:text-[#f0eaea]'
+            }`}
+          >
+            {preferences.soundEffects ? <Volume2 className="h-4 w-4" aria-hidden="true" /> : <VolumeX className="h-4 w-4" aria-hidden="true" />}
+          </button>
+
           {/* Language toggle — desktop */}
           <button
             type="button"
@@ -290,6 +312,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ))}
                 </div>
               </div>
+
+              <label className="flex items-center justify-between text-xs cursor-pointer">
+                <span className="font-medium text-[#100303] dark:text-[#f0eaea]">Sound Effects (SFX)</span>
+                <input type="checkbox" checked={preferences.soundEffects}
+                  onChange={(e) => {
+                    const next = e.target.checked;
+                    onUpdatePreferences({ soundEffects: next });
+                    if (next) sounds.playCorrect();
+                  }}
+                  className="h-4 w-4 accent-[#E10906]" />
+              </label>
 
               <label className="flex items-center justify-between text-xs cursor-pointer">
                 <span className="font-medium text-[#100303] dark:text-[#f0eaea]">Reduce Animations</span>

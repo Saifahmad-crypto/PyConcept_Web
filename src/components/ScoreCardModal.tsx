@@ -9,6 +9,7 @@ import {
   Award,
   Sparkles,
   Zap,
+  MessageCircle,
 } from 'lucide-react';
 
 export interface ScoreCardData {
@@ -321,6 +322,28 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     }
   };
 
+  const percent = data ? (data.maxScore > 0 ? Math.round((data.score / data.maxScore) * 100) : 0) : 0;
+  const shareText = data
+    ? `🔥 I scored ${data.score}/${data.maxScore} (${percent}%) in ${data.title} on PyVerse! Master Python conditionals & loops through interactive visual learning:\nhttps://saifahmad-crypto.github.io/PyConcept_Web/`
+    : '';
+
+  const shareToWhatsApp = () => {
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+  };
+
+  const shareToTwitter = () => {
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+  };
+
+  const shareToLinkedIn = () => {
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        'https://saifahmad-crypto.github.io/PyConcept_Web/'
+      )}`,
+      '_blank'
+    );
+  };
+
   return (
     <div
       role="dialog"
@@ -382,6 +405,35 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
             className="w-full h-auto rounded-lg shadow-lg"
             style={{ aspectRatio: '16 / 9', maxHeight: '420px' }}
           />
+        </div>
+
+        {/* 1-Click Social Share Row */}
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#2C1616] bg-[#140606] px-4 py-2 text-xs">
+          <span className="text-[#8A8585] font-semibold">1-Click Share:</span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={shareToWhatsApp}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-800/60 bg-emerald-950/40 px-2.5 py-1 font-semibold text-emerald-400 hover:bg-emerald-900/60 transition-colors"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={shareToTwitter}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-sky-800/60 bg-sky-950/40 px-2.5 py-1 font-semibold text-sky-400 hover:bg-sky-900/60 transition-colors"
+            >
+              𝕏 Post
+            </button>
+            <button
+              type="button"
+              onClick={shareToLinkedIn}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-blue-800/60 bg-blue-950/40 px-2.5 py-1 font-semibold text-blue-400 hover:bg-blue-900/60 transition-colors"
+            >
+              in LinkedIn
+            </button>
+          </div>
         </div>
 
         {/* Action Buttons */}

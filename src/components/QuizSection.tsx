@@ -14,7 +14,9 @@ import {
   SlidersHorizontal,
   Flame,
   AlertTriangle,
+  Lightbulb,
 } from 'lucide-react';
+import { sounds } from '../utils/soundEffects';
 import { QUIZ_QUESTIONS } from '../data/curriculumData';
 import { QuizScoreRecord, TopicId, QuizDifficulty } from '../types';
 import { CodeBlock } from './CodeBlock';
@@ -117,6 +119,11 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
   const handleSubmitAnswer = () => {
     if (selectedOpt === null) return;
     const isRight = selectedOpt === currentQ.correctIndex;
+    if (isRight) {
+      sounds.playCorrect();
+    } else {
+      sounds.playIncorrect();
+    }
     const nextScore = isRight ? score + 1 : score;
     setSubmitted(true);
     setScore(nextScore);
@@ -133,6 +140,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
   const handleNext = () => {
     if (currentIdx + 1 >= questions.length) {
       setFinished(true);
+      sounds.playLevelUp();
       if (topic !== 'mixed') {
         onRecordQuizResult(topic, score, questions.length);
       }
@@ -556,6 +564,17 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                 )}
               </div>
               <p className="mt-1.5 text-[#100303] dark:text-[#f0eaea] leading-relaxed">{currentQ.explanation}</p>
+              {selectedOpt !== null && selectedOpt !== currentQ.correctIndex && (
+                <div className="mt-3 rounded-lg border border-amber-300/80 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40 p-2.5 text-xs text-amber-900 dark:text-amber-200">
+                  <span className="font-semibold flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
+                    <Lightbulb className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                    Diagnostic Breakdown (Why Option {String.fromCharCode(65 + selectedOpt)} differed):
+                  </span>
+                  <p className="mt-1 text-amber-900/90 dark:text-amber-200/90 leading-relaxed">
+                    You selected Option {String.fromCharCode(65 + selectedOpt)}. In Python, this option represents a common trap where {currentQ.topic === 'loops' ? 'loop condition, step stride, or off-by-one boundary' : currentQ.topic === 'conditionals' ? 'conditional branch truthiness or evaluation order' : 'syntax or type coercion'} was assumed instead of Python's exact runtime rules.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

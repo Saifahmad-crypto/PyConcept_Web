@@ -21,6 +21,7 @@ import { SavedSnippet } from '../types';
 import { runPythonCode, PythonRunResult } from '../utils/pythonEngine';
 import { pyodideService, PyodideProgressStatus } from '../workers/pyodideRunner';
 import { CodeExplainerModal } from './studio/CodeExplainerModal';
+import { sounds } from '../utils/soundEffects';
 
 interface CodePlaygroundProps {
   externalCode?: string | null;
@@ -157,6 +158,7 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
   const [pyodideState, setPyodideState] = useState<PyodideProgressStatus>('idle');
   const [pyodideMsg, setPyodideMsg] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);
+  const [mobileTab, setMobileTab] = useState<'editor' | 'output'>('editor');
   const preRef = useRef<HTMLPreElement | null>(null);
 
   useEffect(() => {
@@ -204,6 +206,9 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
 
   const handleRun = async () => {
     onRecordSandboxRun?.();
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setMobileTab('output');
+    }
     const stdinLines = stdinText.split('\n').map((l) => l.trim()).filter((l) => l.length > 0);
 
     if (runtimeMode === 'real') {
@@ -212,12 +217,14 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
         const res = await pyodideService.runCode(code, stdinLines, 10000);
         setIsRunning(false);
         if (res.success) {
+          sounds.playCorrect();
           setResult({
             success: true,
             output: res.output,
             stepsExecuted: code.split('\n').length,
           });
         } else {
+          sounds.playIncorrect();
           setResult({
             success: false,
             output: res.output,
@@ -232,6 +239,7 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
         }
       } catch (err: any) {
         setIsRunning(false);
+        sounds.playIncorrect();
         setResult({
           success: false,
           output: '',
@@ -247,7 +255,13 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
       return;
     }
 
-    setResult(runPythonCode(code, stdinText.split('\n')));
+    const runRes = runPythonCode(code, stdinText.split('\n'));
+    if (runRes.success) {
+      sounds.playCorrect();
+    } else {
+      sounds.playIncorrect();
+    }
+    setResult(runRes);
   };
 
   const handleStop = () => {
@@ -439,10 +453,36 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
         </div>
       </div>
 
+      {/* Mobile Segmented View Switcher */}
+      <div className="flex lg:hidden items-center rounded-xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#FBF5F9] dark:bg-[#1a0808] p-1 gap-1 mb-4">
+        <button
+          type="button"
+          onClick={() => setMobileTab('editor')}
+          className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-colors ${
+            mobileTab === 'editor'
+              ? 'bg-[#E10906] text-white shadow-sm'
+              : 'text-[#8A8585] dark:text-[#9a8585]'
+          }`}
+        >
+          main.py (Editor)
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileTab('output')}
+          className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-colors ${
+            mobileTab === 'output'
+              ? 'bg-[#E10906] text-white shadow-sm'
+              : 'text-[#8A8585] dark:text-[#9a8585]'
+          }`}
+        >
+          Output &amp; Console
+        </button>
+      </div>
+
       {/* Editor + Output Console Split */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Syntax-Highlighted Code Editor */}
-        <div className="space-y-4 lg:col-span-7">
+        <div className={`space-y-4 lg:col-span-7 ${mobileTab === 'editor' ? 'block' : 'hidden lg:block'}`}>
           <div className="overflow-hidden rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-lg shadow-[#100303]/5">
             <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs text-[#CFC8C8]">
               <span className="font-mono font-medium">main.py</span>
@@ -591,7 +631,7 @@ export const CodePlayground: React.FC<CodePlaygroundProps> = ({
         </div>
 
         {/* Output Console */}
-        <div className="lg:col-span-5">
+        <div className={`lg:col-span-5 ${mobileTab === 'output' ? 'block' : 'hidden lg:block'}`}>
           <div className="flex h-full min-h-[390px] flex-col overflow-hidden rounded-2xl border border-[#E5DFDF] dark:border-[#3a1a1a] bg-[#100303] shadow-lg shadow-[#100303]/5">
             <div className="flex items-center justify-between border-b border-[#2C1616] bg-[#190909] px-4 py-2.5 text-xs">
               <span className="font-semibold text-[#CFC8C8]">Output Console</span>

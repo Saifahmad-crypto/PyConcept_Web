@@ -151,6 +151,9 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
+            if (id.includes('src/data/curriculumData') || id.includes('src/data/ecosystemData')) {
+              return 'data-curriculum';
+            }
             if (id.includes('node_modules')) {
               if (id.includes('three') || id.includes('@react-three')) {
                 return 'vendor-three';
@@ -163,6 +166,9 @@ export default defineConfig(({ mode }) => {
               }
               if (id.includes('lucide-react')) {
                 return 'vendor-icons';
+              }
+              if (id.includes('canvas-confetti')) {
+                return 'vendor-confetti';
               }
             }
           },

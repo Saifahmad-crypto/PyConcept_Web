@@ -12,6 +12,7 @@ import { TopicId } from '../types';
 import { getDailyQuestForDate } from '../data/ecosystemData';
 import { getLocalDateKey, computeStreakDays } from '../hooks/useProgress';
 import { CodeBlock } from './CodeBlock';
+import { sounds } from '../utils/soundEffects';
 
 interface DailyQuestCardProps {
   completedDailyQuests: string[];
@@ -57,8 +58,13 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
   const handleSubmit = () => {
     if (selected === null) return;
     setSubmitted(true);
-    if (selected === quest.correctIndex && !alreadyCompleted) {
-      onCompleteDailyQuest(quest.id, quest.title, quest.topic, quest.xpReward);
+    if (selected === quest.correctIndex) {
+      sounds.playCorrect();
+      if (!alreadyCompleted) {
+        onCompleteDailyQuest(quest.id, quest.title, quest.topic, quest.xpReward);
+      }
+    } else {
+      sounds.playIncorrect();
     }
   };
 
@@ -207,7 +213,13 @@ export const DailyQuestCard: React.FC<DailyQuestCardProps> = ({
                     : `Correct! +${quest.xpReward} XP awarded.`
                   : 'Not quite — review the hint and try again.'}
               </p>
-              {isCorrect && <p className="mt-1">{quest.explanation}</p>}
+              {isCorrect ? (
+                <p className="mt-1">{quest.explanation}</p>
+              ) : (
+                <p className="mt-1 text-rose-800 dark:text-rose-200/90">
+                  <strong>Why Option {String.fromCharCode(65 + (selected ?? 0))} differed:</strong> In Python, this option represents a common misconception in {quest.topic === 'loops' ? 'loop condition or iteration bounds' : 'decision flow truthiness'}. Check the hint above or step through in the simulator!
+                </p>
+              )}
             </div>
           )}
 

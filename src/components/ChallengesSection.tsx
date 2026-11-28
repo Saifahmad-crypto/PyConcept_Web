@@ -16,6 +16,7 @@ import { TopicId } from '../types';
 import { runPythonCode } from '../utils/pythonEngine';
 import { getLocalDateKey, computeStreakDays } from '../hooks/useProgress';
 import { CodeBlock } from './CodeBlock';
+import { sounds } from '../utils/soundEffects';
 
 interface ChallengesSectionProps {
   completedChallenges: string[];
@@ -109,6 +110,7 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
   const handleVerify = () => {
     const res = runPythonCode(currentCode);
     if (!res.success) {
+      sounds.playIncorrect();
       setFeedback({
         passed: false,
         message: `${res.error?.type || 'Error'} (Line ${res.error?.line || 1}): ${
@@ -120,6 +122,11 @@ export const ChallengesSection: React.FC<ChallengesSectionProps> = ({
     }
 
     const check = activeChallenge.validateOutput(res.output, currentCode);
+    if (check.passed) {
+      sounds.playCorrect();
+    } else {
+      sounds.playIncorrect();
+    }
     setFeedback({
       passed: check.passed,
       message: check.message,
