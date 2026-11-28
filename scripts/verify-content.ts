@@ -1,4 +1,5 @@
 import { CODING_CHALLENGES, QUIZ_QUESTIONS } from '../src/data/curriculumData';
+import { BUG_HUNT_CHALLENGES } from '../src/data/ecosystemData';
 import { runPythonCode } from '../src/utils/pythonEngine';
 import { execSync, spawnSync } from 'child_process';
 
@@ -9,6 +10,9 @@ interface VerificationReport {
   totalOutputQuizzes: number;
   passedOutputQuizzes: number;
   failedOutputQuizzes: number;
+  totalBugHunts: number;
+  passedBugHunts: number;
+  failedBugHunts: number;
   python3Checked: boolean;
   errors: string[];
 }
@@ -25,6 +29,9 @@ function verifyAll(): boolean {
     totalOutputQuizzes: 0,
     passedOutputQuizzes: 0,
     failedOutputQuizzes: 0,
+    totalBugHunts: BUG_HUNT_CHALLENGES.length,
+    passedBugHunts: 0,
+    failedBugHunts: 0,
     python3Checked: false,
     errors: [],
   };
@@ -135,12 +142,65 @@ function verifyAll(): boolean {
     report.passedOutputQuizzes++;
   }
 
-  // 4. Print Summary Report
+  // 4. Verify all Bug Hunt Challenges
+  console.log(`\n🐛 Verifying ${BUG_HUNT_CHALLENGES.length} Bug Hunt Challenges...`);
+  for (let i = 0; i < BUG_HUNT_CHALLENGES.length; i++) {
+    const bug = BUG_HUNT_CHALLENGES[i];
+    const expectedNorm = bug.expectedOutput.trim().replace(/\r\n/g, '\n');
+
+    // A. Solution code must succeed and pass verify()
+    const solRes = runPythonCode(bug.solutionCode, bug.stdinLines ?? []);
+    if (!solRes.success) {
+      report.failedBugHunts++;
+      const err = `[FAIL] BugHunt #${i + 1} (${bug.id}): solutionCode threw error: ${solRes.error?.message}`;
+      report.errors.push(err);
+      console.error(err);
+      continue;
+    }
+
+    const solOut = solRes.output.trim().replace(/\r\n/g, '\n');
+    if (solOut !== expectedNorm) {
+      report.failedBugHunts++;
+      const err = `[FAIL] BugHunt #${i + 1} (${bug.id}): solutionCode produced "${solOut}", expected "${expectedNorm}".`;
+      report.errors.push(err);
+      console.error(err);
+      continue;
+    }
+
+    const verifyCheck = bug.verify(solRes.output, bug.solutionCode);
+    if (!verifyCheck.passed) {
+      report.failedBugHunts++;
+      const err = `[FAIL] BugHunt #${i + 1} (${bug.id}): verify() rejected solutionCode: ${verifyCheck.message}`;
+      report.errors.push(err);
+      console.error(err);
+      continue;
+    }
+
+    // B. Buggy code must either fail (error/infinite-loop-guard) or produce different output
+    const buggyRes = runPythonCode(bug.buggyCode, bug.stdinLines ?? []);
+    if (buggyRes.success) {
+      const buggyOut = buggyRes.output.trim().replace(/\r\n/g, '\n');
+      if (buggyOut === expectedNorm) {
+        report.failedBugHunts++;
+        const err = `[FAIL] BugHunt #${i + 1} (${bug.id}): buggyCode already produces expected output "${expectedNorm}"!`;
+        report.errors.push(err);
+        console.error(err);
+        continue;
+      }
+    }
+
+    report.passedBugHunts++;
+  }
+
+  // 5. Print Summary Report
   console.log('\n' + '='.repeat(70));
   console.log('📊 VERIFICATION SUMMARY');
   console.log('='.repeat(70));
   console.log(`Coding Challenges: ${report.passedChallenges} / ${report.totalChallenges} PASSED`);
   console.log(`Output Quizzes:    ${report.passedOutputQuizzes} / ${report.totalOutputQuizzes} PASSED`);
+  console.log(`Bug Hunts:         ${report.passedBugHunts} / ${report.totalBugHunts} PASSED`);
+  console.log(`- Conditionals:    ${BUG_HUNT_CHALLENGES.filter((b) => b.topic === 'conditionals').length} | Loops: ${BUG_HUNT_CHALLENGES.filter((b) => b.topic === 'loops').length}`);
+  console.log(`- Easy / Med / Adv:${BUG_HUNT_CHALLENGES.filter((b) => b.difficulty === 'Easy').length} / ${BUG_HUNT_CHALLENGES.filter((b) => b.difficulty === 'Medium').length} / ${BUG_HUNT_CHALLENGES.filter((b) => b.difficulty === 'Advanced').length}`);
   console.log(`Total Quiz Bank:   ${QUIZ_QUESTIONS.length} Questions`);
   console.log(`- Basics:          ${QUIZ_QUESTIONS.filter((q) => q.topic === 'basics').length}`);
   console.log(`- Conditionals:    ${QUIZ_QUESTIONS.filter((q) => q.topic === 'conditionals').length}`);

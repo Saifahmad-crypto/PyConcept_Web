@@ -326,7 +326,14 @@ export interface BugChallengeDef {
     | 'Incorrect Condition'
     | 'Off-by-One Loop'
     | 'Variable Update'
-    | 'Wrong Output';
+    | 'Wrong Output'
+    | 'Wrong Operator'
+    | 'Wrong Range'
+    | 'Indentation'
+    | 'Runtime Error'
+    | 'Infinite Loop'
+    | 'Elif Order'
+    | 'break/continue';
   difficulty: 'Easy' | 'Medium' | 'Advanced';
   title: string;
   description: string;
