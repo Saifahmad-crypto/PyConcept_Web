@@ -378,19 +378,10 @@ export function analyzePythonCodeStepByStep(code: string): ExplainerSummary {
 
 import { buildTutorApiUrl, hasConfiguredProxyUrl } from './tutorClient';
 
-const OBFUSCATED_KEY = 'QVEuQWI4Uk42SnhrcFRZLUpnVjR1U2JFWkxWUzdmT3BQMUN6NTdWcm5STDVlajNYSGtZMXc=';
-
+// Gemini API key – supplied via VITE_GEMINI_API_KEY env var only.
+// No fallback key is embedded in the client bundle.
 function getInbuiltGeminiKey(): string {
-  try {
-    const envKey = (import.meta.env.VITE_GEMINI_API_KEY as string | undefined)?.trim();
-    if (envKey) return envKey;
-    if (typeof atob === 'function') {
-      return atob(OBFUSCATED_KEY);
-    }
-    return '';
-  } catch {
-    return '';
-  }
+  return (import.meta.env.VITE_GEMINI_API_KEY as string | undefined)?.trim() ?? '';
 }
 
 /**
