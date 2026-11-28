@@ -51,6 +51,7 @@ import { computeStreakDays } from '../hooks/useProgress';
 import { runPythonCode } from '../utils/pythonEngine';
 import { DailyQuestCard } from './DailyQuestCard';
 import { PyVerseLogo } from './PyVerseLogo';
+import { FEEDBACK_FORM_URL } from '../config';
 import { HeroVisual } from './HeroVisual';
 
 interface HomePageProps {
@@ -1216,7 +1217,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <span>Local browser progress · Python Basics · Conditionals · Loops</span>
                 <span aria-hidden="true" className="text-[#4a2626]">|</span>
                 <a
-                  href="FEEDBACK_FORM_URL"
+                  href={FEEDBACK_FORM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-[#f0eaea] hover:text-[#E10906] transition-colors underline-offset-4 hover:underline"

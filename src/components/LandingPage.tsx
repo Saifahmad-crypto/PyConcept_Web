@@ -27,6 +27,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { PyVerseLogo } from './PyVerseLogo';
+import { FEEDBACK_FORM_URL } from '../config';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useLanguage } from '../hooks/useLanguage';
 import { t } from '../data/translations';
@@ -718,7 +719,7 @@ assert target_cipher == "SOLVED"`,
 
           <div className="flex items-center gap-4">
             <a
-              href="FEEDBACK_FORM_URL"
+              href={FEEDBACK_FORM_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-red-500 transition-colors font-semibold underline-offset-4 hover:underline"
