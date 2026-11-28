@@ -137,45 +137,62 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
 
     // 2. Top Bar: PyVerse Brand & Category Pill
     const brandX = 75;
-    const brandY = 68;
+    const brandY = 62;
 
-    // PyVerse Emblem
+    // PyVerse Emblem Box
     ctx.save();
     ctx.translate(brandX, brandY);
-    ctx.fillStyle = '#140406';
+    ctx.fillStyle = '#160406';
     ctx.strokeStyle = '#E10906';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(0, 0, 44, 44, 12);
-    else ctx.rect(0, 0, 44, 44);
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(0, 0, 48, 48, 12);
+    else ctx.rect(0, 0, 48, 48);
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = '800 24px "Space Grotesk", system-ui, sans-serif';
+    ctx.font = '800 26px "Space Grotesk", system-ui, sans-serif';
     ctx.fillStyle = '#FFFFFF';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('P', 22, 22);
+    ctx.fillText('P', 24, 24);
     ctx.restore();
 
     // Brand Wordmark
-    ctx.font = '800 30px "Space Grotesk", system-ui, sans-serif';
     ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
+    ctx.textBaseline = 'top';
+    ctx.font = '800 28px "Space Grotesk", system-ui, sans-serif';
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText('Py', brandX + 56, brandY + 16);
+    ctx.fillText('Py', brandX + 62, brandY + 4);
     const pyW = ctx.measureText('Py').width;
     ctx.fillStyle = '#E10906';
-    ctx.fillText('Verse', brandX + 56 + pyW, brandY + 16);
+    ctx.fillText('Verse', brandX + 62 + pyW, brandY + 4);
 
     ctx.font = '700 10px "JetBrains Mono", monospace';
     ctx.fillStyle = '#A08C8C';
-    ctx.fillText('VERIFIED LOGIC ASSESSMENT • EVALUATION RECORD', brandX + 56, brandY + 36);
+    ctx.fillText('VERIFIED LOGIC ASSESSMENT  //  EVALUATION RECORD', brandX + 62, brandY + 36);
 
-    // Official Circular Hologram Seal (Top Right)
+    // Official Embossed Gold Hologram Medallion (Top Right)
     const sealCx = width - 130;
-    const sealCy = 90;
-    const sealR = 40;
+    const sealCy = 86;
+    const sealR = 38;
+
+    // Serrated outer rays
+    ctx.save();
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 2;
+    for (let angle = 0; angle < 360; angle += 15) {
+      const rad = (angle * Math.PI) / 180;
+      const x1 = sealCx + Math.cos(rad) * (sealR + 2);
+      const y1 = sealCy + Math.sin(rad) * (sealR + 2);
+      const x2 = sealCx + Math.cos(rad) * (sealR + 6);
+      const y2 = sealCy + Math.sin(rad) * (sealR + 6);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    ctx.restore();
 
     ctx.fillStyle = '#160608';
     ctx.strokeStyle = '#D4AF37';
@@ -185,7 +202,7 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.fill();
     ctx.stroke();
 
-    ctx.strokeStyle = '#E10906';
+    ctx.strokeStyle = '#8C6E1E';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(sealCx, sealCy, sealR - 5, 0, Math.PI * 2);
@@ -196,103 +213,139 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.font = '700 9px "JetBrains Mono", monospace';
     ctx.fillStyle = '#D4AF37';
     ctx.fillText('OFFICIAL', sealCx, sealCy - 18);
-    ctx.font = '800 13px "JetBrains Mono", monospace';
+    ctx.font = '800 13px "Space Grotesk", sans-serif';
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText('SEAL', sealCx, sealCy - 4);
+    ctx.fillText('SEAL', sealCx, sealCy - 3);
     ctx.font = '700 9px "JetBrains Mono", monospace';
     ctx.fillStyle = '#D4AF37';
-    ctx.fillText('2026', sealCx, sealCy + 14);
+    ctx.fillText('2026', sealCx, sealCy + 13);
 
     // Category Pill next to seal
     const catLabel = (category ? `${category.toUpperCase()} • GRADE A+` : 'OFFICIAL RESULT • GRADE A+');
-    ctx.font = '700 13px "JetBrains Mono", monospace';
-    const pillW = ctx.measureText(catLabel).width + 28;
-    const pillX = sealCx - sealR - pillW - 20;
-    const pillY = 74;
+    ctx.font = '700 12px "JetBrains Mono", monospace';
+    const pillW = ctx.measureText(catLabel).width + 26;
+    const pillX = sealCx - sealR - pillW - 24;
+    const pillY = 70;
 
     ctx.fillStyle = 'rgba(225, 9, 6, 0.16)';
     ctx.strokeStyle = '#E10906';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(pillX, pillY, pillW, 36, 18);
-    else ctx.rect(pillX, pillY, pillW, 36);
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(pillX, pillY, pillW, 34, 17);
+    else ctx.rect(pillX, pillY, pillW, 34);
     ctx.fill();
     ctx.stroke();
 
     ctx.fillStyle = '#FFF0F0';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(catLabel, pillX + pillW / 2, pillY + 18);
+    ctx.fillText(catLabel, pillX + pillW / 2, pillY + 17);
 
     // Header Divider Line
     ctx.strokeStyle = '#321214';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(75, 138);
-    ctx.lineTo(width - 75, 138);
+    ctx.moveTo(75, 134);
+    ctx.lineTo(width - 75, 134);
     ctx.stroke();
 
     // 3. Candidate & Exam Meta Section
     ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
     ctx.font = '700 11px "JetBrains Mono", monospace';
     ctx.fillStyle = '#E10906';
-    ctx.fillText('CANDIDATE ASSESSMENT REPORT', 75, 158);
+    ctx.fillText('OFFICIAL ASSESSMENT REPORT', 75, 156);
 
-    ctx.font = '800 32px "Space Grotesk", system-ui, sans-serif';
+    ctx.font = '800 30px "Space Grotesk", system-ui, sans-serif';
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(title, 75, 192);
+    ctx.fillText(title, 75, 194);
 
-    // Player Name & Verified Badge
+    // Candidate Name & Verified Badge
     const cleanPlayer = (playerName || 'PyVerse Learner').trim();
-    ctx.font = '700 22px "Cinzel", Georgia, serif';
-    ctx.fillStyle = '#B4AAAA';
-    ctx.fillText('Certified Learner: ', 75, 235);
-    const pPrefixW = ctx.measureText('Certified Learner: ').width;
+    ctx.font = '700 13px "JetBrains Mono", monospace';
+    ctx.fillStyle = '#9CA3AF';
+    ctx.fillText('CANDIDATE: ', 75, 234);
+    const pPrefixW = ctx.measureText('CANDIDATE: ').width;
+
+    ctx.font = '800 24px "Space Grotesk", system-ui, sans-serif';
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText(cleanPlayer, 75 + pPrefixW, 235);
     const pNameW = ctx.measureText(cleanPlayer).width;
 
-    const vBadgeX = 75 + pPrefixW + pNameW + 16;
-    ctx.fillStyle = 'rgba(16, 60, 35, 0.8)';
+    const vBadgeX = 75 + pPrefixW + pNameW + 18;
+    const vBadgeY = 216;
+    ctx.fillStyle = 'rgba(14, 45, 24, 0.9)';
     ctx.strokeStyle = '#22C55E';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(vBadgeX, 220, 110, 26, 6);
-    else ctx.rect(vBadgeX, 220, 110, 26);
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(vBadgeX, vBadgeY, 115, 26, 13);
+    else ctx.rect(vBadgeX, vBadgeY, 115, 26);
     ctx.fill();
     ctx.stroke();
 
-    ctx.textAlign = 'center';
+    // Drawn crisp green checkmark in badge
+    ctx.strokeStyle = '#22C55E';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(vBadgeX + 16, vBadgeY + 13);
+    ctx.lineTo(vBadgeX + 21, vBadgeY + 18);
+    ctx.lineTo(vBadgeX + 28, vBadgeY + 9);
+    ctx.stroke();
+
+    ctx.textAlign = 'left';
     ctx.font = '700 10px "JetBrains Mono", monospace';
     ctx.fillStyle = '#86EFAC';
-    ctx.fillText('✓ VERIFIED ID', vBadgeX + 55, 233);
+    ctx.fillText('VERIFIED ID', vBadgeX + 34, vBadgeY + 17);
 
     // 4. Three-Card Performance Dashboard Grid
-    const gridY = 275;
+    const gridY = 265;
     const colW = 330;
-    const colH = 205;
+    const colH = 215;
     const gap = 30;
     const startX = 75;
 
+    // Helper: geometric star
+    const drawStar = (cx: number, cy: number, rOut: number, rIn: number, filled: boolean, strokeCol: string) => {
+      ctx.save();
+      ctx.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const r = i % 2 === 0 ? rOut : rIn;
+        const ang = (i * 36 - 90) * (Math.PI / 180);
+        const x = cx + Math.cos(ang) * r;
+        const y = cy + Math.sin(ang) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      if (filled) {
+        ctx.fillStyle = strokeCol;
+        ctx.fill();
+      }
+      ctx.strokeStyle = strokeCol;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+    };
+
     // Rank / Performance Calculation
     let rankTitle = 'APPRENTICE EXPLORER';
-    let stars = '★ ★ ☆ ☆ ☆';
+    let filledStars = 2;
     let rankColor = '#8A8585';
     let tierText = 'Top 50% Tier';
 
     if (percent === 100) {
       rankTitle = 'PERFECT MASTER';
-      stars = '★ ★ ★ ★ ★';
+      filledStars = 5;
       rankColor = '#10B981';
       tierText = 'Top 1% Percentile';
     } else if (percent >= 80) {
       rankTitle = 'LOGIC CHAMPION';
-      stars = '★ ★ ★ ★ ☆';
+      filledStars = 4;
       rankColor = '#F59E0B';
       tierText = 'Top 5% Percentile';
     } else if (percent >= 60) {
       rankTitle = 'RISING PYTHON CODER';
-      stars = '★ ★ ★ ☆ ☆';
+      filledStars = 3;
       rankColor = '#3B82F6';
       tierText = 'Top 20% Percentile';
     }
@@ -318,19 +371,33 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.fillStyle = '#AA9696';
     ctx.fillText('OVERALL SCORE', c1X + 22, gridY + 28);
 
-    ctx.font = '800 64px "Space Grotesk", sans-serif';
+    ctx.font = '800 60px "Space Grotesk", sans-serif';
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText(`${score} / ${maxScore}`, c1X + 22, gridY + 84);
 
+    // Progress Bar
+    const barW = colW - 44;
+    const barH = 8;
+    ctx.fillStyle = '#280F12';
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(c1X + 22, gridY + 110, barW, barH, 4);
+    else ctx.fillRect(c1X + 22, gridY + 110, barW, barH);
+    ctx.fill();
+
+    const fillW = Math.max(6, Math.round(barW * (percent / 100)));
+    ctx.fillStyle = '#22C55E';
+    if (typeof (ctx as any).roundRect === 'function') (ctx as any).roundRect(c1X + 22, gridY + 110, fillW, barH, 4);
+    else ctx.fillRect(c1X + 22, gridY + 110, fillW, barH);
+    ctx.fill();
+
     ctx.font = '700 14px "JetBrains Mono", monospace';
     ctx.fillStyle = '#22C55E';
-    ctx.fillText(`ACCURACY: ${percent.toFixed(1)}%`, c1X + 22, gridY + 140);
+    ctx.fillText(`ACCURACY: ${percent.toFixed(1)}%`, c1X + 22, gridY + 150);
 
     ctx.font = '500 11px "JetBrains Mono", monospace';
     ctx.fillStyle = '#8C7878';
-    ctx.fillText(`${score} Correct  •  ${Math.max(0, maxScore - score)} Incorrect`, c1X + 22, gridY + 168);
+    ctx.fillText(`${score} Correct  •  ${Math.max(0, maxScore - score)} Incorrect`, c1X + 22, gridY + 180);
 
-    // Card 2: Performance Standing & Rank
+    // Card 2: Performance Standing & Drawn Stars
     const c2X = c1X + colW + gap;
     ctx.fillStyle = '#0E0305';
     ctx.strokeStyle = '#411619';
@@ -350,21 +417,25 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.fillStyle = '#AA9696';
     ctx.fillText('PERFORMANCE STANDING', c2X + 22, gridY + 28);
 
-    ctx.font = '700 20px "JetBrains Mono", monospace';
-    ctx.fillStyle = rankColor;
-    ctx.fillText(stars, c2X + 22, gridY + 62);
+    // Draw 5 sharp geometric stars
+    const starY = gridY + 58;
+    for (let sIdx = 0; sIdx < 5; sIdx++) {
+      const sx = c2X + 32 + sIdx * 28;
+      const isFilled = sIdx < filledStars;
+      drawStar(sx, starY, 9, 4.5, isFilled, rankColor);
+    }
 
     ctx.font = '800 22px "Space Grotesk", sans-serif';
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(rankTitle, c2X + 22, gridY + 98);
+    ctx.fillText(rankTitle, c2X + 22, gridY + 102);
 
     ctx.font = '700 13px "JetBrains Mono", monospace';
     ctx.fillStyle = '#D4AF37';
-    ctx.fillText(`STANDOUT: ${tierText}`, c2X + 22, gridY + 140);
+    ctx.fillText(`STANDOUT: ${tierText}`, c2X + 22, gridY + 144);
 
     ctx.font = '500 11px "JetBrains Mono", monospace';
     ctx.fillStyle = '#8C7878';
-    ctx.fillText('Mastered Control-Flow Logic', c2X + 22, gridY + 168);
+    ctx.fillText('Mastered Control-Flow Logic', c2X + 22, gridY + 172);
 
     // Card 3: Runtime AST Verification & Security Hash
     const c3X = c2X + colW + gap;
@@ -386,25 +457,25 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     ctx.fillStyle = '#AA9696';
     ctx.fillText('RUNTIME VERIFICATION', c3X + 22, gridY + 28);
 
-    ctx.font = '800 24px "Space Grotesk", sans-serif';
+    ctx.font = '800 22px "Space Grotesk", sans-serif';
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText('Python 3.12 Engine', c3X + 22, gridY + 62);
 
-    ctx.font = '600 12px "JetBrains Mono", monospace';
+    ctx.font = '600 11px "JetBrains Mono", monospace';
     ctx.fillStyle = '#93C5FD';
-    ctx.fillText('ENGINE: Safe AST Isolator', c3X + 22, gridY + 98);
+    ctx.fillText('ENGINE: Safe AST Isolator', c3X + 22, gridY + 96);
 
     const hashStamp = `PV-${Math.abs((score * 7919 + percent * 31) % 9000 + 1000)}`;
-    ctx.font = '700 13px "JetBrains Mono", monospace';
+    ctx.font = '700 12px "JetBrains Mono", monospace';
     ctx.fillStyle = '#A0B4C8';
-    ctx.fillText(`HASH: #${hashStamp}-EVAL`, c3X + 22, gridY + 140);
+    ctx.fillText(`HASH: #${hashStamp}-EVAL`, c3X + 22, gridY + 138);
 
     ctx.font = '500 11px "JetBrains Mono", monospace';
-    ctx.fillStyle = '#8C7878';
-    ctx.fillText('Cryptographic Record Sealed', c3X + 22, gridY + 168);
+    ctx.fillStyle = '#22C55E';
+    ctx.fillText('✓ 0 Syntax / AST Errors', c3X + 22, gridY + 172);
 
     // 5. High-Security Footer Bar & Micro-Barcode Pattern
-    const footerY = 525;
+    const footerY = 520;
     ctx.strokeStyle = '#321214';
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -415,13 +486,13 @@ export const ScoreCardModal: React.FC<ScoreCardModalProps> = ({ data, onClose })
     // Barcode Motif on Left
     const barX = 75;
     const barY = footerY + 18;
-    const barH = 32;
-    const barPattern = [2, 1, 3, 1, 1, 2, 4, 1, 2, 3, 1, 1, 3, 2, 1, 4, 2, 1, 1, 3, 2, 2, 1, 3, 1, 2, 4, 1, 2, 1];
+    const barcodeH = 32;
+    const barPattern = [3, 1, 2, 4, 1, 1, 3, 2, 1, 4, 2, 1, 1, 3, 2, 2, 1, 3, 1, 2, 4, 1, 2, 1, 3, 1, 2, 4];
     let currBx = barX;
     ctx.fillStyle = '#B48C8C';
     barPattern.forEach((bw, idx) => {
       if (idx % 2 === 0) {
-        ctx.fillRect(currBx, barY, bw, barH);
+        ctx.fillRect(currBx, barY, bw, barcodeH);
       }
       currBx += bw + 1;
     });
